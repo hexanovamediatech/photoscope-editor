@@ -1,0 +1,82 @@
+.inpute-names{
+    width: 400px;
+    height: 50px;
+    background: #242631;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.input-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.custom-file-label{
+    background: #00A3FF;
+    color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+     width: 200px;
+     margin-left: 50px;
+     border-radius: 5px;
+}
+#file1{
+    display: none;  
+}
+#file2{
+    display: none;  
+}
+.all-buttons{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+   margin-left: 70%;
+   margin-top: 50px;
+   gap: 20px;
+}
+.buttons button{
+    height: 50px;
+    background: #00A3FF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+#uploadHeading{
+    color: #ffff;
+}
+
+
+.buttons-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.buttons{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    margin-top: 50px;
+    gap: 20px;
+}
+.new-loader{
+    height: 100%;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}.new-loader p{
+    color: white;
+}
+#loaderContent{
+    display: none;
+}
+#navigatebutton{
+    cursor: not-allowed;
+  background: #242631;
+}

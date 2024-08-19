@@ -1,0 +1,242 @@
+.rg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden
+}
+
+.guide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9991;
+    font-size: 0
+}
+
+.guide.v {
+    width: 1px;
+    height: 7000px;
+    cursor: col-resize
+}
+
+.guide.h {
+    width: 3000px;
+    height: 1px;
+    cursor: row-resize
+}
+
+.guide .info {
+    width: 40px;
+    height: 25px;
+    line-height: 23px;
+    text-align: center;
+    position: relative;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.guide.v .info {
+    left: 2px
+}
+
+.guide.h .info {
+    top: 2px
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.ruler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9990;
+    display: none;
+}
+
+.ruler .label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.7rem !important;
+    transform: translateX(-2px);
+}
+
+.ruler.v .label {
+    transform: translateX(-2px) translateY(-2px);
+}
+
+.ruler,
+.ruler span {
+    font-size: 0
+}
+
+.ruler.h {
+    width: 3000px;
+    left: 39px;
+    line-height: 40px;
+    height: 41px;
+    padding: 0;
+}
+
+.ruler.v {
+    height: 7000px;
+    top: 39px;
+    width: 40px;
+}
+
+.ruler.h span {
+    border-left: 1px solid transparent;
+    height: 9px;
+    width: 1px;
+    vertical-align: bottom;
+    display: inline-block;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    line-height: 1;
+}
+
+.ruler.v span {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    border-top: 1px solid transparent;
+    width: 9px;
+    height: 1px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.ruler.v span.major {
+    width: 13px
+}
+
+.ruler.v span.milestone {
+    position: relative;
+    width: 17px
+}
+
+.ruler.v span.label {
+    border: 0;
+    font-size: 9px;
+    position: absolute;
+    text-align: center;
+    width: 9px
+}
+
+.ruler.h span.major {
+    height: 13px
+}
+
+.ruler.h span.milestone {
+    position: relative;
+    height: 17px
+}
+
+.ruler.h span.label {
+    border: 0;
+    font-size: 9px;
+    position: absolute;
+    text-align: center;
+    top: -14px;
+    width: 9px
+}
+
+.ruler.h .l10 {
+    left: -5px
+}
+
+.ruler.h .l100 {
+    left: -7px
+}
+
+.ruler.h .l1000 {
+    left: -10px
+}
+
+.ruler.v .l10,
+.ruler.v .l100,
+.ruler.v .l1000 {
+    top: -7px
+}
+
+.ruler.v .l10 {
+    left: -12px
+}
+
+.ruler.v .l100 {
+    left: -17px
+}
+
+.ruler.v .l1000 {
+    left: -23px
+}
+
+#hexa-ruler-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 40px;
+    height: 41px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#hexa-ruler-icon.closed {
+    border-right-color: transparent !important;
+    border-bottom-color: transparent !important;
+}
+
+.menu-btn {
+    line-height: 9px;
+    z-index: 9998;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    text-align: left;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 2px
+}
+
+.menu-btn span.material-icons {
+    font-size: 20px;
+    transform: rotate(90deg);
+}
+
+.rg-menu {
+    position: absolute;
+    top: 41px;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    list-style: 0;
+    display: none;
+    z-index: 9999;
+    font-size: 0.9rem;
+}
+
+.rg-menu li {
+    text-align: left;
+    padding: 0
+}
+
+.rg-menu a {
+    display: flex;
+    padding: 8px;
+    text-decoration: none;
+    line-height: 20px;
+    width: 140px;
+    justify-content: space-between;
+}
+
+.rg-menu .hotkey {
+    font-size: 0.8rem;
+}

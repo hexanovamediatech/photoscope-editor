@@ -1,0 +1,1044 @@
+/* ================= LOADER ================== */
+
+.hexa-sub-settings {
+  padding-top: 25px;
+}
+#hexa-image-filter-name {
+  border: none !important;
+  padding: 10px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid #303030 !important;
+}
+.hexa-loader-inner {
+  background: #121212;
+}
+.hexa-image-filter {
+  margin: 0px;
+}
+.hexa-loader {
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #00a3ff;
+}
+/*==============Filter Name==========*/
+.hexa-accordion-mask:hover {
+  color: #fff;
+}
+.img-filter-container {
+  cursor: pointer;
+  border: 1px solid #303030;
+  padding: 0;
+  margin-top: 15px;
+  height: auto;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+.img-filter-container.active {
+  border: #0188d4 solid 1px;
+}
+.grid-items {
+  position: relative;
+  border: none;
+  padding: 0;
+}
+.hexa-filtered-image {
+  border-radius: 0 !important;
+  margin: 0 !important;
+  border: 3px solid #242631 !important;
+}
+
+.hexa-filtered-image:hover {
+  border: 3px solid #fff !important;
+}
+.grid-items-filter-name {
+  background-color: #303030;
+  position: absolute;
+  z-index: 2;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 700;
+  bottom: 3px;
+  margin-bottom: 0;
+  right: 3px;
+  padding: 0px 10px;
+  border-top-left-radius: 5px;
+}
+
+/* ================= GENERAL STYLES ================== */
+
+* {
+  scrollbar-color: #717171 #303030;
+}
+
+*::-webkit-scrollbar-track {
+  background: #303030;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border: 4px solid #303030;
+}
+
+body {
+  background: #1c1d26;
+  color: #aaa;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #fff;
+}
+
+.text-danger {
+  color: #f44336 !important;
+}
+
+.text-success {
+  color: #009688 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+#hexa-icon-panel hr {
+  border-bottom: 1px dashed #818181;
+}
+
+.notice {
+  color: #aaa;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 4px solid #00a3ff;
+}
+
+.notice.notice-danger {
+  border-left: 4px solid #f44336;
+}
+
+.notice.notice-warning {
+  border-left: 4px solid #ffc107;
+}
+
+.notice.notice-success {
+  border-left: 4px solid #009688;
+}
+
+.hexa-img-loader {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #00a3ff;
+}
+
+#hexa-overlay-preview {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1,0H0V1H2V2H1' fill='%23000000'/%3E%3C/svg%3E")
+    left top/contain #333;
+  background-size: 15px 15px;
+}
+
+/* ================= PAGE STRUCTURE ================== */
+
+#hexa-toggle-left,
+#hexa-toggle-right {
+  background-color: #242631;
+  border: 1px solid #303030;
+}
+
+#hexa-toggle-right.closed,
+#hexa-toggle-left.closed {
+  background-color: #242631;
+}
+
+#hexa-toggle-left .material-icons,
+#hexa-toggle-right .material-icons {
+  color: #fff;
+}
+
+#hexa-toggle-left:hover .material-icons,
+#hexa-toggle-right:hover .material-icons {
+  color: #00a3ff;
+}
+
+/* ================= TOP BAR ================== */
+
+#hexa-top-bar {
+  background: #242631;
+  border-bottom: 1px solid #303030;
+}
+
+.hexa-top-bar-menu .hexa-btn-simple {
+  color: #fff;
+}
+
+.hexa-top-bar-menu .hexa-btn-simple:disabled {
+  color: #aaa;
+}
+
+/* ================= DROPDOWN ================== */
+
+ul.hexa-dropdown {
+  background: #242631;
+  border: 1px solid #303030;
+}
+
+ul.hexa-dropdown li {
+  border-bottom: 1px solid #303030;
+}
+
+ul.hexa-dropdown li a {
+  color: #aaa;
+}
+
+ul.hexa-dropdown li a:hover {
+  color: #fff;
+}
+
+ul.hexa-dropdown li a .material-icons {
+  color: #00a3ff;
+}
+
+/* ================= CONTENT BAR ================== */
+
+.hexa-content-bar {
+  background: #242631;
+  /* border-top: 1px solid #303030; */
+  /* padding: 10px 0; */
+  /* border: 1px solid #303030; */
+}
+
+.hexa-content-bar .hexa-img-size {
+  border-right: 1px solid #303030;
+}
+
+.hexa-content-bar .hexa-counter .hexa-btn,
+.hexa-content-bar .hexa-counter .hexa-btn:hover,
+.hexa-content-bar .hexa-counter .hexa-btn:focus {
+  background: #242631;
+  color: #aaa;
+}
+
+.hexa-content-bar .hexa-counter .hexa-btn:hover {
+  color: #fff;
+}
+
+.hexa-counter .hexa-btn:disabled {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.hexa-content-bar .hexa-counter:after {
+  background: #303030;
+}
+
+#hexa-img-drag {
+  /* border-right: 1px solid #303030; */
+  background: #242631;
+  color: #aaa;
+  font-size: 22px;
+}
+
+#hexa-img-drag:hover,
+#hexa-img-drag.active {
+  /* background: #303030; */
+  color: #fff;
+}
+
+/* ================= ICON MENU ================== */
+
+#hexa-icon-menu {
+  background: #1e202a;
+}
+
+#hexa-icon-menu.closed {
+  border-right: 1px solid #303030;
+}
+
+button.hexa-icon-menu-btn {
+  color: #aaa;
+  background: #1e202a;
+}
+
+button.hexa-icon-menu-btn.active,
+button.hexa-icon-menu-btn:hover {
+  color: #fff;
+  background-color: #242631;
+}
+
+#hexa-icon-panel {
+  border-right: 1px solid #303030;
+  background: #242631;
+}
+
+/* ================= CONTENT ================== */
+#hexa-maskbutton {
+  background-color: #00a3ff;
+  color: #ffff;
+}
+
+#hexa-maskbutton:hover {
+  background: #0188d4;
+}
+
+#hexa-content {
+  background-color: #1c1d26;
+}
+
+#hexa-canvas-wrap {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1,0H0V1H2V2H1' fill='%23FFFFFF'/%3E%3C/svg%3E")
+    left top/contain #ccc;
+  background-size: 15px 15px;
+}
+
+#hexa-canvas-loader {
+  background: #121212;
+}
+
+/* ================= LAYERS ================== */
+
+#hexa-right-col {
+  border-left: 1px solid #3e3e51;
+  background: #242631;
+}
+
+.hexa-layers-title {
+  background: #242631;
+}
+
+#hexa-layers li {
+  color: #aaa;
+  border-bottom: 1px solid #303030;
+  background: #121212;
+}
+
+#hexa-layers li:first-child {
+  border-top: 1px solid #303030;
+}
+
+#hexa-layers li:hover {
+  color: #fff;
+}
+
+#hexa-layers li.active {
+  color: #fff;
+  background: #212121;
+}
+
+#hexa-layers li .layer-icons {
+  background: #242631;
+}
+
+#hexa-layers li .layer-name {
+  color: #aaa;
+}
+
+#hexa-layers li .layer-name:focus {
+  color: #fff;
+}
+
+#hexa-layers li .layer-icons .material-icons {
+  color: #aaa;
+}
+
+#hexa-layers > li > .material-icons {
+  color: #00a3ff;
+}
+
+#hexa-layers > li > .material-icons.layer-settings {
+  background: #242631;
+  color: #aaa;
+}
+
+#hexa-layers > li > .material-icons.layer-settings:hover,
+#hexa-layers > li > .material-icons.layer-settings.active {
+  color: #fff;
+}
+
+#hexa-layers li .layer-icons .layer-visible,
+#hexa-layers li .layer-icons .layer-unlocked {
+  color: #009688;
+}
+
+#hexa-layers li .layer-icons .layer-hidden,
+#hexa-layers li .layer-icons .layer-locked {
+  color: #ffc107;
+}
+
+#hexa-no-layer a {
+  color: #00a3ff;
+}
+
+#hexa-layer-delete-wrap {
+  border-top: 1px dashed #303030;
+}
+
+/* ================= GRID ================== */
+
+.hexa-frames-grid .grid-item,
+.hexa-grid .grid-item {
+  background: #303030;
+}
+
+.hexa-frame,
+.hexa-element {
+  border: 1px solid #303030;
+  background: #303030;
+}
+
+.type-customSVG > a:before {
+  color: #4caf50;
+}
+
+.hexa-element.light {
+  background: #eee;
+}
+
+.hexa-frame:hover,
+.hexa-element:hover {
+  border: 1px solid #fff;
+}
+
+.template-favorite,
+.hexa-frame .frame-favorite,
+.hexa-element .element-favorite {
+  background: #fff;
+}
+
+.hexa-frames-grid .hexa-frame {
+  border: 3px solid #303030;
+}
+
+.hexa-frames-grid .hexa-frame:hover {
+  border: 3px solid #fff;
+}
+
+.grid-icon-item {
+  color: #aaa;
+  border: 1px solid #121212;
+}
+
+.grid-icon-item:hover {
+  border: 1px solid #00a3ff;
+  color: #fff;
+}
+
+.grid-icon-item .material-icons {
+  color: #00a3ff;
+}
+
+.grid-icon-label {
+  border-top: 1px solid #121212;
+}
+
+/* ================= ELEMENTS ================== */
+
+#hexa-filters.hexa-grid img:hover {
+  border: 3px solid #fff;
+}
+
+#hexa-filters.hexa-grid div label span {
+  background: #303030;
+  color: #fff;
+}
+
+#hexa-filters.hexa-grid input[type="checkbox"]:checked + label img,
+#hexa-filters.hexa-grid input[type="radio"]:checked + label img {
+  border: 3px solid #fff;
+}
+
+#hexa-filters.hexa-grid input[type="checkbox"]:checked + label > span,
+#hexa-filters.hexa-grid input[type="radio"]:checked + label > span {
+  color: #242631;
+  background: #fff;
+}
+
+.hexa-element > .material-icons {
+  color: #fff;
+}
+
+/* ================= BUTTONS ================== */
+
+.hexa-btn-simple {
+  color: #aaa;
+}
+
+.hexa-btn-simple:hover,
+.hexa-btn-simple.active {
+  color: #fff;
+}
+
+.hexa-btn-simple:disabled {
+  color: #aaa;
+}
+
+.hexa-btn-simple.star {
+  color: #ff9800 !important;
+}
+
+.hexa-btn {
+  background: #212121;
+  color: #fff;
+}
+
+.hexa-btn:hover,
+.hexa-btn.primary:hover {
+  background: #0188d4;
+}
+
+.hexa-btn.active,
+.hexa-btn.active:hover,
+.hexa-btn.primary {
+  background: #00a3ff;
+  color: #fff;
+}
+
+.hexa-btn.danger {
+  background: #f44336;
+}
+
+.hexa-btn.danger:hover {
+  background: #d32f2f;
+}
+
+.hexa-horizontal-center.active,
+.hexa-vertical-center.active {
+  background: #212121 !important;
+}
+
+/* ================= BLOCKS ================== */
+
+.icon-group {
+  border: 1px solid #303030;
+  background: #303030;
+}
+
+.icon-group .hexa-btn {
+  border-right: 1px solid #303030;
+}
+
+.icon-group .hexa-btn:hover,
+.icon-group .hexa-btn.active {
+  background: #242631;
+}
+
+/* ================= TOOLTIP ================== */
+
+.tooltip:after {
+  background-color: #fff;
+  color: #242631;
+}
+
+.tooltip:before {
+  border-color: #fff transparent;
+}
+
+/* ================= PAGINATION ================== */
+
+.hexa-pagination ul li {
+  border: 1px solid #303030;
+  color: #aaa;
+}
+
+.hexa-pagination ul li.active,
+.hexa-pagination ul li.active:hover {
+  background: #00a3ff;
+  border-color: #00a3ff;
+  color: #fff;
+}
+
+.hexa-pagination ul li:hover {
+  border-color: #00a3ff;
+}
+
+.hexa-pagination ul li a {
+  color: #fff;
+}
+
+.hexa-accordion .hexa-pagination ul li {
+  color: #aaa;
+  background: #212121;
+}
+
+.hexa-accordion .hexa-pagination ul li.active,
+.hexa-accordion .hexa-pagination ul li.active:hover {
+  color: #fff;
+  background: #00a3ff;
+}
+
+.hexa-accordion .hexa-pagination ul li a,
+.hexa-accordion .hexa-pagination ul li > span {
+  color: #aaa;
+}
+
+.hexa-accordion .hexa-pagination ul li.active > span,
+.hexa-accordion .hexa-pagination ul li a:hover {
+  color: #fff;
+}
+
+/* ================= ACCORDION ================== */
+
+ul.hexa-accordion > li {
+  border: 1px solid #303030;
+}
+
+ul.hexa-accordion > li.opened {
+  border-color: #00a3ff;
+}
+
+ul.hexa-accordion > li > a {
+  color: #aaa;
+}
+
+ul.hexa-accordion > li > a:hover,
+ul.hexa-accordion > li.opened > a {
+  color: #fff;
+}
+
+ul.hexa-accordion > li.opened > a {
+  border-bottom: 1px solid #303030;
+}
+
+ul.hexa-accordion > li > a > .data-count {
+  background: #00a3ff;
+  color: #fff;
+}
+
+/* ================= RANGESLIDER ================== */
+
+.hexa-slider {
+  background: #303030;
+}
+
+.hexa-slider::-webkit-slider-thumb {
+  background: #00a3ff;
+  border: 3px solid #121212;
+}
+
+.hexa-slider::-moz-range-thumb {
+  background: #00a3ff;
+  border: 3px solid #121212;
+}
+
+/* ================= COUNTER ================== */
+
+.hexa-counter .hexa-btn,
+.hexa-counter .hexa-btn:hover,
+.hexa-counter .hexa-btn:focus {
+  background: #303030;
+}
+
+.hexa-counter .hexa-btn:disabled {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ================= CONTROLS ================== */
+
+.hexa-control-label span {
+  background: #303030;
+  color: #fff;
+}
+
+.hexa-form-field {
+  background: #212121;
+  border: 1px solid #303030;
+  color: #aaa;
+}
+
+.hexa-form-field:focus {
+  background: #212121;
+  border: 1px solid #00a3ff;
+  color: #fff;
+}
+
+.hexa-search-wrap .material-icons {
+  color: #aaa;
+}
+
+#hexa-element-search-icon.cancel,
+#hexa-icon-search-icon.cancel {
+  color: #f44336;
+}
+
+.hexa-sub-settings {
+  border-top: 1px dashed #818181;
+}
+
+/* ================= COLORPICKER ================== */
+
+.hexa-colorpicker,
+.hexa-colorpicker:focus,
+.hexa-form-field {
+  background: #212121;
+  border: 1px solid #303030;
+  color: #aaa;
+}
+
+.hexa-colorpicker:focus {
+  color: #fff;
+}
+
+.sp-container {
+  background: #242631;
+  border: 1px solid #303030;
+}
+
+.sp-palette-container {
+  border-right: solid 1px #303030;
+}
+
+.sp-container button {
+  color: #aaa;
+}
+
+.sp-container button:hover {
+  color: #fff;
+}
+
+.sp-container button.sp-choose {
+  background: #00a3ff;
+  color: #fff;
+}
+
+.sp-container button.sp-choose:hover,
+.sp-container button.sp-choose:focus {
+  background: #5546e8;
+  color: #fff;
+}
+
+.sp-clear-display:before {
+  color: #fff;
+}
+
+/* ================= SELECT ================== */
+
+.hexa-select {
+  color: #aaa;
+  background: #212121
+    url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23aaaaaa' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E")
+    no-repeat right 0.5rem center;
+  background-size: 20px 10px;
+  border: 1px solid #303030;
+}
+
+.hexa-select:focus {
+  border: 1px solid #00a3ff;
+}
+
+.hexa-select:focus::-ms-value {
+  color: #465362;
+  background-color: #fff;
+}
+
+.select2-container--dark .select2-selection--single {
+  background: #212121;
+  border: 1px solid #303030;
+}
+
+.select2-container--dark
+  .select2-selection--single
+  .select2-selection__rendered {
+  color: #aaa;
+}
+
+.select2-container--dark
+  .select2-selection--single
+  .select2-selection__arrow
+  b {
+  border-color: #aaa transparent transparent transparent;
+}
+
+.select2-container--dark
+  .select2-selection--single
+  .select2-selection__placeholder {
+  color: #fff;
+}
+
+.select2-container--open .select2-dropdown--below,
+.select2-container--open .select2-dropdown--above {
+  background: #242631;
+  border-color: #303030;
+}
+
+.select2-container--dark .select2-results__option--highlighted[aria-selected] {
+  background: #00a3ff !important;
+  color: #ffffff;
+}
+
+.select2-container--dark .select2-results__option[aria-selected="true"] {
+  background: #00a3ff;
+  color: #fff;
+}
+
+.select2-drop {
+  border: 2px solid #303030;
+}
+
+.select2-drop.select2-drop-above {
+  border-top: 2px solid #303030;
+}
+
+.select2-container--dark .select2-search input {
+  border: 1px solid #303030;
+  background: #242631;
+  color: #fff;
+}
+
+.select2-container--dark .select2-search input:focus {
+  border: 1px solid #00a3ff;
+}
+
+.select2-container--dark .select2-results__group {
+  border-top: 1px solid #303030;
+}
+
+/* ================= TABS ================== */
+
+.hexa-tabs-menu li:hover {
+  color: #fff;
+}
+
+.hexa-tabs-menu li.active {
+  background: #00a3ff;
+  color: #fff;
+}
+
+/* ================= TOGGLE ================== */
+
+.hexa-toggle-switch {
+  background: #303030;
+}
+
+.hexa-toggle-switch:before {
+  background: #fff;
+}
+
+.hexa-toggle-checkbox:checked + .hexa-toggle-switch {
+  background: #00a3ff;
+}
+
+/* ================= CHECKBOX ================== */
+
+.hexa-checkmark {
+  background-color: #212121;
+  border: 1px solid #303030;
+}
+
+.hexa-checkbox input:checked ~ .hexa-checkmark {
+  background-color: #00a3ff;
+  border-color: #00a3ff;
+}
+
+.hexa-checkbox .hexa-checkmark:after {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+}
+
+/* ================= CUSTOM CURSOR ================== */
+
+.tm-pointer-simple.tm-cursor {
+  background-color: #fff;
+}
+
+/* ================= MODAL ================== */
+
+.hexa-modal {
+  background: rgba(51, 51, 51, 0.9);
+}
+
+.hexa-modal-inner > .hexa-tabs > .hexa-tabs-menu > li {
+  background: #212121;
+}
+
+.hexa-modal-inner > .hexa-tabs > .hexa-tabs-menu > li.active {
+  background: #121212;
+}
+
+.hexa-modal-inner > .hexa-tabs > .hexa-tab,
+.hexa-modal-bg {
+  background: #121212;
+}
+
+.hexa-modal-close {
+  color: #fff;
+  background: #f44336;
+}
+
+.hexa-modal-close:hover {
+  color: #fff;
+  background: #d32f2f;
+}
+
+.hexa-modal-close .material-icons {
+  font-size: 20px;
+  line-height: 36px;
+}
+
+#hexa-download-as-json,
+#hexa-save-as-json {
+  border-top: 1px dashed #303030;
+}
+
+.hexa-select-btn-block > div:first-child {
+  border-right: 1px dashed #303030;
+}
+
+/* ================= TEMPLATE LIBRARY ================== */
+
+.hexa-template-list {
+  border: 1px solid #303030;
+}
+
+.hexa-template-list li {
+  border-bottom: 1px solid #303030;
+}
+
+.hexa-template-list li.active {
+  background: #212121;
+}
+
+#hexa-history-list li .info .material-icons {
+  color: #00a3ff;
+}
+
+#hexa-history-list li .info span.time {
+  background: #303030;
+  color: #fff;
+}
+
+/* ================= MASONRY ================== */
+
+.hexa-masonry-item .favorite {
+  background: #fff;
+}
+
+.hexa-masonry-item-inner {
+  border: 4px solid #303030;
+}
+
+.grid-item:hover .hexa-masonry-item-inner,
+.hexa-masonry-item-inner:hover {
+  border-color: #fff;
+}
+
+.hexa-masonry-item-desc {
+  background: #fff;
+  color: #242631;
+}
+
+.hexa-svg-library-delete,
+.hexa-library-delete {
+  color: #fff;
+  background: #f44336;
+}
+
+.hexa-svg-library-delete:hover,
+.hexa-library-delete:hover {
+  background: #d32f2f;
+}
+
+.hexa-grid.svg-library-grid .hexa-masonry-item-inner {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1,0H0V1H2V2H1' fill='%23000000'/%3E%3C/svg%3E")
+    left top/contain #333;
+  background-size: 15px 15px;
+}
+
+a.pexels-url {
+  color: #00a3ff;
+  background: #fff;
+}
+
+a.pexels-url:hover {
+  color: #544abf;
+}
+
+#pexels-credit {
+  color: #aaa;
+}
+
+/* ================= RULER ================== */
+
+.guide.v {
+  border-right: 1px solid #00a3ff;
+}
+
+.guide.h {
+  border-bottom: 1px solid #00a3ff;
+}
+
+.guide .info {
+  background-color: #242631;
+  border: 1px solid #212121;
+  color: #fff;
+}
+
+.ruler {
+  background-color: #212121;
+}
+
+.ruler .label {
+  color: #aaa;
+}
+
+.ruler.h {
+  border-bottom: 1px solid #444;
+}
+
+.ruler.h span.major {
+  border-left: 1px solid #444;
+}
+
+.ruler.h span.milestone {
+  border-left: 1px solid #444;
+}
+
+.ruler.v {
+  border-right: 1px solid #444;
+}
+
+.ruler.v span.major {
+  border-top: 1px solid #444;
+}
+
+.ruler.v span.milestone {
+  border-top: 1px solid #444;
+}
+
+#hexa-ruler-icon {
+  background: #212121;
+  border-right: 1px solid #444;
+  border-bottom: 1px solid #444;
+}
+
+.menu-btn {
+  background-color: #00a3ff;
+  color: #fff;
+}
+
+.rg-menu {
+  border-right: 1px solid #303030;
+}
+
+.rg-menu li {
+  border-bottom: 1px solid #303030;
+}
+
+.rg-menu a {
+  background-color: #242631;
+  color: #aaa;
+}
+
+.rg-menu a:hover,
+.rg-menu a.selected {
+  color: #fff;
+}
+
+/* ================= MEDIA QUERIES ================== */
+
+@media only screen and (max-width: 800px) {
+  .hexa-modal-inner > .hexa-tabs > .hexa-tabs-menu > li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}

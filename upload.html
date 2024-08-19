@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link href="upload.css" rel="stylesheet" type="text/css">
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: #1C1D26;
+    }
+</style>
+
+<body>
+    <div id="uploadForm">
+        <h4 style="color: #ffffff;" id="uploadHeading">Upload Files</h4>
+        <form>
+            <div class="input-container">
+                <div class="inpute-names" id="firstInput"></div>
+                <label for="file1" class="custom-file-label">Upload GLB</label>
+                <input type="file" id="file1" name="file1" class="custom-file-input" onchange="updateLabel(this)"
+                    required><br><br>
+            </div>
+            <div class="input-container">
+                <div class="inpute-names" id="secondInput"></div>
+                <label for="file2" class="custom-file-label">Upload UV</label>
+                <input type="file" id="file2" name="file2" class="custom-file-input" onchange="updateLeabel2(this)"
+                    required><br><br>
+            </div>
+            <div class="buttons-container">
+                <div class="new-loader">
+                    <p id="loaderContent">Uploading..</p>
+                </div>
+                <div class="buttons">
+                    <button type="button" id="uploadbutton" onclick="uploadFiles()">Upload Files</button>
+                    <button type="button" id="navigatebutton" onclick="navigate()">Go to home</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        function navigate() {
+            window.location.href = "index.html";
+        }
+        function updateLabel(input) {
+            const file = input.files[0];
+            const fileName = file ? file.name : "Select File";
+            const lebel1 = document.getElementById('firstInput')
+            lebel1.textContent = fileName
+
+        }
+        function updateLeabel2(input) {
+            const file = input.files[0];
+            const fileName = file ? file.name : "Select File";
+            const lebel2 = document.getElementById('secondInput')
+            lebel2.textContent = fileName
+        }
+
+        async function uploadFiles() {
+            const uploadButton = document.getElementById('uploadbutton');
+            uploadButton.style.cursor = 'not-allowed';
+
+            console.log('clicked')
+            const files = document.querySelectorAll('input[type="file"]');
+            let glbURL = "";
+            let imageURL = "";
+
+
+            files.forEach((fileInput, index) => {
+                const file = fileInput.files[0];
+                console.log(file)
+                const { name: fileName, type: contentType } = file;
+                const location = "uploads";
+
+                const fileData = { fileName, contentType, location };
+
+                var uploadingData = {
+                    file: file,
+                    fileName: fileName,
+                    contentType: contentType,
+                    location: location
+                };
+                try {
+                    const loaderContent = document.getElementById('loaderContent')
+                    loaderContent.style.display = 'block'
+                    const response = fetch('https://starter-express-production.up.railway.app/upload', {
+                        method: 'POST',
+                        body: JSON.stringify(uploadingData),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to upload file');
+
+                            }
+                            return response.json();
+                        }).then(data => {
+                            const { signedUrl } = data;
+                            console.log('url generated ', signedUrl)
+                            fetch(signedUrl, {
+                                method: 'PUT',
+                                body: file,
+                                headers: {
+                                    'Content-Type': contentType
+                                }
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        console.log('File uploaded successfully.', uploadingData.contentType);
+                                        const objURL = `https://interactive-three-d-bucket.s3.ap-south-1.amazonaws.com/${uploadingData.location}/${uploadingData.fileName}`
+                                        const isGLB = objURL.endsWith('.glb');
+                                        const isImage = objURL.endsWith('.jpg') || objURL.endsWith('.jpeg') || objURL.endsWith('.png');
+                                        if (isGLB) {
+                                            glbURL = objURL;
+                                        } else if (isImage) {
+                                            imageURL = objURL;
+                                        }
+                                        const obj = {
+                                            glburl: glbURL,
+                                            imageUrl: imageURL
+                                        };
+                                        console.log(obj);
+                                        if (obj.glburl && obj.imageUrl) {
+                                            fetch('https://starter-express-production.up.railway.app/post/urls', {
+                                                method: 'POST',
+                                                body: JSON.stringify(obj),
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error('Failed to save URLs');
+
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    console.log('URLs saved successfully:', data);
+                                                    const navigateButton = document.getElementById('navigatebutton')
+                                                    navigateButton.style.cursor = 'pointer'
+                                                    navigateButton.style.background = '#00A3FF'
+                                                    const loaderContent = document.getElementById('loaderContent')
+                                                    loaderContent.textContent = 'Completed'
+                                                    loaderContent.style.color = 'green'
+
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error saving URLs:', error);
+
+                                                });
+
+                                        }
+                                    } else {
+                                        throw new Error('Failed to upload file');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error uploading file:', error);
+                                });
+                        })
+                        .catch(error => {
+                            console.error('Failed to get pre-signed URL:', error);
+                        });
+                } catch (error) {
+                    console.log(error)
+                }
+            });
+
+
+        }
+    </script>
+</body>
+
+</html>

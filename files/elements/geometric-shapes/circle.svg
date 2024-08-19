@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="bi bi-circle-fill">
+  <!-- Filled circle with red color -->
+  <circle cx="8" cy="8" r="8" fill="#FF0000"/>
+  
+  <!-- Existing path element -->
+  <path d="M8,0C3.582,0,0,3.582,0,8s3.582,8,8,8s8-3.582,8-8S12.418,0,8,0z M8,15C4.691,15,2,12.309,2,8S4.691,1,8,1s6,2.691,6,7 S11.309,15,8,15z"/>
+</svg>
