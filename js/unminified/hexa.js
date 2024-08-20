@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () { },
-        saveTemplate: function () { },
-        saveImage: function () { },
+        customFunctions: function () {},
+        saveTemplate: function () {},
+        saveImage: function () {},
       },
       options
     );
@@ -166,8 +166,6 @@
       }
     });
 
-
-
     // Populate Material Icons
     $.getJSON(settings.baseURL + "json/material-icons.json", function (fonts) {
       for (var i = 0; i < fonts.categories.length; i++) {
@@ -183,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-              url +
-              '" data-loader="no" title="' +
-              item.icons[ii].name +
-              '">' +
-              '<span class="material-icons">' +
-              item.icons[ii].ligature +
-              "</div>"
+                url +
+                '" data-loader="no" title="' +
+                item.icons[ii].name +
+                '">' +
+                '<span class="material-icons">' +
+                item.icons[ii].ligature +
+                "</div>"
             );
         }
       }
@@ -669,9 +667,7 @@
         var canvas2 = new fabric.Canvas(newCanvas, {
           preserveObjectStacking: true,
         });
-        var canvas2Width = parseInt(
-          selector.find("#hexa-canvas-width").val()
-        );
+        var canvas2Width = parseInt(selector.find("#hexa-canvas-width").val());
         var canvas2Height = parseInt(
           selector.find("#hexa-canvas-height").val()
         );
@@ -798,9 +794,7 @@
       }
       if (!selector.find("#keep-data").is(":checked")) {
         canvas.backgroundImage.filters = [];
-        selector
-          .find("#hexa-adjust .conditional-settings")
-          .addClass("d-none");
+        selector.find("#hexa-adjust .conditional-settings").addClass("d-none");
         selector.find("#hexa-brightness").prop("checked", false);
         selector.find("#brightness").val(0);
         selector.find("#hexa-contrast").prop("checked", false);
@@ -1024,9 +1018,7 @@
         selector
           .find("#hexa-icon-menu, #hexa-icon-panel, #hexa-ruler-icon")
           .css("pointer-events", "none");
-        selector
-          .find(".hexa-keep, #modal-add-new .hexa-modal-close")
-          .hide();
+        selector.find(".hexa-keep, #modal-add-new .hexa-modal-close").hide();
         selector.find("#modal-add-new").show();
         selector.find("#hexa-save").prop("disabled", true);
       } else {
@@ -1036,9 +1028,7 @@
         selector
           .find("#hexa-icon-menu, #hexa-icon-panel, #hexa-ruler-icon")
           .css("pointer-events", "auto");
-        selector
-          .find(".hexa-keep, #modal-add-new .hexa-modal-close")
-          .show();
+        selector.find(".hexa-keep, #modal-add-new .hexa-modal-close").show();
         selector.find("#modal-add-new").hide();
         selector.find("#hexa-save").prop("disabled", false);
       }
@@ -1108,9 +1098,7 @@
         input.val("");
         selector.find("#hexa-templates-grid .grid-item").show();
         if (selector.find("#hexa-templates-grid-pagination").length) {
-          selector
-            .find("#hexa-templates-grid-pagination")
-            .pagination("redraw");
+          selector.find("#hexa-templates-grid-pagination").pagination("redraw");
           selector
             .find("#hexa-templates-grid-pagination")
             .pagination("selectPage", 1);
@@ -1169,8 +1157,8 @@
             }
           }
           if (
-            selector.find("#hexa-templates-grid .grid-item:visible")
-              .length === 0
+            selector.find("#hexa-templates-grid .grid-item:visible").length ===
+            0
           ) {
             selector.find("#hexa-all-templates-noimg").removeClass("d-none");
           }
@@ -1179,9 +1167,6 @@
         selector.find("#hexa-templates-menu").prop("disabled", true);
       }
     });
-
-
-
 
     /* Save Template */
     selector.find("#hexa-json-save").on("click", function () {
@@ -1197,7 +1182,7 @@
         "lockRotation",
         "crossOrigin",
         "layerName",
-        "customId"
+        "customId",
       ]);
 
       // Convert the background image source to a data URL
@@ -1205,27 +1190,27 @@
         json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
         var template = JSON.stringify(json);
 
-        var blob = new Blob([template], { type: 'application/json' });
+        var blob = new Blob([template], { type: "application/json" });
 
         var timestamp = new Date().getTime();
-        var uniqueFileName = 'template_' + timestamp + '.json';
+        var uniqueFileName = "template_" + timestamp + ".json";
         var formData = new FormData();
-        formData.append('files', blob, uniqueFileName);
+        formData.append("files", blob, uniqueFileName);
 
         $.ajax({
-          url: 'https://interactive.hexanovamedia.tech/api/v1/user/media/upload',
-          type: 'POST',
+          url: "https://interactive.hexanovamedia.tech/api/v1/user/media/upload",
+          type: "POST",
           data: formData,
           processData: false,
           contentType: false,
           success: function (response) {
             var url = response.urls[0];
             var currentUrl = window.location.href;
-            var type = '';
-            if (currentUrl.includes('p3-type1.html')) {
-              type = 'p3-type1';
-            } else if (currentUrl.includes('p2-type1.html')) {
-              type = 'p2-type1';
+            var type = "";
+            if (currentUrl.includes("p3-type1.html")) {
+              type = "p3-type1";
+            } else if (currentUrl.includes("p2-type1.html")) {
+              type = "p2-type1";
             }
             // Update the template with the new URL
             var key = Math.random().toString(36).substr(2, 9);
@@ -1235,45 +1220,46 @@
               key: key,
               src: url,
               name: name,
-              type: type
+              type: type,
             };
 
             // Upload the data object to the new API
-            uploadData(data).then(() => {
-              // Display a success message using toastr after successful upload
-              toastr.success('Data uploaded successfully!', 'Success');
-            }).catch(error => {
-              // Display an error message using toastr if uploading fails
-              toastr.error(error.message, 'Error');
-            });
+            uploadData(data)
+              .then(() => {
+                // Display a success message using toastr after successful upload
+                toastr.success("Data uploaded successfully!", "Success");
+              })
+              .catch((error) => {
+                // Display an error message using toastr if uploading fails
+                toastr.error(error.message, "Error");
+              });
           },
           error: function (xhr, status, error) {
             // Display an error message using toastr if the API call fails
-            toastr.error(error, 'Error');
-          }
+            toastr.error(error, "Error");
+          },
         });
       });
     });
 
-
     function uploadData(data) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: 'https://interactive.hexanovamedia.tech/api/v1/user/file-data/upload',
-          type: 'POST',
-          contentType: 'application/json',
+          url: "https://interactive.hexanovamedia.tech/api/v1/user/file-data/upload",
+          type: "POST",
+          contentType: "application/json",
           data: JSON.stringify(data),
           success: function (response) {
             resolve(response);
           },
           error: function (xhr, status, error) {
             reject(error);
-          }
+          },
         });
       });
     }
 
-    $(document).on('click', '#hexa-new', function () {
+    $(document).on("click", "#hexa-new", function () {
       fetchAndDisplayTemplates();
     });
 
@@ -1281,44 +1267,44 @@
       return new Promise((resolve, reject) => {
         $.ajax({
           url: `https://interactive.hexanovamedia.tech/api/v1/user/delete/${key}`,
-          type: 'DELETE',
+          type: "DELETE",
           success: function (response) {
             resolve(response);
           },
           error: function (xhr, status, error) {
             reject(error);
-          }
+          },
         });
       });
     }
 
-
-
-
     function fetchAndDisplayTemplates() {
       const url = window.location.href;
-      let type = '';
+      let type = "";
 
-      if (url.includes('p3-type1.html')) {
-        type = 'p3-type1';
-      } else if (url.includes('p2-type1.html')) {
-        type = 'p2-type1';
+      if (url.includes("p3-type1.html")) {
+        type = "p3-type1";
+      } else if (url.includes("p2-type1.html")) {
+        type = "p2-type1";
       }
-      getAllSavedData().then(assets => {
-        const templatesContainer = $('#hexa-my-templates');
-        templatesContainer.empty(); // Clear existing content
+      getAllSavedData()
+        .then((assets) => {
+          const templatesContainer = $("#hexa-my-templates");
+          templatesContainer.empty(); // Clear existing content
 
-        if (assets.length === 0) {
-          templatesContainer.html('<div class="notice notice-info">No templates found.</div>');
-        } else {
-          assets.forEach(asset => {
-            if (asset.type === type) {
-              const jsonblob = new Blob([asset.src], { type: "text/plain" });
-              const jsonurl = URL.createObjectURL(jsonblob);
+          if (assets.length === 0) {
+            templatesContainer.html(
+              '<div class="notice notice-info">No templates found.</div>'
+            );
+          } else {
+            assets.forEach((asset) => {
+              if (asset.type === type) {
+                const jsonblob = new Blob([asset.src], { type: "text/plain" });
+                const jsonurl = URL.createObjectURL(jsonblob);
 
-              const listItem = $('<li>').attr('data-keyword', asset.name);
+                const listItem = $("<li>").attr("data-keyword", asset.name);
 
-              listItem.html(`
+                listItem.html(`
                       <div>${asset.name}</div>
                       <div>
                           <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
@@ -1330,48 +1316,40 @@
                       </div>
                   `);
 
-              templatesContainer.append(listItem);
-            }
-          });
-        }
-      }).catch(error => {
-        toastr.error(error.message, 'Error retrieving assets');
-      });
+                templatesContainer.append(listItem);
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          toastr.error(error.message, "Error retrieving assets");
+        });
     }
-
-
 
     function getAllSavedData() {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: 'https://interactive.hexanovamedia.tech/api/v1/user/get/all',
-          type: 'GET',
-          contentType: 'application/json',
+          url: "https://interactive.hexanovamedia.tech/api/v1/user/get/all",
+          type: "GET",
+          contentType: "application/json",
           success: function (response) {
             resolve(response.data);
           },
           error: function (xhr, status, error) {
             reject(error);
-          }
+          },
         });
       });
     }
 
     // Example usage of deleteData function
 
-
-
-
-    $(document).on('click', '.hexa-template-delete', function () {
-      var assetKey = $(this).data('target');
+    $(document).on("click", ".hexa-template-delete", function () {
+      var assetKey = $(this).data("target");
 
       // Function to handle the template deletion
       deleteTemplate(assetKey);
     });
-
-
-
-
 
     function deleteAssetFromIndexedDB(dbName, storeName, key) {
       return new Promise((resolve, reject) => {
@@ -1383,7 +1361,7 @@
 
         request.onsuccess = (event) => {
           const db = event.target.result;
-          const transaction = db.transaction(storeName, 'readwrite');
+          const transaction = db.transaction(storeName, "readwrite");
           const store = transaction.objectStore(storeName);
 
           const deleteRequest = store.delete(key);
@@ -1402,7 +1380,6 @@
         };
       });
     }
-
 
     /* Download Template */
     selector.find("#hexa-json-download").on("click", function () {
@@ -1434,7 +1411,7 @@
     });
     /* Load JSON */
     function loadJSON(json) {
-      console.log('this is the json', json.objects);
+      console.log("this is the json", json.objects);
       selector.find("#hexa-canvas-loader").css("display", "flex");
       rotate = json.backgroundImage.angle;
       scaleX = json.backgroundImage.scaleX;
@@ -1453,7 +1430,6 @@
         width: originalWidth,
         height: originalHeight,
       };
-
 
       var filteredObjects = [];
       var clipmaskObjects = [];
@@ -1478,7 +1454,6 @@
         }
       });
 
-
       json.objects = filteredObjects;
 
       for (var i = 0; i < json.objects.length; i++) {
@@ -1486,7 +1461,6 @@
           json.objects[i].fontFamily = json.objects[i].fontFamily + "-hexa";
         }
       }
-
 
       canvas.loadFromJSON(
         json,
@@ -1507,10 +1481,10 @@
           canvas.requestRenderAll();
           selector.find("#hexa-canvas-loader").hide();
           if (clipmaskData.image != null && clipmaskData.path != null) {
-            applyTemplateClipMask(clipmaskData.image, clipmaskData.path)
+            applyTemplateClipMask(clipmaskData.image, clipmaskData.path);
           }
         },
-        function () { },
+        function () {},
         {
           crossOrigin: "anonymous",
         }
@@ -1621,33 +1595,35 @@
       selector.find(".hexa-modal").hide();
     });
     /* Add Template */
-    selector.find(".template-selection").on("click", ".hexa-select-template", function () {
-      selector
-        .find("#hexa-canvas-wrap, .hexa-content-bar")
-        .css("visibility", "visible");
-      selector.find(".hexa-modal").hide();
-      selector.find("#hexa-canvas-loader").css("display", "flex");
-      var objects = canvas.getObjects();
-      objects
-        .filter((element) => element.objectType != "BG")
-        .forEach((element) => canvas.remove(element));
-      selector.find("#hexa-layers li").remove();
-      checkLayers();
-      $.getJSON($(this).data("json"), function (json) {
-        loadJSON(json);
-        setTimeout(function () {
-          addToHistory(
-            '<span class="material-icons">flag</span>' + hexaParams.started
-          );
-        }, 100);
-      })
-        .fail(function (jqxhr, textStatus, error) {
-          toastr.error("Request Failed: " + error, hexaParams.error);
+    selector
+      .find(".template-selection")
+      .on("click", ".hexa-select-template", function () {
+        selector
+          .find("#hexa-canvas-wrap, .hexa-content-bar")
+          .css("visibility", "visible");
+        selector.find(".hexa-modal").hide();
+        selector.find("#hexa-canvas-loader").css("display", "flex");
+        var objects = canvas.getObjects();
+        objects
+          .filter((element) => element.objectType != "BG")
+          .forEach((element) => canvas.remove(element));
+        selector.find("#hexa-layers li").remove();
+        checkLayers();
+        $.getJSON($(this).data("json"), function (json) {
+          loadJSON(json);
+          setTimeout(function () {
+            addToHistory(
+              '<span class="material-icons">flag</span>' + hexaParams.started
+            );
+          }, 100);
         })
-        .always(function () {
-          selector.find("#hexa-canvas-loader").hide();
-        });
-    });
+          .fail(function (jqxhr, textStatus, error) {
+            toastr.error("Request Failed: " + error, hexaParams.error);
+          })
+          .always(function () {
+            selector.find("#hexa-canvas-loader").hide();
+          });
+      });
     /* Search My Templates */
     selector.find("#hexa-my-templates-search").on("click", function () {
       var input = $(this).parent().find("input");
@@ -1666,9 +1642,7 @@
         input.val("");
         selector.find("#hexa-my-templates li").show();
         if (selector.find("#hexa-my-templates-pagination").length) {
-          selector
-            .find("#hexa-my-templates-pagination")
-            .pagination("redraw");
+          selector.find("#hexa-my-templates-pagination").pagination("redraw");
           selector
             .find("#hexa-my-templates-pagination")
             .pagination("selectPage", 1);
@@ -1684,9 +1658,7 @@
         if (searchTerm == "" || searchTerm.length < 1) {
           selector.find("#hexa-my-templates li").show();
           if (selector.find("#hexa-my-templates-pagination").length) {
-            selector
-              .find("#hexa-my-templates-pagination")
-              .pagination("redraw");
+            selector.find("#hexa-my-templates-pagination").pagination("redraw");
             selector
               .find("#hexa-my-templates-pagination")
               .pagination("selectPage", 1);
@@ -1757,9 +1729,7 @@
     /* Download Image */
     selector.find("#hexa-download").on("click", function () {
       var name = selector.find("#hexa-download-name").val();
-      var quality = parseFloat(
-        selector.find("#hexa-download-quality").val()
-      );
+      var quality = parseFloat(selector.find("#hexa-download-quality").val());
       var format = selector.find("#hexa-download-format").val();
       var link = document.createElement("a");
       add_watermark();
@@ -1921,16 +1891,12 @@
     selector.find("#hexa-img-media-library").on("click", function () {
       mmediaLibraryMode = "add-as-object";
     });
-    selector
-      .find("#hexa-img-replace-media-library")
-      .on("click", function () {
-        mmediaLibraryMode = "replace-image";
-      });
-    selector
-      .find("#hexa-overlay-img-media-library")
-      .on("click", function () {
-        mmediaLibraryMode = "overlay-image";
-      });
+    selector.find("#hexa-img-replace-media-library").on("click", function () {
+      mmediaLibraryMode = "replace-image";
+    });
+    selector.find("#hexa-overlay-img-media-library").on("click", function () {
+      mmediaLibraryMode = "overlay-image";
+    });
     /* Select Image */
     selector
       .find("#modal-media-library")
@@ -2059,18 +2025,14 @@
         if (searchTerm == "" || searchTerm.length < 1) {
           selector.find("#hexa-library-my .hexa-masonry-item").show();
           if (selector.find("#hexa-library-my-pagination").length) {
-            selector
-              .find("#hexa-library-my-pagination")
-              .pagination("redraw");
+            selector.find("#hexa-library-my-pagination").pagination("redraw");
             selector
               .find("#hexa-library-my-pagination")
               .pagination("selectPage", 1);
           }
         } else {
           if (selector.find("#hexa-library-my-pagination").length) {
-            selector
-              .find("#hexa-library-my-pagination")
-              .pagination("destroy");
+            selector.find("#hexa-library-my-pagination").pagination("destroy");
           }
           selector
             .find("#hexa-library-my .hexa-masonry-item")
@@ -2117,18 +2079,14 @@
         if (searchTerm == "" || searchTerm.length < 1) {
           selector.find("#hexa-library-all .hexa-masonry-item").show();
           if (selector.find("#hexa-library-all-pagination").length) {
-            selector
-              .find("#hexa-library-all-pagination")
-              .pagination("redraw");
+            selector.find("#hexa-library-all-pagination").pagination("redraw");
             selector
               .find("#hexa-library-all-pagination")
               .pagination("selectPage", 1);
           }
         } else {
           if (selector.find("#hexa-library-all-pagination").length) {
-            selector
-              .find("#hexa-library-all-pagination")
-              .pagination("destroy");
+            selector.find("#hexa-library-all-pagination").pagination("destroy");
           }
           selector
             .find("#hexa-library-all .hexa-masonry-item")
@@ -2147,9 +2105,7 @@
     });
     /* Save Image */
     selector.find("#hexa-save-img").on("click", function () {
-      var quality = parseFloat(
-        selector.find("#hexa-save-img-quality").val()
-      );
+      var quality = parseFloat(selector.find("#hexa-save-img-quality").val());
       var format = selector.find("#hexa-save-img-format").val();
       var imgData = "";
       add_watermark();
@@ -2243,34 +2199,30 @@
     /* Select SVG */
     selector
       .find(".svg-library-grid")
-      .on(
-        "click",
-        ">.hexa-masonry-item>.hexa-masonry-item-inner",
-        function () {
-          var fullSVG = $(this).find("img").data("full");
-          fabric.loadSVGFromURL(
-            fullSVG,
-            function (objects, options) {
-              var svg = fabric.util.groupSVGElements(objects, options);
-              svg.set("originX", "center");
-              svg.set("originY", "center");
-              svg.set("left", getScaledSize()[0] / 2);
-              svg.set("top", getScaledSize()[1] / 2);
-              svg.set("objectType", "customSVG");
-              svg.scaleToWidth(getScaledSize()[0] / 2);
-              svg.scaleToHeight(getScaledSize()[1] / 2);
-              canvas.add(svg);
-              canvas.setActiveObject(svg);
-              canvas.requestRenderAll();
-            },
-            function () { },
-            {
-              crossOrigin: "anonymous",
-            }
-          );
-          selector.find("#modal-svg-library").hide();
-        }
-      );
+      .on("click", ">.hexa-masonry-item>.hexa-masonry-item-inner", function () {
+        var fullSVG = $(this).find("img").data("full");
+        fabric.loadSVGFromURL(
+          fullSVG,
+          function (objects, options) {
+            var svg = fabric.util.groupSVGElements(objects, options);
+            svg.set("originX", "center");
+            svg.set("originY", "center");
+            svg.set("left", getScaledSize()[0] / 2);
+            svg.set("top", getScaledSize()[1] / 2);
+            svg.set("objectType", "customSVG");
+            svg.scaleToWidth(getScaledSize()[0] / 2);
+            svg.scaleToHeight(getScaledSize()[1] / 2);
+            canvas.add(svg);
+            canvas.setActiveObject(svg);
+            canvas.requestRenderAll();
+          },
+          function () {},
+          {
+            crossOrigin: "anonymous",
+          }
+        );
+        selector.find("#modal-svg-library").hide();
+      });
     /* Search My SVGs */
     selector.find("#hexa-svg-library-my-search").on("click", function () {
       var input = $(this).parent().find("input");
@@ -2286,9 +2238,7 @@
         input.val("");
         selector.find("#hexa-svg-library-my .hexa-masonry-item").show();
         if (selector.find("#hexa-svg-library-my-pagination").length) {
-          selector
-            .find("#hexa-svg-library-my-pagination")
-            .pagination("redraw");
+          selector.find("#hexa-svg-library-my-pagination").pagination("redraw");
           selector
             .find("#hexa-svg-library-my-pagination")
             .pagination("selectPage", 1);
@@ -2322,13 +2272,10 @@
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
           if (
-            selector.find(
-              "#hexa-svg-library-my .hexa-masonry-item:visible"
-            ).length === 0
+            selector.find("#hexa-svg-library-my .hexa-masonry-item:visible")
+              .length === 0
           ) {
-            selector
-              .find("#hexa-svg-library-my-noimg")
-              .removeClass("d-none");
+            selector.find("#hexa-svg-library-my-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
@@ -2364,9 +2311,7 @@
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         if (searchTerm == "" || searchTerm.length < 1) {
-          selector
-            .find("#hexa-svg-library-all .hexa-masonry-item")
-            .show();
+          selector.find("#hexa-svg-library-all .hexa-masonry-item").show();
           if (selector.find("#hexa-svg-library-all-pagination").length) {
             selector
               .find("#hexa-svg-library-all-pagination")
@@ -2387,13 +2332,10 @@
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
           if (
-            selector.find(
-              "#hexa-svg-library-all .hexa-masonry-item:visible"
-            ).length === 0
+            selector.find("#hexa-svg-library-all .hexa-masonry-item:visible")
+              .length === 0
           ) {
-            selector
-              .find("#hexa-svg-library-all-noimg")
-              .removeClass("d-none");
+            selector.find("#hexa-svg-library-all-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
@@ -2480,12 +2422,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-        action +
-        '<span class="time">' +
-        time +
-        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-        JSON.stringify(json) +
-        "</script></div></li>"
+          action +
+          '<span class="time">' +
+          time +
+          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          JSON.stringify(json) +
+          "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -3014,22 +2956,18 @@
       })
       .disableSelection();
     /* Settings toggle */
-    selector
-      .find("#hexa-layers")
-      .on("click", ".layer-settings", function () {
-        var layerSettings = $(this).next();
-        if ($(this).hasClass("active")) {
-          $(this).removeClass("active");
-          layerSettings.hide();
-        } else {
-          selector.find("#hexa-layers .layer-icons").hide();
-          selector
-            .find("#hexa-layers .layer-settings")
-            .removeClass("active");
-          $(this).addClass("active");
-          layerSettings.show();
-        }
-      });
+    selector.find("#hexa-layers").on("click", ".layer-settings", function () {
+      var layerSettings = $(this).next();
+      if ($(this).hasClass("active")) {
+        $(this).removeClass("active");
+        layerSettings.hide();
+      } else {
+        selector.find("#hexa-layers .layer-icons").hide();
+        selector.find("#hexa-layers .layer-settings").removeClass("active");
+        $(this).addClass("active");
+        layerSettings.show();
+      }
+    });
     /* Delete Layer Event */
     function deleteLayerEvent(id) {
       var item = selector.find("#hexa-layers #" + id);
@@ -3163,9 +3101,7 @@
         selector.find("#hexa-layer-delete-wrap").css("visibility", "hidden");
       } else {
         selector.find("#hexa-no-layer").hide();
-        selector
-          .find("#hexa-layer-delete-wrap")
-          .css("visibility", "visible");
+        selector.find("#hexa-layer-delete-wrap").css("visibility", "visible");
       }
     }
     /* Layer Toggle */
@@ -3327,8 +3263,7 @@
           selector.find("#hexa-img-zoom").val(100);
         } else {
           if (zoomWidth > selector.find("#hexa-content").width()) {
-            ratio =
-              (selector.find("#hexa-content").width() - 60) / zoomWidth;
+            ratio = (selector.find("#hexa-content").width() - 60) / zoomWidth;
             requiredRatio = ratio.toFixed(2) * 100;
             if (currentZoom > requiredRatio) {
               canvas.setZoom(ratio.toFixed(2));
@@ -3421,9 +3356,7 @@
       selector.find("#hexa-crop-width").val(Math.round(e.width / 2));
       selector.find("#hexa-crop-height").val(Math.round(e.height / 2));
       selector.find("#hexa-resize-width").data("size", Math.round(e.width));
-      selector
-        .find("#hexa-resize-height")
-        .data("size", Math.round(e.height));
+      selector.find("#hexa-resize-height").data("size", Math.round(e.height));
       if (mode == "image") {
         selector.find("#hexa-crop-width").data("max", Math.round(e.width));
         selector.find("#hexa-crop-height").data("max", Math.round(e.height));
@@ -3460,9 +3393,7 @@
         )
         .css("pointer-events", "none");
       selector
-        .find(
-          ".hexa-icon-panel-content ul.hexa-accordion > li.accordion-crop"
-        )
+        .find(".hexa-icon-panel-content ul.hexa-accordion > li.accordion-crop")
         .css("pointer-events", "auto");
       objects
         .filter(
@@ -3678,9 +3609,7 @@
         var width = $(this).data("max");
         var height = selector.find("#hexa-crop-height").data("max");
         var ratio = width / height;
-        selector
-          .find("#hexa-crop-height")
-          .val(Math.round(this.value / ratio));
+        selector.find("#hexa-crop-height").val(Math.round(this.value / ratio));
       }
       clipPath.set("width", parseInt($(this).val()));
       clipPath.set(
@@ -3695,15 +3624,10 @@
         var height = $(this).data("max");
         var width = selector.find("#hexa-crop-width").data("max");
         var ratio = height / width;
-        selector
-          .find("#hexa-crop-width")
-          .val(Math.round(this.value / ratio));
+        selector.find("#hexa-crop-width").val(Math.round(this.value / ratio));
       }
       clipPath.set("height", parseInt($(this).val()));
-      clipPath.set(
-        "width",
-        parseInt(selector.find("#hexa-crop-width").val())
-      );
+      clipPath.set("width", parseInt(selector.find("#hexa-crop-width").val()));
       canvas.requestRenderAll();
     });
     /* Resize Canvas */
@@ -3787,9 +3711,7 @@
         var height = $(this).data("size");
         var width = selector.find("#hexa-resize-width").data("size");
         var ratio = height / width;
-        selector
-          .find("#hexa-resize-width")
-          .val(Math.round(this.value / ratio));
+        selector.find("#hexa-resize-width").val(Math.round(this.value / ratio));
       }
     });
     /* Rotate Canvas */
@@ -4868,9 +4790,7 @@
           },
         ];
       }
-      if (
-        selector.find("#hexa-" + value + "-gradient").val() == "vertical"
-      ) {
+      if (selector.find("#hexa-" + value + "-gradient").val() == "vertical") {
         selector.find("#" + value + "-gradient-settings").show();
         selector.find("#" + value + "-fill-color").hide();
         obj.set(
@@ -4969,11 +4889,9 @@
     }
     var gradientFields = ["text", "shape", "element"];
     $.each(gradientFields, function (index, value) {
-      selector
-        .find("#hexa-" + value + "-gradient")
-        .on("change", function () {
-          updateGradient(value);
-        });
+      selector.find("#hexa-" + value + "-gradient").on("change", function () {
+        updateGradient(value);
+      });
       selector
         .find("#" + value + "-gradient-color-1")
         .on("change", function () {
@@ -5200,9 +5118,7 @@
     selector.find("#hexa-text-input").bind("input paste", function () {
       canvas.getActiveObject().set("text", $(this).val());
       selector
-        .find(
-          "#hexa-layers #" + canvas.getActiveObject().id + " .layer-name"
-        )
+        .find("#hexa-layers #" + canvas.getActiveObject().id + " .layer-name")
         .html(canvas.getActiveObject().text);
       canvas.requestRenderAll();
     });
@@ -5290,8 +5206,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                          item.find(".select2-item").html() +
-                          "&text=abc",
+                            item.find(".select2-item").html() +
+                            "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5424,30 +5340,28 @@
         });
       });
     /* Text Flip Buttons */
-    selector
-      .find("#hexa-text-flip-btns > .hexa-btn")
-      .on("click", function () {
-        if ($(this).hasClass("active")) {
-          if ($(this).attr("id") == "text-flip-x") {
-            canvas.getActiveObject().set("flipX", false);
-          } else if ($(this).attr("id") == "text-flip-y") {
-            canvas.getActiveObject().set("flipY", false);
-          }
-          $(this).removeClass("active");
-        } else {
-          if ($(this).attr("id") == "text-flip-x") {
-            canvas.getActiveObject().set("flipX", true);
-          } else if ($(this).attr("id") == "text-flip-y") {
-            canvas.getActiveObject().set("flipY", true);
-          }
-          $(this).addClass("active");
+    selector.find("#hexa-text-flip-btns > .hexa-btn").on("click", function () {
+      if ($(this).hasClass("active")) {
+        if ($(this).attr("id") == "text-flip-x") {
+          canvas.getActiveObject().set("flipX", false);
+        } else if ($(this).attr("id") == "text-flip-y") {
+          canvas.getActiveObject().set("flipY", false);
         }
-        canvas.requestRenderAll();
-        canvas.fire("hexa:history", {
-          type: "textbox",
-          text: hexaParams.edited,
-        });
+        $(this).removeClass("active");
+      } else {
+        if ($(this).attr("id") == "text-flip-x") {
+          canvas.getActiveObject().set("flipX", true);
+        } else if ($(this).attr("id") == "text-flip-y") {
+          canvas.getActiveObject().set("flipY", true);
+        }
+        $(this).addClass("active");
+      }
+      canvas.requestRenderAll();
+      canvas.fire("hexa:history", {
+        type: "textbox",
+        text: hexaParams.edited,
       });
+    });
     /* Text Skew, Rotate, Opacity */
     selector
       .find("#hexa-text-settings input[type=range]")
@@ -5478,18 +5392,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-          $(originalOption).data("icon") +
-          "</span>" +
-          icon.text +
-          "</div>"
+            $(originalOption).data("icon") +
+            "</span>" +
+            icon.text +
+            "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-          $(originalOption).data("font") +
-          '">' +
-          icon.text +
-          "</div>"
+            $(originalOption).data("font") +
+            '">' +
+            icon.text +
+            "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -6013,25 +5927,67 @@
 
     var preservedImage;
 
-    function AddingImage() {
-      console.log("adding image ");
+    // function AddingImage() {
+    //   console.log("adding image ");
 
-      var pathname = window.location.pathname;
-      console.log("pathname is", pathname);
+    //   var pathname = window.location.pathname;
+    //   console.log("pathname is", pathname);
+
+    //   var imageUrls = {
+    //     "/p5-type1.html": "assets/3d/P5_Type1.png",
+    //     "/p9-type1.html": "assets/3d/P9_Type1.png",
+    //     "/p3-type1.html": "assets/3d/P3_type1.png",
+    //     "/p2-type1.html": "assets/3d/P2_type1.png",
+    //     "/p4-type1.html": "assets/3d/P4_Type1.png",
+    //     "/p3-type3.html": "assets/3d/P3_type3.png",
+    //     "/model-1.html": "assets/3d/Glow-3.png",
+    //     "/model-2.html": "assets/3d/model-2.png",
+    //   };
+
+    //   if (imageUrls.hasOwnProperty(pathname)) {
+    //     var imageUrl = imageUrls[pathname];
+
+    //     fabric.Image.fromURL(imageUrl, function (img) {
+    //       img.set({
+    //         selectable: false,
+    //         evented: false,
+    //         hasControls: false,
+    //         customId: "saheb",
+    //         isPreservedObject: true,
+    //       });
+    //       if (pathname == "/p3-type1.html") {
+    //         img.scaleX = 2;
+    //         img.scaleY = 2;
+    //       }
+    //       preservedImage = img;
+    //       canvas.add(img);
+    //       canvas.renderAll();
+    //       onlyDeleteLayerEvent(img.id);
+    //     });
+    //   }
+    // }
+
+    function AddingImage() {
+      console.log("adding image");
+
+      // Get the 'name' query parameter from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const name = urlParams.get("name");
+      console.log("name from query param is", name);
 
       var imageUrls = {
-        "/p5-type1.html": "assets/3d/P5_Type1.png",
-        "/p9-type1.html": "assets/3d/P9_Type1.png",
-        "/p3-type1.html": "assets/3d/P3_type1.png",
-        "/p2-type1.html": "assets/3d/P2_type1.png",
-        "/p4-type1.html": "assets/3d/P4_Type1.png",
-        "/p3-type3.html": "assets/3d/P3_type3.png",
-        "/model-1.html": "assets/3d/Glow-3.png",
-        "/model-2.html": "assets/3d/model-2.png",
+        "p5-type1": "assets/3d/P5_Type1.png",
+        "p9-type1": "assets/3d/P9_Type1.png",
+        "p3-type1": "assets/3d/P3_type1.png",
+        "p2-type1": "assets/3d/P2_type1.png",
+        "p4-type1": "assets/3d/P4_Type1.png",
+        "p3-type3": "assets/3d/P3_type3.png",
+        "Model-1": "assets/3d/Glow-3.png",
+        "Model-2": "assets/3d/model-2.png",
       };
 
-      if (imageUrls.hasOwnProperty(pathname)) {
-        var imageUrl = imageUrls[pathname];
+      if (imageUrls.hasOwnProperty(name)) {
+        var imageUrl = imageUrls[name];
 
         fabric.Image.fromURL(imageUrl, function (img) {
           img.set({
@@ -6041,7 +5997,7 @@
             customId: "saheb",
             isPreservedObject: true,
           });
-          if (pathname == "/p3-type1.html") {
+          if (name === "p3-type1") {
             img.scaleX = 2;
             img.scaleY = 2;
           }
@@ -6100,286 +6056,289 @@
     var shape;
     var selectionSvg;
     var isAdded = false;
-    selector
-      .find(".hexa-mask-shape-select-option")
-      .on("click", function (e) {
-        var selected = $(this).data("value");
-        isAdded = true;
-        activeMaskButton();
-        if (selected == "custom") {
-          selector.find("#hexa-img-radius-settings").removeClass("d-none");
-        } else {
-          selector.find("#hexa-img-radius-settings").addClass("d-none");
-          selector.find("#img-border-radius").val("0");
-          selector
-            .find("#img-border-radius")
-            .parent()
-            .parent()
-            .find("label span")
-            .html("0");
-        }
-        var obj = canvas.getActiveObject();
-        var mask = null;
-        var left = -(obj.width / 2);
-        var top = -(obj.width / 2);
-        var radius = obj.width / 2;
-        if (obj.width > obj.height) {
-          left = -(obj.height / 2);
-          top = -(obj.height / 2);
-          radius = obj.height / 2;
-        }
-        obj.clipPath = null;
-        canvas.requestRenderAll();
-        if (selected == "circle") {
-          shape = "circle";
-          activeImage = obj;
-          obj.set({
-            top: 0,
-            left: 0,
-            originX: "left",
-            originY: "top",
-          });
-          selectioncircle = new fabric.Circle({
-            fill: "rgba(0,0,0,0.3)",
-            originX: "left",
-            originY: "top",
-            stroke: "black",
-            opacity: 1,
-            radius: 150,
-            hasRotatingPoint: false,
-            transparentCorners: false,
-            cornerColor: "white",
-            cornerStrokeColor: "black",
-            borderColor: "black",
-            cornerSize: 12,
-            padding: 0,
-            cornerStyle: "circle",
-            borderDashArray: [5, 5],
-            borderScaleFactor: 1.3,
-          });
-          canvas.add(selectioncircle);
-          canvas.setActiveObject(selectioncircle);
-          canvas.renderAll();
-        } else if (selected == "triangle") {
-          shape = "triangle";
-          activeImage = obj;
-          obj.set({
-            top: 0,
-            left: 0,
-            originX: "left",
-            originY: "top",
-          });
-          selectiontriangle = new fabric.Triangle({
-            fill: "rgba(0,0,0,0.3)",
-            originX: "left",
-            originY: "top",
-            stroke: "black",
-            opacity: 1,
-            width: radius,
-            height: radius,
-            hasRotatingPoint: false,
-            transparentCorners: false,
-            cornerColor: "white",
-            cornerStrokeColor: "black",
-            borderColor: "black",
-            cornerSize: 12,
-            padding: 0,
-            cornerStyle: "circle",
-            borderDashArray: [5, 5],
-            borderScaleFactor: 1.3,
-          });
+    selector.find(".hexa-mask-shape-select-option").on("click", function (e) {
+      var selected = $(this).data("value");
+      isAdded = true;
+      activeMaskButton();
+      if (selected == "custom") {
+        selector.find("#hexa-img-radius-settings").removeClass("d-none");
+      } else {
+        selector.find("#hexa-img-radius-settings").addClass("d-none");
+        selector.find("#img-border-radius").val("0");
+        selector
+          .find("#img-border-radius")
+          .parent()
+          .parent()
+          .find("label span")
+          .html("0");
+      }
+      var obj = canvas.getActiveObject();
+      var mask = null;
+      var left = -(obj.width / 2);
+      var top = -(obj.width / 2);
+      var radius = obj.width / 2;
+      if (obj.width > obj.height) {
+        left = -(obj.height / 2);
+        top = -(obj.height / 2);
+        radius = obj.height / 2;
+      }
+      obj.clipPath = null;
+      canvas.requestRenderAll();
+      if (selected == "circle") {
+        shape = "circle";
+        activeImage = obj;
+        obj.set({
+          top: 0,
+          left: 0,
+          originX: "left",
+          originY: "top",
+        });
+        selectioncircle = new fabric.Circle({
+          fill: "rgba(0,0,0,0.3)",
+          originX: "left",
+          originY: "top",
+          stroke: "black",
+          opacity: 1,
+          radius: 150,
+          hasRotatingPoint: false,
+          transparentCorners: false,
+          cornerColor: "white",
+          cornerStrokeColor: "black",
+          borderColor: "black",
+          cornerSize: 12,
+          padding: 0,
+          cornerStyle: "circle",
+          borderDashArray: [5, 5],
+          borderScaleFactor: 1.3,
+        });
+        canvas.add(selectioncircle);
+        canvas.setActiveObject(selectioncircle);
+        canvas.renderAll();
+      } else if (selected == "triangle") {
+        shape = "triangle";
+        activeImage = obj;
+        obj.set({
+          top: 0,
+          left: 0,
+          originX: "left",
+          originY: "top",
+        });
+        selectiontriangle = new fabric.Triangle({
+          fill: "rgba(0,0,0,0.3)",
+          originX: "left",
+          originY: "top",
+          stroke: "black",
+          opacity: 1,
+          width: radius,
+          height: radius,
+          hasRotatingPoint: false,
+          transparentCorners: false,
+          cornerColor: "white",
+          cornerStrokeColor: "black",
+          borderColor: "black",
+          cornerSize: 12,
+          padding: 0,
+          cornerStyle: "circle",
+          borderDashArray: [5, 5],
+          borderScaleFactor: 1.3,
+        });
 
-          canvas.add(selectiontriangle);
-          canvas.setActiveObject(selectiontriangle);
-          canvas.renderAll();
-        } else if (selected == "rectangle") {
-          shape = "rectangle";
-          activeImage = obj;
-          obj.set({
-            top: 0,
-            left: 0,
-            originX: "left",
-            originY: "top",
-          });
-          selectionRect = new fabric.Rect({
-            fill: "rgba(0,0,0,0.3)",
-            originX: "left",
-            originY: "top",
-            stroke: "black",
-            opacity: 1,
-            width: obj.width,
-            height: obj.height,
-            hasRotatingPoint: false,
-            transparentCorners: false,
-            cornerColor: "white",
-            cornerStrokeColor: "black",
-            borderColor: "black",
-            cornerSize: 12,
-            padding: 0,
-            cornerStyle: "circle",
-            borderDashArray: [5, 5],
-            borderScaleFactor: 1.3,
-          });
-          selectionRect.scaleToWidth(300);
-          canvas.add(selectionRect);
-          canvas.setActiveObject(selectionRect); // Set the selection rectangle as the active object
-          canvas.renderAll();
-          // canvas.renderAll();
-        } else if (selected == "square") {
-          shape = "rectangle";
-          activeImage = obj;
-          obj.set({
-            top: 0,
-            left: 0,
-            originX: "left",
-            originY: "top",
-          });
-          selectionRect = new fabric.Rect({
-            fill: "rgba(0,0,0,0.3)",
-            originX: "left",
-            originY: "top",
-            stroke: "black",
-            opacity: 1,
-            width: 300,
-            height: 300,
-            hasRotatingPoint: false,
-            transparentCorners: false,
-            cornerColor: "white",
-            cornerStrokeColor: "black",
-            borderColor: "black",
-            cornerSize: 12,
-            padding: 0,
-            cornerStyle: "circle",
-            borderDashArray: [5, 5],
-            borderScaleFactor: 1.3,
-          });
-          selectionRect.scaleToWidth(300);
-          canvas.add(selectionRect);
-          canvas.setActiveObject(selectionRect);
-          canvas.renderAll();
-        } else if (selected == "other") {
-          shape = "other";
-          activeImage = obj;
+        canvas.add(selectiontriangle);
+        canvas.setActiveObject(selectiontriangle);
+        canvas.renderAll();
+      } else if (selected == "rectangle") {
+        shape = "rectangle";
+        activeImage = obj;
+        obj.set({
+          top: 0,
+          left: 0,
+          originX: "left",
+          originY: "top",
+        });
+        selectionRect = new fabric.Rect({
+          fill: "rgba(0,0,0,0.3)",
+          originX: "left",
+          originY: "top",
+          stroke: "black",
+          opacity: 1,
+          width: obj.width,
+          height: obj.height,
+          hasRotatingPoint: false,
+          transparentCorners: false,
+          cornerColor: "white",
+          cornerStrokeColor: "black",
+          borderColor: "black",
+          cornerSize: 12,
+          padding: 0,
+          cornerStyle: "circle",
+          borderDashArray: [5, 5],
+          borderScaleFactor: 1.3,
+        });
+        selectionRect.scaleToWidth(300);
+        canvas.add(selectionRect);
+        canvas.setActiveObject(selectionRect); // Set the selection rectangle as the active object
+        canvas.renderAll();
+        // canvas.renderAll();
+      } else if (selected == "square") {
+        shape = "rectangle";
+        activeImage = obj;
+        obj.set({
+          top: 0,
+          left: 0,
+          originX: "left",
+          originY: "top",
+        });
+        selectionRect = new fabric.Rect({
+          fill: "rgba(0,0,0,0.3)",
+          originX: "left",
+          originY: "top",
+          stroke: "black",
+          opacity: 1,
+          width: 300,
+          height: 300,
+          hasRotatingPoint: false,
+          transparentCorners: false,
+          cornerColor: "white",
+          cornerStrokeColor: "black",
+          borderColor: "black",
+          cornerSize: 12,
+          padding: 0,
+          cornerStyle: "circle",
+          borderDashArray: [5, 5],
+          borderScaleFactor: 1.3,
+        });
+        selectionRect.scaleToWidth(300);
+        canvas.add(selectionRect);
+        canvas.setActiveObject(selectionRect);
+        canvas.renderAll();
+      } else if (selected == "other") {
+        shape = "other";
+        activeImage = obj;
 
-          // obj.set({
-          //   top: 0,
-          //   left: 0,
-          //   originX: "left",
-          //   originY: "top",
-          // });
+        // obj.set({
+        //   top: 0,
+        //   left: 0,
+        //   originX: "left",
+        //   originY: "top",
+        // });
 
-          var svgFileUrl = $(this).find("img.lazy").data("src");
-          // console.log(svgFileUrl);
-          var regex = /\/([^\/]+)\/[^\/]+\.svg$/; // Regular expression to match "abstract-shapes" from the URL
-          var matches = svgFileUrl.match(regex);
-          var shapeName = matches[1];
-          var scaleX, scaleY;
-          $.ajax({
-            url: svgFileUrl,
-            method: "GET",
-            dataType: "xml",
-            async: false,
-            success: function (svgContent) {
-              var pathElement = $(svgContent).find("path");
-              svgPathString = pathElement.attr("d");
-              var pathPoints = fabric.util.parsePath(svgPathString);
-              scaleX = 3;
-              scaleY = 3;
-              if (shapeName == "geometric-shapes") {
-                if (svgFileUrl == "files/elements/geometric-shapes/1.svg") {
-                  scaleX = 30;
-                  scaleY = 30;
-                } else if (svgFileUrl == 'files/elements/geometric-shapes/square.svg') {
-                  scaleX = 5;
-                  scaleY = 5;
-                } else if (svgFileUrl == 'files/elements/geometric-shapes/circle.svg') {
-                  scaleX = 5;
-                  scaleY = 5;
-                  svgPathString = "M110,50 A50,50 0 1,1 10,50 A50,50 0 1,1 110,50 Z"
-                } else {
-                  scaleX = 10;
-                  scaleY = 10;
-                }
-              } else if (shapeName == "Numbers") {
-                scaleX = 1;
-                scaleY = 1;
-              } else if (shapeName == "alphabets") {
-                scaleX = 1;
-                scaleY = 1;
-              } else if (shapeName == "people") {
-                scaleX = 1;
-                scaleY = 1;
-              } else if (shapeName == "gifts") {
-                scaleX = 4;
-                scaleY = 4;
-              } else if (shapeName == "animals") {
-                scaleX = 18;
-                scaleY = 18;
-              } else if (shapeName == "weapons") {
-                scaleX = 2;
-                scaleY = 2;
-              } else if (shapeName == "trees") {
-                scaleX = 4;
-                scaleY = 4;
-              } else if (shapeName == "clouds") {
-                scaleX = 16;
-                scaleY = 16;
-              } else if (shapeName == "speech-bubbles") {
-                scaleX = 2;
-                scaleY = 2;
-              } else if (shapeName == "shape-badges") {
-                scaleX = 2;
-                scaleY = 2;
-              } else if (shapeName == "ink-brush-strokes") {
-                scaleX = 4;
-                scaleY = 4;
+        var svgFileUrl = $(this).find("img.lazy").data("src");
+        // console.log(svgFileUrl);
+        var regex = /\/([^\/]+)\/[^\/]+\.svg$/; // Regular expression to match "abstract-shapes" from the URL
+        var matches = svgFileUrl.match(regex);
+        var shapeName = matches[1];
+        var scaleX, scaleY;
+        $.ajax({
+          url: svgFileUrl,
+          method: "GET",
+          dataType: "xml",
+          async: false,
+          success: function (svgContent) {
+            var pathElement = $(svgContent).find("path");
+            svgPathString = pathElement.attr("d");
+            var pathPoints = fabric.util.parsePath(svgPathString);
+            scaleX = 3;
+            scaleY = 3;
+            if (shapeName == "geometric-shapes") {
+              if (svgFileUrl == "files/elements/geometric-shapes/1.svg") {
+                scaleX = 30;
+                scaleY = 30;
+              } else if (
+                svgFileUrl == "files/elements/geometric-shapes/square.svg"
+              ) {
+                scaleX = 5;
+                scaleY = 5;
+              } else if (
+                svgFileUrl == "files/elements/geometric-shapes/circle.svg"
+              ) {
+                scaleX = 5;
+                scaleY = 5;
+                svgPathString =
+                  "M110,50 A50,50 0 1,1 10,50 A50,50 0 1,1 110,50 Z";
+              } else {
+                scaleX = 10;
+                scaleY = 10;
               }
-            },
-            error: function (error) {
-              console.error("Error fetching SVG file:", error);
-            },
-          });
-          var scaleFactor = 3;
-          selectionSvg = new fabric.Path(svgPathString, {
-            fill: "rgba(255,0,0,0.5)",
-            originX: "left",
-            originY: "top",
-            stroke: "rgba(0,0,0,0.3)",
-            opacity: 1,
-            hasRotatingPoint: false,
-            transparentCorners: false,
-            cornerColor: "white",
-            cornerStrokeColor: "black",
-            borderColor: "black",
-            cornerSize: 12,
-            padding: 0,
-            cornerStyle: "circle",
-            borderDashArray: [5, 5],
-            borderScaleFactor: 1.3,
-            top: 300,
-            left: 300,
-            // scaleX: scaleFactor,
-            // scaleY: scaleFactor,
-            scaleX: scaleX,
-            scaleY: scaleY,
-          });
-          addClipMask(selectionSvg.path, activeImage)
-          // canvas.add(selectionSvg);
-          // canvas.setActiveObject(selectionSvg);
-          // canvas.renderAll();
-        }
-        // setTimeout(function () {
-        //   // obj.clipPath = mask;
-        //   canvas.requestRenderAll();
-        //   addToHistory(
-        //     objectName("image") +
-        //     " " +
-        //     hexaParams.mask +
-        //     " " +
-        //     hexaParams.added
-        //   );
-        // }, 100);
-      });
+            } else if (shapeName == "Numbers") {
+              scaleX = 1;
+              scaleY = 1;
+            } else if (shapeName == "alphabets") {
+              scaleX = 1;
+              scaleY = 1;
+            } else if (shapeName == "people") {
+              scaleX = 1;
+              scaleY = 1;
+            } else if (shapeName == "gifts") {
+              scaleX = 4;
+              scaleY = 4;
+            } else if (shapeName == "animals") {
+              scaleX = 18;
+              scaleY = 18;
+            } else if (shapeName == "weapons") {
+              scaleX = 2;
+              scaleY = 2;
+            } else if (shapeName == "trees") {
+              scaleX = 4;
+              scaleY = 4;
+            } else if (shapeName == "clouds") {
+              scaleX = 16;
+              scaleY = 16;
+            } else if (shapeName == "speech-bubbles") {
+              scaleX = 2;
+              scaleY = 2;
+            } else if (shapeName == "shape-badges") {
+              scaleX = 2;
+              scaleY = 2;
+            } else if (shapeName == "ink-brush-strokes") {
+              scaleX = 4;
+              scaleY = 4;
+            }
+          },
+          error: function (error) {
+            console.error("Error fetching SVG file:", error);
+          },
+        });
+        var scaleFactor = 3;
+        selectionSvg = new fabric.Path(svgPathString, {
+          fill: "rgba(255,0,0,0.5)",
+          originX: "left",
+          originY: "top",
+          stroke: "rgba(0,0,0,0.3)",
+          opacity: 1,
+          hasRotatingPoint: false,
+          transparentCorners: false,
+          cornerColor: "white",
+          cornerStrokeColor: "black",
+          borderColor: "black",
+          cornerSize: 12,
+          padding: 0,
+          cornerStyle: "circle",
+          borderDashArray: [5, 5],
+          borderScaleFactor: 1.3,
+          top: 300,
+          left: 300,
+          // scaleX: scaleFactor,
+          // scaleY: scaleFactor,
+          scaleX: scaleX,
+          scaleY: scaleY,
+        });
+        addClipMask(selectionSvg.path, activeImage);
+        // canvas.add(selectionSvg);
+        // canvas.setActiveObject(selectionSvg);
+        // canvas.renderAll();
+      }
+      // setTimeout(function () {
+      //   // obj.clipPath = mask;
+      //   canvas.requestRenderAll();
+      //   addToHistory(
+      //     objectName("image") +
+      //     " " +
+      //     hexaParams.mask +
+      //     " " +
+      //     hexaParams.added
+      //   );
+      // }, 100);
+    });
 
     function onlyDeleteLayerEvent(id) {
       var item = selector.find("#hexa-layers #" + id);
@@ -6583,13 +6542,12 @@
       }
     }
 
-
     function addClipMask(path, activeObject) {
-      var uniqueId = "clipmask"
+      var uniqueId = "clipmask";
       if (activeObject) {
         activeObject.customId = uniqueId;
         var shell = new fabric.Path(path, {
-          fill: '',
+          fill: "",
           // stroke: 'blue',
           strokeWidth: 5,
           scaleX: 3,
@@ -6598,19 +6556,19 @@
           lockScalingY: false,
           lockSkewingX: true,
           lockSkewingY: true,
-          originX: 'center',
-          originY: 'center',
+          originX: "center",
+          originY: "center",
           top: activeObject.top,
-          left: activeObject.left
+          left: activeObject.left,
         });
         var clipPath = new fabric.Path(path, {
           absolutePositioned: true,
-          originX: 'center',
-          originY: 'center',
+          originX: "center",
+          originY: "center",
           scaleX: 3,
           scaleY: 3,
           top: activeObject.top,
-          left: activeObject.left
+          left: activeObject.left,
         });
 
         shell.customId = uniqueId;
@@ -6618,32 +6576,36 @@
         activeObject.clipPath = clipPath;
         activeObject.setCoords();
 
-        shell.on('moving', ({ e, transform, pointer }) => {
-          clipPath.setPositionByOrigin(shell.getCenterPoint(), 'center', 'center');
-          activeObject.set('dirty', true);
+        shell.on("moving", ({ e, transform, pointer }) => {
+          clipPath.setPositionByOrigin(
+            shell.getCenterPoint(),
+            "center",
+            "center"
+          );
+          activeObject.set("dirty", true);
           shell.bringToFront();
         });
 
-        shell.on('rotating', () => {
+        shell.on("rotating", () => {
           clipPath.set({ angle: shell.angle });
-          activeObject.set('dirty', true);
+          activeObject.set("dirty", true);
           shell.bringToFront();
         });
 
-        shell.on('scaling', () => {
+        shell.on("scaling", () => {
           clipPath.scale(shell.scaleX, shell.scaleY);
           clipPath.set({ top: shell.top, left: shell.left }); // Update the position of the clipPath
-          activeObject.set('dirty', true);
+          activeObject.set("dirty", true);
           shell.bringToFront();
         });
         canvas.add(shell);
         canvas.setActiveObject(activeObject);
         // isChangeble = true;
-        document.getElementById('done-masking-img').style.display = 'block';
-        document.getElementById('replace-image-btn').style.display = 'block';
-        document.getElementById('edit-masking-button').style.display = 'none';
+        document.getElementById("done-masking-img").style.display = "block";
+        document.getElementById("replace-image-btn").style.display = "block";
+        document.getElementById("edit-masking-button").style.display = "none";
       } else {
-        alert('Please select an image object on the canvas first.');
+        alert("Please select an image object on the canvas first.");
       }
     }
 
@@ -6668,7 +6630,7 @@
 
           // Create and configure shell (path)
           const shell = new fabric.Path(path, {
-            fill: '',
+            fill: "",
             // stroke: 'blue',
             strokeWidth: 5,
             scaleX: newShell.scaleX,
@@ -6677,18 +6639,17 @@
             lockScalingY: false,
             lockSkewingX: true,
             lockSkewingY: true,
-            originX: 'center',
-            originY: 'center',
+            originX: "center",
+            originY: "center",
             top: activeObject.top,
             left: activeObject.left,
-
           });
 
           // Create and configure clipPath (path)
           const clipPath = new fabric.Path(path, {
             absolutePositioned: true,
-            originX: 'center',
-            originY: 'center',
+            originX: "center",
+            originY: "center",
             scaleX: shell.scaleX,
             scaleY: shell.scaleY,
             top: activeObject.top,
@@ -6700,24 +6661,28 @@
           canvas.renderAll();
 
           // Event handlers for shell (path)
-          shell.on('moving', () => {
-            clipPath.setPositionByOrigin(shell.getCenterPoint(), 'center', 'center');
-            img.set('dirty', true);
+          shell.on("moving", () => {
+            clipPath.setPositionByOrigin(
+              shell.getCenterPoint(),
+              "center",
+              "center"
+            );
+            img.set("dirty", true);
             shell.bringToFront();
             canvas.requestRenderAll(); // Force canvas update
           });
 
-          shell.on('rotating', () => {
+          shell.on("rotating", () => {
             clipPath.set({ angle: shell.angle });
-            img.set('dirty', true);
+            img.set("dirty", true);
             shell.bringToFront();
             canvas.requestRenderAll(); // Force canvas update
           });
 
-          shell.on('scaling', () => {
+          shell.on("scaling", () => {
             clipPath.scale(shell.scaleX, shell.scaleY);
             clipPath.set({ top: shell.top, left: shell.left });
-            img.set('dirty', true);
+            img.set("dirty", true);
             shell.bringToFront();
             canvas.requestRenderAll(); // Force canvas update
           });
@@ -6728,13 +6693,13 @@
           isChangeble = true;
         });
       } else {
-        alert('Both activeObject and shell must be provided.');
+        alert("Both activeObject and shell must be provided.");
       }
     }
 
     function groupImageAndClipPath(image, clipPath) {
       const clipPathOutline = new fabric.Path(clipPath.path, {
-        fill: 'rgba(0,0,0,0)',
+        fill: "rgba(0,0,0,0)",
         scaleX: clipPath.scaleX / image.scaleX,
         scaleY: clipPath.scaleY / image.scaleY,
         originX: clipPath.originX,
@@ -6747,14 +6712,14 @@
       const group = new fabric.Group([image, clipPathOutline], {
         left: image.left,
         top: image.top,
-        originX: 'center',
-        originY: 'center',
+        originX: "center",
+        originY: "center",
         lockScalingFlip: true,
         hasControls: false,
-        hasBorders: false
+        hasBorders: false,
       });
 
-      group.customId = 'clipGroup';
+      group.customId = "clipGroup";
 
       image.clipPath = clipPathOutline;
 
@@ -6765,52 +6730,49 @@
       return group;
     }
 
-
-
     function updateReplaceButtonState() {
       const activeObject = canvas.getActiveObject();
-      console.log('this is active now', activeObject);
-      const replaceButton = document.getElementById('replace-image-btn');
-      const editButton = document.getElementById('edit-masking-button'); // Assuming 'edit-button' is the ID of the edit button
+      console.log("this is active now", activeObject);
+      const replaceButton = document.getElementById("replace-image-btn");
+      const editButton = document.getElementById("edit-masking-button"); // Assuming 'edit-button' is the ID of the edit button
 
-
-      if (activeObject && activeObject.type === 'image') {
+      if (activeObject && activeObject.type === "image") {
         replaceButton.disabled = false;
-        replaceButton.style.backgroundColor = '#00a3ff';
-      } else if (activeObject && activeObject.type === 'group' && activeObject.customId === 'clipGroup') {
-       editButton.style.display = "block"
+        replaceButton.style.backgroundColor = "#00a3ff";
+      } else if (
+        activeObject &&
+        activeObject.type === "group" &&
+        activeObject.customId === "clipGroup"
+      ) {
+        editButton.style.display = "block";
       } else {
         replaceButton.disabled = true;
-        replaceButton.style.backgroundColor = '#A2A2A2';
+        replaceButton.style.backgroundColor = "#A2A2A2";
       }
     }
 
-    canvas.on('selection:created', updateReplaceButtonState);
-    canvas.on('selection:updated', updateReplaceButtonState);
-    canvas.on('selection:cleared', updateReplaceButtonState);
-    canvas.on('object:moving', () => {
+    canvas.on("selection:created", updateReplaceButtonState);
+    canvas.on("selection:updated", updateReplaceButtonState);
+    canvas.on("selection:cleared", updateReplaceButtonState);
+    canvas.on("object:moving", () => {
       updateReplaceButtonState();
     });
-    canvas.on('mouse:down', function (event) {
-      updateReplaceButtonState()
-    })
+    canvas.on("mouse:down", function (event) {
+      updateReplaceButtonState();
+    });
     // Initialize button state when the page loads
     updateReplaceButtonState();
 
-
-
-
-
     function ungroupImageAndClipPath() {
       const activeObject = canvas.getActiveObject();
-      if (activeObject && activeObject.customId === 'clipGroup') {
-        document.getElementById('done-masking-img').style.display = 'block';
-        document.getElementById('replace-image-btn').style.display = 'block';
-        document.getElementById('edit-masking-button').style.display = 'none';
+      if (activeObject && activeObject.customId === "clipGroup") {
+        document.getElementById("done-masking-img").style.display = "block";
+        document.getElementById("replace-image-btn").style.display = "block";
+        document.getElementById("edit-masking-button").style.display = "none";
 
         const objects = activeObject.getObjects();
-        const image = objects.find(obj => obj.type === 'image');
-        const clipPathOutline = objects.find(obj => obj.type === 'path');
+        const image = objects.find((obj) => obj.type === "image");
+        const clipPathOutline = objects.find((obj) => obj.type === "path");
 
         const groupScaleX = activeObject.scaleX;
         const groupScaleY = activeObject.scaleY;
@@ -6821,8 +6783,14 @@
         let imageUrl = image._element.src;
         let path = clipPathOutline.path;
 
-        console.log('clipPathoutline', clipPathOutline.left, clipPathOutline.top, clipPathOutline.scaleX, clipPathOutline.scaleY);
-        console.log('image', image.left, image.top, image.scaleX, image.scaleY);
+        console.log(
+          "clipPathoutline",
+          clipPathOutline.left,
+          clipPathOutline.top,
+          clipPathOutline.scaleX,
+          clipPathOutline.scaleY
+        );
+        console.log("image", image.left, image.top, image.scaleX, image.scaleY);
 
         fabric.Image.fromURL(imageUrl, function (img) {
           img.set({
@@ -6833,13 +6801,13 @@
             originX: image.originX,
             originY: image.originY,
             angle: groupAngle + image.angle,
-            customId: 'clipmask'
+            customId: "clipmask",
           });
           img.setCoords();
           canvas.add(img);
 
           const shell = new fabric.Path(path, {
-            fill: '',
+            fill: "",
             strokeWidth: 5,
             scaleX: clipPathOutline.scaleX * groupScaleX * image.scaleX,
             scaleY: clipPathOutline.scaleY * groupScaleY * image.scaleY,
@@ -6852,42 +6820,49 @@
             top: groupTop + clipPathOutline.top * groupScaleY,
             left: groupLeft + clipPathOutline.left * groupScaleX,
             angle: groupAngle + clipPathOutline.angle,
-            customId: 'clipmask'
+            customId: "clipmask",
           });
 
           const clipPath = new fabric.Path(path, {
             absolutePositioned: true,
-            originX: 'center',
-            originY: 'center',
+            originX: "center",
+            originY: "center",
             scaleX: shell.scaleX / groupScaleX,
             scaleY: shell.scaleY / groupScaleY,
             top: shell.top,
             left: shell.left,
-            customId: 'clipmask'
+            customId: "clipmask",
           });
 
           img.clipPath = clipPath;
           img.setCoords();
           canvas.renderAll();
 
-          shell.on('moving', () => {
-            clipPath.setPositionByOrigin(shell.getCenterPoint(), 'center', 'center');
-            img.set('dirty', true);
+          shell.on("moving", () => {
+            clipPath.setPositionByOrigin(
+              shell.getCenterPoint(),
+              "center",
+              "center"
+            );
+            img.set("dirty", true);
             shell.bringToFront();
             canvas.requestRenderAll(); // Force canvas update
           });
 
-          shell.on('rotating', () => {
+          shell.on("rotating", () => {
             clipPath.set({ angle: shell.angle });
-            img.set('dirty', true);
+            img.set("dirty", true);
             shell.bringToFront();
             canvas.requestRenderAll(); // Force canvas update
           });
 
-          shell.on('scaling', () => {
-            clipPath.scale(shell.scaleX / groupScaleX, shell.scaleY / groupScaleY);
+          shell.on("scaling", () => {
+            clipPath.scale(
+              shell.scaleX / groupScaleX,
+              shell.scaleY / groupScaleY
+            );
             clipPath.set({ top: shell.top, left: shell.left });
-            img.set('dirty', true);
+            img.set("dirty", true);
             shell.bringToFront();
             canvas.requestRenderAll(); // Force canvas update
           });
@@ -6902,74 +6877,78 @@
       }
     }
 
-
     selector.find("#edit-masking-button").on("click", function () {
-      ungroupImageAndClipPath()
-    })
+      ungroupImageAndClipPath();
+    });
 
+    document
+      .getElementById("done-masking-img")
+      .addEventListener("click", function () {
+        const activeObject = canvas.getActiveObject();
+        console.log("active obj is", activeObject);
 
-    document.getElementById('done-masking-img').addEventListener('click', function () {
-      const activeObject = canvas.getActiveObject();
-      console.log('active obj is', activeObject);
+        if (activeObject) {
+          this.style.display = "none";
+          document.getElementById("edit-masking-button").style.display =
+            "block";
+          document.getElementById("replace-image-btn").style.display = "none";
 
-      if (activeObject) {
-        this.style.display = 'none';
-        document.getElementById('edit-masking-button').style.display = 'block';
-        document.getElementById('replace-image-btn').style.display = 'none';
+          if (activeObject.type === "image" && activeObject.clipPath) {
+            const clipPath = activeObject.clipPath;
+            const image = new fabric.Image(activeObject._element, {
+              left: activeObject.left,
+              top: activeObject.top,
+              scaleX: activeObject.scaleX,
+              scaleY: activeObject.scaleY,
+              originX: activeObject.originX,
+              originY: activeObject.originY,
+            });
 
-        if (activeObject.type === 'image' && activeObject.clipPath) {
-          const clipPath = activeObject.clipPath;
-          const image = new fabric.Image(activeObject._element, {
-            left: activeObject.left,
-            top: activeObject.top,
-            scaleX: activeObject.scaleX,
-            scaleY: activeObject.scaleY,
-            originX: activeObject.originX,
-            originY: activeObject.originY,
-          });
+            // Remove the old active object
+            canvas.remove(activeObject);
 
-          // Remove the old active object
-          canvas.remove(activeObject);
-
-          canvas.remove(image)
-          onlyDeleteLayerEvent(activeObject.id);
-          onlyDeleteLayerEvent(image.id);
-
-          // Group image and clip path
-          groupImageAndClipPath(image, clipPath);
-        }
-        else if (activeObject.type === 'path' && activeObject.customId === 'clipmask') {
-          const image = canvas.getObjects('image').find(img => img.customId === activeObject.customId);
-          if (image) {
-            canvas.remove(image)
+            canvas.remove(image);
+            onlyDeleteLayerEvent(activeObject.id);
             onlyDeleteLayerEvent(image.id);
-            groupImageAndClipPath(image, image.clipPath);
+
+            // Group image and clip path
+            groupImageAndClipPath(image, clipPath);
+          } else if (
+            activeObject.type === "path" &&
+            activeObject.customId === "clipmask"
+          ) {
+            const image = canvas
+              .getObjects("image")
+              .find((img) => img.customId === activeObject.customId);
+            if (image) {
+              canvas.remove(image);
+              onlyDeleteLayerEvent(image.id);
+              groupImageAndClipPath(image, image.clipPath);
+            } else {
+              alert("Associated image not found for the selected clip path.");
+            }
           } else {
-            alert('Associated image not found for the selected clip path.');
+            alert(
+              "Please select an image object or a clip path on the canvas first."
+            );
+            console.log(canvas.getActiveObject());
           }
         } else {
-          alert('Please select an image object or a clip path on the canvas first.');
-          console.log(canvas.getActiveObject());
+          alert("No object selected on the canvas.");
         }
+      });
 
-      } else {
-        alert('No object selected on the canvas.');
-      }
-    });
+    document
+      .getElementById("replace-image-btn")
+      .addEventListener("click", function () {
+        document.getElementById("image-input").click();
+      });
 
-
-    document.getElementById('replace-image-btn').addEventListener('click', function () {
-      document.getElementById('image-input').click();
-    });
-
-
-
-    document.getElementById('image-input').onchange = function () {
+    document.getElementById("image-input").onchange = function () {
       var activeObject = canvas.getActiveObject();
       if (activeObject) {
-
         var file = this.files[0];
-        console.log('this is the uploaded file', file);
+        console.log("this is the uploaded file", file);
         var reader = new FileReader();
         reader.onload = function (event) {
           var imageData = event.target.result;
@@ -6983,21 +6962,19 @@
               originY: activeObject.originX,
               clipPath: activeObject.clipPath,
               objectCaching: false,
-              customId: "clipmask"
+              customId: "clipmask",
             });
             canvas.remove(activeObject);
-            onlyDeleteLayerEvent(activeObject.id)
+            onlyDeleteLayerEvent(activeObject.id);
             canvas.add(img);
-            setLayerSort(img.id, 3)
-
-
+            setLayerSort(img.id, 3);
 
             // canvas.setActiveObject(img);
           });
         };
         reader.readAsDataURL(file);
       } else {
-        alert('Please select an image object on the canvas first.');
+        alert("Please select an image object on the canvas first.");
       }
     };
 
@@ -7821,9 +7798,7 @@
         selector.find("#hexa-canvas-loader").css("display", "flex");
         var frame = $(this).parent().parent();
         var svgUrl = frame.data("elsource");
-        selector
-          .find(".hexa-frames-grid .hexa-frame")
-          .removeClass("active");
+        selector.find(".hexa-frames-grid .hexa-frame").removeClass("active");
         frame.addClass("active");
         fabric.loadSVGFromURL(
           svgUrl,
@@ -7843,7 +7818,7 @@
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8051,7 +8026,7 @@
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8202,7 +8177,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8365,9 +8340,7 @@
       selector.find("#hexa-noicons").hide();
       var searchTerm = $(this).val().toLowerCase().replace(/\s/g, " ");
       if (searchTerm == "" || searchTerm.length < 1) {
-        selector
-          .find("#hexa-icons-grid .hexa-element")
-          .css("display", "flex");
+        selector.find("#hexa-icons-grid .hexa-element").css("display", "flex");
         selector.find("#hexa-icon-search-icon").html("search");
         selector.find("#hexa-icon-search-icon").removeClass("cancel");
       } else {
@@ -8375,8 +8348,7 @@
         selector.find("#hexa-icon-search-icon").addClass("cancel");
         filterIcons(searchTerm);
         if (
-          selector.find("#hexa-icons-grid .hexa-element:visible")
-            .length === 0
+          selector.find("#hexa-icons-grid .hexa-element:visible").length === 0
         ) {
           selector.find("#hexa-noicons").show();
         }
@@ -8388,9 +8360,7 @@
         $(this).removeClass("cancel");
         $(this).html("search");
         selector.find("#hexa-icon-search").val("");
-        selector
-          .find("#hexa-icons-grid .hexa-element")
-          .css("display", "flex");
+        selector.find("#hexa-icons-grid .hexa-element").css("display", "flex");
         selector.find("#hexa-noicons").hide();
       }
     });
@@ -8523,8 +8493,7 @@
         $(this).removeClass("active");
         canvas.isDrawingMode = false;
         $(this).html(
-          '<span class="material-icons">edit</span>' +
-          hexaParams.startDrawing
+          '<span class="material-icons">edit</span>' + hexaParams.startDrawing
         );
       } else {
         selector.find("#hexa-draw-undo").prop("disabled", false);
@@ -8538,8 +8507,7 @@
         selector.find("#hexa-brush-select").trigger("change");
         canvas.isDrawingMode = true;
         $(this).html(
-          '<span class="material-icons">close</span>' +
-          hexaParams.stopDrawing
+          '<span class="material-icons">close</span>' + hexaParams.stopDrawing
         );
       }
     });
@@ -8607,8 +8575,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-            selector.find("#brush-pattern-width").val()
-          ),
+              selector.find("#brush-pattern-width").val()
+            ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -8822,7 +8790,7 @@
       selector.find(".web-thr-d-main-container").addClass("display-unity");
       selector.find("#hexa-canvas").addClass("hide-canvas");
       selector.find("#hexa").addClass("hide-canva");
-      canvas.renderAll()
+      canvas.renderAll();
       // updateCanvasState()
       var name = "tester";
       var quality = 1;
@@ -8841,7 +8809,6 @@
       canvas.setWidth(zoomWidth);
       canvas.setHeight(zoomHeight);
       var blob = "";
-
 
       canvas.getObjects().forEach(function (obj) {
         console.log("object:", obj);
