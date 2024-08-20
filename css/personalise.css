@@ -1,9 +1,11 @@
 .personalise-page-inactive {
   display: none;
+  /* display: block; */
 }
 
 .personalise-page-active {
   display: block;
+  /* display: none; */
 }
 .personalise-3d-box {
   width: 100%;

@@ -284,17 +284,27 @@ document
       "block";
   });
 
-document.getElementById("openEditor").addEventListener("click", function () {
-  var inactive = document.querySelector(".personalise-page-inactive");
-  var active = document.querySelector(".personalise-page-active");
+// document.getElementById("openEditor").addEventListener("click", function () {
+//   var inactive = document.querySelector(".personalise-page-inactive");
+//   var active = document.querySelector(".personalise-page-active");
 
-  if (inactive.style.display === "none") {
-    inactive.style.display = "block";
-    active.style.display = "none";
-  } else {
-    inactive.style.display = "none";
-    active.style.display = "block";
-  }
+//   if (inactive.style.display === "none") {
+//     inactive.style.display = "block";
+//     active.style.display = "none";
+//   } else {
+//     inactive.style.display = "none";
+//     active.style.display = "block";
+//   }
+// });
+document.getElementById("openEditor").addEventListener("click", function () {
+  var editorMainCont = document.getElementById("editor-main-cont");
+  var miniEditorMainCont = document.getElementById("mini-editor-main-cont");
+
+  editorMainCont.classList.toggle("personalise-page-inactive");
+  editorMainCont.classList.toggle("personalise-page-active");
+
+  miniEditorMainCont.classList.toggle("personalise-page-active");
+  miniEditorMainCont.classList.toggle("personalise-page-inactive");
 });
 
 // function loadJSONToCanvas(json, format = "png", quality = 1) {
@@ -812,23 +822,23 @@ document
   });
 
 // Replace image event listener
-document
-  .getElementById("personaliseImgUpload")
-  .addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
+// document
+//   .getElementById("personaliseImgUpload")
+//   .addEventListener("change", function (event) {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const reader = new FileReader();
 
-      reader.onload = function (e) {
-        const newImageURL = e.target.result;
+//       reader.onload = function (e) {
+//         const newImageURL = e.target.result;
 
-        // Replace image in canvas object
-        replaceCanvasObjectImage(newImageURL);
-      };
+//         // Replace image in canvas object
+//         replaceCanvasObjectImage(newImageURL);
+//       };
 
-      reader.readAsDataURL(file);
-    }
-  });
+//       reader.readAsDataURL(file);
+//     }
+//   });
 // document
 //   .getElementById("personaliseClosePopupBtn")
 //   .addEventListener("click", () => {
@@ -859,67 +869,67 @@ document
   });
 
 // Event listener for file input change
-// document
-//   .getElementById("personaliseImgUpload")
-//   .addEventListener("change", handleImageUpload);
+document
+  .getElementById("personaliseImgUpload")
+  .addEventListener("change", handleImageUpload);
 
-// function handleImageUpload(event) {
-//   const file = event.target.files[0];
-//   if (file) {
-//     const reader = new FileReader();
-//     reader.onload = function (e) {
-//       const img = new Image();
-//       img.onload = function () {
-//         const canvas = document.getElementById("personaliseCanvas");
-//         const ctx = canvas.getContext("2d");
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.getElementById("personaliseCanvas");
+        const ctx = canvas.getContext("2d");
 
-//         // Clear the canvas
-//         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-//         // Calculate dimensions while maintaining aspect ratio
-//         const imgAspectRatio = img.width / img.height;
-//         const canvasAspectRatio = canvas.width / canvas.height;
-//         let drawWidth, drawHeight;
+        // Calculate dimensions while maintaining aspect ratio
+        const imgAspectRatio = img.width / img.height;
+        const canvasAspectRatio = canvas.width / canvas.height;
+        let drawWidth, drawHeight;
 
-//         if (imgAspectRatio > canvasAspectRatio) {
-//           drawWidth = canvas.width;
-//           drawHeight = canvas.width / imgAspectRatio;
-//         } else {
-//           drawWidth = canvas.height * imgAspectRatio;
-//           drawHeight = canvas.height;
-//         }
+        if (imgAspectRatio > canvasAspectRatio) {
+          drawWidth = canvas.width;
+          drawHeight = canvas.width / imgAspectRatio;
+        } else {
+          drawWidth = canvas.height * imgAspectRatio;
+          drawHeight = canvas.height;
+        }
 
-//         const drawX = (canvas.width - drawWidth) / 2;
-//         const drawY = (canvas.height - drawHeight) / 2;
+        const drawX = (canvas.width - drawWidth) / 2;
+        const drawY = (canvas.height - drawHeight) / 2;
 
-//         // Draw the image with maintained aspect ratio
-//         ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+        // Draw the image with maintained aspect ratio
+        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
-//         // Update the selected image data URL
-//         selectedImage = canvas.toDataURL("image/png");
+        // Update the selected image data URL
+        selectedImage = canvas.toDataURL("image/png");
 
-//         // Initialize Fabric.js canvas
-//         fabricCanvas = new fabric.Canvas("personaliseCanvas");
-//         const fabricImage = new fabric.Image(img, {
-//           left: drawX,
-//           top: drawY,
-//           scaleX: drawWidth / img.width,
-//           scaleY: drawHeight / img.height,
-//           selectable: false, // Disable selection and resizing controls by default
-//         });
-//         fabricCanvas.add(fabricImage);
-//         fabricCanvas.setActiveObject(fabricImage);
-//         fabricCanvas.discardActiveObject(); // Ensure the image is not selected initially
-//         fabricCanvas.renderAll();
+        // Initialize Fabric.js canvas
+        fabricCanvas = new fabric.Canvas("personaliseCanvas");
+        const fabricImage = new fabric.Image(img, {
+          left: drawX,
+          top: drawY,
+          scaleX: drawWidth / img.width,
+          scaleY: drawHeight / img.height,
+          selectable: false, // Disable selection and resizing controls by default
+        });
+        fabricCanvas.add(fabricImage);
+        fabricCanvas.setActiveObject(fabricImage);
+        fabricCanvas.discardActiveObject(); // Ensure the image is not selected initially
+        fabricCanvas.renderAll();
 
-//         // Store a reference to the fabric image
-//         fabricCanvas.imageObject = fabricImage;
-//       };
-//       img.src = e.target.result;
-//     };
-//     reader.readAsDataURL(file);
-//   }
-// }
+        // Store a reference to the fabric image
+        fabricCanvas.imageObject = fabricImage;
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
 
 // Event listener for the "Adjust" button click
 document
