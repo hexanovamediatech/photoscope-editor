@@ -90,11 +90,16 @@ function initPersonalise() {
   console.log("Model name from query param is", name);
 
   // Set a default model or handle cases where 'name' might not be provided
-  const modelName = name ? name : "default-model";
+  // const modelName = name ? name : "default-model";
 
-  // Construct the dynamic path for the GLB file using the name
-  const normalizedName = name.replace("-", "_").toUpperCase();
+  // // Construct the dynamic path for the GLB file using the name
+  // const normalizedName = name.replace("-", "_").toUpperCase();
+  let normalizedName =
+    name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
+  console.log(normalizedName);
+  // Use the normalizedName in the glbPath
   const glbPath = `/assets/3d/${normalizedName}.glb`;
+  // const glbPath = `/assets/3d/${normalizedName}.glb`;
   console.log(glbPath);
   const mainContainer = document.getElementById("personalise-3d-container");
   mainContainer.style.backgroundColor = "#f0f0f0";
@@ -252,7 +257,11 @@ function getNameFromUrl() {
 // Function to update the image source
 function updateImageSource() {
   const name = getNameFromUrl();
-  const normalizedName = name.replace("-", "_").toUpperCase(); // Get the name from URL
+  // const normalizedName = name.replace("-", "_").toUpperCase();
+  let normalizedName =
+    name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
+  console.log(normalizedName);
+  // Get the name from URL
   if (normalizedName) {
     const imageElement = document.querySelector(".personalise-template-img");
     const imagePath = `assets/3d/${normalizedName}.png`; // Construct the image path
