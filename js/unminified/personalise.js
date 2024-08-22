@@ -293,217 +293,6 @@ document
       "block";
   });
 
-// document.getElementById("openEditor").addEventListener("click", function () {
-//   var inactive = document.querySelector(".personalise-page-inactive");
-//   var active = document.querySelector(".personalise-page-active");
-
-//   if (inactive.style.display === "none") {
-//     inactive.style.display = "block";
-//     active.style.display = "none";
-//   } else {
-//     inactive.style.display = "none";
-//     active.style.display = "block";
-//   }
-// });
-document.getElementById("openEditor").addEventListener("click", function () {
-  var editorMainCont = document.getElementById("editor-main-cont");
-  var miniEditorMainCont = document.getElementById("mini-editor-main-cont");
-
-  editorMainCont.classList.toggle("personalise-page-inactive");
-  editorMainCont.classList.toggle("personalise-page-active");
-
-  miniEditorMainCont.classList.toggle("personalise-page-active");
-  miniEditorMainCont.classList.toggle("personalise-page-inactive");
-});
-
-// function loadJSONToCanvas(json, format = "png", quality = 1) {
-//   try {
-//     console.log("Received JSON data:", json);
-
-//     // Get the canvas element
-//     const canvasElement = document.getElementById("personaliseCanvas");
-//     if (!canvasElement) {
-//       throw new Error('Canvas element with ID "personaliseCanvas" not found');
-//     }
-
-//     // Initialize Fabric.js canvas
-//     const fabricCanvas = new fabric.Canvas(canvasElement);
-
-//     // Set canvas dimensions to 460x460
-//     const canvasWidth = 460;
-//     const canvasHeight = 460;
-//     fabricCanvas.setWidth(canvasWidth);
-//     fabricCanvas.setHeight(canvasHeight);
-
-//     // Clear the canvas
-//     fabricCanvas.clear();
-
-//     // Handle background image if present
-//     if (json.backgroundImage) {
-//       const backgroundImage = json.backgroundImage;
-//       fabric.Image.fromURL(
-//         backgroundImage.src,
-//         function (img) {
-//           img.set({
-//             left: 0,
-//             top: 0,
-//             scaleX: canvasWidth / img.width,
-//             scaleY: canvasHeight / img.height,
-//             originX: "left",
-//             originY: "top",
-//           });
-//           fabricCanvas.setBackgroundImage(
-//             img,
-//             fabricCanvas.renderAll.bind(fabricCanvas)
-//           );
-//         },
-//         { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
-//       );
-//     }
-
-//     // Calculate the bounding box of all objects
-//     const boundingBox = json.objects.reduce(
-//       (box, obj) => {
-//         const objWidth = obj.width * (obj.scaleX || 1);
-//         const objHeight = obj.height * (obj.scaleY || 1);
-//         return {
-//           left: Math.min(box.left, obj.left),
-//           top: Math.min(box.top, obj.top),
-//           right: Math.max(box.right, obj.left + objWidth),
-//           bottom: Math.max(box.bottom, obj.top + objHeight),
-//         };
-//       },
-//       {
-//         left: Infinity,
-//         top: Infinity,
-//         right: -Infinity,
-//         bottom: -Infinity,
-//       }
-//     );
-
-//     // Calculate scale factors to fit the bounding box within the canvas
-//     const boundingBoxWidth = boundingBox.right - boundingBox.left;
-//     const boundingBoxHeight = boundingBox.bottom - boundingBox.top;
-//     const scaleX = canvasWidth / boundingBoxWidth;
-//     const scaleY = canvasHeight / boundingBoxHeight;
-//     const baseScale = Math.min(scaleX, scaleY); // Use min to fit within both dimensions
-
-//     // Define a multiplier for additional scaling if needed
-//     const scaleMultiplier = 1; // Adjust this multiplier as needed for fitting
-
-//     // Final scale factor
-//     const scale = baseScale * scaleMultiplier;
-
-//     // Apply scaling and adjust object positions
-//     json.objects.forEach((obj) => {
-//       obj.scaleX = (obj.scaleX || 1) * scale;
-//       obj.scaleY = (obj.scaleY || 1) * scale;
-
-//       obj.left = (obj.left - boundingBox.left) * scale;
-//       obj.top = (obj.top - boundingBox.top) * scale;
-//     });
-
-//     // Load objects from JSON data
-//     fabricCanvas.loadFromJSON(json, function () {
-//       fabricCanvas.renderAll();
-
-//       // Export canvas to image URL
-//       const imgData = fabricCanvas.toDataURL({
-//         format: format, // 'png' or 'jpeg'
-//         quality: quality, // Quality between 0 and 1
-//         enableRetinaScaling: false,
-//       });
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-//       console.log("Image Data URL:", imgData);
-//       // You can now use this URL to display or download the image
-//       // Example: Set it as the source for an <img> element
-//       // document.getElementById('outputImage').src = imgData;
-//     });
-//   } catch (error) {
-//     console.error("Error processing JSON data:", error);
-//   }
-// }
-
-// function loadJSONToCanvas(json, format = "png", quality = 1) {
-//   try {
-//     console.log("Received JSON data:", json);
-
-//     // Get the canvas element
-//     const canvasElement = document.getElementById("personaliseCanvas");
-//     if (!canvasElement) {
-//       throw new Error('Canvas element with ID "personaliseCanvas" not found');
-//     }
-
-//     // Initialize Fabric.js canvas
-//     const fabricCanvas = new fabric.Canvas(canvasElement);
-
-//     // Set canvas dimensions to 460x460
-//     const canvasWidth = 460;
-//     const canvasHeight = 460;
-//     fabricCanvas.setWidth(canvasWidth);
-//     fabricCanvas.setHeight(canvasHeight);
-
-//     // Clear the canvas
-//     fabricCanvas.clear();
-
-//     // Handle background image if present
-//     if (json.backgroundImage) {
-//       const backgroundImage = json.backgroundImage;
-//       fabric.Image.fromURL(
-//         backgroundImage.src,
-//         function (img) {
-//           img.set({
-//             left: 0,
-//             top: 0,
-//             scaleX: canvasWidth / img.width,
-//             scaleY: canvasHeight / img.height,
-//             originX: "left",
-//             originY: "top",
-//           });
-//           fabricCanvas.setBackgroundImage(
-//             img,
-//             fabricCanvas.renderAll.bind(fabricCanvas)
-//           );
-//         },
-//         { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
-//       );
-//     }
-
-//     // Apply scaling and adjust object positions
-//     json.objects.forEach((obj) => {
-//       // Apply hardcoded scaling
-//       obj.scaleX = 0.225;
-//       obj.scaleY = 0.225;
-
-//       // Adjust positions to ensure the object remains within the canvas
-//       const scaledWidth = obj.width * obj.scaleX;
-//       const scaledHeight = obj.height * obj.scaleY;
-
-//       // Recalculate `left` and `top` positions
-//       obj.left = Math.max(0, Math.min(obj.left, canvasWidth - scaledWidth));
-//       obj.top = Math.max(0, Math.min(obj.top, canvasHeight - scaledHeight));
-//     });
-
-//     // Load objects from JSON data
-//     fabricCanvas.loadFromJSON(json, function () {
-//       fabricCanvas.renderAll();
-
-//       // Export canvas to image URL
-//       const imgData = fabricCanvas.toDataURL({
-//         format: format, // 'png' or 'jpeg'
-//         quality: quality, // Quality between 0 and 1
-//         enableRetinaScaling: false,
-//       });
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-//       console.log("Image Data URL:", imgData);
-//     });
-//   } catch (error) {
-//     console.error("Error processing JSON data:", error);
-//   }
-// }
-
 let newFabricCanvas;
 
 function initializeCanvas() {
@@ -548,95 +337,6 @@ function updateCanvasText(textIndex, newText) {
   newFabricCanvas.renderAll();
 }
 
-// function loadJSONToCanvas(json, format = "png", quality = 1) {
-//   try {
-//     console.log("Received JSON data:", json);
-
-//     // Initialize the canvas if it hasn't been initialized yet
-//     if (!newFabricCanvas) {
-//       initializeCanvas();
-//     }
-
-//     newFabricCanvas.clear();
-
-//     if (json.backgroundImage) {
-//       const backgroundImage = json.backgroundImage;
-//       fabric.Image.fromURL(
-//         backgroundImage.src,
-//         function (img) {
-//           img.set({
-//             left: 0,
-//             top: 0,
-//             scaleX: 460 / img.width,
-//             scaleY: 460 / img.height,
-//             originX: "left",
-//             originY: "top",
-//             selectable: false,
-//             hasControls: false,
-//             hasBorders: false,
-//             lockMovementX: true,
-//             lockMovementY: true,
-//             lockRotation: true,
-//             lockScalingX: true,
-//             lockScalingY: true,
-//           });
-//           newFabricCanvas.setBackgroundImage(
-//             img,
-//             newFabricCanvas.renderAll.bind(newFabricCanvas)
-//           );
-//         },
-//         { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
-//       );
-//     }
-
-//     let nextIndex = 1; // Initialize the index for default values
-
-//     json.objects.forEach((obj) => {
-//       obj.scaleX = 0.225;
-//       obj.scaleY = 0.225;
-
-//       const scaledWidth = obj.width * obj.scaleX;
-//       const scaledHeight = obj.height * obj.scaleY;
-
-//       // obj.left = Math.max(0, Math.min(obj.left, 160 - scaledWidth));
-//       // obj.top = Math.max(0, Math.min(obj.top, 160 - scaledHeight));
-//       obj.left = Math.max(0, Math.min(350 - scaledWidth));
-//       obj.top = Math.max(0, Math.min(160 - scaledHeight));
-//       if (obj.type === "textbox") {
-//         // Assign a default dataIndex if not provided
-//         obj.dataIndex = obj.dataIndex || nextIndex++;
-//       }
-//     });
-
-//     newFabricCanvas.loadFromJSON(json, function () {
-//       newFabricCanvas.forEachObject((obj) => {
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       newFabricCanvas.renderAll();
-
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-//       console.log("Image Data URL:", imgData);
-//     });
-//   } catch (error) {
-//     console.error("Error processing JSON data:", error);
-//   }
-// }
 function loadJSONToCanvas(json, format = "png", quality = 1) {
   try {
     console.log("Received JSON data:", json);
@@ -768,49 +468,164 @@ function loadJSONToCanvas(json, format = "png", quality = 1) {
     console.error("Error processing JSON data:", error);
   }
 }
-function replaceCanvasObjectImage(newImageURL) {
-  if (!newFabricCanvas) {
-    console.error("Fabric canvas is not initialized.");
-    return;
-  }
 
-  // Find the image object to replace
-  const imageObjects = newFabricCanvas.getObjects("image");
+// function loadJSON(json) {
+//   console.log("this is the json", json.objects);
+//   selector.find("#hexa-canvas-loader").css("display", "flex");
+//   rotate = json.backgroundImage.angle;
+//   scaleX = json.backgroundImage.scaleX;
+//   scaleY = json.backgroundImage.scaleY;
+//   originX = json.backgroundImage.originX;
+//   originY = json.backgroundImage.originY;
+//   canvas.clear();
+//   selector.find("#hexa-layers li").remove();
+//   mode = json.backgroundImage.mode;
+//   var blob = dataURLtoBlob(json.backgroundImage.src);
+//   imgurl = URL.createObjectURL(blob);
+//   selector.find("#hexa-canvas-img").attr("src", imgurl);
+//   originalWidth = json.backgroundImage.width;
+//   originalHeight = json.backgroundImage.height;
+//   var dimentions = {
+//     width: originalWidth,
+//     height: originalHeight,
+//   };
 
-  if (imageObjects.length > 0) {
-    const imageObject = imageObjects[0]; // Assuming you want to replace the first image object found
+//   var filteredObjects = [];
+//   var clipmaskObjects = [];
 
-    fabric.Image.fromURL(
-      newImageURL,
-      function (newImg) {
-        newImg.set({
-          left: imageObject.left,
-          top: imageObject.top,
-          scaleX: imageObject.scaleX,
-          scaleY: imageObject.scaleY,
-          originX: "left",
-          originY: "top",
-          selectable: false,
-          hasControls: false,
-          hasBorders: false,
-          lockMovementX: true,
-          lockMovementY: true,
-          lockRotation: true,
-          lockScalingX: true,
-          lockScalingY: true,
-        });
+//   json.objects.forEach((obj) => {
+//     if (obj.customId === "clipmask") {
+//       clipmaskObjects.push(obj);
+//     } else {
+//       filteredObjects.push(obj);
+//     }
+//   });
+//   var clipmaskData = {
+//     image: null,
+//     path: null,
+//   };
 
-        // Replace the old image object with the new one
-        newFabricCanvas.remove(imageObject);
-        newFabricCanvas.add(newImg);
-        newFabricCanvas.renderAll();
-      },
-      { crossOrigin: "anonymous" }
-    );
-  } else {
-    console.warn("No image object found to replace.");
-  }
-}
+//   clipmaskObjects.forEach((obj) => {
+//     if (obj.type === "image") {
+//       clipmaskData.image = obj;
+//     } else if (obj.type === "path") {
+//       clipmaskData.path = obj;
+//     }
+//   });
+
+//   json.objects = filteredObjects;
+
+//   for (var i = 0; i < json.objects.length; i++) {
+//     if (json.objects[i].objectType == "textbox") {
+//       json.objects[i].fontFamily = json.objects[i].fontFamily + "-hexa";
+//     }
+//   }
+
+//   canvas.loadFromJSON(
+//     json,
+//     function () {
+//       var objects = canvas.getObjects();
+//       var textboxes = objects.filter(
+//         (element) => element.objectType == "textbox"
+//       );
+//       loadTemplateFonts(textboxes);
+//       checkLayers();
+//       selector
+//         .find("#hexa-canvas-color")
+//         .spectrum("set", canvas.backgroundColor);
+//       selector
+//         .find("#custom-image-background")
+//         .spectrum("set", canvas.backgroundColor);
+//       img = selector.find("#hexa-canvas-img")[0];
+//       canvas.requestRenderAll();
+//       selector.find("#hexa-canvas-loader").hide();
+//       if (clipmaskData.image != null && clipmaskData.path != null) {
+//         applyTemplateClipMask(clipmaskData.image, clipmaskData.path);
+//       }
+//     },
+//     function () {},
+//     {
+//       crossOrigin: "anonymous",
+//     }
+//   );
+//   setFileName(new Date().getTime(), "");
+//   setDimentions(dimentions);
+//   adjustZoom();
+//   modeCheck();
+//   canvas.fire("selection:cleared");
+//   setTimeout(function () {
+//     selector.find("#hexa-layers > li").removeClass("active");
+//     if (json.backgroundImage) {
+//       adjustFilterControls(json.backgroundImage["filters"]);
+//     }
+//     if (json.overlayImage) {
+//       selector.find("#hexa-overlay-wrap").show();
+//       selector
+//         .find("#hexa-overlay-preview")
+//         .attr("src", json.overlayImage.src);
+//     } else {
+//       selector.find("#hexa-overlay-wrap").hide();
+//       selector.find("#hexa-overlay-preview").attr("src", "");
+//     }
+//   }, 100);
+// }
+
+document.getElementById("openEditor").addEventListener("click", function () {
+  var mainContainer = document.getElementById("mini-editor-main-cont");
+  var buttonContainer = document.getElementById("webg-buttons-container");
+
+  // Remove the 'personalise-page-active' class from the main container
+  mainContainer.classList.remove("personalise-page-active");
+  // Add the 'personalise-page-inactive' class to the main container
+  mainContainer.classList.add("personalise-page-inactive");
+  console.log(newFabricCanvas.getObjects());
+  // Remove the 'toggle-2d-3d-cont' class from the button container
+  buttonContainer.classList.remove("toggle-2d-3d-cont");
+});
+
+// function replaceCanvasObjectImage(newImageURL) {
+//   if (!newFabricCanvas) {
+//     console.error("Fabric canvas is not initialized.");
+//     return;
+//   }
+
+//   // Find the image object to replace
+//   const imageObjects = newFabricCanvas.getObjects("image");
+
+//   if (imageObjects.length > 0) {
+//     const imageObject = imageObjects[0]; // Assuming you want to replace the first image object found
+
+//     fabric.Image.fromURL(
+//       newImageURL,
+//       function (newImg) {
+//         newImg.set({
+//           left: imageObject.left,
+//           top: imageObject.top,
+//           scaleX: imageObject.scaleX,
+//           scaleY: imageObject.scaleY,
+//           originX: "left",
+//           originY: "top",
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+
+//         // Replace the old image object with the new one
+//         newFabricCanvas.remove(imageObject);
+//         newFabricCanvas.add(newImg);
+//         newFabricCanvas.renderAll();
+//       },
+//       { crossOrigin: "anonymous" }
+//     );
+//   } else {
+//     console.warn("No image object found to replace.");
+//   }
+// }
 
 // Event listeners for buttons
 
