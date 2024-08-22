@@ -1,11 +1,24 @@
-.personalise-page-inactive {
+/* .personalise-page-inactive {
   display: none;
-  /* display: block; */
 }
 
 .personalise-page-active {
   display: block;
-  /* display: none; */
+} */
+.toggle-2d-3d-cont {
+  display: none;
+}
+.personalise-page-active {
+  display: block;
+}
+
+.personalise-page-inactive {
+  display: none;
+}
+
+.personalise-page-main-cont {
+  position: absolute;
+  /* z-index: 100; */
 }
 .personalise-3d-box {
   width: 100%;
@@ -15,7 +28,9 @@
   background-color: #818181 !important;
   height: 100vh;
 }
-
+/* .canvas-container {
+  display: none;
+} */
 .personalize-3d-main-cont {
   display: flex;
   align-items: center;

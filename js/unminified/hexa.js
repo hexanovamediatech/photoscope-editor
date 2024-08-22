@@ -5967,6 +5967,47 @@
     //   }
     // }
 
+    // function AddingImage() {
+    //   console.log("adding image");
+
+    //   // Get the 'name' query parameter from the URL
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const name = urlParams.get("name");
+    //   console.log("name from query param is", name);
+
+    //   var imageUrls = {
+    //     "p5-type1": "assets/3d/P5_Type1.png",
+    //     "p9-type1": "assets/3d/P9_Type1.png",
+    //     "p3-type1": "assets/3d/P3_type1.png",
+    //     "p2-type1": "assets/3d/P2_type1.png",
+    //     "p4-type1": "assets/3d/P4_Type1.png",
+    //     "p3-type3": "assets/3d/P3_type3.png",
+    //     "Model-1": "assets/3d/Glow-3.png",
+    //     "Model-2": "assets/3d/model-2.png",
+    //   };
+
+    //   if (imageUrls.hasOwnProperty(name)) {
+    //     var imageUrl = imageUrls[name];
+    //     console.log("png image filepath ", imageUrl);
+    //     fabric.Image.fromURL(imageUrl, function (img) {
+    //       img.set({
+    //         selectable: false,
+    //         evented: false,
+    //         hasControls: false,
+    //         customId: "saheb",
+    //         isPreservedObject: true,
+    //       });
+    //       if (name === "p3-type1") {
+    //         img.scaleX = 2;
+    //         img.scaleY = 2;
+    //       }
+    //       preservedImage = img;
+    //       canvas.add(img);
+    //       canvas.renderAll();
+    //       onlyDeleteLayerEvent(img.id);
+    //     });
+    //   }
+    // }
     function AddingImage() {
       console.log("adding image");
 
@@ -5988,24 +6029,28 @@
 
       if (imageUrls.hasOwnProperty(name)) {
         var imageUrl = imageUrls[name];
+        console.log("png image filepath ", imageUrl);
 
-        fabric.Image.fromURL(imageUrl, function (img) {
-          img.set({
-            selectable: false,
-            evented: false,
-            hasControls: false,
-            customId: "saheb",
-            isPreservedObject: true,
+        // Delay the execution by 2 seconds (2000 milliseconds)
+        setTimeout(() => {
+          fabric.Image.fromURL(imageUrl, function (img) {
+            img.set({
+              selectable: false,
+              evented: false,
+              hasControls: false,
+              customId: "saheb",
+              isPreservedObject: true,
+            });
+            if (name === "p3-type1") {
+              img.scaleX = 2;
+              img.scaleY = 2;
+            }
+            preservedImage = img;
+            canvas.add(img);
+            canvas.renderAll();
+            onlyDeleteLayerEvent(img.id);
           });
-          if (name === "p3-type1") {
-            img.scaleX = 2;
-            img.scaleY = 2;
-          }
-          preservedImage = img;
-          canvas.add(img);
-          canvas.renderAll();
-          onlyDeleteLayerEvent(img.id);
-        });
+        }, 1000); // 2 seconds delay
       }
     }
 
