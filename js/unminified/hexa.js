@@ -1510,6 +1510,7 @@
         }
       }, 100);
     }
+
     /* Load Template Fonts */
     function loadTemplateFonts(objects) {
       if (objects.length !== 0) {
@@ -2541,6 +2542,104 @@
           selector.find("#hexa-canvas-loader").hide();
         });
       });
+
+    // selector.find("#openEditor").on("click", function () {
+    //   var $mainContainer = selector.find("#mini-editor-main-cont");
+    //   var $buttonContainer = selector.find("#webg-buttons-container");
+
+    //   // Remove the 'personalise-page-active' class from the main container
+    //   $mainContainer.removeClass("personalise-page-active");
+    //   // Add the 'personalise-page-inactive' class to the main container
+    //   $mainContainer.addClass("personalise-page-inactive");
+
+    //   // Remove the 'toggle-2d-3d-cont' class from the button container
+    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
+
+    //   // Retrieve the JSON objects from localStorage
+    //   var savedOriginalCanvasJSON = localStorage.getItem(
+    //     "savedOriginalCanvasJSON"
+    //   );
+    //   var savedCanvasJSON = localStorage.getItem("savedCanvasJSON");
+
+    //   if (savedCanvasJSON && savedOriginalCanvasJSON) {
+    //     // Parse the JSON strings
+    //     var originalCanvasObject = JSON.parse(savedOriginalCanvasJSON);
+    //     var canvasObject = JSON.parse(savedCanvasJSON);
+
+    //     // Iterate over the objects in canvasObject to update their properties
+    //     canvasObject.objects.forEach((obj, index) => {
+    //       if (originalCanvasObject.objects[index]) {
+    //         // Update the properties from originalCanvasObject
+    //         obj.top = originalCanvasObject.objects[index].top;
+    //         obj.left = originalCanvasObject.objects[index].left;
+    //         obj.scaleX = originalCanvasObject.objects[index].scaleX;
+    //         obj.scaleY = originalCanvasObject.objects[index].scaleY;
+    //       }
+    //     });
+
+    //     // Load the updated JSON into your editor or canvas
+    //     loadJSON(canvasObject);
+
+    //     // Clear the localStorage by removing the savedCanvasJSON item
+    //     localStorage.removeItem("savedCanvasJSON");
+    //   } else {
+    //     console.log("No saved canvas JSON found in localStorage.");
+    //   }
+    // });
+
+    selector.find("#openEditor").on("click", function () {
+      var $mainContainer = selector.find("#mini-editor-main-cont");
+      var $buttonContainer = selector.find("#webg-buttons-container");
+
+      // Remove the 'personalise-page-active' class from the main container
+      $mainContainer.removeClass("personalise-page-active");
+      // Add the 'personalise-page-inactive' class to the main container
+      $mainContainer.addClass("personalise-page-inactive");
+
+      // Remove the 'toggle-2d-3d-cont' class from the button container
+      $buttonContainer.removeClass("toggle-2d-3d-cont");
+
+      // Retrieve the JSON objects from localStorage
+      var savedOriginalCanvasJSON = localStorage.getItem(
+        "savedOriginalCanvasJSON"
+      );
+      var savedCanvasJSON = localStorage.getItem("savedCanvasJSON");
+
+      if (savedCanvasJSON && savedOriginalCanvasJSON) {
+        // Parse the JSON strings
+        var originalCanvasObject = JSON.parse(savedOriginalCanvasJSON);
+        var canvasObject = JSON.parse(savedCanvasJSON);
+
+        // Iterate over the objects in canvasObject to update their properties
+        canvasObject.objects.forEach((obj, index) => {
+          if (originalCanvasObject.objects[index]) {
+            var originalObj = originalCanvasObject.objects[index];
+
+            // Copy the values for top, left, scaleX, and scaleY from originalObj
+            obj.top = originalObj.top;
+            obj.left = originalObj.left;
+            obj.scaleX = originalObj.scaleX;
+            obj.scaleY = originalObj.scaleY;
+
+            // Iterate over properties of the originalObj and add missing ones to obj
+            for (var key in originalObj) {
+              if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+                obj[key] = originalObj[key];
+              }
+            }
+          }
+        });
+
+        // Load the updated JSON into your editor or canvas
+        loadJSON(canvasObject);
+
+        // Clear the localStorage by removing the savedCanvasJSON item
+        localStorage.removeItem("savedCanvasJSON");
+      } else {
+        console.log("No saved canvas JSON found in localStorage.");
+      }
+    });
+
     /**Disable Right Click */
     // 	$(document).on('contextmenu', function(event) {
     // 		event.preventDefault();
