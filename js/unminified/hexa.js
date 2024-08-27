@@ -1198,20 +1198,22 @@
         formData.append("files", blob, uniqueFileName);
 
         $.ajax({
-          url: "https://interactive.hexanovamedia.tech/api/v1/user/media/upload",
+          url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
           type: "POST",
           data: formData,
           processData: false,
           contentType: false,
           success: function (response) {
             var url = response.urls[0];
-            var currentUrl = window.location.href;
+            // var currentUrl = window.location.href;
+            const urlParams = new URLSearchParams(window.location.search);
+            const modelName = urlParams.get("name");
             var type = "";
-            if (currentUrl.includes("p3-type1.html")) {
-              type = "p3-type1";
-            } else if (currentUrl.includes("p2-type1.html")) {
-              type = "p2-type1";
-            }
+            // if (currentUrl.includes("p3-type1.html")) {
+            //   type = "p3-type1";
+            // } else if (currentUrl.includes("p2-type1.html")) {
+            //   type = "p2-type1";
+            // }
             // Update the template with the new URL
             var key = Math.random().toString(36).substr(2, 9);
             var name = selector.find("#hexa-json-save-name").val();
@@ -1220,7 +1222,7 @@
               key: key,
               src: url,
               name: name,
-              type: type,
+              type: modelName,
             };
 
             // Upload the data object to the new API
@@ -1245,7 +1247,7 @@
     function uploadData(data) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: "https://interactive.hexanovamedia.tech/api/v1/user/file-data/upload",
+          url: "https://backend.toddlerneeds.com/api/v1/user/file-data/upload",
           type: "POST",
           contentType: "application/json",
           data: JSON.stringify(data),
@@ -1266,7 +1268,7 @@
     function deleteTemplate(key) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `https://interactive.hexanovamedia.tech/api/v1/user/delete/${key}`,
+          url: `https://backend.toddlerneeds.com/api/v1/user/delete/${key}`,
           type: "DELETE",
           success: function (response) {
             resolve(response);
@@ -1280,13 +1282,15 @@
 
     function fetchAndDisplayTemplates() {
       const url = window.location.href;
-      let type = "";
+      // let type = "";
 
-      if (url.includes("p3-type1.html")) {
-        type = "p3-type1";
-      } else if (url.includes("p2-type1.html")) {
-        type = "p2-type1";
-      }
+      // if (url.includes("p3-type1.html")) {
+      //   type = "p3-type1";
+      // } else if (url.includes("p2-type1.html")) {
+      //   type = "p2-type1";
+      // }
+      const urlParams = new URLSearchParams(window.location.search);
+      const modelName = urlParams.get("name");
       getAllSavedData()
         .then((assets) => {
           const templatesContainer = $("#hexa-my-templates");
@@ -1298,7 +1302,7 @@
             );
           } else {
             assets.forEach((asset) => {
-              if (asset.type === type) {
+              if (asset.type === modelName) {
                 const jsonblob = new Blob([asset.src], { type: "text/plain" });
                 const jsonurl = URL.createObjectURL(jsonblob);
 
@@ -1329,7 +1333,7 @@
     function getAllSavedData() {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: "https://interactive.hexanovamedia.tech/api/v1/user/get/all",
+          url: "https://backend.toddlerneeds.com/api/v1/user/get/all",
           type: "GET",
           contentType: "application/json",
           success: function (response) {

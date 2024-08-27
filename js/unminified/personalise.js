@@ -12,7 +12,9 @@ let activeItem = null;
 let savedCanvasJSON;
 let newImageSrc = null;
 let imageUpdatedJSON;
+let textUpdatedJson;
 let imageReplace = false;
+
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -313,143 +315,23 @@ function updateCanvasText(textIndex, newText) {
   }
 
   newFabricCanvas.renderAll();
+  const format = "png";
+  const quality = 1;
+  const imgData = newFabricCanvas.toDataURL({
+    format: format,
+    quality: quality,
+    enableRetinaScaling: false,
+  });
+  fabricImageConverted = imgData;
+  changeTexture(fabricImageConverted);
+  // console.log("recall again and again");
+  // const updatedCanvasJSON = newFabricCanvas.toJSON();
+  // textUpdatedJson= JSON.stringify(updatedCanvasJSON);
+  savedCanvasJSON = newFabricCanvas.toJSON();
+  localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+  // return updatedCanvasJSON;
 }
 
-// function loadJSONToCanvas(json, format = "png", quality = 1) {
-//   try {
-//     console.log("Received JSON data:", json);
-
-//     // Initialize the canvas if it hasn't been initialized yet
-//     if (!newFabricCanvas) {
-//       initializeCanvas();
-//     }
-
-//     newFabricCanvas.clear();
-
-//     // Set canvas dimensions
-//     const canvasWidth = 460;
-//     const canvasHeight = 460;
-
-//     if (json.backgroundImage) {
-//       const backgroundImage = json.backgroundImage;
-//       fabric.Image.fromURL(
-//         backgroundImage.src,
-//         function (img) {
-//           img.set({
-//             left: 0,
-//             top: 0,
-//             scaleX: canvasWidth / img.width,
-//             scaleY: canvasHeight / img.height,
-//             originX: "left",
-//             originY: "top",
-//             selectable: false,
-//             hasControls: false,
-//             hasBorders: false,
-//             lockMovementX: true,
-//             lockMovementY: true,
-//             lockRotation: true,
-//             lockScalingX: true,
-//             lockScalingY: true,
-//           });
-//           newFabricCanvas.setBackgroundImage(
-//             img,
-//             newFabricCanvas.renderAll.bind(newFabricCanvas)
-//           );
-//         },
-//         { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
-//       );
-//     }
-
-//     // Calculate bounding box of all objects
-//     const boundingBox = json.objects.reduce(
-//       (box, obj) => {
-//         const objWidth = obj.width * (obj.scaleX || 1);
-//         const objHeight = obj.height * (obj.scaleY || 1);
-//         return {
-//           left: Math.min(box.left, obj.left),
-//           top: Math.min(box.top, obj.top),
-//           right: Math.max(box.right, obj.left + objWidth),
-//           bottom: Math.max(box.bottom, obj.top + objHeight),
-//         };
-//       },
-//       {
-//         left: Infinity,
-//         top: Infinity,
-//         right: -Infinity,
-//         bottom: -Infinity,
-//       }
-//     );
-
-//     // Calculate scale factors to fit the bounding box within the canvas
-//     const boundingBoxWidth = boundingBox.right - boundingBox.left;
-//     const boundingBoxHeight = boundingBox.bottom - boundingBox.top;
-//     const scaleX = canvasWidth / boundingBoxWidth;
-//     const scaleY = canvasHeight / boundingBoxHeight;
-//     const baseScale = Math.min(scaleX, scaleY); // Use min to fit within both dimensions
-
-//     // Define a multiplier for additional scaling if needed
-//     const scaleMultiplier = 1; // Adjust this multiplier as needed for fitting
-
-//     // Final scale factor
-//     const scale = baseScale * scaleMultiplier;
-
-//     let nextIndex = 1; // Initialize the index for default values
-
-//     json.objects.forEach((obj) => {
-//       // Apply calculated scale to each object
-//       obj.scaleX = (obj.scaleX || 1) * scale;
-//       obj.scaleY = (obj.scaleY || 1) * scale;
-
-//       const scaledWidth = obj.width * obj.scaleX;
-//       const scaledHeight = obj.height * obj.scaleY;
-
-//       // Center the objects within the canvas, adjusting for their original positions
-//       obj.left =
-//         (canvasWidth - boundingBoxWidth * scale) / 2 +
-//         (obj.left - boundingBox.left) * scale;
-//       obj.top =
-//         (canvasHeight - boundingBoxHeight * scale) / 2 +
-//         (obj.top - boundingBox.top) * scale;
-
-//       if (obj.type === "textbox") {
-//         // Assign a default dataIndex if not provided
-//         obj.dataIndex = obj.dataIndex || nextIndex++;
-//       }
-//     });
-
-//     newFabricCanvas.loadFromJSON(json, function () {
-//       newFabricCanvas.forEachObject((obj) => {
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       newFabricCanvas.renderAll();
-
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-//       // console.log("Image Data URL:", imgData);
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
-
-//       console.log("Canvas JSON:", JSON.stringify(savedCanvasJSON));
-//     });
-//   } catch (error) {
-//     console.error("Error processing JSON data:", error);
-//   }
-// }
 function replaceImageSrc(json, newImageSrc) {
   // console.log(json);
   json.objects.forEach((obj) => {
@@ -463,7 +345,7 @@ function replaceImageSrc(json, newImageSrc) {
   });
   imageUpdatedJSON = json;
 
-  // console.log(imageUpdatedJSON, "image updated json strc");
+  console.log(imageUpdatedJSON, "image updated json strc");
 }
 function loadJSONToCanvas(json, format = "png", quality = 1) {
   try {
@@ -759,14 +641,6 @@ function handleImageUploadmain(event) {
           width: canvas.width,
           height: canvas.height,
         };
-
-        // Save the JSON to localStorage
-        // localStorage.setItem(
-        //   "savedCanvasJSON",
-        //   JSON.stringify(savedCanvasJSON)
-        // );
-
-        // console.log("Canvas JSON:", JSON.stringify(savedCanvasJSON));
       };
       img.src = e.target.result;
     };
@@ -789,22 +663,63 @@ document
       }
       fabricCanvas.renderAll();
     }
+    if (newFabricCanvas) {
+      // newFabricCanvas.forEachObject((obj) => {
+      //   obj.set({
+      //     selectable: true,
+      //     hasControls: true,
+      //     hasBorders: true,
+      //     lockMovementX: false,
+      //     lockMovementY: false,
+      //     lockRotation: false,
+      //     lockScalingX: false,
+      //     lockScalingY: false,
+      //   });
+      // });
+      const objects = newFabricCanvas.getObjects();
+      const firstObject = objects[0];
+
+      if (firstObject) {
+        // Set properties for the first object
+        firstObject.set({
+          selectable: false,
+          hasControls: false,
+          hasBorders: false,
+          lockMovementX: true,
+          lockMovementY: true,
+          lockRotation: true,
+          lockScalingX: true,
+          lockScalingY: true,
+        });
+      }
+
+      objects.slice(1).forEach((obj) => {
+        obj.set({
+          selectable: true,
+          hasControls: true,
+          hasBorders: true,
+          lockMovementX: false,
+          lockMovementY: false,
+          lockRotation: false,
+          lockScalingX: false,
+          lockScalingY: false,
+        });
+      });
+      newFabricCanvas.renderAll();
+      newFabricCanvas.renderAll();
+      savedCanvasJSON = newFabricCanvas.toJSON();
+      localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+    }
   });
 
 document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
   if (fabricCanvas) {
     // Get the image as a data URL
     const selectedImage = fabricCanvas.toDataURL("image/png");
-
     // Apply the selected image as a texture to your 3D model
     changeTexture(selectedImage);
-
     // Save the current state of the canvas as JSON
     savedCanvasJSON = fabricCanvas.toJSON();
-    // console.log("Saved Canvas JSON:", JSON.stringify(savedCanvasJSON));
-    // if (!imageReplace) {
-    //   localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
-    // }
     // Disable resizing and adjusting
     const activeObject =
       fabricCanvas.getActiveObject() || fabricCanvas.imageObject;
@@ -818,7 +733,35 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     // document.getElementById("personaliseImageUploadPopup").style.display =
     //   "none";
   }
-  // loadJSON(savedCanvasJSON);
+  if (newFabricCanvas) {
+    newFabricCanvas.forEachObject((obj) => {
+      obj.set({
+        selectable: false,
+        hasControls: false,
+        hasBorders: false,
+        lockMovementX: true,
+        lockMovementY: true,
+        lockRotation: true,
+        lockScalingX: true,
+        lockScalingY: true,
+      });
+    });
+    newFabricCanvas.renderAll();
+    const format = "png";
+    const quality = 1;
+    const imgData = newFabricCanvas.toDataURL({
+      format: format,
+      quality: quality,
+      enableRetinaScaling: false,
+    });
+    fabricImageConverted = imgData;
+    changeTexture(fabricImageConverted);
+
+    savedCanvasJSON = newFabricCanvas.toJSON();
+    console.log(JSON.stringify(savedCanvasJSON));
+    localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+    // loadJSON(savedCanvasJSON);
+  }
 });
 
 // Initialize the 3D viewer when the page is ready
@@ -827,17 +770,19 @@ initialize3DViewer();
 (async () => {
   try {
     const response = await fetch(
-      "https://interactive.hexanovamedia.tech/api/v1/user/get/all"
+      "https://backend.toddlerneeds.com/api/v1/user/get/all"
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
     const dataArray = data.data; // Access the array from the data object
-
+    console.log(dataArray);
     if (Array.isArray(dataArray)) {
       // Filter the objects with type "p2-type1"
-      const filteredData = dataArray.filter((obj) => obj.type === "p2-type1");
+      const urlParams = new URLSearchParams(window.location.search);
+      const name = urlParams.get("name");
+      const filteredData = dataArray.filter((obj) => obj.type === name);
 
       // Get the container element where you want to display the names
       const container = document.getElementById("library-container");
@@ -865,7 +810,7 @@ initialize3DViewer();
           // Add active class to the clicked item
           newDiv.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
-          // console.log(activeItem);
+          console.log(activeItem);
           // Fetch the JSON data from the URL in activeItem
           try {
             const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
