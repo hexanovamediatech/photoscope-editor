@@ -332,127 +332,262 @@ function updateCanvasText(textIndex, newText) {
   // return updatedCanvasJSON;
 }
 
+// function replaceImageSrc(json, newImageSrc) {
+//   // Loop through the objects array to handle images within groups
+//   json.objects.forEach((obj) => {
+//     if (obj.type === "group") {
+//       obj.objects.forEach((innerObj) => {
+//         if (innerObj.type === "image") {
+//           innerObj.src = newImageSrc;
+//         }
+//       });
+//     }
+//   });
+
+//   // Check the second object in the array for type "image" if it's not inside a group
+//   if (
+//     json.objects.length > 1 &&
+//     json.objects[1].type === "image" &&
+//     json.objects[1].src
+//   ) {
+//     json.objects[1].src = newImageSrc;
+//   }
+
+//   imageUpdatedJSON = json;
+
+//   console.log(imageUpdatedJSON, "image updated json strc");
+// }
 function replaceImageSrc(json, newImageSrc) {
-  // console.log(json);
+  let imageFoundInGroup = false;
+
+  // Check if there are images within groups
   json.objects.forEach((obj) => {
     if (obj.type === "group") {
       obj.objects.forEach((innerObj) => {
         if (innerObj.type === "image") {
-          innerObj.src = newImageSrc;
+          // innerObj.src = newImageSrc;
+          imageFoundInGroup = true;
         }
       });
     }
   });
-  imageUpdatedJSON = json;
 
-  console.log(imageUpdatedJSON, "image updated json strc");
-}
-function loadJSONToCanvas(json, format = "png", quality = 1) {
-  try {
-    // console.log("Received JSON data:", json);
-
-    // Initialize the canvas if it hasn't been initialized yet
-    if (!newFabricCanvas) {
-      initializeCanvas();
-    }
-
-    newFabricCanvas.clear();
-
-    // Set canvas dimensions
-    const canvasWidth = 460;
-    const canvasHeight = 460;
-    // if (typeof newImageSrc !== "undefined") {
-    //   replaceImageSrc(json, newImageSrc);
-    // }
-    if (json.backgroundImage) {
-      const backgroundImage = json.backgroundImage;
-      fabric.Image.fromURL(
-        backgroundImage.src,
-        function (img) {
-          img.set({
-            left: 0,
-            top: 0,
-            scaleX: canvasWidth / img.width,
-            scaleY: canvasHeight / img.height,
-            originX: "left",
-            originY: "top",
-            selectable: false,
-            hasControls: false,
-            hasBorders: false,
-            lockMovementX: true,
-            lockMovementY: true,
-            lockRotation: true,
-            lockScalingX: true,
-            lockScalingY: true,
-          });
-          newFabricCanvas.setBackgroundImage(
-            img,
-            newFabricCanvas.renderAll.bind(newFabricCanvas)
-          );
-        },
-        { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
-      );
-    }
-
-    // Calculate bounding box of all objects
-    const boundingBox = json.objects.reduce(
-      (box, obj) => {
-        const objWidth = obj.width * (obj.scaleX || 1);
-        const objHeight = obj.height * (obj.scaleY || 1);
-        return {
-          left: Math.min(box.left, obj.left),
-          top: Math.min(box.top, obj.top),
-          right: Math.max(box.right, obj.left + objWidth),
-          bottom: Math.max(box.bottom, obj.top + objHeight),
-        };
-      },
-      {
-        left: Infinity,
-        top: Infinity,
-        right: -Infinity,
-        bottom: -Infinity,
-      }
-    );
-
-    // Calculate scale factors to fit the bounding box within the canvas
-    const boundingBoxWidth = boundingBox.right - boundingBox.left;
-    const boundingBoxHeight = boundingBox.bottom - boundingBox.top;
-    const scaleX = canvasWidth / boundingBoxWidth;
-    const scaleY = canvasHeight / boundingBoxHeight;
-    const baseScale = Math.min(scaleX, scaleY); // Use min to fit within both dimensions
-
-    // Define a multiplier for additional scaling if needed
-    const scaleMultiplier = 1; // Adjust this multiplier as needed for fitting
-
-    // Final scale factor
-    const scale = baseScale * scaleMultiplier;
-
-    let nextIndex = 1; // Initialize the index for default values
-
+  if (imageFoundInGroup) {
     json.objects.forEach((obj) => {
-      // Apply calculated scale to each object
-      obj.scaleX = (obj.scaleX || 1) * scale;
-      obj.scaleY = (obj.scaleY || 1) * scale;
-
-      const scaledWidth = obj.width * obj.scaleX;
-      const scaledHeight = obj.height * obj.scaleY;
-
-      // Center the objects within the canvas, adjusting for their original positions
-      obj.left =
-        (canvasWidth - boundingBoxWidth * scale) / 2 +
-        (obj.left - boundingBox.left) * scale;
-      obj.top =
-        (canvasHeight - boundingBoxHeight * scale) / 2 +
-        (obj.top - boundingBox.top) * scale;
-
-      if (obj.type === "textbox") {
-        // Assign a default dataIndex if not provided
-        obj.dataIndex = obj.dataIndex || nextIndex++;
+      if (obj.type === "group") {
+        obj.objects.forEach((innerObj) => {
+          if (innerObj.type === "image") {
+            innerObj.src = newImageSrc;
+          }
+        });
       }
     });
+  } else {
+    if (json.objects.length > 1 && json.objects[1].type === "image") {
+      json.objects[1].src = newImageSrc;
+    }
+    console.log("Image updated in second position or no groups found");
+  }
 
-    newFabricCanvas.loadFromJSON(json, function () {
-      newFabricCanvas.forEachObject((obj) => {
+  imageUpdatedJSON = json;
+  console.log(imageUpdatedJSON, "image updated json strc");
+}
+
+// function loadJSONToCanvas(json, format = "png", quality = 1) {
+//   try {
+//     // console.log("Received JSON data:", json);
+
+//     // Initialize the canvas if it hasn't been initialized yet
+//     if (!newFabricCanvas) {
+//       initializeCanvas();
+//     }
+
+//     newFabricCanvas.clear();
+
+//     // Set canvas dimensions
+//     const canvasWidth = 460;
+//     const canvasHeight = 460;
+//     // if (typeof newImageSrc !== "undefined") {
+//     //   replaceImageSrc(json, newImageSrc);
+//     // }
+//     if (json.backgroundImage) {
+//       const backgroundImage = json.backgroundImage;
+//       fabric.Image.fromURL(
+//         backgroundImage.src,
+//         function (img) {
+//           img.set({
+//             left: 0,
+//             top: 0,
+//             scaleX: canvasWidth / img.width,
+//             scaleY: canvasHeight / img.height,
+//             originX: "left",
+//             originY: "top",
+//             selectable: false,
+//             hasControls: false,
+//             hasBorders: false,
+//             lockMovementX: true,
+//             lockMovementY: true,
+//             lockRotation: true,
+//             lockScalingX: true,
+//             lockScalingY: true,
+//           });
+//           newFabricCanvas.setBackgroundImage(
+//             img,
+//             newFabricCanvas.renderAll.bind(newFabricCanvas)
+//           );
+//         },
+//         { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
+//       );
+//     }
+
+//     // Calculate bounding box of all objects
+//     const boundingBox = json.objects.reduce(
+//       (box, obj) => {
+//         const objWidth = obj.width * (obj.scaleX || 1);
+//         const objHeight = obj.height * (obj.scaleY || 1);
+//         return {
+//           left: Math.min(box.left, obj.left),
+//           top: Math.min(box.top, obj.top),
+//           right: Math.max(box.right, obj.left + objWidth),
+//           bottom: Math.max(box.bottom, obj.top + objHeight),
+//         };
+//       },
+//       {
+//         left: Infinity,
+//         top: Infinity,
+//         right: -Infinity,
+//         bottom: -Infinity,
+//       }
+//     );
+
+//     // Calculate scale factors to fit the bounding box within the canvas
+//     const boundingBoxWidth = boundingBox.right - boundingBox.left;
+//     const boundingBoxHeight = boundingBox.bottom - boundingBox.top;
+//     const scaleX = canvasWidth / boundingBoxWidth;
+//     const scaleY = canvasHeight / boundingBoxHeight;
+//     const baseScale = Math.min(scaleX, scaleY); // Use min to fit within both dimensions
+
+//     // Define a multiplier for additional scaling if needed
+//     const scaleMultiplier = 1; // Adjust this multiplier as needed for fitting
+
+//     // Final scale factor
+//     const scale = baseScale * scaleMultiplier;
+
+//     let nextIndex = 1; // Initialize the index for default values
+
+//     json.objects.forEach((obj) => {
+//       // Apply calculated scale to each object
+//       obj.scaleX = (obj.scaleX || 1) * scale;
+//       obj.scaleY = (obj.scaleY || 1) * scale;
+
+//       const scaledWidth = obj.width * obj.scaleX;
+//       const scaledHeight = obj.height * obj.scaleY;
+
+//       // Center the objects within the canvas, adjusting for their original positions
+//       obj.left =
+//         (canvasWidth - boundingBoxWidth * scale) / 2 +
+//         (obj.left - boundingBox.left) * scale;
+//       obj.top =
+//         (canvasHeight - boundingBoxHeight * scale) / 2 +
+//         (obj.top - boundingBox.top) * scale;
+
+//       if (obj.type === "textbox") {
+//         // Assign a default dataIndex if not provided
+//         obj.dataIndex = obj.dataIndex || nextIndex++;
+//       }
+//     });
+
+//     newFabricCanvas.loadFromJSON(json, function () {
+//       newFabricCanvas.forEachObject((obj) => {
+//         obj.set({
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+//       });
+
+//       newFabricCanvas.renderAll();
+
+//       const imgData = newFabricCanvas.toDataURL({
+//         format: format,
+//         quality: quality,
+//         enableRetinaScaling: false,
+//       });
+//       fabricImageConverted = imgData;
+//       changeTexture(fabricImageConverted);
+
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+
+//       // console.log("Canvas JSON:", JSON.stringify(savedCanvasJSON));
+//     });
+//   } catch (error) {
+//     console.error("Error processing JSON data:", error);
+//   }
+// }
+
+function loadJSONToCanvas(jsonData) {
+  if (!newFabricCanvas) {
+    initializeCanvas();
+  }
+
+  newFabricCanvas.clear();
+
+  // Load the JSON data into the existing Fabric.js canvas
+  let nextIndex = 1;
+  jsonData.objects.forEach((obj) => {
+    if (obj.type === "textbox") {
+      // Assign a default dataIndex if not provided
+      obj.dataIndex = obj.dataIndex || nextIndex++;
+    }
+  });
+  newFabricCanvas.loadFromJSON(
+    jsonData,
+    function () {
+      console.log(jsonData.objects);
+
+      // Load and scale the background image if it exists
+      if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
+        const bgImageData = jsonData.backgroundImage.src;
+        fabric.Image.fromURL(bgImageData, function (bgImage) {
+          // Set the background image properties
+          bgImage.set({
+            scaleX: 0.225, // Apply the scale factor
+            scaleY: 0.225, // Apply the scale factor
+            left: jsonData.backgroundImage.left,
+            top: jsonData.backgroundImage.top,
+            originX: "left",
+            originY: "top",
+          });
+
+          newFabricCanvas.setBackgroundImage(
+            bgImage,
+            newFabricCanvas.renderAll.bind(newFabricCanvas)
+          );
+        });
+      }
+
+      // After loading the JSON, resize and reposition all objects to fit the canvas
+      newFabricCanvas.getObjects().forEach((obj, index) => {
+        if (index === 0) {
+          // Scale down the first object
+          obj.scaleX *= 0.225;
+          obj.scaleY *= 0.225;
+        } else {
+          // Apply a different scaling factor for other objects
+          obj.scaleX *= 0.225; // Adjust the scaling factor as needed
+          obj.scaleY *= 0.225; // Adjust the scaling factor as needed
+
+          // Adjust top and left properties to make the object visible
+          obj.left *= 0.225; // Adjust the position as needed
+          obj.top *= 0.225; // Adjust the position as needed
+        }
+        obj.setCoords();
         obj.set({
           selectable: false,
           hasControls: false,
@@ -465,8 +600,12 @@ function loadJSONToCanvas(json, format = "png", quality = 1) {
         });
       });
 
+      // Render all objects on the canvas
       newFabricCanvas.renderAll();
+      console.log(newFabricCanvas.getObjects());
 
+      const format = "png";
+      const quality = 1;
       const imgData = newFabricCanvas.toDataURL({
         format: format,
         quality: quality,
@@ -477,12 +616,12 @@ function loadJSONToCanvas(json, format = "png", quality = 1) {
 
       savedCanvasJSON = newFabricCanvas.toJSON();
       localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
-
-      // console.log("Canvas JSON:", JSON.stringify(savedCanvasJSON));
-    });
-  } catch (error) {
-    console.error("Error processing JSON data:", error);
-  }
+    },
+    function (error) {
+      console.error("Error loading JSON:", error);
+      console.log("Loaded JSON Data:", jsonData);
+    }
+  );
 }
 
 function setNewImageSrc(imageSrc) {
@@ -649,6 +788,7 @@ function handleImageUploadmain(event) {
 }
 
 // Event listener for the "Adjust" button click
+
 document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
@@ -663,38 +803,14 @@ document
       }
       fabricCanvas.renderAll();
     }
+
     if (newFabricCanvas) {
-      // newFabricCanvas.forEachObject((obj) => {
-      //   obj.set({
-      //     selectable: true,
-      //     hasControls: true,
-      //     hasBorders: true,
-      //     lockMovementX: false,
-      //     lockMovementY: false,
-      //     lockRotation: false,
-      //     lockScalingX: false,
-      //     lockScalingY: false,
-      //   });
-      // });
+      // Set properties for the first object in the canvas
       const objects = newFabricCanvas.getObjects();
-      const firstObject = objects[0];
+      const firstObject = objects[1];
 
       if (firstObject) {
-        // Set properties for the first object
         firstObject.set({
-          selectable: false,
-          hasControls: false,
-          hasBorders: false,
-          lockMovementX: true,
-          lockMovementY: true,
-          lockRotation: true,
-          lockScalingX: true,
-          lockScalingY: true,
-        });
-      }
-
-      objects.slice(1).forEach((obj) => {
-        obj.set({
           selectable: true,
           hasControls: true,
           hasBorders: true,
@@ -704,13 +820,141 @@ document
           lockScalingX: false,
           lockScalingY: false,
         });
+      }
+
+      // Handle images within groups
+      // newFabricCanvas.forEachObject((obj) => {
+      //   if (obj.type === "group") {
+      //     obj.forEachObject((innerObj) => {
+      //       if (innerObj.type === "image") {
+      //         innerObj.set({
+      //           selectable: true,
+      //           hasControls: true,
+      //           hasBorders: true,
+      //           lockMovementX: false,
+      //           lockMovementY: false,
+      //           lockRotation: false,
+      //           lockScalingX: false,
+      //           lockScalingY: false,
+      //         });
+      //         console.log("Image within group made adjustable");
+      //       }
+      //     });
+      //   }
+      // });
+      newFabricCanvas.forEachObject((obj) => {
+        if (obj.type === "group") {
+          // obj.forEachObject((innerObj) => {
+          //   if (innerObj.type === "image") {
+          obj.set({
+            selectable: true,
+            hasControls: true,
+            hasBorders: true,
+            lockMovementX: false,
+            lockMovementY: false,
+            lockRotation: false,
+            lockScalingX: false,
+            lockScalingY: false,
+          });
+          console.log("Image within group made adjustable");
+          // }
+          // });
+        }
       });
+
+      // Render the canvas after adjustments
       newFabricCanvas.renderAll();
-      newFabricCanvas.renderAll();
+
+      // Save the updated canvas state to localStorage
       savedCanvasJSON = newFabricCanvas.toJSON();
-      localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+      try {
+        localStorage.setItem(
+          "savedCanvasJSON",
+          JSON.stringify(savedCanvasJSON)
+        );
+      } catch (error) {
+        console.error("Failed to save canvas state:", error);
+      }
     }
   });
+
+////////Main adjust function/////////////////
+
+// document
+//   .getElementById("personaliseAdjustBtn")
+//   .addEventListener("click", () => {
+//     if (fabricCanvas) {
+//       const activeObject = fabricCanvas.imageObject;
+//       if (activeObject) {
+//         activeObject.set({
+//           selectable: true,
+//           hasControls: true,
+//         });
+//         fabricCanvas.setActiveObject(activeObject);
+//       }
+//       fabricCanvas.renderAll();
+//     }
+
+//     if (newFabricCanvas) {
+//       // Set properties for the first object in the canvas
+//       const objects = newFabricCanvas.getObjects();
+//       const firstObject = objects[1];
+//       let firstImage = false;
+//       if (firstObject && firstObject.type === "image") {
+//         firstImage = true;
+//       }
+//       if (firstImage) {
+//         if (firstObject && firstObject.type === "image") {
+//           console.log("first image selected");
+//           firstObject.set({
+//             selectable: true,
+//             hasControls: true,
+//             hasBorders: true,
+//             lockMovementX: false,
+//             lockMovementY: false,
+//             lockRotation: false,
+//             lockScalingX: false,
+//             lockScalingY: false,
+//           });
+//         }
+//       } else {
+//         console.log("group image selected");
+//         newFabricCanvas.forEachObject((obj) => {
+//           if (obj.type === "group") {
+//             obj.forEachObject((innerObj) => {
+//               if (innerObj.type === "image") {
+//                 innerObj.set({
+//                   selectable: true,
+//                   hasControls: true,
+//                   hasBorders: true,
+//                   lockMovementX: false,
+//                   lockMovementY: false,
+//                   lockRotation: false,
+//                   lockScalingX: false,
+//                   lockScalingY: false,
+//                 });
+//                 console.log("Image within group made adjustable");
+//               }
+//             });
+//           }
+//         });
+//       }
+
+//       // Render the canvas after adjustments
+//       newFabricCanvas.renderAll();
+
+//       // Save the updated canvas state to localStorage
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       try {
+//         localStorage.setItem(
+//           "savedCanvasJSON",
+//           JSON.stringify(savedCanvasJSON)
+//         );
+//       } catch (error) {
+//         console.error("Failed to save canvas state:", error);
+//       }
+//     }
+//   });
 
 document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
   if (fabricCanvas) {
