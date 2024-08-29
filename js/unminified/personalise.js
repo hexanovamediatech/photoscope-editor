@@ -333,64 +333,89 @@ function updateCanvasText(textIndex, newText) {
 }
 
 // function replaceImageSrc(json, newImageSrc) {
-//   // Loop through the objects array to handle images within groups
+//   let imageFoundInGroup = false;
+
+//   // Check if there are images within groups
 //   json.objects.forEach((obj) => {
 //     if (obj.type === "group") {
 //       obj.objects.forEach((innerObj) => {
 //         if (innerObj.type === "image") {
-//           innerObj.src = newImageSrc;
+//           // innerObj.src = newImageSrc;
+//           imageFoundInGroup = true;
 //         }
 //       });
 //     }
 //   });
 
-//   // Check the second object in the array for type "image" if it's not inside a group
-//   if (
-//     json.objects.length > 1 &&
-//     json.objects[1].type === "image" &&
-//     json.objects[1].src
-//   ) {
-//     json.objects[1].src = newImageSrc;
+//   if (imageFoundInGroup) {
+//     json.objects.forEach((obj) => {
+//       if (obj.type === "group") {
+//         obj.objects.forEach((innerObj) => {
+//           if (innerObj.type === "image") {
+//             innerObj.src = newImageSrc;
+//           }
+//         });
+//       }
+//     });
+//   } else {
+//     if (json.objects.length > 1 && json.objects[1].type === "image") {
+//       json.objects[1].src = newImageSrc;
+//     }
+//     console.log("Image updated in second position or no groups found");
 //   }
 
 //   imageUpdatedJSON = json;
-
 //   console.log(imageUpdatedJSON, "image updated json strc");
 // }
-function replaceImageSrc(json, newImageSrc) {
+function replaceImageSrc(json, newImageSrc, callback) {
   let imageFoundInGroup = false;
 
-  // Check if there are images within groups
-  json.objects.forEach((obj) => {
-    if (obj.type === "group") {
-      obj.objects.forEach((innerObj) => {
-        if (innerObj.type === "image") {
-          // innerObj.src = newImageSrc;
-          imageFoundInGroup = true;
-        }
-      });
-    }
-  });
+  const img = new Image();
+  img.src = newImageSrc;
 
-  if (imageFoundInGroup) {
+  // Wait until the image is loaded
+  img.onload = function () {
+    // Create a temporary canvas to compress the image
+    const tempCanvas = document.createElement("canvas");
+    const ctx = tempCanvas.getContext("2d");
+
+    // Set the desired width and height (for compression)
+    tempCanvas.width = img.width;
+    tempCanvas.height = img.height;
+
+    // Draw the image onto the canvas
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+
+    // Convert the canvas to a compressed base64-encoded image
+    const compressedImageSrc = tempCanvas.toDataURL("image/jpeg", 0.5); // Adjust quality as needed
+
+    // Check if there are images within groups
     json.objects.forEach((obj) => {
       if (obj.type === "group") {
         obj.objects.forEach((innerObj) => {
           if (innerObj.type === "image") {
-            innerObj.src = newImageSrc;
+            innerObj.src = compressedImageSrc;
+            imageFoundInGroup = true;
           }
         });
       }
     });
-  } else {
-    if (json.objects.length > 1 && json.objects[1].type === "image") {
-      json.objects[1].src = newImageSrc;
-    }
-    console.log("Image updated in second position or no groups found");
-  }
 
-  imageUpdatedJSON = json;
-  console.log(imageUpdatedJSON, "image updated json strc");
+    if (
+      !imageFoundInGroup &&
+      json.objects.length > 1 &&
+      json.objects[1].type === "image"
+    ) {
+      json.objects[1].src = compressedImageSrc;
+      console.log("Image updated in second position or no groups found");
+    }
+
+    imageUpdatedJSON = json;
+    console.log(imageUpdatedJSON, "image updated json strc");
+
+    // Call the callback function after the image is replaced and compressed
+    if (callback) callback(imageUpdatedJSON);
+  };
 }
 
 // function loadJSONToCanvas(json, format = "png", quality = 1) {
@@ -531,6 +556,98 @@ function replaceImageSrc(json, newImageSrc) {
 //   }
 // }
 
+// function loadJSONToCanvas(jsonData) {
+//   if (!newFabricCanvas) {
+//     initializeCanvas();
+//   }
+
+//   newFabricCanvas.clear();
+
+//   // Load the JSON data into the existing Fabric.js canvas
+//   let nextIndex = 1;
+//   jsonData.objects.forEach((obj) => {
+//     if (obj.type === "textbox") {
+//       // Assign a default dataIndex if not provided
+//       obj.dataIndex = obj.dataIndex || nextIndex++;
+//     }
+//   });
+//   newFabricCanvas.loadFromJSON(
+//     jsonData,
+//     function () {
+//       console.log(jsonData.objects);
+
+//       // Load and scale the background image if it exists
+//       if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
+//         const bgImageData = jsonData.backgroundImage.src;
+//         fabric.Image.fromURL(bgImageData, function (bgImage) {
+//           // Set the background image properties
+//           bgImage.set({
+//             scaleX: 0.225, // Apply the scale factor
+//             scaleY: 0.225, // Apply the scale factor
+//             left: jsonData.backgroundImage.left,
+//             top: jsonData.backgroundImage.top,
+//             originX: "left",
+//             originY: "top",
+//           });
+
+//           newFabricCanvas.setBackgroundImage(
+//             bgImage,
+//             newFabricCanvas.renderAll.bind(newFabricCanvas)
+//           );
+//         });
+//       }
+
+//       // After loading the JSON, resize and reposition all objects to fit the canvas
+//       newFabricCanvas.getObjects().forEach((obj, index) => {
+//         if (index === 0) {
+//           // Scale down the first object
+//           obj.scaleX *= 0.225;
+//           obj.scaleY *= 0.225;
+//         } else {
+//           // Apply a different scaling factor for other objects
+//           obj.scaleX *= 0.225; // Adjust the scaling factor as needed
+//           obj.scaleY *= 0.225; // Adjust the scaling factor as needed
+
+//           // Adjust top and left properties to make the object visible
+//           obj.left *= 0.225; // Adjust the position as needed
+//           obj.top *= 0.225; // Adjust the position as needed
+//         }
+//         obj.setCoords();
+//         obj.set({
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+//       });
+
+//       // Render all objects on the canvas
+//       newFabricCanvas.renderAll();
+//       console.log(newFabricCanvas.getObjects());
+
+//       const format = "png";
+//       const quality = 1;
+//       const imgData = newFabricCanvas.toDataURL({
+//         format: format,
+//         quality: quality,
+//         enableRetinaScaling: false,
+//       });
+//       fabricImageConverted = imgData;
+//       changeTexture(fabricImageConverted);
+
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+//     },
+//     function (error) {
+//       console.error("Error loading JSON:", error);
+//       console.log("Loaded JSON Data:", jsonData);
+//     }
+//   );
+// }
 function loadJSONToCanvas(jsonData) {
   if (!newFabricCanvas) {
     initializeCanvas();
@@ -544,6 +661,10 @@ function loadJSONToCanvas(jsonData) {
     if (obj.type === "textbox") {
       // Assign a default dataIndex if not provided
       obj.dataIndex = obj.dataIndex || nextIndex++;
+      const inputField = document.getElementById(`text-${obj.dataIndex}`);
+      if (inputField) {
+        inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
+      }
     }
   });
   newFabricCanvas.loadFromJSON(
@@ -587,6 +708,16 @@ function loadJSONToCanvas(jsonData) {
           obj.left *= 0.225; // Adjust the position as needed
           obj.top *= 0.225; // Adjust the position as needed
         }
+
+        if (obj.clipPath) {
+          obj.clipPath.set({
+            scaleX: obj.clipPath.scaleX * 0.225, // Adjust the scaling factor as needed
+            scaleY: obj.clipPath.scaleY * 0.225, // Adjust the scaling factor as needed
+            left: obj.clipPath.left * 0.225, // Adjust the position as needed
+            top: obj.clipPath.top * 0.225, // Adjust the position as needed
+          });
+        }
+
         obj.setCoords();
         obj.set({
           selectable: false,
@@ -600,8 +731,9 @@ function loadJSONToCanvas(jsonData) {
         });
       });
 
-      // Render all objects on the canvas
+      // Force a render to ensure all objects, including clipPaths, are applied
       newFabricCanvas.renderAll();
+
       console.log(newFabricCanvas.getObjects());
 
       const format = "png";
@@ -624,6 +756,32 @@ function loadJSONToCanvas(jsonData) {
   );
 }
 
+// function setNewImageSrc(imageSrc) {
+//   newImageSrc = imageSrc;
+
+//   // Retrieve the JSON string from localStorage
+//   const savedOriginalCanvasJSONString = localStorage.getItem(
+//     "savedOriginalCanvasJSON"
+//   );
+
+//   // Parse the JSON string into an object
+//   let savedOriginalCanvasJSON = {};
+//   if (savedOriginalCanvasJSONString) {
+//     savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
+//     // console.log(savedOriginalCanvasJSON, "parsed json");
+//   }
+
+//   if (typeof newImageSrc !== "undefined") {
+//     // Replace the image source in the parsed JSON
+//     replaceImageSrc(savedOriginalCanvasJSON, newImageSrc);
+
+//     // Save the updated JSON back to a variable
+//     const imageUpdatedJSON = savedOriginalCanvasJSON;
+
+//     // Load the updated JSON to the canvas
+//     loadJSONToCanvas(imageUpdatedJSON);
+//   }
+// }
 function setNewImageSrc(imageSrc) {
   newImageSrc = imageSrc;
 
@@ -636,18 +794,24 @@ function setNewImageSrc(imageSrc) {
   let savedOriginalCanvasJSON = {};
   if (savedOriginalCanvasJSONString) {
     savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
-    // console.log(savedOriginalCanvasJSON, "parsed json");
   }
 
   if (typeof newImageSrc !== "undefined") {
-    // Replace the image source in the parsed JSON
-    replaceImageSrc(savedOriginalCanvasJSON, newImageSrc);
+    // Replace the image source in the parsed JSON and compress it
+    replaceImageSrc(
+      savedOriginalCanvasJSON,
+      newImageSrc,
+      (imageUpdatedJSON) => {
+        // Save the updated JSON back to localStorage or use it as needed
+        loadJSONToCanvas(imageUpdatedJSON);
 
-    // Save the updated JSON back to a variable
-    const imageUpdatedJSON = savedOriginalCanvasJSON;
-
-    // Load the updated JSON to the canvas
-    loadJSONToCanvas(imageUpdatedJSON);
+        // Optionally, save the updated JSON back to localStorage
+        localStorage.setItem(
+          "savedCanvasJSON",
+          JSON.stringify(imageUpdatedJSON)
+        );
+      }
+    );
   }
 }
 
@@ -807,10 +971,25 @@ document
     if (newFabricCanvas) {
       // Set properties for the first object in the canvas
       const objects = newFabricCanvas.getObjects();
-      const firstObject = objects[1];
+      const targetObject = objects.find(
+        (obj) => obj.type === "image" && !obj.src.startsWith("http")
+      );
 
-      if (firstObject) {
-        firstObject.set({
+      // if (firstObject) {
+      //   firstObject.set({
+      //     selectable: true,
+      //     hasControls: true,
+      //     hasBorders: true,
+      //     lockMovementX: false,
+      //     lockMovementY: false,
+      //     lockRotation: false,
+      //     lockScalingX: false,
+      //     lockScalingY: false,
+      //   });
+      // }
+      if (targetObject) {
+        // Set properties for the found object
+        targetObject.set({
           selectable: true,
           hasControls: true,
           hasBorders: true,
@@ -821,7 +1000,6 @@ document
           lockScalingY: false,
         });
       }
-
       // Handle images within groups
       // newFabricCanvas.forEachObject((obj) => {
       //   if (obj.type === "group") {
@@ -846,6 +1024,7 @@ document
         if (obj.type === "group") {
           // obj.forEachObject((innerObj) => {
           //   if (innerObj.type === "image") {
+
           obj.set({
             selectable: true,
             hasControls: true,
