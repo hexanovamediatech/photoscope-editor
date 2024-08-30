@@ -817,6 +817,9 @@ function setNewImageSrc(imageSrc) {
 
 // Assuming the user selects an image via an input field
 function handleImageUploadAlternate(event) {
+  const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+  miniEditorAdjust.classList.remove("display-none-prop");
+  miniEditorAdjust.classList.add("display-block-prop");
   const file = event.target.files[0];
   const reader = new FileReader();
 
@@ -884,6 +887,10 @@ function setupEventListener() {
   }
 }
 function handleImageUploadmain(event) {
+  const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+  miniEditorAdjust.classList.remove("display-none-prop");
+  miniEditorAdjust.classList.add("display-block-prop");
+
   const file = event.target.files[0];
   if (file) {
     const reader = new FileReader();
@@ -956,6 +963,20 @@ function handleImageUploadmain(event) {
 document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
+    // Display Canvas in popup
+    const miniEditorCont = document.getElementById("mini-editor-Cont");
+    miniEditorCont.classList.remove("display-none-prop");
+    miniEditorCont.classList.add("display-block-prop");
+    // Display Done Button
+    const miniEditorDone = document.getElementById("miniE-done-Btn");
+    miniEditorDone.classList.remove("display-none-prop");
+    miniEditorDone.classList.add("display-block-prop");
+
+    // Hide Adjust Button
+    const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+    miniEditorAdjust.classList.add("display-none-prop");
+    miniEditorAdjust.classList.remove("display-block-prop");
+
     if (fabricCanvas) {
       const activeObject = fabricCanvas.imageObject;
       if (activeObject) {
@@ -1185,6 +1206,22 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
     // loadJSON(savedCanvasJSON);
   }
+
+  // Hide Done Button
+  const miniEditorDone = document.getElementById("miniE-done-Btn");
+  miniEditorDone.classList.add("display-none-prop");
+  miniEditorDone.classList.remove("display-block-prop");
+
+  //Display Adjust Button
+
+  const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+  miniEditorAdjust.classList.remove("display-none-prop");
+  miniEditorAdjust.classList.add("display-block-prop");
+
+  // Hide Canvas in popup
+  const miniEditorCont = document.getElementById("mini-editor-Cont");
+  miniEditorCont.classList.add("display-none-prop");
+  miniEditorCont.classList.remove("display-block-prop");
 });
 
 // Initialize the 3D viewer when the page is ready

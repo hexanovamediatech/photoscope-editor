@@ -8364,20 +8364,38 @@ Enter Your Text Here</textarea
             </div>
             <div id="personaliseImageUploadPopup" class="popup-container">
               <div class="popup-content">
-                <div><input type="text" id="text-1" autocomplete="off" /></div>
-                <div><input type="text" id="text-2" autocomplete="off" /></div>
+                <div class="mini-ediotr-input-cont">
+                  <div>
+                    <input
+                      type="text"
+                      id="text-1"
+                      class="mini-editor-input"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      id="text-2"
+                      class="mini-editor-input"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
 
                 <span id="personaliseClosePopupBtn" class="close-btn"
                   >&times;</span
                 >
-                <div class="image-preview-area">
-                  <div id="personaliseCanvasWrap">
-                    <img src="" class="personalise-template-img" />
-                    <canvas
-                      id="personaliseCanvas"
-                      width="460"
-                      height="460"
-                    ></canvas>
+                <div class="display-none-prop" id="mini-editor-Cont">
+                  <div class="image-preview-area">
+                    <div id="personaliseCanvasWrap">
+                      <img src="" class="personalise-template-img" />
+                      <canvas
+                        id="personaliseCanvas"
+                        width="460"
+                        height="460"
+                      ></canvas>
+                    </div>
                   </div>
                 </div>
                 <div class="button-container">
@@ -8392,16 +8410,24 @@ Enter Your Text Here</textarea
                     <label
                       for="personaliseImgUpload"
                       class="hexa-btn primary hexa-lg-btn btn-full"
-                      ><span class="material-icons">upload</span>
-                      <span>Replace</span></label
                     >
+                      <span class="material-icons">upload</span>
+                      <span>Replace</span>
+                    </label>
                   </div>
-                  <button id="personaliseAdjustBtn">Adjust</button>
-                  <button id="personaliseDoneBtn">Done</button>
+                  <div class="display-none-prop" id="miniE-adjust-Btn">
+                    <button id="personaliseAdjustBtn">Adjust</button>
+                  </div>
+                  <div class="display-none-prop" id="miniE-done-Btn">
+                    <button id="personaliseDoneBtn">Done</button>
+                  </div>
+                  <div class="ediotr-btn-cont">
+                    <button id="openEditor">Edit in Editor</button>
+                  </div>
                 </div>
-                <div class="ediotr-btn-cont">
+                <!-- <div class="ediotr-btn-cont">
                   <button id="openEditor">Edit in Editor</button>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
