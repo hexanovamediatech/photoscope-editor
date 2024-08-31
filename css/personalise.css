@@ -188,6 +188,14 @@
   font-size: 18px;
   font-weight: 700;
 }
+.template-list-loader-cont {
+  height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
+  margin-bottom: 10px;
+}
 .personalise-librarry-name-cont {
   display: grid;
   grid-template-columns: repeat(2, 0fr);
@@ -237,4 +245,28 @@
 
 .display-block-prop {
   display: block;
+}
+
+.threedD-loader {
+  width: 45px;
+  aspect-ratio: 0.75;
+  --c: no-repeat linear-gradient(#242631 0 0); /* Updated color */
+  background: var(--c) 0% 100%, var(--c) 50% 100%, var(--c) 100% 100%;
+  background-size: 20% 65%;
+  animation: l5 1s infinite linear;
+}
+
+@keyframes l5 {
+  20% {
+    background-position: 0% 50%, 50% 100%, 100% 100%;
+  }
+  40% {
+    background-position: 0% 0%, 50% 50%, 100% 100%;
+  }
+  60% {
+    background-position: 0% 100%, 50% 0%, 100% 50%;
+  }
+  80% {
+    background-position: 0% 100%, 50% 100%, 100% 0%;
+  }
 }
