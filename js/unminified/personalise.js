@@ -25,88 +25,20 @@ document.addEventListener("variableReady", function (e) {
   }
 });
 let fabricImageConverted = null;
-// function initPersonalise() {
-//   const mainContainer = document.getElementById("personalise-3d-container");
-//   mainContainer.style.backgroundColor = "#f0f0f0";
-//   camera = new THREE.PerspectiveCamera(
-//     45,
-//     window.innerWidth / window.innerHeight,
-//     0.1,
-//     20
-//   );
-//   camera.position.set(0, 0.08, 0.5);
 
-//   scene = new THREE.Scene();
-//   new GLTFLoader().load("/assets/3d/P2_type1.glb", function (gltf) {
-//     const loadedModel = gltf.scene;
-//     const specificMesh = loadedModel.children[0].children[3];
-//     const textureLoader = new THREE.TextureLoader();
-
-//     textureLoader.load(
-//       "assets/3d/76_leather texture-seamless.jpg",
-//       (bumpMap) => {
-//         textureLoader.load(selectedImage, (texture) => {
-//           const material = new THREE.MeshStandardMaterial({
-//             map: texture,
-//             bumpMap: bumpMap,
-//             roughness: 1,
-//             metalness: 1,
-//             opacity: 1,
-//             bumpScale: 0.5,
-//           });
-//           specificMesh.material = material;
-
-//           texture.repeat.set(1.9, -1.9);
-//           texture.offset.set(0.92, 0.5);
-//           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-//         });
-//       }
-//     );
-
-//     loadedModel.position.set(0, -0.11, 0);
-//     scene.add(gltf.scene);
-//   });
-
-//   renderer = new THREE.WebGLRenderer({ antialias: true });
-//   renderer.setPixelRatio(window.devicePixelRatio);
-//   renderer.setSize(window.innerWidth, window.innerHeight);
-//   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-//   renderer.toneMappingExposure = 0.5;
-//   mainContainer.appendChild(renderer.domElement);
-
-//   const environment = new RoomEnvironment(renderer);
-//   const pmremGenerator = new THREE.PMREMGenerator(renderer);
-
-//   scene.background = new THREE.Color(0x818181);
-//   scene.environment = pmremGenerator.fromScene(environment).texture;
-
-//   controls = new OrbitControls(camera, renderer.domElement);
-//   controls.enableDamping = true;
-//   controls.minDistance = 0.35;
-//   controls.maxDistance = 0.7;
-//   controls.target.set(0, 0, 0);
-//   controls.update();
-
-//   window.addEventListener("resize", onWindowResizePersonalise);
-// }
 function initPersonalise() {
   // Extract the 'name' query parameter from the URL
+  const loader = document.getElementById("mini-editor-loader-cont");
+  // loader.classList.remove("display-none-prop");
+  // loader.classList.add("display-block-prop");
   const urlParams = new URLSearchParams(window.location.search);
   const name = urlParams.get("name");
-  // console.log("Model name from query param is", name);
 
-  // Set a default model or handle cases where 'name' might not be provided
-  // const modelName = name ? name : "default-model";
-
-  // // Construct the dynamic path for the GLB file using the name
-  // const normalizedName = name.replace("-", "_").toUpperCase();
   let normalizedName =
     name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
-  // console.log(normalizedName);
-  // Use the normalizedName in the glbPath
+
   const glbPath = `/assets/3d/${normalizedName}.glb`;
-  // const glbPath = `/assets/3d/${normalizedName}.glb`;
-  // console.log(glbPath);
+
   const mainContainer = document.getElementById("personalise-3d-container");
   mainContainer.style.backgroundColor = "#f0f0f0";
 
@@ -149,6 +81,8 @@ function initPersonalise() {
 
     loadedModel.position.set(0, -0.11, 0);
     scene.add(gltf.scene);
+    loader.classList.remove("display-block-prop");
+    loader.classList.add("display-none-prop");
   });
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -315,6 +249,32 @@ function updateCanvasText(textIndex, newText) {
   }
 
   newFabricCanvas.renderAll();
+  // const format = "png";
+  // const quality = 1;
+  // const imgData = newFabricCanvas.toDataURL({
+  //   format: format,
+  //   quality: quality,
+  //   enableRetinaScaling: false,
+  // });
+  // fabricImageConverted = imgData;
+  // changeTexture(fabricImageConverted);
+  // console.log("recall again and again");
+  // const updatedCanvasJSON = newFabricCanvas.toJSON();
+  // textUpdatedJson= JSON.stringify(updatedCanvasJSON);
+  savedCanvasJSON = newFabricCanvas.toJSON();
+  localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+  const allObjects = newFabricCanvas.getObjects();
+
+  // Save the first object (assuming it's the background image)
+  const firstObject = allObjects[0];
+
+  // Remove the first object from the canvas
+  newFabricCanvas.remove(firstObject);
+
+  // Render the canvas without the first object
+  newFabricCanvas.renderAll();
+
+  // Convert the remaining objects on the canvas to an image
   const format = "png";
   const quality = 1;
   const imgData = newFabricCanvas.toDataURL({
@@ -322,14 +282,16 @@ function updateCanvasText(textIndex, newText) {
     quality: quality,
     enableRetinaScaling: false,
   });
+
+  // Pass the image data to the changeTexture function
   fabricImageConverted = imgData;
   changeTexture(fabricImageConverted);
-  // console.log("recall again and again");
-  // const updatedCanvasJSON = newFabricCanvas.toJSON();
-  // textUpdatedJson= JSON.stringify(updatedCanvasJSON);
-  savedCanvasJSON = newFabricCanvas.toJSON();
-  localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
-  // return updatedCanvasJSON;
+
+  // Add the first object back to its original position
+  newFabricCanvas.insertAt(firstObject, 0);
+
+  // Render the canvas to show all objects again
+  newFabricCanvas.renderAll();
 }
 
 // function replaceImageSrc(json, newImageSrc) {
@@ -736,6 +698,30 @@ function loadJSONToCanvas(jsonData) {
 
       console.log(newFabricCanvas.getObjects());
 
+      // const format = "png";
+      // const quality = 1;
+      // const imgData = newFabricCanvas.toDataURL({
+      //   format: format,
+      //   quality: quality,
+      //   enableRetinaScaling: false,
+      // });
+      // fabricImageConverted = imgData;
+      // changeTexture(fabricImageConverted);
+
+      savedCanvasJSON = newFabricCanvas.toJSON();
+      localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+      const allObjects = newFabricCanvas.getObjects();
+
+      // Save the first object (assuming it's the background image)
+      const firstObject = allObjects[0];
+
+      // Remove the first object from the canvas
+      newFabricCanvas.remove(firstObject);
+
+      // Render the canvas without the first object
+      newFabricCanvas.renderAll();
+
+      // Convert the remaining objects on the canvas to an image
       const format = "png";
       const quality = 1;
       const imgData = newFabricCanvas.toDataURL({
@@ -743,11 +729,16 @@ function loadJSONToCanvas(jsonData) {
         quality: quality,
         enableRetinaScaling: false,
       });
+
+      // Pass the image data to the changeTexture function
       fabricImageConverted = imgData;
       changeTexture(fabricImageConverted);
 
-      savedCanvasJSON = newFabricCanvas.toJSON();
-      localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+      // Add the first object back to its original position
+      newFabricCanvas.insertAt(firstObject, 0);
+
+      // Render the canvas to show all objects again
+      newFabricCanvas.renderAll();
     },
     function (error) {
       console.error("Error loading JSON:", error);
@@ -1191,6 +1182,31 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       });
     });
     newFabricCanvas.renderAll();
+    // const format = "png";
+    // const quality = 1;
+    // const imgData = newFabricCanvas.toDataURL({
+    //   format: format,
+    //   quality: quality,
+    //   enableRetinaScaling: false,
+    // });
+    // fabricImageConverted = imgData;
+    // changeTexture(fabricImageConverted);
+
+    savedCanvasJSON = newFabricCanvas.toJSON();
+    // console.log(JSON.stringify(savedCanvasJSON));
+    localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+    const allObjects = newFabricCanvas.getObjects();
+
+    // Save the first object (assuming it's the background image)
+    const firstObject = allObjects[0];
+
+    // Remove the first object from the canvas
+    newFabricCanvas.remove(firstObject);
+
+    // Render the canvas without the first object
+    newFabricCanvas.renderAll();
+
+    // Convert the remaining objects on the canvas to an image
     const format = "png";
     const quality = 1;
     const imgData = newFabricCanvas.toDataURL({
@@ -1198,12 +1214,16 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       quality: quality,
       enableRetinaScaling: false,
     });
+
+    // Pass the image data to the changeTexture function
     fabricImageConverted = imgData;
     changeTexture(fabricImageConverted);
 
-    savedCanvasJSON = newFabricCanvas.toJSON();
-    console.log(JSON.stringify(savedCanvasJSON));
-    localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+    // Add the first object back to its original position
+    newFabricCanvas.insertAt(firstObject, 0);
+
+    // Render the canvas to show all objects again
+    newFabricCanvas.renderAll();
     // loadJSON(savedCanvasJSON);
   }
 
@@ -1228,6 +1248,9 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 initialize3DViewer();
 
 (async () => {
+  const loader = document.getElementById("mini-editor-loader");
+  const templateListCont = document.getElementById("template-list-cont");
+  // Show loader
   try {
     const response = await fetch(
       "https://backend.toddlerneeds.com/api/v1/user/get/all"
@@ -1295,6 +1318,10 @@ initialize3DViewer();
       });
 
       // console.log("Filtered data:", filteredData);
+      loader.classList.remove("template-list-loader-cont");
+      loader.classList.add("display-none-prop");
+      templateListCont.classList.remove("display-none-prop");
+      templateListCont.classList.add("display-block-prop");
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
     }
