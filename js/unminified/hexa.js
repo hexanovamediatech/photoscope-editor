@@ -1184,10 +1184,14 @@
         "layerName",
         "customId",
       ]);
-
-      // Convert the background image source to a data URL
+      var canvasImageUrl = canvas.toDataURL({
+        format: "png", // You can change to "jpeg" if needed
+        multiplier: 2, // Multiplier increases resolution
+      });
+      // console.log('this is the image url', canvasImageUrl);
       convertToDataURL(json.backgroundImage.src, function (dataUrl) {
         json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
+
         var template = JSON.stringify(json);
 
         var blob = new Blob([template], { type: "application/json" });
@@ -1197,6 +1201,10 @@
         var formData = new FormData();
         formData.append("files", blob, uniqueFileName);
 
+        var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
+        var imageFileName = "template_image_" + timestamp + ".png";
+        formData.append("files", imageBlob, imageFileName);
+
         $.ajax({
           url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
           type: "POST",
@@ -1204,23 +1212,25 @@
           processData: false,
           contentType: false,
           success: function (response) {
-            var url = response.urls[0];
-            // var currentUrl = window.location.href;
+            var imageUrl = "";
+            var jsonUrl = "";
+            response.urls.forEach(function (url) {
+              if (url.endsWith('.json')) {
+                jsonUrl = url;
+              } else if (url.endsWith('.png') || url.endsWith('.jpeg') || url.endsWith('.jpg')) {
+                imageUrl = url; 
+              }
+            });
             const urlParams = new URLSearchParams(window.location.search);
             const modelName = urlParams.get("name");
-            var type = "";
-            // if (currentUrl.includes("p3-type1.html")) {
-            //   type = "p3-type1";
-            // } else if (currentUrl.includes("p2-type1.html")) {
-            //   type = "p2-type1";
-            // }
-            // Update the template with the new URL
+           
             var key = Math.random().toString(36).substr(2, 9);
             var name = selector.find("#hexa-json-save-name").val();
 
             var data = {
               key: key,
-              src: url,
+              src: jsonUrl,
+              imageUrl: imageUrl,
               name: name,
               type: modelName,
             };
