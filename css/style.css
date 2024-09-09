@@ -360,7 +360,7 @@ body.layers-closed #hexa-body {
   margin-right: 200px;
 }
 
-.hexa-save-new-button-container{
+.hexa-save-new-button-container {
   display: flex;
   flex-direction: row;
   gap: 20px;
@@ -378,23 +378,28 @@ body.layers-closed #hexa-body {
   margin-left: 10px;
 }
 
-  .hexa-logo {
-    padding: 20px 20px 20px 100px;
-    /* height: 60px; */
-  }
+.hexa-logo {
+  padding: 20px 20px 20px 100px;
+  /* height: 60px; */
+}
 
-  .hexa-logo img {
-    height: 30px;
-    width: auto;
-  }
+.hexa-logo img {
+  /* height: 30px; */
+  /* width: auto; */
+  /* margin-botto: 20px; */
+  width: 100%;
+}
+/* .hexa-logo-mini img {
+  width: 100%;
+  margin-bottom: 20px;
+} */
+.hexa-logo img.logo-desktop {
+  display: block;
+}
 
-  .hexa-logo img.logo-desktop {
-    display: block;
-  }
-
-  .hexa-logo img.logo-mobile {
-    display: none;
-  }
+.hexa-logo img.logo-mobile {
+  display: none;
+}
 
 /* ================= DROPDOWN ================== */
 
@@ -2237,10 +2242,7 @@ ul.hexa-accordion > li > a > .data-count {
   width: 25%;
 }
 
-.hexa-select-btn-block
-  .hexa-btn-set
-  .hexa-btn:last-child
-  .material-icons {
+.hexa-select-btn-block .hexa-btn-set .hexa-btn:last-child .material-icons {
   font-size: 0.9rem;
 }
 
@@ -2668,11 +2670,7 @@ ul.hexa-accordion > li > a > .data-count {
     font-size: 1rem;
   }
 
-  .hexa-modal-inner
-    > .hexa-tabs
-    > .hexa-tabs-menu
-    > li
-    > .material-icons {
+  .hexa-modal-inner > .hexa-tabs > .hexa-tabs-menu > li > .material-icons {
     display: none;
   }
 
@@ -2831,8 +2829,7 @@ ul.hexa-accordion > li > a > .data-count {
   display: none !important;
 }
 
-.hexa-accordion-mask.opened
-  + .hexa-control.hexa-mask-icon-select-option {
+.hexa-accordion-mask.opened + .hexa-control.hexa-mask-icon-select-option {
   display: flex !important;
 }
 
@@ -3329,10 +3326,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg {
   fill: #fff;
 }
 ul.hexa-elements-accor-shapes-container.hexa-accordion > li:hover > a svg,
-ul.hexa-elements-accor-shapes-container.hexa-accordion
-  > li.opened
-  > a
-  svg {
+ul.hexa-elements-accor-shapes-container.hexa-accordion > li.opened > a svg {
   opacity: 1;
 }
 ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
@@ -3406,7 +3400,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 }
 
 .hexa-canvas-inner-footer-container button:hover {
-  background-color: #00a3ff  !important;
+  background-color: #00a3ff !important;
 }
 
 .hexa-canvas-inner-footer-container .hexa-btn-simple span {
@@ -3479,7 +3473,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 /* {
   
 } */
-.hexa-mask-unmask{
+.hexa-mask-unmask {
   position: absolute;
   top: 10px;
   left: 25px;
@@ -3490,35 +3484,34 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   background-color: #242631;
   border-radius: 10px;
 }
-#mask-unmask-button-image{
+#mask-unmask-button-image {
   height: 20px;
 }
-#hexa-button-Round{
- height: 20px;
- width: 15px;
+#hexa-button-Round {
+  height: 20px;
+  width: 15px;
 }
 
-
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1; 
+  display: none;
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
   padding-top: 60px;
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 5% auto; 
+  margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; 
+  width: 80%;
 }
 
 .close-button {
@@ -3535,8 +3528,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   cursor: pointer;
 }
 
-
-.hexa-mask-done-edit-btn-container{
+.hexa-mask-done-edit-btn-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3545,7 +3537,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   margin-top: auto;
 }
 
-.hexa-btn-edit-mask{
+.hexa-btn-edit-mask {
   background: #00a3ff;
   color: #fff;
   padding: 8px 12px;
@@ -3558,5 +3550,5 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   font-size: 0.9rem;
   font-weight: 700;
   border: none;
-width: 70%;
+  width: 70%;
 }

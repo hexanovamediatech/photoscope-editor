@@ -187,24 +187,46 @@ function updateImageSource() {
 document.addEventListener("DOMContentLoaded", updateImageSource);
 
 // Event listener for the "Personalize" button
+// document
+//   .getElementById("personaliseOpenPopupBtn")
+//   .addEventListener("click", async () => {
+//     // Check if there is an active item
+//     if (activeItem) {
+//       try {
+//         const response = await fetch(activeItem.src);
+//         const jsonData = await response.json();
+//         // console.log(jsonData);
+//         loadJSONToCanvas(jsonData);
+//       } catch (error) {
+//         console.error("Error fetching or parsing the JSON:", error);
+//       }
+//     }
+
+//     // Show the popup
+//     document.getElementById("personaliseImageUploadPopup").style.display =
+//       "block";
+//   });
 document
   .getElementById("personaliseOpenPopupBtn")
   .addEventListener("click", async () => {
-    // Check if there is an active item
-    if (activeItem) {
-      try {
-        const response = await fetch(activeItem.src);
-        const jsonData = await response.json();
-        // console.log(jsonData);
-        loadJSONToCanvas(jsonData);
-      } catch (error) {
-        console.error("Error fetching or parsing the JSON:", error);
+    // Check if imageReplace is true before proceeding
+    if (imageReplace) {
+      // Check if there is an active item
+      if (activeItem) {
+        try {
+          const response = await fetch(activeItem.src);
+          const jsonData = await response.json();
+          // Load the JSON data to the canvas
+          loadJSONToCanvas(jsonData);
+        } catch (error) {
+          console.error("Error fetching or parsing the JSON:", error);
+        }
       }
-    }
 
-    // Show the popup
-    document.getElementById("personaliseImageUploadPopup").style.display =
-      "block";
+      // Show the popup
+      document.getElementById("personaliseImageUploadPopup").style.display =
+        "block";
+    }
   });
 
 let newFabricCanvas;
@@ -292,6 +314,10 @@ function updateCanvasText(textIndex, newText) {
 
   // Render the canvas to show all objects again
   newFabricCanvas.renderAll();
+
+  const updatedCanvasJSON = newFabricCanvas.toJSON();
+  // textUpdatedJson= JSON.stringify(updatedCanvasJSON);
+  localStorage.setItem("savedCanvasJSON", JSON.stringify(updatedCanvasJSON));
 }
 
 // function replaceImageSrc(json, newImageSrc) {
@@ -773,19 +799,81 @@ function loadJSONToCanvas(jsonData) {
 //     loadJSONToCanvas(imageUpdatedJSON);
 //   }
 // }
+// function setNewImageSrc(imageSrc) {
+//   newImageSrc = imageSrc;
+
+//   // Retrieve the JSON string from localStorage
+//   const savedOriginalCanvasJSONString = localStorage.getItem(
+//     "savedOriginalCanvasJSON"
+//   );
+//   const savedCanvasJSONString = localStorage.getItem("savedCanvasJSON");
+
+//   // Parse the JSON string into an object
+//   let savedOriginalCanvasJSON = {};
+//   if (savedOriginalCanvasJSONString) {
+//     savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
+//   }
+
+//   if (typeof newImageSrc !== "undefined") {
+//     // Replace the image source in the parsed JSON and compress it
+//     replaceImageSrc(
+//       savedOriginalCanvasJSON,
+//       newImageSrc,
+//       (imageUpdatedJSON) => {
+//         // Save the updated JSON back to localStorage or use it as needed
+//         loadJSONToCanvas(imageUpdatedJSON);
+
+//         // Optionally, save the updated JSON back to localStorage
+//         localStorage.setItem(
+//           "savedCanvasJSON",
+//           JSON.stringify(imageUpdatedJSON)
+//         );
+//       }
+//     );
+//   }
+// }
 function setNewImageSrc(imageSrc) {
   newImageSrc = imageSrc;
 
-  // Retrieve the JSON string from localStorage
+  // Retrieve the JSON strings from localStorage
   const savedOriginalCanvasJSONString = localStorage.getItem(
     "savedOriginalCanvasJSON"
   );
+  const savedCanvasJSONString = localStorage.getItem("savedCanvasJSON");
 
-  // Parse the JSON string into an object
+  // Parse the JSON strings into objects
   let savedOriginalCanvasJSON = {};
+  let savedCanvasJSON = {};
+
   if (savedOriginalCanvasJSONString) {
     savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
   }
+
+  if (savedCanvasJSONString) {
+    savedCanvasJSON = JSON.parse(savedCanvasJSONString);
+  }
+
+  // Function to overwrite the text in savedOriginalCanvasJSON with savedCanvasJSON's text
+  function overwriteText(originalJSON, updatedJSON) {
+    if (
+      originalJSON.objects &&
+      updatedJSON.objects &&
+      originalJSON.objects.length === updatedJSON.objects.length
+    ) {
+      originalJSON.objects.forEach((obj, index) => {
+        if (
+          obj.type === "textbox" &&
+          updatedJSON.objects[index].type === "textbox"
+        ) {
+          // Overwrite the text
+          obj.text = updatedJSON.objects[index].text;
+        }
+      });
+    }
+  }
+
+  // Overwrite text from savedCanvasJSON to savedOriginalCanvasJSON
+  overwriteText(savedOriginalCanvasJSON, savedCanvasJSON);
 
   if (typeof newImageSrc !== "undefined") {
     // Replace the image source in the parsed JSON and compress it
@@ -793,7 +881,7 @@ function setNewImageSrc(imageSrc) {
       savedOriginalCanvasJSON,
       newImageSrc,
       (imageUpdatedJSON) => {
-        // Save the updated JSON back to localStorage or use it as needed
+        // Load the updated JSON onto the canvas
         loadJSONToCanvas(imageUpdatedJSON);
 
         // Optionally, save the updated JSON back to localStorage
@@ -801,8 +889,14 @@ function setNewImageSrc(imageSrc) {
           "savedCanvasJSON",
           JSON.stringify(imageUpdatedJSON)
         );
+
+        // Log the updated JSON (with overwritten text) to the console
+        console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
       }
     );
+  } else {
+    // Log the updated JSON (without changing image source) to the console
+    console.log("Updated JSON with overwritten text:", savedOriginalCanvasJSON);
   }
 }
 
