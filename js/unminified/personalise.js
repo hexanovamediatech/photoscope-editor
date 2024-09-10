@@ -1341,6 +1341,88 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 // Initialize the 3D viewer when the page is ready
 initialize3DViewer();
 
+// (async () => {
+//   const loader = document.getElementById("mini-editor-loader");
+//   const templateListCont = document.getElementById("template-list-cont");
+//   // Show loader
+//   try {
+//     const response = await fetch(
+//       "https://backend.toddlerneeds.com/api/v1/user/get/all"
+//     );
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     const dataArray = data.data; // Access the array from the data object
+//     console.log(dataArray);
+//     if (Array.isArray(dataArray)) {
+//       // Filter the objects with type "p2-type1"
+//       const urlParams = new URLSearchParams(window.location.search);
+//       const name = urlParams.get("name");
+//       const filteredData = dataArray.filter((obj) => obj.type === name);
+
+//       // Get the container element where you want to display the names
+//       const container = document.getElementById("library-container");
+
+//       filteredData.forEach((item) => {
+//         const newDiv = document.createElement("div");
+//         newDiv.classList.add("personalise-library-box");
+
+//         const newP = document.createElement("p");
+//         newP.textContent = item.name;
+
+//         newDiv.appendChild(newP);
+//         container.appendChild(newDiv);
+
+//         // Add click event listener
+//         newDiv.addEventListener("click", async () => {
+//           // Remove active class from previously selected item
+//           const previouslyActive = container.querySelector(
+//             ".personalise-library-box.active"
+//           );
+//           if (previouslyActive) {
+//             previouslyActive.classList.remove("active");
+//           }
+
+//           // Add active class to the clicked item
+//           newDiv.classList.add("active");
+//           activeItem = item.src; // Set the clicked item as active
+//           console.log(activeItem);
+//           // Fetch the JSON data from the URL in activeItem
+//           try {
+//             const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
+//             if (!jsonResponse.ok) {
+//               throw new Error(`HTTP error! status: ${jsonResponse.status}`);
+//             }
+//             const jsonData = await jsonResponse.json();
+//             // console.log(jsonData);
+//             imageReplace = true;
+//             localStorage.setItem(
+//               "savedOriginalCanvasJSON",
+//               JSON.stringify(jsonData)
+//             );
+//             // console.log(fabricImageConverted);
+//             // Pass the JSON object to loadJSONToCanvas
+//             loadJSONToCanvas(jsonData);
+//             setupEventListener();
+//           } catch (fetchError) {
+//             console.error("Error fetching JSON data:", fetchError);
+//           }
+//         });
+//       });
+
+//       // console.log("Filtered data:", filteredData);
+//       loader.classList.remove("template-list-loader-cont");
+//       loader.classList.add("display-none-prop");
+//       templateListCont.classList.remove("display-none-prop");
+//       templateListCont.classList.add("display-block-prop");
+//     } else {
+//       console.error("Error: The fetched data is not an array:", dataArray);
+//     }
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// })();
 (async () => {
   const loader = document.getElementById("mini-editor-loader");
   const templateListCont = document.getElementById("template-list-cont");
@@ -1365,29 +1447,56 @@ initialize3DViewer();
       const container = document.getElementById("library-container");
 
       filteredData.forEach((item) => {
+        // Create a main div to hold both the image and text divs
+        const mainDiv = document.createElement("div");
+        mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
+
+        // Create the div for the image
         const newDiv = document.createElement("div");
         newDiv.classList.add("personalise-library-box");
 
+        // Create and set image tag inside the newDiv
+        const newImg = document.createElement("img");
+        newImg.src = item.imageUrl;
+        newImg.alt = item.name;
+        newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
+
+        // Append the image to the newDiv
+        newDiv.appendChild(newImg);
+
+        // Create a new div to hold the p tag
+        const textDiv = document.createElement("div");
+        textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
+
+        // Create and set paragraph tag for the name inside the textDiv
         const newP = document.createElement("p");
         newP.textContent = item.name;
 
-        newDiv.appendChild(newP);
-        container.appendChild(newDiv);
+        // Append the paragraph to the textDiv
+        textDiv.appendChild(newP);
+
+        // Append both the image div and text div to the main div
+        mainDiv.appendChild(newDiv);
+        mainDiv.appendChild(textDiv);
+
+        // Append the main div to the container
+        container.appendChild(mainDiv);
 
         // Add click event listener
-        newDiv.addEventListener("click", async () => {
+        mainDiv.addEventListener("click", async () => {
           // Remove active class from previously selected item
           const previouslyActive = container.querySelector(
-            ".personalise-library-box.active"
+            ".personalise-library-main-box.active"
           );
           if (previouslyActive) {
             previouslyActive.classList.remove("active");
           }
 
           // Add active class to the clicked item
-          newDiv.classList.add("active");
+          mainDiv.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
           console.log(activeItem);
+
           // Fetch the JSON data from the URL in activeItem
           try {
             const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
@@ -1395,13 +1504,11 @@ initialize3DViewer();
               throw new Error(`HTTP error! status: ${jsonResponse.status}`);
             }
             const jsonData = await jsonResponse.json();
-            // console.log(jsonData);
             imageReplace = true;
             localStorage.setItem(
               "savedOriginalCanvasJSON",
               JSON.stringify(jsonData)
             );
-            // console.log(fabricImageConverted);
             // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
             setupEventListener();
@@ -1411,7 +1518,7 @@ initialize3DViewer();
         });
       });
 
-      // console.log("Filtered data:", filteredData);
+      // Hide loader and show template list
       loader.classList.remove("template-list-loader-cont");
       loader.classList.add("display-none-prop");
       templateListCont.classList.remove("display-none-prop");
@@ -1423,4 +1530,5 @@ initialize3DViewer();
     console.error("Error fetching data:", error);
   }
 })();
+
 setupEventListener();
