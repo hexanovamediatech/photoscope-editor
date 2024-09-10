@@ -1185,8 +1185,8 @@
         "customId",
       ]);
       var canvasImageUrl = canvas.toDataURL({
-        format: "png", // You can change to "jpeg" if needed
-        multiplier: 2, // Multiplier increases resolution
+        format: "png", 
+        multiplier: 2, 
       });
       // console.log('this is the image url', canvasImageUrl);
       convertToDataURL(json.backgroundImage.src, function (dataUrl) {
@@ -1261,6 +1261,9 @@
           type: "POST",
           contentType: "application/json",
           data: JSON.stringify(data),
+          xhrFields: {
+            withCredentials: true
+        },
           success: function (response) {
             resolve(response);
           },
@@ -1451,6 +1454,7 @@
       json.objects.forEach((obj) => {
         if (obj.customId === "clipmask") {
           clipmaskObjects.push(obj);
+          document.getElementById("done-masking-img").style.display = "block";
         } else {
           filteredObjects.push(obj);
         }
