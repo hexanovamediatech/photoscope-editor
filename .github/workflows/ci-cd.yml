@@ -15,6 +15,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Start/Restart http-server on port 5000
-        run: |
-          pm2 describe http-server > /dev/null && pm2 restart http-server -- -p 5000 || pm2 start http-server --name http-server -- -p 5000
+      - name: Start/Restart http-server
+        run: pm2 restart http-server
