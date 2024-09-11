@@ -1184,9 +1184,28 @@
         "layerName",
         "customId",
       ]);
+      // var canvasImageUrl = canvas.toDataURL({
+      //   format: "png",
+      //   multiplier: 2,
+      // });
+      var objects = canvas.getObjects();
+      var filteredObjects = objects.filter(function (obj) {
+        return obj.customId !== "layoutImage";
+      });
+      canvas.getObjects().forEach(function (obj) {
+        // If the object is not in the filteredObjects array, hide it
+        if (!filteredObjects.includes(obj)) {
+          obj.visible = false; // Temporarily hide the object
+        }
+      });
+      // Step 2: Generate the image URL with only the visible (filtered) objects
       var canvasImageUrl = canvas.toDataURL({
         format: "png",
         multiplier: 2,
+      });
+      // Step 3: Restore visibility of all objects
+      canvas.getObjects().forEach(function (obj) {
+        obj.visible = true; // Restore the original visibility of the objects
       });
       // console.log('this is the image url', canvasImageUrl);
       convertToDataURL(json.backgroundImage.src, function (dataUrl) {
