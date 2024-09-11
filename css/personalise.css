@@ -92,6 +92,19 @@
   outline: none;
   border: none;
 }
+
+#editInEditorpBtn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 290px;
+  height: 60px;
+  color: #fb0000;
+  font-size: 24px;
+  outline: none;
+  border: none;
+}
 .popup-container {
   position: fixed;
   left: 50%;
@@ -183,6 +196,16 @@
   align-items: center;
   justify-content: center;
 }
+.personalise-library-box img {
+  width: 100%;
+}
+
+.personalise-text-container p {
+  text-align: center;
+  font-weight: 700;
+  color: #1c1d26;
+  margin-bottom: 0px;
+}
 
 .personalise-library-box p {
   font-size: 18px;
@@ -196,12 +219,15 @@
   overflow-y: scroll;
   margin-bottom: 10px;
 }
+#template-list-cont {
+  height: 450px;
+  overflow-y: scroll;
+}
 .personalise-librarry-name-cont {
   display: grid;
   grid-template-columns: repeat(2, 0fr);
   gap: 10px;
-  height: 450px;
-  overflow-y: scroll;
+
   margin-bottom: 10px;
 }
 #personaliseCanvasWrap {

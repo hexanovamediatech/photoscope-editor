@@ -27,17 +27,38 @@ document.addEventListener("variableReady", function (e) {
 let fabricImageConverted = null;
 
 function initPersonalise() {
-  // Extract the 'name' query parameter from the URL
   const loader = document.getElementById("mini-editor-loader-cont");
-  // loader.classList.remove("display-none-prop");
-  // loader.classList.add("display-block-prop");
   const urlParams = new URLSearchParams(window.location.search);
   const name = urlParams.get("name");
+  var modelUrls = {
+    "p5-type1":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p5-type1/P5_type1.glb",
+    "p9-type1":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p9-type1/P9_type1.glb",
+    "p3-type1":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type1/P3_type1.glb",
+    "p2-type1":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p2-type1/P2_type1.glb",
+    "p4-type1":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p4-type1/P4_type1.glb",
+    "p3-type3":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type3/p3_typ3.glb",
+    "Model-1":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-1/Model-1.glb",
+    "Model-2":
+      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-2/model-2.png",
+  };
+  // let normalizedName =
+  //   name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
 
-  let normalizedName =
-    name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
+  // const glbPath = `/assets/3d/${normalizedName}.glb`;
+  const glbPath = modelUrls[name];
 
-  const glbPath = `/assets/3d/${normalizedName}.glb`;
+  // Check if a valid model URL exists for the given name
+  if (!glbPath) {
+    console.error("Model not found for the specified name.");
+    return;
+  }
 
   const mainContainer = document.getElementById("personalise-3d-container");
   mainContainer.style.backgroundColor = "#f0f0f0";
@@ -55,29 +76,6 @@ function initPersonalise() {
   // Load the GLB model dynamically based on the 'name' parameter
   new GLTFLoader().load(glbPath, function (gltf) {
     const loadedModel = gltf.scene;
-    const specificMesh = loadedModel.children[0].children[3];
-    const textureLoader = new THREE.TextureLoader();
-
-    textureLoader.load(
-      "assets/3d/76_leather texture-seamless.jpg",
-      (bumpMap) => {
-        textureLoader.load(selectedImage, (texture) => {
-          const material = new THREE.MeshStandardMaterial({
-            map: texture,
-            bumpMap: bumpMap,
-            roughness: 1,
-            metalness: 1,
-            opacity: 1,
-            bumpScale: 0.5,
-          });
-          specificMesh.material = material;
-
-          texture.repeat.set(1.9, -1.9);
-          texture.offset.set(0.92, 0.5);
-          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        });
-      }
-    );
 
     loadedModel.position.set(0, -0.11, 0);
     scene.add(gltf.scene);
@@ -163,34 +161,36 @@ function initialize3DViewer() {
 }
 
 // Function to get the 'name' parameter from the URL
-function getNameFromUrl() {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get("name");
-}
+// function getNameFromUrl() {
+//   const urlParams = new URLSearchParams(window.location.search);
+//   return urlParams.get("name");
+// }
 
 // Function to update the image source
-function updateImageSource() {
-  const name = getNameFromUrl();
-  // const normalizedName = name.replace("-", "_").toUpperCase();
-  let normalizedName =
-    name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
-  // console.log(normalizedName);
-  // Get the name from URL
-  if (normalizedName) {
-    const imageElement = document.querySelector(".personalise-template-img");
-    const imagePath = `assets/3d/${normalizedName}.png`; // Construct the image path
-    imageElement.src = imagePath; // Update the src attribute
-  }
-}
+// function updateImageSource() {
+//   console.log("image replace called");
+//   const name = getNameFromUrl();
+//   // const normalizedName = name.replace("-", "_").toUpperCase();
+//   let normalizedName =
+//     name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
+//   // console.log(normalizedName);
+//   // Get the name from URL
+//   if (normalizedName) {
+//     const imageElement = document.querySelector(".personalise-template-img");
+//     const imagePath = `assets/3d/${normalizedName}.png`; // Construct the image path
+//     imageElement.src = imagePath; // Update the src attribute
+//   }
+// }
 
 // Call the function to update the image source on page load
-document.addEventListener("DOMContentLoaded", updateImageSource);
+// document.addEventListener("DOMContentLoaded", updateImageSource);
 
 // Event listener for the "Personalize" button
 // document
 //   .getElementById("personaliseOpenPopupBtn")
 //   .addEventListener("click", async () => {
 //     // Check if there is an active item
+//     console.log("open personalise");
 //     if (activeItem) {
 //       try {
 //         const response = await fetch(activeItem.src);
@@ -206,6 +206,7 @@ document.addEventListener("DOMContentLoaded", updateImageSource);
 //     document.getElementById("personaliseImageUploadPopup").style.display =
 //       "block";
 //   });
+
 document
   .getElementById("personaliseOpenPopupBtn")
   .addEventListener("click", async () => {
@@ -356,6 +357,8 @@ function updateCanvasText(textIndex, newText) {
 //   console.log(imageUpdatedJSON, "image updated json strc");
 // }
 function replaceImageSrc(json, newImageSrc, callback) {
+  console.log(json);
+  console.log(newImageSrc);
   let imageFoundInGroup = false;
 
   const img = new Image();
@@ -1365,17 +1368,50 @@ initialize3DViewer();
       const container = document.getElementById("library-container");
 
       filteredData.forEach((item) => {
+        // const newDiv = document.createElement("div");
+        // newDiv.classList.add("personalise-library-box");
+
+        // const newP = document.createElement("p");
+        // newP.textContent = item.name;
+
+        // newDiv.appendChild(newP);
+        // container.appendChild(newDiv);
+        const mainDiv = document.createElement("div");
+        mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
+
+        // Create the div for the image
         const newDiv = document.createElement("div");
         newDiv.classList.add("personalise-library-box");
 
+        // Create and set image tag inside the newDiv
+        const newImg = document.createElement("img");
+        newImg.src = item.imageUrl;
+        newImg.alt = item.name;
+        newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
+
+        // Append the image to the newDiv
+        newDiv.appendChild(newImg);
+
+        // Create a new div to hold the p tag
+        const textDiv = document.createElement("div");
+        textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
+
+        // Create and set paragraph tag for the name inside the textDiv
         const newP = document.createElement("p");
         newP.textContent = item.name;
 
-        newDiv.appendChild(newP);
-        container.appendChild(newDiv);
+        // Append the paragraph to the textDiv
+        textDiv.appendChild(newP);
+
+        // Append both the image div and text div to the main div
+        mainDiv.appendChild(newDiv);
+        mainDiv.appendChild(textDiv);
+
+        // Append the main div to the container
+        container.appendChild(mainDiv);
 
         // Add click event listener
-        newDiv.addEventListener("click", async () => {
+        mainDiv.addEventListener("click", async () => {
           // Remove active class from previously selected item
           const previouslyActive = container.querySelector(
             ".personalise-library-box.active"

@@ -1185,8 +1185,8 @@
         "customId",
       ]);
       var canvasImageUrl = canvas.toDataURL({
-        format: "png", 
-        multiplier: 2, 
+        format: "png",
+        multiplier: 2,
       });
       // console.log('this is the image url', canvasImageUrl);
       convertToDataURL(json.backgroundImage.src, function (dataUrl) {
@@ -1215,15 +1215,19 @@
             var imageUrl = "";
             var jsonUrl = "";
             response.urls.forEach(function (url) {
-              if (url.endsWith('.json')) {
+              if (url.endsWith(".json")) {
                 jsonUrl = url;
-              } else if (url.endsWith('.png') || url.endsWith('.jpeg') || url.endsWith('.jpg')) {
-                imageUrl = url; 
+              } else if (
+                url.endsWith(".png") ||
+                url.endsWith(".jpeg") ||
+                url.endsWith(".jpg")
+              ) {
+                imageUrl = url;
               }
             });
             const urlParams = new URLSearchParams(window.location.search);
             const modelName = urlParams.get("name");
-           
+
             var key = Math.random().toString(36).substr(2, 9);
             var name = selector.find("#hexa-json-save-name").val();
 
@@ -1262,8 +1266,8 @@
           contentType: "application/json",
           data: JSON.stringify(data),
           xhrFields: {
-            withCredentials: true
-        },
+            withCredentials: true,
+          },
           success: function (response) {
             resolve(response);
           },
@@ -2657,7 +2661,56 @@
         console.log("No saved canvas JSON found in localStorage.");
       }
     });
+    selector.find("#editInEditorpBtn").on("click", function () {
+      var $mainContainer = selector.find("#mini-editor-main-cont");
+      var $buttonContainer = selector.find("#webg-buttons-container");
 
+      // Remove the 'personalise-page-active' class from the main container
+      $mainContainer.removeClass("personalise-page-active");
+      // Add the 'personalise-page-inactive' class to the main container
+      $mainContainer.addClass("personalise-page-inactive");
+
+      // Remove the 'toggle-2d-3d-cont' class from the button container
+      $buttonContainer.removeClass("toggle-2d-3d-cont");
+      var savedOriginalCanvasJSON = localStorage.getItem(
+        "savedOriginalCanvasJSON"
+      );
+      var savedCanvasJSON = localStorage.getItem("savedCanvasJSON");
+
+      if (savedCanvasJSON && savedOriginalCanvasJSON) {
+        // Parse the JSON strings
+        var originalCanvasObject = JSON.parse(savedOriginalCanvasJSON);
+        var canvasObject = JSON.parse(savedCanvasJSON);
+
+        // Iterate over the objects in canvasObject to update their properties
+        canvasObject.objects.forEach((obj, index) => {
+          if (originalCanvasObject.objects[index]) {
+            var originalObj = originalCanvasObject.objects[index];
+
+            // Copy the values for top, left, scaleX, and scaleY from originalObj
+            obj.top = originalObj.top;
+            obj.left = originalObj.left;
+            obj.scaleX = originalObj.scaleX;
+            obj.scaleY = originalObj.scaleY;
+
+            // Iterate over properties of the originalObj and add missing ones to obj
+            for (var key in originalObj) {
+              if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+                obj[key] = originalObj[key];
+              }
+            }
+          }
+        });
+
+        // Load the updated JSON into your editor or canvas
+        loadJSON(canvasObject);
+
+        // Clear the localStorage by removing the savedCanvasJSON item
+        localStorage.removeItem("savedCanvasJSON");
+      } else {
+        console.log("No saved canvas JSON found in localStorage.");
+      }
+    });
     /**Disable Right Click */
     // 	$(document).on('contextmenu', function(event) {
     // 		event.preventDefault();
@@ -6069,7 +6122,7 @@
     //         selectable: false,
     //         evented: false,
     //         hasControls: false,
-    //         customId: "saheb",
+    //         customId: "layoutImage",
     //         isPreservedObject: true,
     //       });
     //       if (pathname == "/p3-type1.html") {
@@ -6111,7 +6164,7 @@
     //         selectable: false,
     //         evented: false,
     //         hasControls: false,
-    //         customId: "saheb",
+    //         customId: "layoutImage",
     //         isPreservedObject: true,
     //       });
     //       if (name === "p3-type1") {
@@ -6134,14 +6187,22 @@
       console.log("name from query param is", name);
 
       var imageUrls = {
-        "p5-type1": "assets/3d/P5_Type1.png",
-        "p9-type1": "assets/3d/P9_Type1.png",
-        "p3-type1": "assets/3d/P3_type1.png",
-        "p2-type1": "assets/3d/P2_type1.png",
-        "p4-type1": "assets/3d/P4_Type1.png",
-        "p3-type3": "assets/3d/P3_type3.png",
-        "Model-1": "assets/3d/Glow-3.png",
-        "Model-2": "assets/3d/model-2.png",
+        "p5-type1":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p5-type1/P5_Type1.png",
+        "p9-type1":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p9-type1/P9_type1.png",
+        "p3-type1":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type1/P3_type1.png",
+        "p2-type1":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p2-type1/P2_type1.png",
+        "p4-type1":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p4-type1/P4_Type1.png",
+        "p3-type3":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type3/P3_type3.png",
+        "Model-1":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-1/Glow-3.png",
+        "Model-2":
+          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-2/model-2.png",
       };
 
       if (imageUrls.hasOwnProperty(name)) {
@@ -6155,7 +6216,7 @@
               selectable: false,
               evented: false,
               hasControls: false,
-              customId: "saheb",
+              customId: "layoutImage",
               isPreservedObject: true,
             });
             if (name === "p3-type1") {
@@ -8974,7 +9035,7 @@
 
       canvas.getObjects().forEach(function (obj) {
         console.log("object:", obj);
-        if (obj.customId === "saheb") {
+        if (obj.customId === "layoutImage") {
           obj.visible = false;
         }
       });
@@ -8984,7 +9045,7 @@
         enableRetinaScaling: false,
       });
       canvas.getObjects().forEach(function (obj) {
-        if (obj.customId === "saheb") {
+        if (obj.customId === "layoutImage") {
           obj.visible = true;
         }
       });
