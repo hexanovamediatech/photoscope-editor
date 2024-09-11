@@ -15,14 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Change directory to project folder
-        run: cd /home/ubuntu/3d-editor/photoscope-editor
-
-      - name: Pull the latest code from main
-        run: git pull origin main
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Restart Application
-        run: pm2 restart index.html
+      - name: Start/Restart http-server
+        run: |
+          pm2 describe http-server > /dev/null && pm2 restart http-server || pm2 start http-server --name http-server -- -p 3000
