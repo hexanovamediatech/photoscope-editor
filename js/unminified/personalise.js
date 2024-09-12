@@ -12,6 +12,7 @@ let imageReplace = false;
 let newFabricCanvas;
 let fabricImageConverted = null;
 let modelSource = null;
+let templateId = null;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -698,6 +699,17 @@ initialize3DViewer();
       // Get the container element where you want to display the names
       const container = document.getElementById("library-container");
 
+      // Fetch favorites to compare with
+      const favoriteResponse = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/user/favorite/templates",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const favoriteData = await favoriteResponse.json();
+      const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
+
       filteredData.forEach((item) => {
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
@@ -722,6 +734,59 @@ initialize3DViewer();
         // Create and set paragraph tag for the name inside the textDiv
         const newP = document.createElement("p");
         newP.textContent = item.name;
+        // Favorite icon using PNGs
+        const favIcon = document.createElement("img");
+        favIcon.classList.add("template-fav-icon");
+        favIcon.id = "templateFavIcon";
+        // Check if this template is in the favorites list
+        const isFavorite = favoriteKeys?.includes(item.key);
+        favIcon.src = isFavorite
+          ? "../../assets/custom/heart-filled.png"
+          : "../../assets/custom/heart.png";
+        favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
+        favIcon.style.cursor = "pointer";
+
+        newDiv.appendChild(favIcon);
+
+        // // Attach the onclick event to the favIcon
+        // favIcon.addEventListener('click', () => {
+        //     const templateKey = item.key;
+        //     handleFavTempllate(templateKey);
+        // });
+
+        // Attach the onclick event to the favIcon
+        favIcon.addEventListener("click", async (e) => {
+          e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
+
+          const templateKey = item.key;
+
+          // Call the favorite toggle function
+          const isSuccess = await handleFavTempllate(templateKey);
+
+          // If the request was successful, immediately toggle the icon
+          if (isSuccess) {
+            const isCurrentlyFavorite =
+              favIcon.src.includes("heart-filled.png");
+            favIcon.src = isCurrentlyFavorite
+              ? "../../assets/custom/heart.png"
+              : "../../assets/custom/heart-filled.png";
+            favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+
+            // Show toastr success message
+            toastr.success(
+              isCurrentlyFavorite
+                ? "Removed from favorites!"
+                : "Added to favorites!",
+              "Success"
+            );
+          } else {
+            // Show toastr error message if something went wrong
+            toastr.error(
+              "Please login to add template into Favorites",
+              "Error"
+            );
+          }
+        });
 
         // Append the paragraph to the textDiv
         textDiv.appendChild(newP);
@@ -742,7 +807,8 @@ initialize3DViewer();
           if (previouslyActive) {
             previouslyActive.classList.remove("active");
           }
-
+          templateId = item.key;
+          console.log("templateId", templateId);
           // Add active class to the clicked item
           newDiv.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
@@ -779,3 +845,60 @@ initialize3DViewer();
   }
 })();
 setupEventListener();
+
+// document
+//   .getElementById("personaliseOpenPopupBtn")
+//   .addEventListener("click", async () => {
+
+//   });
+//   function handleFavTempllate(templateKey) {
+//     const url = `https://backend.toddlerneeds.com/api/v1/user/template/togglefavorite`;
+
+//     fetch(url, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({ templateKey }),
+//         credentials: 'include'
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log('Success:', data);
+//         toastr.success('Success! Template toggled.', 'success');
+//     })
+//     .catch((error) => {
+//         console.error('Error:', error);
+//         toastr.error('Error! Could not toggle template.', 'failure');
+//     });
+// }
+
+async function handleFavTempllate(templateKey) {
+  try {
+    const response = await fetch(
+      "https://backend.toddlerneeds.com/api/v1/user/template/togglefavorite",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ templateKey }),
+      }
+    );
+
+    if (response.ok) {
+      return true;
+      // Indicate success
+    } else {
+      console.error(`Failed to toggle favorite for template ${templateKey}`);
+      // toastr.error('Please loggin to add template to Favorite', 'Error');
+      return false;
+      // Indicate failure
+    }
+  } catch (error) {
+    console.error("Error toggling favorite:", error);
+    return false;
+    // Indicate failure
+  }
+}

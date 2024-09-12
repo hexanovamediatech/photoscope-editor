@@ -185,6 +185,8 @@
   /* margin-top: 20px; */
 }
 .personalise-library-box {
+  position: relative;
+
   background-color: #ffff;
   width: 140px;
   height: 140px;
@@ -295,4 +297,14 @@
   80% {
     background-position: 0% 100%, 50% 100%, 100% 0%;
   }
+}
+
+
+.template-fav-icon{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 20px !important;
+    height: 20px !important;
+
 }
