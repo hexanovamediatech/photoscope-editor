@@ -4,61 +4,49 @@ import { GLTFLoader } from "../../jsm/GLTFLoader.js";
 import { RoomEnvironment } from "../../jsm/RoomEnvironment.js";
 
 let camera, scene, renderer, controls;
-let selectedImage = null; // Store the selected image data URL
-let fabricCanvas = null;
-const canvasWidth = 460; // Desired width of the canvas
-const canvasHeight = 460; // Desired height of the canvas
 let activeItem = null;
 let savedCanvasJSON;
 let newImageSrc = null;
 let imageUpdatedJSON;
-let textUpdatedJson;
 let imageReplace = false;
-let templateId= null;
+let newFabricCanvas;
+let fabricImageConverted = null;
+let modelSource = null;
+let templateId = null;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
     changeTexture(e.detail.data);
   } else {
-    initPersonalise();
-    animate();
+    initialize3DViewer();
   }
 });
-let fabricImageConverted = null;
+
+async function fetchModelData() {
+  try {
+    const response = await fetch(
+      "https://backend.toddlerneeds.com/api/v1/product/all"
+    );
+    const data = await response.json();
+
+    // Extract the model source (GLB path) based on the name parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelName = urlParams.get("name");
+
+    const product = data.products.find((item) => item.name === modelName);
+    if (product && product.modelsUrl) {
+      modelSource = product.modelsUrl; // Set the model URL
+      window.layoutSource = product.imageUrl;
+    } else {
+      console.error("Model not found for the specified name.");
+    }
+  } catch (error) {
+    console.error("Error fetching model data:", error);
+  }
+}
 
 function initPersonalise() {
   const loader = document.getElementById("mini-editor-loader-cont");
-  const urlParams = new URLSearchParams(window.location.search);
-  const name = urlParams.get("name");
-  var modelUrls = {
-    "p5-type1":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p5-type1/P5_type1.glb",
-    "p9-type1":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p9-type1/P9_type1.glb",
-    "p3-type1":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type1/P3_type1.glb",
-    "p2-type1":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p2-type1/P2_type1.glb",
-    "p4-type1":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p4-type1/P4_type1.glb",
-    "p3-type3":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type3/p3_typ3.glb",
-    "Model-1":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-1/Model-1.glb",
-    "Model-2":
-      "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-2/model-2.png",
-  };
-  // let normalizedName =
-  //   name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
-
-  // const glbPath = `/assets/3d/${normalizedName}.glb`;
-  const glbPath = modelUrls[name];
-
-  // Check if a valid model URL exists for the given name
-  if (!glbPath) {
-    console.error("Model not found for the specified name.");
-    return;
-  }
 
   const mainContainer = document.getElementById("personalise-3d-container");
   mainContainer.style.backgroundColor = "#f0f0f0";
@@ -74,7 +62,7 @@ function initPersonalise() {
   scene = new THREE.Scene();
 
   // Load the GLB model dynamically based on the 'name' parameter
-  new GLTFLoader().load(glbPath, function (gltf) {
+  new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
 
     loadedModel.position.set(0, -0.11, 0);
@@ -155,58 +143,22 @@ function changeTexture(newUrl) {
   }
 }
 
-function initialize3DViewer() {
-  initPersonalise();
-  animate();
+async function initialize3DViewer() {
+  try {
+    // Wait for model data to be fetched
+    await fetchModelData();
+
+    // Proceed with initialization only if modelSource is available
+    if (modelSource) {
+      initPersonalise();
+      animate();
+    } else {
+      console.error("No model source found. 3D viewer initialization skipped.");
+    }
+  } catch (error) {
+    console.error("Failed to initialize 3D viewer:", error);
+  }
 }
-
-// Function to get the 'name' parameter from the URL
-// function getNameFromUrl() {
-//   const urlParams = new URLSearchParams(window.location.search);
-//   return urlParams.get("name");
-// }
-
-// Function to update the image source
-// function updateImageSource() {
-//   console.log("image replace called");
-//   const name = getNameFromUrl();
-//   // const normalizedName = name.replace("-", "_").toUpperCase();
-//   let normalizedName =
-//     name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, "_");
-//   // console.log(normalizedName);
-//   // Get the name from URL
-//   if (normalizedName) {
-//     const imageElement = document.querySelector(".personalise-template-img");
-//     const imagePath = `assets/3d/${normalizedName}.png`; // Construct the image path
-//     imageElement.src = imagePath; // Update the src attribute
-//   }
-// }
-
-// Call the function to update the image source on page load
-// document.addEventListener("DOMContentLoaded", updateImageSource);
-
-// Event listener for the "Personalize" button
-// document
-//   .getElementById("personaliseOpenPopupBtn")
-//   .addEventListener("click", async () => {
-//     // Check if there is an active item
-//     console.log("open personalise");
-//     if (activeItem) {
-//       try {
-//         const response = await fetch(activeItem.src);
-//         const jsonData = await response.json();
-//         // console.log(jsonData);
-//         loadJSONToCanvas(jsonData);
-//       } catch (error) {
-//         console.error("Error fetching or parsing the JSON:", error);
-//       }
-//     }
-
-//     // Show the popup
-//     document.getElementById("personaliseImageUploadPopup").style.display =
-//       "block";
-//   });
-
 document
   .getElementById("personaliseOpenPopupBtn")
   .addEventListener("click", async () => {
@@ -229,8 +181,6 @@ document
         "block";
     }
   });
-
-let newFabricCanvas;
 
 function initializeCanvas() {
   const canvasElement = document.getElementById("personaliseCanvas");
@@ -272,20 +222,9 @@ function updateCanvasText(textIndex, newText) {
   }
 
   newFabricCanvas.renderAll();
-  // const format = "png";
-  // const quality = 1;
-  // const imgData = newFabricCanvas.toDataURL({
-  //   format: format,
-  //   quality: quality,
-  //   enableRetinaScaling: false,
-  // });
-  // fabricImageConverted = imgData;
-  // changeTexture(fabricImageConverted);
-  // console.log("recall again and again");
-  // const updatedCanvasJSON = newFabricCanvas.toJSON();
-  // textUpdatedJson= JSON.stringify(updatedCanvasJSON);
+
   savedCanvasJSON = newFabricCanvas.toJSON();
-  localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+  window.editedCanvasJson = savedCanvasJSON;
   const allObjects = newFabricCanvas.getObjects();
 
   // Save the first object (assuming it's the background image)
@@ -317,328 +256,46 @@ function updateCanvasText(textIndex, newText) {
   newFabricCanvas.renderAll();
 
   const updatedCanvasJSON = newFabricCanvas.toJSON();
-  // textUpdatedJson= JSON.stringify(updatedCanvasJSON);
-  localStorage.setItem("savedCanvasJSON", JSON.stringify(updatedCanvasJSON));
+  window.editedCanvasJson = updatedCanvasJSON;
 }
 
-// function replaceImageSrc(json, newImageSrc) {
-//   let imageFoundInGroup = false;
-
-//   // Check if there are images within groups
-//   json.objects.forEach((obj) => {
-//     if (obj.type === "group") {
-//       obj.objects.forEach((innerObj) => {
-//         if (innerObj.type === "image") {
-//           // innerObj.src = newImageSrc;
-//           imageFoundInGroup = true;
-//         }
-//       });
-//     }
-//   });
-
-//   if (imageFoundInGroup) {
-//     json.objects.forEach((obj) => {
-//       if (obj.type === "group") {
-//         obj.objects.forEach((innerObj) => {
-//           if (innerObj.type === "image") {
-//             innerObj.src = newImageSrc;
-//           }
-//         });
-//       }
-//     });
-//   } else {
-//     if (json.objects.length > 1 && json.objects[1].type === "image") {
-//       json.objects[1].src = newImageSrc;
-//     }
-//     console.log("Image updated in second position or no groups found");
-//   }
-
-//   imageUpdatedJSON = json;
-//   console.log(imageUpdatedJSON, "image updated json strc");
-// }
 function replaceImageSrc(json, newImageSrc, callback) {
-  console.log(json);
-  console.log(newImageSrc);
   let imageFoundInGroup = false;
 
-  const img = new Image();
-  img.src = newImageSrc;
+  // Check if there are images within groups
+  json.objects.forEach((obj) => {
+    if (obj.type === "group") {
+      obj.objects.forEach((innerObj) => {
+        if (innerObj.type === "image") {
+          innerObj.src = newImageSrc;
+          imageFoundInGroup = true;
+        }
+      });
+    }
+  });
 
-  // Wait until the image is loaded
-  img.onload = function () {
-    // Create a temporary canvas to compress the image
-    const tempCanvas = document.createElement("canvas");
-    const ctx = tempCanvas.getContext("2d");
-
-    // Set the desired width and height (for compression)
-    tempCanvas.width = img.width;
-    tempCanvas.height = img.height;
-
-    // Draw the image onto the canvas
-    ctx.drawImage(img, 0, 0, img.width, img.height);
-
-    // Convert the canvas to a compressed base64-encoded image
-    const compressedImageSrc = tempCanvas.toDataURL("image/jpeg", 0.5); // Adjust quality as needed
-
-    // Check if there are images within groups
+  if (imageFoundInGroup) {
     json.objects.forEach((obj) => {
       if (obj.type === "group") {
         obj.objects.forEach((innerObj) => {
           if (innerObj.type === "image") {
-            innerObj.src = compressedImageSrc;
-            imageFoundInGroup = true;
+            innerObj.src = newImageSrc;
           }
         });
       }
     });
-
-    if (
-      !imageFoundInGroup &&
-      json.objects.length > 1 &&
-      json.objects[1].type === "image"
-    ) {
-      json.objects[1].src = compressedImageSrc;
-      console.log("Image updated in second position or no groups found");
+  } else {
+    if (json.objects.length > 1 && json.objects[1].type === "image") {
+      json.objects[1].src = newImageSrc;
     }
+    console.log("Image updated in second position or no groups found");
+  }
 
-    imageUpdatedJSON = json;
-    console.log(imageUpdatedJSON, "image updated json strc");
-
-    // Call the callback function after the image is replaced and compressed
-    if (callback) callback(imageUpdatedJSON);
-  };
+  imageUpdatedJSON = json;
+  console.log(imageUpdatedJSON, "image updated json strc");
+  if (callback) callback(imageUpdatedJSON);
 }
 
-// function loadJSONToCanvas(json, format = "png", quality = 1) {
-//   try {
-//     // console.log("Received JSON data:", json);
-
-//     // Initialize the canvas if it hasn't been initialized yet
-//     if (!newFabricCanvas) {
-//       initializeCanvas();
-//     }
-
-//     newFabricCanvas.clear();
-
-//     // Set canvas dimensions
-//     const canvasWidth = 460;
-//     const canvasHeight = 460;
-//     // if (typeof newImageSrc !== "undefined") {
-//     //   replaceImageSrc(json, newImageSrc);
-//     // }
-//     if (json.backgroundImage) {
-//       const backgroundImage = json.backgroundImage;
-//       fabric.Image.fromURL(
-//         backgroundImage.src,
-//         function (img) {
-//           img.set({
-//             left: 0,
-//             top: 0,
-//             scaleX: canvasWidth / img.width,
-//             scaleY: canvasHeight / img.height,
-//             originX: "left",
-//             originY: "top",
-//             selectable: false,
-//             hasControls: false,
-//             hasBorders: false,
-//             lockMovementX: true,
-//             lockMovementY: true,
-//             lockRotation: true,
-//             lockScalingX: true,
-//             lockScalingY: true,
-//           });
-//           newFabricCanvas.setBackgroundImage(
-//             img,
-//             newFabricCanvas.renderAll.bind(newFabricCanvas)
-//           );
-//         },
-//         { crossOrigin: backgroundImage.crossOrigin || "anonymous" }
-//       );
-//     }
-
-//     // Calculate bounding box of all objects
-//     const boundingBox = json.objects.reduce(
-//       (box, obj) => {
-//         const objWidth = obj.width * (obj.scaleX || 1);
-//         const objHeight = obj.height * (obj.scaleY || 1);
-//         return {
-//           left: Math.min(box.left, obj.left),
-//           top: Math.min(box.top, obj.top),
-//           right: Math.max(box.right, obj.left + objWidth),
-//           bottom: Math.max(box.bottom, obj.top + objHeight),
-//         };
-//       },
-//       {
-//         left: Infinity,
-//         top: Infinity,
-//         right: -Infinity,
-//         bottom: -Infinity,
-//       }
-//     );
-
-//     // Calculate scale factors to fit the bounding box within the canvas
-//     const boundingBoxWidth = boundingBox.right - boundingBox.left;
-//     const boundingBoxHeight = boundingBox.bottom - boundingBox.top;
-//     const scaleX = canvasWidth / boundingBoxWidth;
-//     const scaleY = canvasHeight / boundingBoxHeight;
-//     const baseScale = Math.min(scaleX, scaleY); // Use min to fit within both dimensions
-
-//     // Define a multiplier for additional scaling if needed
-//     const scaleMultiplier = 1; // Adjust this multiplier as needed for fitting
-
-//     // Final scale factor
-//     const scale = baseScale * scaleMultiplier;
-
-//     let nextIndex = 1; // Initialize the index for default values
-
-//     json.objects.forEach((obj) => {
-//       // Apply calculated scale to each object
-//       obj.scaleX = (obj.scaleX || 1) * scale;
-//       obj.scaleY = (obj.scaleY || 1) * scale;
-
-//       const scaledWidth = obj.width * obj.scaleX;
-//       const scaledHeight = obj.height * obj.scaleY;
-
-//       // Center the objects within the canvas, adjusting for their original positions
-//       obj.left =
-//         (canvasWidth - boundingBoxWidth * scale) / 2 +
-//         (obj.left - boundingBox.left) * scale;
-//       obj.top =
-//         (canvasHeight - boundingBoxHeight * scale) / 2 +
-//         (obj.top - boundingBox.top) * scale;
-
-//       if (obj.type === "textbox") {
-//         // Assign a default dataIndex if not provided
-//         obj.dataIndex = obj.dataIndex || nextIndex++;
-//       }
-//     });
-
-//     newFabricCanvas.loadFromJSON(json, function () {
-//       newFabricCanvas.forEachObject((obj) => {
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       newFabricCanvas.renderAll();
-
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
-
-//       // console.log("Canvas JSON:", JSON.stringify(savedCanvasJSON));
-//     });
-//   } catch (error) {
-//     console.error("Error processing JSON data:", error);
-//   }
-// }
-
-// function loadJSONToCanvas(jsonData) {
-//   if (!newFabricCanvas) {
-//     initializeCanvas();
-//   }
-
-//   newFabricCanvas.clear();
-
-//   // Load the JSON data into the existing Fabric.js canvas
-//   let nextIndex = 1;
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "textbox") {
-//       // Assign a default dataIndex if not provided
-//       obj.dataIndex = obj.dataIndex || nextIndex++;
-//     }
-//   });
-//   newFabricCanvas.loadFromJSON(
-//     jsonData,
-//     function () {
-//       console.log(jsonData.objects);
-
-//       // Load and scale the background image if it exists
-//       if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
-//         const bgImageData = jsonData.backgroundImage.src;
-//         fabric.Image.fromURL(bgImageData, function (bgImage) {
-//           // Set the background image properties
-//           bgImage.set({
-//             scaleX: 0.225, // Apply the scale factor
-//             scaleY: 0.225, // Apply the scale factor
-//             left: jsonData.backgroundImage.left,
-//             top: jsonData.backgroundImage.top,
-//             originX: "left",
-//             originY: "top",
-//           });
-
-//           newFabricCanvas.setBackgroundImage(
-//             bgImage,
-//             newFabricCanvas.renderAll.bind(newFabricCanvas)
-//           );
-//         });
-//       }
-
-//       // After loading the JSON, resize and reposition all objects to fit the canvas
-//       newFabricCanvas.getObjects().forEach((obj, index) => {
-//         if (index === 0) {
-//           // Scale down the first object
-//           obj.scaleX *= 0.225;
-//           obj.scaleY *= 0.225;
-//         } else {
-//           // Apply a different scaling factor for other objects
-//           obj.scaleX *= 0.225; // Adjust the scaling factor as needed
-//           obj.scaleY *= 0.225; // Adjust the scaling factor as needed
-
-//           // Adjust top and left properties to make the object visible
-//           obj.left *= 0.225; // Adjust the position as needed
-//           obj.top *= 0.225; // Adjust the position as needed
-//         }
-//         obj.setCoords();
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       // Render all objects on the canvas
-//       newFabricCanvas.renderAll();
-//       console.log(newFabricCanvas.getObjects());
-
-//       const format = "png";
-//       const quality = 1;
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
-//     },
-//     function (error) {
-//       console.error("Error loading JSON:", error);
-//       console.log("Loaded JSON Data:", jsonData);
-//     }
-//   );
-// }
 function loadJSONToCanvas(jsonData) {
   if (!newFabricCanvas) {
     initializeCanvas();
@@ -725,20 +382,8 @@ function loadJSONToCanvas(jsonData) {
       // Force a render to ensure all objects, including clipPaths, are applied
       newFabricCanvas.renderAll();
 
-      console.log(newFabricCanvas.getObjects());
-
-      // const format = "png";
-      // const quality = 1;
-      // const imgData = newFabricCanvas.toDataURL({
-      //   format: format,
-      //   quality: quality,
-      //   enableRetinaScaling: false,
-      // });
-      // fabricImageConverted = imgData;
-      // changeTexture(fabricImageConverted);
-
       savedCanvasJSON = newFabricCanvas.toJSON();
-      localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+      window.editedCanvasJson = savedCanvasJSON;
       const allObjects = newFabricCanvas.getObjects();
 
       // Save the first object (assuming it's the background image)
@@ -776,87 +421,13 @@ function loadJSONToCanvas(jsonData) {
   );
 }
 
-// function setNewImageSrc(imageSrc) {
-//   newImageSrc = imageSrc;
-
-//   // Retrieve the JSON string from localStorage
-//   const savedOriginalCanvasJSONString = localStorage.getItem(
-//     "savedOriginalCanvasJSON"
-//   );
-
-//   // Parse the JSON string into an object
-//   let savedOriginalCanvasJSON = {};
-//   if (savedOriginalCanvasJSONString) {
-//     savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
-//     // console.log(savedOriginalCanvasJSON, "parsed json");
-//   }
-
-//   if (typeof newImageSrc !== "undefined") {
-//     // Replace the image source in the parsed JSON
-//     replaceImageSrc(savedOriginalCanvasJSON, newImageSrc);
-
-//     // Save the updated JSON back to a variable
-//     const imageUpdatedJSON = savedOriginalCanvasJSON;
-
-//     // Load the updated JSON to the canvas
-//     loadJSONToCanvas(imageUpdatedJSON);
-//   }
-// }
-// function setNewImageSrc(imageSrc) {
-//   newImageSrc = imageSrc;
-
-//   // Retrieve the JSON string from localStorage
-//   const savedOriginalCanvasJSONString = localStorage.getItem(
-//     "savedOriginalCanvasJSON"
-//   );
-//   const savedCanvasJSONString = localStorage.getItem("savedCanvasJSON");
-
-//   // Parse the JSON string into an object
-//   let savedOriginalCanvasJSON = {};
-//   if (savedOriginalCanvasJSONString) {
-//     savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
-//   }
-
-//   if (typeof newImageSrc !== "undefined") {
-//     // Replace the image source in the parsed JSON and compress it
-//     replaceImageSrc(
-//       savedOriginalCanvasJSON,
-//       newImageSrc,
-//       (imageUpdatedJSON) => {
-//         // Save the updated JSON back to localStorage or use it as needed
-//         loadJSONToCanvas(imageUpdatedJSON);
-
-//         // Optionally, save the updated JSON back to localStorage
-//         localStorage.setItem(
-//           "savedCanvasJSON",
-//           JSON.stringify(imageUpdatedJSON)
-//         );
-//       }
-//     );
-//   }
-// }
 function setNewImageSrc(imageSrc) {
   newImageSrc = imageSrc;
 
-  // Retrieve the JSON strings from localStorage
-  const savedOriginalCanvasJSONString = localStorage.getItem(
-    "savedOriginalCanvasJSON"
-  );
-  const savedCanvasJSONString = localStorage.getItem("savedCanvasJSON");
+  var originalCanvasJson = window.originalCanvasJson;
+  var editedCanvasJson = window.editedCanvasJson;
 
-  // Parse the JSON strings into objects
-  let savedOriginalCanvasJSON = {};
-  let savedCanvasJSON = {};
-
-  if (savedOriginalCanvasJSONString) {
-    savedOriginalCanvasJSON = JSON.parse(savedOriginalCanvasJSONString);
-  }
-
-  if (savedCanvasJSONString) {
-    savedCanvasJSON = JSON.parse(savedCanvasJSONString);
-  }
-
-  // Function to overwrite the text in savedOriginalCanvasJSON with savedCanvasJSON's text
+  // Function to overwrite the text in originalCanvasJsonwith editedCanvasJson's text
   function overwriteText(originalJSON, updatedJSON) {
     if (
       originalJSON.objects &&
@@ -875,31 +446,21 @@ function setNewImageSrc(imageSrc) {
     }
   }
 
-  // Overwrite text from savedCanvasJSON to savedOriginalCanvasJSON
-  overwriteText(savedOriginalCanvasJSON, savedCanvasJSON);
+  // Overwrite text from editedCanvasJson to originalCanvasJson
+  overwriteText(originalCanvasJson, editedCanvasJson);
 
   if (typeof newImageSrc !== "undefined") {
     // Replace the image source in the parsed JSON and compress it
-    replaceImageSrc(
-      savedOriginalCanvasJSON,
-      newImageSrc,
-      (imageUpdatedJSON) => {
-        // Load the updated JSON onto the canvas
-        loadJSONToCanvas(imageUpdatedJSON);
+    replaceImageSrc(originalCanvasJson, newImageSrc, (imageUpdatedJSON) => {
+      // Load the updated JSON onto the canvas
+      loadJSONToCanvas(imageUpdatedJSON);
 
-        // Optionally, save the updated JSON back to localStorage
-        localStorage.setItem(
-          "savedCanvasJSON",
-          JSON.stringify(imageUpdatedJSON)
-        );
-
-        // Log the updated JSON (with overwritten text) to the console
-        console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
-      }
-    );
+      window.editedCanvasJson = imageUpdatedJSON;
+      // console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
+    });
   } else {
     // Log the updated JSON (without changing image source) to the console
-    console.log("Updated JSON with overwritten text:", savedOriginalCanvasJSON);
+    console.log("Updated JSON with overwritten text:", originalCanvasJson);
   }
 }
 
@@ -921,22 +482,9 @@ function handleImageUploadAlternate(event) {
     reader.readAsDataURL(file);
   }
 }
-
 document
-  .getElementById("personaliseClosePopupBtn")
-  .addEventListener("click", () => {
-    // Hide the popup
-    document.getElementById("personaliseImageUploadPopup").style.display =
-      "none";
-
-    // Clear input fields
-    document.getElementById("text-1").value = "";
-    document.getElementById("text-2").value = "";
-
-    // Clear image input field
-    document.getElementById("personaliseImgUpload").value = "";
-  });
-
+  .getElementById("personaliseImgUpload")
+  .addEventListener("change", handleImageUploadAlternate);
 // Replace image event listener
 
 document
@@ -947,104 +495,15 @@ document
       "none";
 
     // Clear the file input field
-
-    // Clear the text input fields
     const textInput1 = document.getElementById("text-1");
     const textInput2 = document.getElementById("text-2");
-
     if (textInput1) {
       textInput1.value = ""; // Clear the first text input
     }
-
     if (textInput2) {
       textInput2.value = ""; // Clear the second text input
     }
   });
-
-function setupEventListener() {
-  const uploadImage = document.getElementById("personaliseImgUpload");
-
-  // Remove any existing event listeners
-  uploadImage.removeEventListener("change", handleImageUploadmain);
-  uploadImage.removeEventListener("change", handleImageUploadAlternate);
-
-  if (imageReplace) {
-    uploadImage.addEventListener("change", handleImageUploadAlternate);
-  } else {
-    uploadImage.addEventListener("change", handleImageUploadmain);
-  }
-}
-function handleImageUploadmain(event) {
-  const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-  miniEditorAdjust.classList.remove("display-none-prop");
-  miniEditorAdjust.classList.add("display-block-prop");
-
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const img = new Image();
-      img.onload = function () {
-        const canvas = document.getElementById("personaliseCanvas");
-        const ctx = canvas.getContext("2d");
-
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Calculate dimensions while maintaining aspect ratio
-        const imgAspectRatio = img.width / img.height;
-        const canvasAspectRatio = canvas.width / canvas.height;
-        let drawWidth, drawHeight;
-
-        if (imgAspectRatio > canvasAspectRatio) {
-          drawWidth = canvas.width;
-          drawHeight = canvas.width / imgAspectRatio;
-        } else {
-          drawWidth = canvas.height * imgAspectRatio;
-          drawHeight = canvas.height;
-        }
-
-        const drawX = (canvas.width - drawWidth) / 2;
-        const drawY = (canvas.height - drawHeight) / 2;
-
-        // Draw the image with maintained aspect ratio
-        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-
-        // Initialize Fabric.js canvas
-        fabricCanvas = new fabric.Canvas("personaliseCanvas");
-        const fabricImage = new fabric.Image(img, {
-          left: drawX,
-          top: drawY,
-          scaleX: drawWidth / img.width,
-          scaleY: drawHeight / img.height,
-          selectable: false, // Disable selection and resizing controls by default
-        });
-        fabricCanvas.add(fabricImage);
-        fabricCanvas.setActiveObject(fabricImage);
-        fabricCanvas.discardActiveObject(); // Ensure the image is not selected initially
-        fabricCanvas.renderAll();
-
-        // Store a reference to the fabric image
-        fabricCanvas.imageObject = fabricImage;
-        // savedCanvasJSON = fabricCanvas.toJSON();
-
-        // Add backgroundImage property if missing
-        savedCanvasJSON.backgroundImage = savedCanvasJSON.backgroundImage || {
-          angle: 0,
-          scaleX: 1,
-          scaleY: 1,
-          originX: "center",
-          originY: "center",
-          src: canvas.toDataURL("image/png"),
-          width: canvas.width,
-          height: canvas.height,
-        };
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
 
 // Event listener for the "Adjust" button click
 
@@ -1064,18 +523,6 @@ document
     const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
     miniEditorAdjust.classList.add("display-none-prop");
     miniEditorAdjust.classList.remove("display-block-prop");
-
-    if (fabricCanvas) {
-      const activeObject = fabricCanvas.imageObject;
-      if (activeObject) {
-        activeObject.set({
-          selectable: true,
-          hasControls: true,
-        });
-        fabricCanvas.setActiveObject(activeObject);
-      }
-      fabricCanvas.renderAll();
-    }
 
     if (newFabricCanvas) {
       // Set properties for the first object in the canvas
@@ -1155,116 +602,11 @@ document
 
       // Save the updated canvas state to localStorage
       savedCanvasJSON = newFabricCanvas.toJSON();
-      try {
-        localStorage.setItem(
-          "savedCanvasJSON",
-          JSON.stringify(savedCanvasJSON)
-        );
-      } catch (error) {
-        console.error("Failed to save canvas state:", error);
-      }
+      window.editedCanvasJson = savedCanvasJSON;
     }
   });
 
-////////Main adjust function/////////////////
-
-// document
-//   .getElementById("personaliseAdjustBtn")
-//   .addEventListener("click", () => {
-//     if (fabricCanvas) {
-//       const activeObject = fabricCanvas.imageObject;
-//       if (activeObject) {
-//         activeObject.set({
-//           selectable: true,
-//           hasControls: true,
-//         });
-//         fabricCanvas.setActiveObject(activeObject);
-//       }
-//       fabricCanvas.renderAll();
-//     }
-
-//     if (newFabricCanvas) {
-//       // Set properties for the first object in the canvas
-//       const objects = newFabricCanvas.getObjects();
-//       const firstObject = objects[1];
-//       let firstImage = false;
-//       if (firstObject && firstObject.type === "image") {
-//         firstImage = true;
-//       }
-//       if (firstImage) {
-//         if (firstObject && firstObject.type === "image") {
-//           console.log("first image selected");
-//           firstObject.set({
-//             selectable: true,
-//             hasControls: true,
-//             hasBorders: true,
-//             lockMovementX: false,
-//             lockMovementY: false,
-//             lockRotation: false,
-//             lockScalingX: false,
-//             lockScalingY: false,
-//           });
-//         }
-//       } else {
-//         console.log("group image selected");
-//         newFabricCanvas.forEachObject((obj) => {
-//           if (obj.type === "group") {
-//             obj.forEachObject((innerObj) => {
-//               if (innerObj.type === "image") {
-//                 innerObj.set({
-//                   selectable: true,
-//                   hasControls: true,
-//                   hasBorders: true,
-//                   lockMovementX: false,
-//                   lockMovementY: false,
-//                   lockRotation: false,
-//                   lockScalingX: false,
-//                   lockScalingY: false,
-//                 });
-//                 console.log("Image within group made adjustable");
-//               }
-//             });
-//           }
-//         });
-//       }
-
-//       // Render the canvas after adjustments
-//       newFabricCanvas.renderAll();
-
-//       // Save the updated canvas state to localStorage
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       try {
-//         localStorage.setItem(
-//           "savedCanvasJSON",
-//           JSON.stringify(savedCanvasJSON)
-//         );
-//       } catch (error) {
-//         console.error("Failed to save canvas state:", error);
-//       }
-//     }
-//   });
-
 document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
-  if (fabricCanvas) {
-    // Get the image as a data URL
-    const selectedImage = fabricCanvas.toDataURL("image/png");
-    // Apply the selected image as a texture to your 3D model
-    changeTexture(selectedImage);
-    // Save the current state of the canvas as JSON
-    savedCanvasJSON = fabricCanvas.toJSON();
-    // Disable resizing and adjusting
-    const activeObject =
-      fabricCanvas.getActiveObject() || fabricCanvas.imageObject;
-    if (activeObject) {
-      activeObject.set("selectable", false);
-      fabricCanvas.discardActiveObject(); // Deselect the object
-      fabricCanvas.renderAll();
-    }
-
-    // Close the image upload popup
-    // document.getElementById("personaliseImageUploadPopup").style.display =
-    //   "none";
-  }
   if (newFabricCanvas) {
     newFabricCanvas.forEachObject((obj) => {
       obj.set({
@@ -1279,19 +621,10 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       });
     });
     newFabricCanvas.renderAll();
-    // const format = "png";
-    // const quality = 1;
-    // const imgData = newFabricCanvas.toDataURL({
-    //   format: format,
-    //   quality: quality,
-    //   enableRetinaScaling: false,
-    // });
-    // fabricImageConverted = imgData;
-    // changeTexture(fabricImageConverted);
 
     savedCanvasJSON = newFabricCanvas.toJSON();
-    // console.log(JSON.stringify(savedCanvasJSON));
-    localStorage.setItem("savedCanvasJSON", JSON.stringify(savedCanvasJSON));
+    window.editedCanvasJson = savedCanvasJSON;
+
     const allObjects = newFabricCanvas.getObjects();
 
     // Save the first object (assuming it's the background image)
@@ -1321,7 +654,6 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
     // Render the canvas to show all objects again
     newFabricCanvas.renderAll();
-    // loadJSON(savedCanvasJSON);
   }
 
   // Hide Done Button
@@ -1367,23 +699,18 @@ initialize3DViewer();
       // Get the container element where you want to display the names
       const container = document.getElementById("library-container");
 
-       // Fetch favorites to compare with
-       const favoriteResponse = await fetch('https://backend.toddlerneeds.com/api/v1/user/favorite/templates', {
-        method: 'GET',
-        credentials: 'include',
-      });
+      // Fetch favorites to compare with
+      const favoriteResponse = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/user/favorite/templates",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
       const favoriteData = await favoriteResponse.json();
-      const favoriteKeys = favoriteData?.favorites?.map(fav => fav.key);
+      const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
       filteredData.forEach((item) => {
-        // const newDiv = document.createElement("div");
-        // newDiv.classList.add("personalise-library-box");
-
-        // const newP = document.createElement("p");
-        // newP.textContent = item.name;
-
-        // newDiv.appendChild(newP);
-        // container.appendChild(newDiv);
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
 
@@ -1413,12 +740,13 @@ initialize3DViewer();
         favIcon.id = "templateFavIcon";
         // Check if this template is in the favorites list
         const isFavorite = favoriteKeys?.includes(item.key);
-        favIcon.src = isFavorite ? '../../assets/custom/heart-filled.png' : '../../assets/custom/heart.png';
-        favIcon.alt = isFavorite ? 'Unfavorite' : 'Favorite';
-        favIcon.style.cursor = 'pointer';
+        favIcon.src = isFavorite
+          ? "../../assets/custom/heart-filled.png"
+          : "../../assets/custom/heart.png";
+        favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
+        favIcon.style.cursor = "pointer";
 
         newDiv.appendChild(favIcon);
-
 
         // // Attach the onclick event to the favIcon
         // favIcon.addEventListener('click', () => {
@@ -1427,28 +755,38 @@ initialize3DViewer();
         // });
 
         // Attach the onclick event to the favIcon
-        favIcon.addEventListener('click', async (e) => {
-            e.stopPropagation();  // Prevents the event from triggering the mainDiv click event
+        favIcon.addEventListener("click", async (e) => {
+          e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
 
-            const templateKey = item.key;
+          const templateKey = item.key;
 
-            // Call the favorite toggle function
-            const isSuccess = await handleFavTempllate(templateKey);
+          // Call the favorite toggle function
+          const isSuccess = await handleFavTempllate(templateKey);
 
-            // If the request was successful, immediately toggle the icon
-            if (isSuccess) {
-                const isCurrentlyFavorite = favIcon.src.includes('heart-filled.png');
-                favIcon.src = isCurrentlyFavorite ? '../../assets/custom/heart.png' : '../../assets/custom/heart-filled.png';
-                favIcon.alt = isCurrentlyFavorite ? 'Favorite' : 'Unfavorite';
+          // If the request was successful, immediately toggle the icon
+          if (isSuccess) {
+            const isCurrentlyFavorite =
+              favIcon.src.includes("heart-filled.png");
+            favIcon.src = isCurrentlyFavorite
+              ? "../../assets/custom/heart.png"
+              : "../../assets/custom/heart-filled.png";
+            favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
 
-                // Show toastr success message
-                toastr.success(isCurrentlyFavorite ? 'Removed from favorites!' : 'Added to favorites!', 'Success');
-            } else {
-                // Show toastr error message if something went wrong
-                toastr.error('Please login to add template into Favorites', 'Error');
-            }
+            // Show toastr success message
+            toastr.success(
+              isCurrentlyFavorite
+                ? "Removed from favorites!"
+                : "Added to favorites!",
+              "Success"
+            );
+          } else {
+            // Show toastr error message if something went wrong
+            toastr.error(
+              "Please login to add template into Favorites",
+              "Error"
+            );
+          }
         });
-
 
         // Append the paragraph to the textDiv
         textDiv.appendChild(newP);
@@ -1469,8 +807,8 @@ initialize3DViewer();
           if (previouslyActive) {
             previouslyActive.classList.remove("active");
           }
-          templateId =item.key
-          console.log("templateId",templateId);
+          templateId = item.key;
+          console.log("templateId", templateId);
           // Add active class to the clicked item
           newDiv.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
@@ -1482,16 +820,12 @@ initialize3DViewer();
               throw new Error(`HTTP error! status: ${jsonResponse.status}`);
             }
             const jsonData = await jsonResponse.json();
-            // console.log(jsonData);
+            window.originalCanvasJson = jsonData;
             imageReplace = true;
-            localStorage.setItem(
-              "savedOriginalCanvasJSON",
-              JSON.stringify(jsonData)
-            );
-            // console.log(fabricImageConverted);
+
             // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
-            setupEventListener();
+            // setupEventListener();
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
           }
@@ -1512,14 +846,9 @@ initialize3DViewer();
 })();
 setupEventListener();
 
-
-
-
-
 // document
 //   .getElementById("personaliseOpenPopupBtn")
 //   .addEventListener("click", async () => {
-
 
 //   });
 //   function handleFavTempllate(templateKey) {
@@ -1545,28 +874,31 @@ setupEventListener();
 // }
 
 async function handleFavTempllate(templateKey) {
-    try {
-        const response = await fetch('https://backend.toddlerneeds.com/api/v1/user/template/togglefavorite', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ templateKey })
-        });
+  try {
+    const response = await fetch(
+      "https://backend.toddlerneeds.com/api/v1/user/template/togglefavorite",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ templateKey }),
+      }
+    );
 
-        if (response.ok) {
-            return true;
-            // Indicate success
-        } else {
-            console.error(`Failed to toggle favorite for template ${templateKey}`);
-            // toastr.error('Please loggin to add template to Favorite', 'Error');
-            return false;
-            // Indicate failure
-        }
-    } catch (error) {
-        console.error('Error toggling favorite:', error);
-        return false;
-        // Indicate failure
+    if (response.ok) {
+      return true;
+      // Indicate success
+    } else {
+      console.error(`Failed to toggle favorite for template ${templateKey}`);
+      // toastr.error('Please loggin to add template to Favorite', 'Error');
+      return false;
+      // Indicate failure
     }
+  } catch (error) {
+    console.error("Error toggling favorite:", error);
+    return false;
+    // Indicate failure
+  }
 }
