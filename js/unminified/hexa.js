@@ -2584,50 +2584,6 @@
         });
       });
 
-    // selector.find("#openEditor").on("click", function () {
-    //   var $mainContainer = selector.find("#mini-editor-main-cont");
-    //   var $buttonContainer = selector.find("#webg-buttons-container");
-
-    //   // Remove the 'personalise-page-active' class from the main container
-    //   $mainContainer.removeClass("personalise-page-active");
-    //   // Add the 'personalise-page-inactive' class to the main container
-    //   $mainContainer.addClass("personalise-page-inactive");
-
-    //   // Remove the 'toggle-2d-3d-cont' class from the button container
-    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
-
-    //   // Retrieve the JSON objects from localStorage
-    //   var savedOriginalCanvasJSON = localStorage.getItem(
-    //     "savedOriginalCanvasJSON"
-    //   );
-    //   var savedCanvasJSON = localStorage.getItem("savedCanvasJSON");
-
-    //   if (savedCanvasJSON && savedOriginalCanvasJSON) {
-    //     // Parse the JSON strings
-    //     var originalCanvasObject = JSON.parse(savedOriginalCanvasJSON);
-    //     var canvasObject = JSON.parse(savedCanvasJSON);
-
-    //     // Iterate over the objects in canvasObject to update their properties
-    //     canvasObject.objects.forEach((obj, index) => {
-    //       if (originalCanvasObject.objects[index]) {
-    //         // Update the properties from originalCanvasObject
-    //         obj.top = originalCanvasObject.objects[index].top;
-    //         obj.left = originalCanvasObject.objects[index].left;
-    //         obj.scaleX = originalCanvasObject.objects[index].scaleX;
-    //         obj.scaleY = originalCanvasObject.objects[index].scaleY;
-    //       }
-    //     });
-
-    //     // Load the updated JSON into your editor or canvas
-    //     loadJSON(canvasObject);
-
-    //     // Clear the localStorage by removing the savedCanvasJSON item
-    //     localStorage.removeItem("savedCanvasJSON");
-    //   } else {
-    //     console.log("No saved canvas JSON found in localStorage.");
-    //   }
-    // });
-
     selector.find("#openEditor").on("click", function () {
       var $mainContainer = selector.find("#mini-editor-main-cont");
       var $buttonContainer = selector.find("#webg-buttons-container");
@@ -2640,19 +2596,15 @@
       // Remove the 'toggle-2d-3d-cont' class from the button container
       $buttonContainer.removeClass("toggle-2d-3d-cont");
 
-      // Retrieve the JSON objects from localStorage
-      var savedOriginalCanvasJSON = localStorage.getItem(
-        "savedOriginalCanvasJSON"
-      );
-      var savedCanvasJSON = localStorage.getItem("savedCanvasJSON");
+      var editedCanvasJson = window.editedCanvasJson;
+      var originalCanvasJson = window.originalCanvasJson;
 
-      if (savedCanvasJSON && savedOriginalCanvasJSON) {
-        // Parse the JSON strings
-        var originalCanvasObject = JSON.parse(savedOriginalCanvasJSON);
-        var canvasObject = JSON.parse(savedCanvasJSON);
+      if (editedCanvasJson && originalCanvasJson) {
+        var originalCanvasObject = originalCanvasJson;
+        var editedCanvasObject = editedCanvasJson;
 
         // Iterate over the objects in canvasObject to update their properties
-        canvasObject.objects.forEach((obj, index) => {
+        editedCanvasObject.objects.forEach((obj, index) => {
           if (originalCanvasObject.objects[index]) {
             var originalObj = originalCanvasObject.objects[index];
 
@@ -2672,10 +2624,7 @@
         });
 
         // Load the updated JSON into your editor or canvas
-        loadJSON(canvasObject);
-
-        // Clear the localStorage by removing the savedCanvasJSON item
-        localStorage.removeItem("savedCanvasJSON");
+        loadJSON(editedCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
       }
@@ -2691,18 +2640,15 @@
 
       // Remove the 'toggle-2d-3d-cont' class from the button container
       $buttonContainer.removeClass("toggle-2d-3d-cont");
-      var savedOriginalCanvasJSON = localStorage.getItem(
-        "savedOriginalCanvasJSON"
-      );
-      var savedCanvasJSON = localStorage.getItem("savedCanvasJSON");
+      var editedCanvasJson = window.editedCanvasJson;
+      var originalCanvasJson = window.originalCanvasJson;
 
-      if (savedCanvasJSON && savedOriginalCanvasJSON) {
-        // Parse the JSON strings
-        var originalCanvasObject = JSON.parse(savedOriginalCanvasJSON);
-        var canvasObject = JSON.parse(savedCanvasJSON);
+      if (editedCanvasJson && originalCanvasJson) {
+        var originalCanvasObject = originalCanvasJson;
+        var editedCanvasObject = editedCanvasJson;
 
         // Iterate over the objects in canvasObject to update their properties
-        canvasObject.objects.forEach((obj, index) => {
+        editedCanvasObject.objects.forEach((obj, index) => {
           if (originalCanvasObject.objects[index]) {
             var originalObj = originalCanvasObject.objects[index];
 
@@ -2722,10 +2668,7 @@
         });
 
         // Load the updated JSON into your editor or canvas
-        loadJSON(canvasObject);
-
-        // Clear the localStorage by removing the savedCanvasJSON item
-        localStorage.removeItem("savedCanvasJSON");
+        loadJSON(editedCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
       }
@@ -6115,122 +6058,47 @@
     });
 
     var preservedImage;
+    var layoutSource = null; // Renamed from imgUrl
 
-    // function AddingImage() {
-    //   console.log("adding image ");
+    // Fetch image data from the API
+    async function fetchImageData() {
+      try {
+        const response = await fetch(
+          "https://backend.toddlerneeds.com/api/v1/product/all"
+        );
+        const data = await response.json();
 
-    //   var pathname = window.location.pathname;
-    //   console.log("pathname is", pathname);
+        // Get the 'name' query parameter from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get("name");
+        console.log("name from query param is", name);
 
-    //   var imageUrls = {
-    //     "/p5-type1.html": "assets/3d/P5_Type1.png",
-    //     "/p9-type1.html": "assets/3d/P9_Type1.png",
-    //     "/p3-type1.html": "assets/3d/P3_type1.png",
-    //     "/p2-type1.html": "assets/3d/P2_type1.png",
-    //     "/p4-type1.html": "assets/3d/P4_Type1.png",
-    //     "/p3-type3.html": "assets/3d/P3_type3.png",
-    //     "/model-1.html": "assets/3d/Glow-3.png",
-    //     "/model-2.html": "assets/3d/model-2.png",
-    //   };
+        // Find the image URL based on the product name
+        const product = data.products.find((item) => item.name === name);
+        if (product && product.imageUrl) {
+          layoutSource = product.imageUrl; // Set the image URL dynamically
+          console.log("Image URL from API: ", layoutSource);
+        } else {
+          console.error("Image not found for the specified name.");
+        }
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    }
 
-    //   if (imageUrls.hasOwnProperty(pathname)) {
-    //     var imageUrl = imageUrls[pathname];
-
-    //     fabric.Image.fromURL(imageUrl, function (img) {
-    //       img.set({
-    //         selectable: false,
-    //         evented: false,
-    //         hasControls: false,
-    //         customId: "layoutImage",
-    //         isPreservedObject: true,
-    //       });
-    //       if (pathname == "/p3-type1.html") {
-    //         img.scaleX = 2;
-    //         img.scaleY = 2;
-    //       }
-    //       preservedImage = img;
-    //       canvas.add(img);
-    //       canvas.renderAll();
-    //       onlyDeleteLayerEvent(img.id);
-    //     });
-    //   }
-    // }
-
-    // function AddingImage() {
-    //   console.log("adding image");
-
-    //   // Get the 'name' query parameter from the URL
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   const name = urlParams.get("name");
-    //   console.log("name from query param is", name);
-
-    //   var imageUrls = {
-    //     "p5-type1": "assets/3d/P5_Type1.png",
-    //     "p9-type1": "assets/3d/P9_Type1.png",
-    //     "p3-type1": "assets/3d/P3_type1.png",
-    //     "p2-type1": "assets/3d/P2_type1.png",
-    //     "p4-type1": "assets/3d/P4_Type1.png",
-    //     "p3-type3": "assets/3d/P3_type3.png",
-    //     "Model-1": "assets/3d/Glow-3.png",
-    //     "Model-2": "assets/3d/model-2.png",
-    //   };
-
-    //   if (imageUrls.hasOwnProperty(name)) {
-    //     var imageUrl = imageUrls[name];
-    //     console.log("png image filepath ", imageUrl);
-    //     fabric.Image.fromURL(imageUrl, function (img) {
-    //       img.set({
-    //         selectable: false,
-    //         evented: false,
-    //         hasControls: false,
-    //         customId: "layoutImage",
-    //         isPreservedObject: true,
-    //       });
-    //       if (name === "p3-type1") {
-    //         img.scaleX = 2;
-    //         img.scaleY = 2;
-    //       }
-    //       preservedImage = img;
-    //       canvas.add(img);
-    //       canvas.renderAll();
-    //       onlyDeleteLayerEvent(img.id);
-    //     });
-    //   }
-    // }
-    function AddingImage() {
+    async function AddingImage() {
       console.log("adding image");
 
-      // Get the 'name' query parameter from the URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const name = urlParams.get("name");
-      console.log("name from query param is", name);
+      // Fetch image data first
+      await fetchImageData();
 
-      var imageUrls = {
-        "p5-type1":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p5-type1/P5_Type1.png",
-        "p9-type1":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p9-type1/P9_type1.png",
-        "p3-type1":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type1/P3_type1.png",
-        "p2-type1":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p2-type1/P2_type1.png",
-        "p4-type1":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p4-type1/P4_Type1.png",
-        "p3-type3":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/p3-type3/P3_type3.png",
-        "Model-1":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-1/Glow-3.png",
-        "Model-2":
-          "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/model-2/model-2.png",
-      };
-
-      if (imageUrls.hasOwnProperty(name)) {
-        var imageUrl = imageUrls[name];
-        console.log("png image filepath ", imageUrl);
+      // Proceed only if layoutSource is available
+      if (layoutSource) {
+        console.log("png image filepath ", layoutSource);
 
         // Delay the execution by 2 seconds (2000 milliseconds)
         setTimeout(() => {
-          fabric.Image.fromURL(imageUrl, function (img) {
+          fabric.Image.fromURL(layoutSource, function (img) {
             img.set({
               selectable: false,
               evented: false,
@@ -6238,16 +6106,23 @@
               customId: "layoutImage",
               isPreservedObject: true,
             });
+
+            // Apply specific scaling if name is 'p3-type1'
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get("name");
             if (name === "p3-type1") {
               img.scaleX = 2;
               img.scaleY = 2;
             }
+
             preservedImage = img;
             canvas.add(img);
             canvas.renderAll();
             onlyDeleteLayerEvent(img.id);
           });
         }, 1000); // 2 seconds delay
+      } else {
+        console.error("No layout source found. Image loading skipped.");
       }
     }
 
