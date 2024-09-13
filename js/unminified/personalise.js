@@ -13,6 +13,7 @@ let newFabricCanvas;
 let fabricImageConverted = null;
 let modelSource = null;
 let templateId = null;
+let selectedMesh = null;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -37,6 +38,7 @@ async function fetchModelData() {
     if (product && product.modelsUrl) {
       modelSource = product.modelsUrl; // Set the model URL
       window.layoutSource = product.imageUrl;
+      selectedMesh = product.specificMesh;
     } else {
       console.error("Model not found for the specified name.");
     }
@@ -117,7 +119,8 @@ function render() {
 function changeTexture(newUrl) {
   if (scene) {
     const textureLoader = new THREE.TextureLoader();
-    const specificMesh = scene.getObjectByName("P2_Top2");
+    console.log(selectedMesh);
+    const specificMesh = scene.getObjectByName(selectedMesh);
 
     if (specificMesh) {
       textureLoader.load(
@@ -149,7 +152,7 @@ async function initialize3DViewer() {
     await fetchModelData();
 
     // Proceed with initialization only if modelSource is available
-    if (modelSource) {
+    if (modelSource && selectedMesh) {
       initPersonalise();
       animate();
     } else {
@@ -406,7 +409,9 @@ function loadJSONToCanvas(jsonData) {
 
       // Pass the image data to the changeTexture function
       fabricImageConverted = imgData;
-      changeTexture(fabricImageConverted);
+      if (selectedMesh) {
+        changeTexture(fabricImageConverted);
+      }
 
       // Add the first object back to its original position
       newFabricCanvas.insertAt(firstObject, 0);
