@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () {},
-        saveTemplate: function () {},
-        saveImage: function () {},
+        customFunctions: function () { },
+        saveTemplate: function () { },
+        saveImage: function () { },
       },
       options
     );
@@ -181,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-                url +
-                '" data-loader="no" title="' +
-                item.icons[ii].name +
-                '">' +
-                '<span class="material-icons">' +
-                item.icons[ii].ligature +
-                "</div>"
+              url +
+              '" data-loader="no" title="' +
+              item.icons[ii].name +
+              '">' +
+              '<span class="material-icons">' +
+              item.icons[ii].ligature +
+              "</div>"
             );
         }
       }
@@ -1169,145 +1169,145 @@
     });
 
     selector.find("#hexa-json-save").on("click", function () {
-        // First, check if the user is logged in and email is verified
-        $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/protected-route",
-          type: "GET",
-          xhrFields: {
-            withCredentials: true, // Include credentials for backend token validation
-          },
-          error: function (xhr, status, error) {
-            // If the API call fails, it means the user is not logged in
+      // First, check if the user is logged in and email is verified
+      $.ajax({
+        url: "https://backend.toddlerneeds.com/api/v1/protected-route",
+        type: "GET",
+        xhrFields: {
+          withCredentials: true, // Include credentials for backend token validation
+        },
+        error: function (xhr, status, error) {
+          // If the API call fails, it means the user is not logged in
+          toastr.error("Please log in to save any template.", "Login Required");
+          console.log("User is not logged in.");
+          return;
+        },
+        success: function (response) {
+          // If the user is not logged in
+          if (!response.role) {
             toastr.error("Please log in to save any template.", "Login Required");
             console.log("User is not logged in.");
             return;
-          },
-          success: function (response) {
-            // If the user is not logged in
-            if (!response.role) {
-              toastr.error("Please log in to save any template.", "Login Required");
-              console.log("User is not logged in.");
-              return;
+          }
+
+          // If the user's email is not verified
+          if (!response.isVerified) {
+            toastr.error("Please verify your email to save any template.", "Email Verification Required");
+            console.log("Email is not verified.");
+            return;
+          }
+
+          // Proceed with saving the template if user is logged in and email is verified
+          console.log("User is logged in and email is verified.");
+
+          // Convert the canvas to a JSON object, including specific properties
+          var json = canvas.toJSON([
+            "objectType",
+            "gradientFill",
+            "roundedCorners",
+            "mode",
+            "selectable",
+            "lockMovementX",
+            "lockMovementY",
+            "lockRotation",
+            "crossOrigin",
+            "layerName",
+            "customId",
+          ]);
+
+          var objects = canvas.getObjects();
+          var filteredObjects = objects.filter(function (obj) {
+            return obj.customId !== "layoutImage"; // Filter out layoutImage
+          });
+
+          // Temporarily hide objects that are not filtered
+          canvas.getObjects().forEach(function (obj) {
+            if (!filteredObjects.includes(obj)) {
+              obj.visible = false;
             }
+          });
 
-            // If the user's email is not verified
-            if (!response.isVerified) {
-              toastr.error("Please verify your email to save any template.", "Email Verification Required");
-              console.log("Email is not verified.");
-              return;
-            }
+          // Generate image URL with only visible (filtered) objects
+          var canvasImageUrl = canvas.toDataURL({
+            format: "png",
+            multiplier: 2,
+          });
 
-            // Proceed with saving the template if user is logged in and email is verified
-            console.log("User is logged in and email is verified.");
+          // Restore visibility of all objects
+          canvas.getObjects().forEach(function (obj) {
+            obj.visible = true;
+          });
 
-            // Convert the canvas to a JSON object, including specific properties
-            var json = canvas.toJSON([
-              "objectType",
-              "gradientFill",
-              "roundedCorners",
-              "mode",
-              "selectable",
-              "lockMovementX",
-              "lockMovementY",
-              "lockRotation",
-              "crossOrigin",
-              "layerName",
-              "customId",
-            ]);
+          convertToDataURL(json.backgroundImage.src, function (dataUrl) {
+            json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
 
-            var objects = canvas.getObjects();
-            var filteredObjects = objects.filter(function (obj) {
-              return obj.customId !== "layoutImage"; // Filter out layoutImage
-            });
+            var template = JSON.stringify(json);
 
-            // Temporarily hide objects that are not filtered
-            canvas.getObjects().forEach(function (obj) {
-              if (!filteredObjects.includes(obj)) {
-                obj.visible = false;
-              }
-            });
+            var blob = new Blob([template], { type: "application/json" });
 
-            // Generate image URL with only visible (filtered) objects
-            var canvasImageUrl = canvas.toDataURL({
-              format: "png",
-              multiplier: 2,
-            });
+            var timestamp = new Date().getTime();
+            var uniqueFileName = "template_" + timestamp + ".json";
+            var formData = new FormData();
+            formData.append("files", blob, uniqueFileName);
 
-            // Restore visibility of all objects
-            canvas.getObjects().forEach(function (obj) {
-              obj.visible = true;
-            });
+            var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
+            var imageFileName = "template_image_" + timestamp + ".png";
+            formData.append("files", imageBlob, imageFileName);
 
-            convertToDataURL(json.backgroundImage.src, function (dataUrl) {
-              json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
+            $.ajax({
+              url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
+              type: "POST",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                var imageUrl = "";
+                var jsonUrl = "";
+                response.urls.forEach(function (url) {
+                  if (url.endsWith(".json")) {
+                    jsonUrl = url;
+                  } else if (
+                    url.endsWith(".png") ||
+                    url.endsWith(".jpeg") ||
+                    url.endsWith(".jpg")
+                  ) {
+                    imageUrl = url;
+                  }
+                });
+                const urlParams = new URLSearchParams(window.location.search);
+                const modelName = urlParams.get("name");
 
-              var template = JSON.stringify(json);
+                var key = Math.random().toString(36).substr(2, 9);
+                var name = selector.find("#hexa-json-save-name").val();
 
-              var blob = new Blob([template], { type: "application/json" });
+                var data = {
+                  key: key,
+                  src: jsonUrl,
+                  imageUrl: imageUrl,
+                  name: name,
+                  type: modelName,
+                };
 
-              var timestamp = new Date().getTime();
-              var uniqueFileName = "template_" + timestamp + ".json";
-              var formData = new FormData();
-              formData.append("files", blob, uniqueFileName);
-
-              var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
-              var imageFileName = "template_image_" + timestamp + ".png";
-              formData.append("files", imageBlob, imageFileName);
-
-              $.ajax({
-                url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                  var imageUrl = "";
-                  var jsonUrl = "";
-                  response.urls.forEach(function (url) {
-                    if (url.endsWith(".json")) {
-                      jsonUrl = url;
-                    } else if (
-                      url.endsWith(".png") ||
-                      url.endsWith(".jpeg") ||
-                      url.endsWith(".jpg")
-                    ) {
-                      imageUrl = url;
-                    }
+                // Upload the data object to the new API
+                uploadData(data)
+                  .then(() => {
+                    // Display a success message using toastr after successful upload
+                    toastr.success("Data uploaded successfully!", "Success");
+                  })
+                  .catch((error) => {
+                    // Display an error message using toastr if uploading fails
+                    toastr.error(error.message, "Error");
                   });
-                  const urlParams = new URLSearchParams(window.location.search);
-                  const modelName = urlParams.get("name");
-
-                  var key = Math.random().toString(36).substr(2, 9);
-                  var name = selector.find("#hexa-json-save-name").val();
-
-                  var data = {
-                    key: key,
-                    src: jsonUrl,
-                    imageUrl: imageUrl,
-                    name: name,
-                    type: modelName,
-                  };
-
-                  // Upload the data object to the new API
-                  uploadData(data)
-                    .then(() => {
-                      // Display a success message using toastr after successful upload
-                      toastr.success("Data uploaded successfully!", "Success");
-                    })
-                    .catch((error) => {
-                      // Display an error message using toastr if uploading fails
-                      toastr.error(error.message, "Error");
-                    });
-                },
-                error: function (xhr, status, error) {
-                  // Display an error message using toastr if the API call fails
-                  toastr.error(error, "Error");
-                },
-              });
+              },
+              error: function (xhr, status, error) {
+                // Display an error message using toastr if the API call fails
+                toastr.error(error, "Error");
+              },
             });
-          },
-        });
+          });
+        },
       });
+    });
 
 
     function uploadData(data) {
@@ -1511,6 +1511,8 @@
         if (obj.customId === "clipmask") {
           clipmaskObjects.push(obj);
           document.getElementById("done-masking-img").style.display = "block";
+          document.getElementById("replace-image-btn").style.display =
+            "block";
         } else {
           filteredObjects.push(obj);
         }
@@ -1558,7 +1560,7 @@
             applyTemplateClipMask(clipmaskData.image, clipmaskData.path);
           }
         },
-        function () {},
+        function () { },
         {
           crossOrigin: "anonymous",
         }
@@ -2291,7 +2293,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -2497,12 +2499,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-          action +
-          '<span class="time">' +
-          time +
-          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-          JSON.stringify(json) +
-          "</script></div></li>"
+        action +
+        '<span class="time">' +
+        time +
+        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+        JSON.stringify(json) +
+        "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -5371,8 +5373,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                            item.find(".select2-item").html() +
-                            "&text=abc",
+                          item.find(".select2-item").html() +
+                          "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5557,18 +5559,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-            $(originalOption).data("icon") +
-            "</span>" +
-            icon.text +
-            "</div>"
+          $(originalOption).data("icon") +
+          "</span>" +
+          icon.text +
+          "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-            $(originalOption).data("font") +
-            '">' +
-            icon.text +
-            "</div>"
+          $(originalOption).data("font") +
+          '">' +
+          icon.text +
+          "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -7038,10 +7040,7 @@
         console.log("active obj is", activeObject);
 
         if (activeObject) {
-          this.style.display = "none";
-          document.getElementById("edit-masking-button").style.display =
-            "block";
-          document.getElementById("replace-image-btn").style.display = "none";
+
 
           if (activeObject.type === "image" && activeObject.clipPath) {
             const clipPath = activeObject.clipPath;
@@ -7060,7 +7059,10 @@
             canvas.remove(image);
             onlyDeleteLayerEvent(activeObject.id);
             onlyDeleteLayerEvent(image.id);
-
+            document.getElementById("edit-masking-button").style.display =
+            "block";
+            document.getElementById("replace-image-btn").style.display = "none";
+            document.getElementById("done-masking-img").style.display = "none";
             // Group image and clip path
             groupImageAndClipPath(image, clipPath);
           } else if (
@@ -7071,6 +7073,9 @@
               .getObjects("image")
               .find((img) => img.customId === activeObject.customId);
             if (image) {
+            
+
+
               canvas.remove(image);
               onlyDeleteLayerEvent(image.id);
               groupImageAndClipPath(image, image.clipPath);
@@ -7968,7 +7973,7 @@
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8176,7 +8181,7 @@
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8327,7 +8332,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8725,8 +8730,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-              selector.find("#brush-pattern-width").val()
-            ),
+            selector.find("#brush-pattern-width").val()
+          ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
