@@ -136,8 +136,40 @@ function changeTexture(newUrl) {
               bumpScale: 0.5,
             });
             specificMesh.material = material;
-            texture.repeat.set(1.9, -1.9);
-            texture.offset.set(0.92, 0.5);
+            // texture.repeat.set(1.9, -1.9);
+            // texture.offset.set(0.92, 0.5);
+            if (selectedMesh === "P2_Top2") {
+              texture.repeat.set(1.9, -1.9);
+              texture.offset.set(0.92, 0.5);
+            } else if (selectedMesh === "P3_typ3_Top") {
+              texture.repeat.set(1.23, -1.23);
+              texture.offset.set(0.875, 1.13);
+            } else if (selectedMesh === "P3_Top") {
+              texture.repeat.set(1.7, -1.7);
+              texture.offset.set(1.0, 1.04);
+            } else if (selectedMesh === "P4Type1") {
+              // texture.repeat.set(2.0, -2.0);
+              // texture.offset.set(0.9, 0.4);
+              console.log("No changes required");
+            } else if (selectedMesh === "P5_typ1") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "Ear_L2") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "part2") {
+              texture.repeat.set(-1, 1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "polySurface1") {
+              // texture.repeat.set(1.6, -1.6);
+              // texture.offset.set(0.93, 0.55);
+              texture.repeat.set(1, -1);
+            } else {
+              console.warn(
+                "No specific texture settings for selectedMesh:",
+                selectedMesh
+              );
+            }
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
           });
         }

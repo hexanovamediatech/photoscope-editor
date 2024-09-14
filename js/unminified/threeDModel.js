@@ -53,39 +53,11 @@ function init() {
     0.1,
     20
   );
-  camera.position.set(0, 0.08, 0.5);
+  // camera.position.set(0, 0.08, 0.5);
+  camera.position.set(0, 0.08, 1);
 
   scene = new THREE.Scene();
-  //   new GLTFLoader().load(modelSource, function (gltf) {
-  //     const loadedModel = gltf.scene;
-  //     const specificMesh = scene.getObjectByName(selectedMesh);
-  //     const textureLoader = new THREE.TextureLoader();
 
-  //     textureLoader.load(
-  //       "assets/3d/76_leather texture-seamless.jpg",
-  //       (bumpMap) => {
-  //         textureLoader.load(url, (texture) => {
-  //           const material = new THREE.MeshStandardMaterial({
-  //             map: texture,
-  //             // normalMap: texture,
-  //             bumpMap: bumpMap,
-  //             roughness: 1,
-  //             metalness: 1,
-  //             opacity: 1,
-  //             bumpScale: 0.5,
-  //           });
-  //           specificMesh.material = material;
-
-  //           texture.repeat.set(1.9, -1.9);
-  //           texture.offset.set(0.92, 0.5);
-  //           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  //         });
-  //       }
-  //     );
-
-  //     loadedModel.position.set(0, -0.11, 0);
-  //     scene.add(gltf.scene);
-  //   });
   new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
     console.log("Loaded model:", loadedModel);
@@ -99,6 +71,7 @@ function init() {
 
     // Assuming the model contains a mesh with the name selectedMesh
     const specificMesh = loadedModel.getObjectByName(selectedMesh);
+    console.log(specificMesh, "specific mesh name");
     if (specificMesh) {
       const textureLoader = new THREE.TextureLoader();
       textureLoader.load(
@@ -115,8 +88,40 @@ function init() {
             });
             specificMesh.material = material;
 
-            texture.repeat.set(1.9, -1.9);
-            texture.offset.set(0.92, 0.5);
+            // texture.repeat.set(1.9, -1.9);
+            // texture.offset.set(0.92, 0.5);
+            if (selectedMesh === "P2_Top2") {
+              texture.repeat.set(1.9, -1.9);
+              texture.offset.set(0.92, 0.5);
+            } else if (selectedMesh === "P3_typ3_Top") {
+              texture.repeat.set(1.23, -1.23);
+              texture.offset.set(0.875, 1.13);
+            } else if (selectedMesh === "P3_Top") {
+              texture.repeat.set(1.7, -1.7);
+              texture.offset.set(1.0, 1.04);
+            } else if (selectedMesh === "P4Type1") {
+              // texture.repeat.set(2.0, -2.0);
+              // texture.offset.set(0.9, 0.4);
+              console.log("No changes required");
+            } else if (selectedMesh === "P5_typ1") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "Ear_L2") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "part2") {
+              texture.repeat.set(-1, 1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "polySurface1") {
+              // texture.repeat.set(1.6, -1.6);
+              // texture.offset.set(0.93, 0.55);
+              texture.repeat.set(1, -1);
+            } else {
+              console.warn(
+                "No specific texture settings for selectedMesh:",
+                selectedMesh
+              );
+            }
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
           });
         }
@@ -176,6 +181,7 @@ function changeTexture(newUrl) {
   if (scene) {
     const textureLoader = new THREE.TextureLoader();
     const specificMesh = scene.getObjectByName(selectedMesh);
+    console.log(specificMesh, "specific mesh name");
     if (specificMesh) {
       textureLoader.load(
         "assets/3d/76_leather texture-seamless.jpg",
@@ -191,8 +197,40 @@ function changeTexture(newUrl) {
               bumpScale: 0.5,
             });
             specificMesh.material = material;
-            texture.repeat.set(1.9, -1.9);
-            texture.offset.set(0.92, 0.5);
+
+            if (selectedMesh === "P2_Top2") {
+              texture.repeat.set(1.9, -1.9);
+              texture.offset.set(0.92, 0.5);
+            } else if (selectedMesh === "P3_typ3_Top") {
+              texture.repeat.set(1.23, -1.23);
+              texture.offset.set(0.875, 1.13);
+            } else if (selectedMesh === "P3_Top") {
+              texture.repeat.set(1.7, -1.7);
+              texture.offset.set(1.0, 1.04);
+            } else if (selectedMesh === "P4Type1") {
+              // texture.repeat.set(2.0, -2.0);
+              // texture.offset.set(0.9, 0.4);
+              console.log("No changes required");
+            } else if (selectedMesh === "P5_typ1") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "Ear_L2") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "part2") {
+              texture.repeat.set(-1, 1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "polySurface1") {
+              // texture.repeat.set(1.6, -1.6);
+              // texture.offset.set(0.93, 0.55);
+              texture.repeat.set(1, -1);
+            } else {
+              console.warn(
+                "No specific texture settings for selectedMesh:",
+                selectedMesh
+              );
+            }
+
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
           });
         }
