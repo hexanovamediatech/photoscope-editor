@@ -1,4 +1,4 @@
-/* ---------------------- 
+/* ----------------------
 Stylesheet Guide
 -------------------------
 
@@ -3048,7 +3048,7 @@ ul.hexa-accordion > li > a > .data-count {
 }
 
 /* .hexa-option:hover {
-   border: 1px solid #00A3FF; 
+   border: 1px solid #00A3FF;
 } */
 
 .hexa-shape-square {
@@ -3471,7 +3471,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   border-radius: 4px;
 }
 /* {
-  
+
 } */
 .hexa-mask-unmask {
   position: absolute;
@@ -3552,3 +3552,75 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   border: none;
   width: 70%;
 }
+
+/* Modal Container */
+.templates-public-private-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 2px solid red; */
+  }
+
+  /* Modal Content */
+  .templates-public-private-modal-content {
+    background-color: #fff;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  /* Modal Header */
+  .templates-public-private-modal-content h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  /* Modal Description */
+  .templates-public-private-modal-content p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    color: #555;
+  }
+
+  /* Buttons Styling */
+  .templates-public-private-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Primary Button */
+  .templates-public-private-btn-primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  /* Secondary Button */
+  .templates-public-private-btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+  }
+
+  /* Button Hover Effects */
+  .templates-public-private-btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .templates-public-private-btn-secondary:hover {
+    background-color: #5a6268;
+  }
