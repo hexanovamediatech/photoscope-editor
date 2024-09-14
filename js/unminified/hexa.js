@@ -1039,13 +1039,63 @@
       }
     }
     /* MODAL */
+    // /* Modal Open */
+    // selector.find(".hexa-modal-open").on("click", function (e) {
+    //   e.preventDefault();
+    //   var target = $(this).data("target");
+    //   selector.find(".hexa-modal").hide();
+    //   selector.find(target).show();
+    // });
+
+
     /* Modal Open */
     selector.find(".hexa-modal-open").on("click", function (e) {
-      e.preventDefault();
-      var target = $(this).data("target");
-      selector.find(".hexa-modal").hide();
-      selector.find(target).show();
-    });
+        e.preventDefault();
+
+        var clickedElement = $(this); // Store reference to the clicked element
+
+        // First, check if the user is logged in and email is verified
+        $.ajax({
+          url: "https://backend.toddlerneeds.com/api/v1/protected-route",
+          type: "GET",
+          xhrFields: {
+            withCredentials: true, // Include credentials for backend token validation
+          },
+          error: function (xhr, status, error) {
+            // If the API call fails, it means the user is not logged in
+            toastr.error("Please log in to proceed.", "Login Required");
+            console.log("User is not logged in.");
+            return;
+          },
+          success: function (response) {
+            // If the user is not logged in
+            if (!response.role) {
+              toastr.error("Please log in to proceed.", "Login Required");
+              console.log("User is not logged in.");
+              return;
+            }
+
+            // If the user's email is not verified
+            if (!response.isVerified) {
+              toastr.error(
+                "Please verify your email to proceed.",
+                "Email Verification Required"
+              );
+              console.log("Email is not verified.");
+              return;
+            }
+
+            // If the user is logged in and email is verified, proceed to open the modal
+            console.log("User is logged in and email is verified.");
+
+            var target = clickedElement.data("target"); // Use the stored clicked element reference
+            selector.find(".hexa-modal").hide(); // Hide any open modals
+            selector.find(target).show(); // Show the target modal
+          },
+        });
+      });
+
+
     /* Modal Close */
     selector.find(".hexa-modal-close").on("click", function (e) {
       e.preventDefault();
@@ -1167,153 +1217,142 @@
         selector.find("#hexa-templates-menu").prop("disabled", true);
       }
     });
+// Show Public/Private modal before saving template
+function showPublicPrivateModal() {
+    return new Promise((resolve, reject) => {
+      // Show the modal
+      $("#templates-public-private-modal").show();
 
-    selector.find("#hexa-json-save").on("click", function () {
-      // First, check if the user is logged in and email is verified
-      $.ajax({
-        url: "https://backend.toddlerneeds.com/api/v1/protected-route",
-        type: "GET",
-        xhrFields: {
-          withCredentials: true, // Include credentials for backend token validation
-        },
-        error: function (xhr, status, error) {
-          // If the API call fails, it means the user is not logged in
-          toastr.error("Please log in to save any template.", "Login Required");
-          console.log("User is not logged in.");
-          return;
-        },
-        success: function (response) {
-          // If the user is not logged in
-          if (!response.role) {
-            toastr.error(
-              "Please log in to save any template.",
-              "Login Required"
-            );
-            console.log("User is not logged in.");
-            return;
-          }
+      // Handle public button click
+      $("#saveAsPublic").on("click", function () {
+        resolve(true);  // Return 'true' for public
+        $("#templates-public-private-modal").hide(); // Hide the modal after selection
+      });
 
-          // If the user's email is not verified
-          if (!response.isVerified) {
-            toastr.error(
-              "Please verify your email to save any template.",
-              "Email Verification Required"
-            );
-            console.log("Email is not verified.");
-            return;
-          }
-
-          // Proceed with saving the template if user is logged in and email is verified
-          console.log("User is logged in and email is verified.");
-
-          // Convert the canvas to a JSON object, including specific properties
-          var json = canvas.toJSON([
-            "objectType",
-            "gradientFill",
-            "roundedCorners",
-            "mode",
-            "selectable",
-            "lockMovementX",
-            "lockMovementY",
-            "lockRotation",
-            "crossOrigin",
-            "layerName",
-            "customId",
-          ]);
-
-          var objects = canvas.getObjects();
-          var filteredObjects = objects.filter(function (obj) {
-            return obj.customId !== "layoutImage"; // Filter out layoutImage
-          });
-
-          // Temporarily hide objects that are not filtered
-          canvas.getObjects().forEach(function (obj) {
-            if (!filteredObjects.includes(obj)) {
-              obj.visible = false;
-            }
-          });
-
-          // Generate image URL with only visible (filtered) objects
-          var canvasImageUrl = canvas.toDataURL({
-            format: "png",
-            multiplier: 2,
-          });
-
-          // Restore visibility of all objects
-          canvas.getObjects().forEach(function (obj) {
-            obj.visible = true;
-          });
-
-          convertToDataURL(json.backgroundImage.src, function (dataUrl) {
-            json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
-
-            var template = JSON.stringify(json);
-
-            var blob = new Blob([template], { type: "application/json" });
-
-            var timestamp = new Date().getTime();
-            var uniqueFileName = "template_" + timestamp + ".json";
-            var formData = new FormData();
-            formData.append("files", blob, uniqueFileName);
-
-            var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
-            var imageFileName = "template_image_" + timestamp + ".png";
-            formData.append("files", imageBlob, imageFileName);
-
-            $.ajax({
-              url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
-              type: "POST",
-              data: formData,
-              processData: false,
-              contentType: false,
-              success: function (response) {
-                var imageUrl = "";
-                var jsonUrl = "";
-                response.urls.forEach(function (url) {
-                  if (url.endsWith(".json")) {
-                    jsonUrl = url;
-                  } else if (
-                    url.endsWith(".png") ||
-                    url.endsWith(".jpeg") ||
-                    url.endsWith(".jpg")
-                  ) {
-                    imageUrl = url;
-                  }
-                });
-                const urlParams = new URLSearchParams(window.location.search);
-                const modelName = urlParams.get("name");
-
-                var key = Math.random().toString(36).substr(2, 9);
-                var name = selector.find("#hexa-json-save-name").val();
-
-                var data = {
-                  key: key,
-                  src: jsonUrl,
-                  imageUrl: imageUrl,
-                  name: name,
-                  type: modelName,
-                };
-
-                // Upload the data object to the new API
-                uploadData(data)
-                  .then(() => {
-                    // Display a success message using toastr after successful upload
-                    toastr.success("Data uploaded successfully!", "Success");
-                  })
-                  .catch((error) => {
-                    // Display an error message using toastr if uploading fails
-                    toastr.error(error.message, "Error");
-                  });
-              },
-              error: function (xhr, status, error) {
-                // Display an error message using toastr if the API call fails
-                toastr.error(error, "Error");
-              },
-            });
-          });
-        },
+      // Handle private button click
+      $("#saveAsPrivate").on("click", function () {
+        resolve(false); // Return 'false' for private
+        $("#templates-public-private-modal").hide(); // Hide the modal after selection
       });
     });
+  }
+
+  selector.find("#hexa-json-save").on("click", function () {
+    // Show public/private modal before proceeding
+    showPublicPrivateModal().then((isPublic) => {
+      // Proceed with saving the template based on user's choice
+
+      // Convert the canvas to a JSON object, including specific properties
+      var json = canvas.toJSON([
+        "objectType",
+        "gradientFill",
+        "roundedCorners",
+        "mode",
+        "selectable",
+        "lockMovementX",
+        "lockMovementY",
+        "lockRotation",
+        "crossOrigin",
+        "layerName",
+        "customId",
+      ]);
+
+      var objects = canvas.getObjects();
+      var filteredObjects = objects.filter(function (obj) {
+        return obj.customId !== "layoutImage"; // Filter out layoutImage
+      });
+
+      // Temporarily hide objects that are not filtered
+      canvas.getObjects().forEach(function (obj) {
+        if (!filteredObjects.includes(obj)) {
+          obj.visible = false;
+        }
+      });
+
+      // Generate image URL with only visible (filtered) objects
+      var canvasImageUrl = canvas.toDataURL({
+        format: "png",
+        multiplier: 2,
+      });
+
+      // Restore visibility of all objects
+      canvas.getObjects().forEach(function (obj) {
+        obj.visible = true;
+      });
+
+      convertToDataURL(json.backgroundImage.src, function (dataUrl) {
+        json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
+
+        var template = JSON.stringify(json);
+
+        var blob = new Blob([template], { type: "application/json" });
+
+        var timestamp = new Date().getTime();
+        var uniqueFileName = "template_" + timestamp + ".json";
+        var formData = new FormData();
+        formData.append("files", blob, uniqueFileName);
+
+        var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
+        var imageFileName = "template_image_" + timestamp + ".png";
+        formData.append("files", imageBlob, imageFileName);
+
+        $.ajax({
+          url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            var imageUrl = "";
+            var jsonUrl = "";
+            response.urls.forEach(function (url) {
+              if (url.endsWith(".json")) {
+                jsonUrl = url;
+              } else if (
+                url.endsWith(".png") ||
+                url.endsWith(".jpeg") ||
+                url.endsWith(".jpg")
+              ) {
+                imageUrl = url;
+              }
+            });
+            const urlParams = new URLSearchParams(window.location.search);
+            const modelName = urlParams.get("name");
+
+            var key = Math.random().toString(36).substr(2, 9);
+            var name = selector.find("#hexa-json-save-name").val();
+
+            var data = {
+              key: key,
+              src: jsonUrl,
+              imageUrl: imageUrl,
+              name: name,
+              type: modelName,
+              isPublic: isPublic, // Add public/private selection to data
+            };
+
+            // Upload the data object to the new API
+            uploadData(data)
+              .then(() => {
+                // Display a success message using toastr after successful upload
+                toastr.success("Data uploaded successfully!", "Success");
+                // Close the modal after saving
+                // selector.find(".hexa-modal").hide();
+              })
+              .catch((error) => {
+                // Display an error message using toastr if uploading fails
+                toastr.error(error.message, "Error");
+              });
+          },
+          error: function (xhr, status, error) {
+            // Display an error message using toastr if the API call fails
+            toastr.error(error, "Error");
+          },
+        });
+      });
+    });
+  });
+
 
     function uploadData(data) {
       return new Promise((resolve, reject) => {
