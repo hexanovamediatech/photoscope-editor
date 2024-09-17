@@ -9050,3 +9050,333 @@ function showPublicPrivateModal() {
     settings.customFunctions.call(this, selector, canvas, lazyLoadInstance);
   };
 })(jQuery);
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     const authContainer = document.querySelector('.auth-container');
+//     let isDropdownOpen = false;
+
+//     // Fetch login status from the API
+//     fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+//       credentials: 'include', // ensure cookies are sent if required
+//     })
+//       .then((response) => response.json())
+//       .then((data) => {
+//         if (data.role) {
+//           // User is logged in
+//           const isAdmin = data.role === 'admin';
+//           showLoggedInUI(isAdmin);
+//         } else {
+//           // No role, user is not logged in
+//           showLoggedOutUI();
+//         }
+//       })
+//       .catch(() => {
+//         showLoggedOutUI();
+//       });
+
+//     // Function to show the UI when the user is logged in
+//     function showLoggedInUI(isAdmin) {
+//       authContainer.innerHTML = `
+//         <div class="profile-icon" id="profileIcon"></div>
+//         <div class="dropdown" id="dropdownMenu" style="display: none;">
+//           <ul>
+//             ${
+//               isAdmin
+//                 ? `<li id="adminDashboard">Dashboard</li>`
+//                 : `<li id="profile">Profile</li>`
+//             }
+//             <li id="logout">Logout</li>
+//           </ul>
+//         </div>
+//       `;
+
+//       const profileIcon = document.getElementById('profileIcon');
+//       const dropdownMenu = document.getElementById('dropdownMenu');
+
+//       // Toggle the dropdown menu visibility when the profile icon is clicked
+//       profileIcon.addEventListener('click', function () {
+//         console.log("clicked profile icon");
+//         isDropdownOpen = !isDropdownOpen;
+//         dropdownMenu.style.display = isDropdownOpen ? 'block' : 'none';
+//       });
+
+//       // Add event listeners for dashboard/profile and logout actions
+//       if (isAdmin) {
+//         document.getElementById('adminDashboard').addEventListener('click', function () {
+//           window.location.href = '/admin-dashboard';
+//         });
+//       } else {
+//         document.getElementById('profile').addEventListener('click', function () {
+//           window.location.href = '/profile';
+//         });
+//       }
+
+//       document.getElementById('logout').addEventListener('click', handleLogout);
+//     }
+
+//     // Function to show the UI when the user is logged out
+//     function showLoggedOutUI() {
+//       authContainer.innerHTML = `
+//         <div class="flex">
+//           <button class="button signup" id="signupBtn">Sign Up</button>
+//           <button class="button signin" id="signinBtn">Sign In</button>
+//         </div>
+//       `;
+
+//       // Navigate to the signup and login pages
+//       document.getElementById('signupBtn').addEventListener('click', function () {
+//         window.location.href = 'http://54.152.205.55:4000/signup';
+//       });
+
+//       document.getElementById('signinBtn').addEventListener('click', function () {
+//         window.location.href = 'http://54.152.205.55:4000/login';
+//       });
+//     }
+
+//     // Function to handle logout action
+//     function handleLogout() {
+//       // Perform logout API call or clear session cookies here
+//       console.log('Logout clicked');
+//       window.location.href = '/logout';
+//     }
+//   });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const authContainer = document.querySelector('.auth-container');
+    let isDropdownOpen = false;
+
+    // Fetch login status from the API
+    fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+      credentials: 'include',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.role) {
+          const isAdmin = data.role === 'admin';
+          showLoggedInUI(isAdmin);
+        } else {
+          showLoggedOutUI();
+        }
+      })
+      .catch(() => {
+        showLoggedOutUI();
+      });
+
+    // Function to show the UI when the user is logged in
+    function showLoggedInUI(isAdmin) {
+      authContainer.innerHTML = `
+        <div class="profile-container">
+          <div class="profile-icon" id="profileIcon"></div>
+          <div class="hex-header-dropdown" id="dropdownMenu">
+            <ul>
+              ${isAdmin ? `<li id="adminDashboard">Dashboard</li>` : `<li id="profile">Profile</li>`}
+              <li id="logout">Logout</li>
+            </ul>
+          </div>
+        </div>
+      `;
+
+      const profileIcon = document.getElementById('profileIcon');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+
+      // Ensure the dropdown is hidden by default
+      dropdownMenu.style.display = 'none';
+
+      // Toggle the dropdown menu visibility when the profile icon is clicked
+      profileIcon.addEventListener('click', function (event) {
+        event.stopPropagation();
+        console.log('Profile icon clicked', isDropdownOpen);
+        isDropdownOpen = !isDropdownOpen;
+        dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+      });
+
+      // Close the dropdown when clicking outside
+      document.addEventListener('click', function () {
+        if (isDropdownOpen) {
+          dropdownMenu.style.display = 'none';
+          isDropdownOpen = false;
+        }
+      });
+
+      // Add event listeners for dashboard/profile and logout actions
+      if (isAdmin) {
+        document.getElementById('adminDashboard').addEventListener('click', function () {
+          window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
+        });
+      } else {
+        document.getElementById('profile').addEventListener('click', function () {
+          window.location.href = 'http://54.152.205.55:4000/profile';
+        });
+      }
+
+      document.getElementById('logout').addEventListener('click', handleLogout);
+    }
+
+    // Function to show the UI when the user is logged out
+    function showLoggedOutUI() {
+      authContainer.innerHTML = `
+        <div class="auth-buttons">
+          <button class="button signup" id="signupBtn">Sign Up</button>
+          <button class="button signin" id="signinBtn">Sign In</button>
+        </div>
+      `;
+
+      // Navigate to the signup and login pages
+      document.getElementById('signupBtn').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/signup';
+      });
+
+      document.getElementById('signinBtn').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/login';
+      });
+    }
+
+    // Function to handle logout action
+    function handleLogout() {
+        fetch('https://backend.toddlerneeds.com/api/v1/logout', {
+        method: 'POST',
+        credentials: 'include',
+        })
+        .then(response => {
+        if (response) {
+        //  console.log("Logout response:", response);
+         console.log("Logout successful");
+            // window.location.href = '/login';
+            window.location.reload();
+        } else {
+            // Handle errors from the server
+            response.json().then(data => {
+            console.error('Logout failed:', data.message || 'Unknown error');
+            alert('Logout failed. Please try again.');
+            });
+        }
+        })
+        .catch(error => {
+        // Handle network or other errors
+        console.error('Logout request failed:', error);
+        alert('Logout request failed. Please check your connection and try again.');
+        });
+    }
+
+  });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const authContainer = document.querySelector('.auth-container-min-editor');
+    let isDropdownOpen = false;
+
+    // Fetch login status from the API
+    fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+      credentials: 'include',
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.role) {
+          const isAdmin = data.role === 'admin';
+          showLoggedInUI(isAdmin);
+        } else {
+          showLoggedOutUI();
+        }
+      })
+      .catch(() => {
+        showLoggedOutUI();
+      });
+
+    // Function to show the UI when the user is logged in
+    function showLoggedInUI(isAdmin) {
+      authContainer.innerHTML = `
+        <div class="profile-container-min-editor">
+          <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
+          <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
+            <ul>
+              ${isAdmin ? `<li id="adminDashboard-min-editor">Dashboard</li>` : `<li id="profile-min-editor">Profile</li>`}
+              <li id="logout-min-editor">Logout</li>
+            </ul>
+          </div>
+        </div>
+      `;
+
+      const profileIcon = document.getElementById('profileIcon-min-editor');
+      const dropdownMenu = document.getElementById('dropdownMenu-min-editor');
+
+      // Ensure the dropdown is hidden by default
+      dropdownMenu.style.display = 'none';
+
+      // Toggle the dropdown menu visibility when the profile icon is clicked
+      profileIcon.addEventListener('click', function (event) {
+        event.stopPropagation();
+        console.log('Profile icon clicked', isDropdownOpen);
+        isDropdownOpen = !isDropdownOpen;
+        dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+      });
+
+      // Close the dropdown when clicking outside
+      document.addEventListener('click', function () {
+        if (isDropdownOpen) {
+          dropdownMenu.style.display = 'none';
+          isDropdownOpen = false;
+        }
+      });
+
+      // Add event listeners for dashboard/profile and logout actions
+      if (isAdmin) {
+        document.getElementById('adminDashboard-min-editor').addEventListener('click', function () {
+          window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
+        });
+      } else {
+        document.getElementById('profile-min-editor').addEventListener('click', function () {
+          window.location.href = 'http://54.152.205.55:4000/profile';
+        });
+      }
+
+      document.getElementById('logout-min-editor').addEventListener('click', handleLogout);
+    }
+
+    // Function to show the UI when the user is logged out
+    function showLoggedOutUI() {
+      authContainer.innerHTML = `
+        <div class="auth-buttons-min-editor">
+          <button class="button-min-editor signup-min-editor" id="signupBtn-min-editor">Sign Up</button>
+          <button class="button-min-editor signin-min-editor" id="signinBtn-min-editor">Sign In</button>
+        </div>
+      `;
+
+      // Navigate to the signup and login pages
+      document.getElementById('signupBtn-min-editor').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/signup';
+      });
+
+      document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/login';
+      });
+    }
+
+    // Function to handle logout action
+    function handleLogout() {
+        fetch('https://backend.toddlerneeds.com/api/v1/logout', {
+        method: 'POST',
+        credentials: 'include',
+        })
+        .then(response => {
+        if (response) {
+        //  console.log("Logout response:", response);
+         console.log("Logout successful");
+            // window.location.href = '/login';
+            window.location.reload();
+        } else {
+            // Handle errors from the server
+            response.json().then(data => {
+            console.error('Logout failed:', data.message || 'Unknown error');
+            alert('Logout failed. Please try again.');
+            });
+        }
+        })
+        .catch(error => {
+        // Handle network or other errors
+        console.error('Logout request failed:', error);
+        alert('Logout request failed. Please check your connection and try again.');
+        });
+    }
+
+  });
