@@ -6253,7 +6253,7 @@ function showPublicPrivateModal() {
     selector.find(".hexa-mask-shape-select-option").on("click", function (e) {
       var selected = $(this).data("value");
       isAdded = true;
-      activeMaskButton();
+      // activeMaskButton();
       if (selected == "custom") {
         selector.find("#hexa-img-radius-settings").removeClass("d-none");
       } else {
@@ -6736,16 +6736,46 @@ function showPublicPrivateModal() {
       }
     }
 
+
+    let storedActiveObject = null;
+    let storedClipPath = null;
+    let clipPathOffset = { top: 0, left: 0 };
+    let shell = null;
+
     function addClipMask(path, activeObject) {
+      console.log('this is the active path and all', path, activeObject);
       var uniqueId = "clipmask";
+      var desiredWidth = 700;
+      var desiredHeight = 700;
+
       if (activeObject) {
         activeObject.customId = uniqueId;
-        var shell = new fabric.Path(path, {
+
+        // Calculate the bounding box for the path
+        var pathObject = new fabric.Path(path);
+        var boundingBox = pathObject.getBoundingRect();
+
+        // Scale factors to normalize the path size
+        var scaleX = desiredWidth / boundingBox.width;
+        var scaleY = desiredHeight / boundingBox.height;
+        var finalScale = Math.min(scaleX, scaleY); // Maintain aspect ratio
+
+        // Create the clipPath object with the same scaling
+        var clipPath = new fabric.Path(path, {
+          absolutePositioned: true,
+          originX: "center",
+          originY: "center",
+          scaleX: finalScale,
+          scaleY: finalScale,
+          top: activeObject.top,
+          left: activeObject.left,
+        });
+
+        shell = new fabric.Path(path, {
           fill: "",
-          // stroke: 'blue',
           strokeWidth: 5,
-          scaleX: 3,
-          scaleY: 3,
+          scaleX: finalScale,
+          scaleY: finalScale,
           lockScalingX: false,
           lockScalingY: false,
           lockSkewingX: true,
@@ -6755,46 +6785,43 @@ function showPublicPrivateModal() {
           top: activeObject.top,
           left: activeObject.left,
         });
-        var clipPath = new fabric.Path(path, {
-          absolutePositioned: true,
-          originX: "center",
-          originY: "center",
-          scaleX: 3,
-          scaleY: 3,
-          top: activeObject.top,
-          left: activeObject.left,
-        });
 
-        shell.customId = uniqueId;
-
+        console.log('clippath to aand ', clipPath.top, clipPath.left);
+        clipPathOffset.top = clipPath.top - activeObject.top;
+        clipPathOffset.left = clipPath.left - activeObject.left;
         activeObject.clipPath = clipPath;
         activeObject.setCoords();
 
-        shell.on("moving", ({ e, transform, pointer }) => {
-          clipPath.setPositionByOrigin(
-            shell.getCenterPoint(),
-            "center",
-            "center"
-          );
-          activeObject.set("dirty", true);
-          shell.bringToFront();
-        });
-
-        shell.on("rotating", () => {
-          clipPath.set({ angle: shell.angle });
-          activeObject.set("dirty", true);
-          shell.bringToFront();
-        });
-
-        shell.on("scaling", () => {
-          clipPath.scale(shell.scaleX, shell.scaleY);
-          clipPath.set({ top: shell.top, left: shell.left }); // Update the position of the clipPath
-          activeObject.set("dirty", true);
-          shell.bringToFront();
-        });
-        canvas.add(shell);
+        // Store the activeObject and clipPath for later use when "done" is clicked
+        storedActiveObject = activeObject;
+        storedClipPath = clipPath;
+        canvas.add(shell)
+        // Add the image (with clip path) to the canvas and make it the active object
         canvas.setActiveObject(activeObject);
-        // isChangeble = true;
+        canvas.renderAll();
+
+        function updateClipPathPosition() {
+          clipPath.set({
+            top: shell.top + clipPathOffset.top,
+            left: shell.left + clipPathOffset.left,
+            angle: shell.angle,
+            scaleX: shell.scaleX,
+            scaleY: shell.scaleY
+          });
+          clipPath.setCoords();
+          canvas.renderAll();
+          // console.log("clippathOffset", clipPath.top, activeObject.top);
+
+        }
+
+
+
+        // Attach the event handlers to sync the clipPath with the shell
+        shell.on('moving', updateClipPathPosition);
+        shell.on('scaling', updateClipPathPosition);
+        shell.on('rotating', updateClipPathPosition);
+
+        // Show the "done" button
         document.getElementById("done-masking-img").style.display = "block";
         document.getElementById("replace-image-btn").style.display = "block";
         document.getElementById("edit-masking-button").style.display = "none";
@@ -6802,6 +6829,48 @@ function showPublicPrivateModal() {
         alert("Please select an image object on the canvas first.");
       }
     }
+
+
+    let relativeTop
+    let relativeLeft
+
+    function syncClipPathWithImage(clipPath, activeObject) {
+      clipPath.set({
+        originX: activeObject.originX,
+        originY: activeObject.originY,
+        angle: activeObject.angle,
+        top: activeObject.top + relativeTop,
+        left: activeObject.left + relativeLeft,
+
+      });
+      clipPath.setCoords();
+      canvas.renderAll();
+    }
+
+    document.getElementById("done-masking-img").addEventListener("click", function () {
+      canvas.remove(shell)
+      onlyDeleteLayerEvent(shell.id)
+
+      canvas.requestRenderAll()
+      console.log('value is ', clipPathOffset.top, clipPathOffset.left);
+
+      if (storedActiveObject && storedClipPath) {
+        relativeTop = storedClipPath.top - storedActiveObject.top;
+        relativeLeft = storedClipPath.left - storedActiveObject.left;
+
+        // Attach the event handlers to start syncing the clipPath with the image
+        storedActiveObject.on('moving', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
+        storedActiveObject.on('rotating', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
+        storedActiveObject.on('scaling', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
+
+        // Optionally, hide the "done" button after syncing starts
+        document.getElementById("done-masking-img").style.display = "none";
+        document.getElementById("replace-image-btn").style.display = "none";
+        document.getElementById("edit-masking-button").style.display = "block";
+      } else {
+        alert("No active object found for syncing. Please add a clip mask first.");
+      }
+    });
 
     function applyTemplateClipMask(activeObject, newShell) {
       let path = newShell.path;
@@ -6891,39 +6960,40 @@ function showPublicPrivateModal() {
       }
     }
 
-    function groupImageAndClipPath(image, clipPath) {
-      const clipPathOutline = new fabric.Path(clipPath.path, {
-        fill: "rgba(0,0,0,0)",
-        scaleX: clipPath.scaleX / image.scaleX,
-        scaleY: clipPath.scaleY / image.scaleY,
-        originX: clipPath.originX,
-        originY: clipPath.originY,
-        left: clipPath.left,
-        top: clipPath.top,
-        angle: clipPath.angle,
-      });
-      image.clipPath = clipPathOutline;
-      const group = new fabric.Group([image, clipPathOutline], {
-        left: image.left,
-        top: image.top,
-        originX: "center",
-        originY: "center",
-        lockScalingFlip: true,
-        hasControls: false,
-        hasBorders: false,
-      });
+    function unlinkClipPath() {
+      if (storedActiveObject && storedClipPath) {
+        // Remove event listeners for moving, rotating, and scaling
+        storedActiveObject.off('moving');
+        storedActiveObject.off('rotating');
+        storedActiveObject.off('scaling');
 
-      group.customId = "clipGroup";
+        // Remove the clipPath from the active object
+        storedActiveObject.clipPath = storedClipPath;
 
-      image.clipPath = clipPathOutline;
+        // Optionally, re-add the shell for further editing
+        canvas.add(shell);
+        shell.set({
+          top: storedClipPath.top,
+          left: storedClipPath.left,
+          angle: storedClipPath.angle,
+        });
+        shell.setCoords();
 
-      canvas.add(group);
-      group.setCoords();
-      canvas.setActiveObject(group);
-      canvas.renderAll();
-      return group;
+        canvas.setActiveObject(storedActiveObject);
+        canvas.renderAll();
+
+        // Show the "done" button again for re-applying the clip mask
+        document.getElementById("done-masking-img").style.display = "block";
+        document.getElementById("replace-image-btn").style.display = "block";
+        document.getElementById("edit-masking-button").style.display = "none";
+      } else {
+        alert("No active object found for unlinking the clip path.");
+      }
     }
 
+    document.getElementById("edit-masking-button").addEventListener("click", function () {
+      unlinkClipPath();
+    });
     function updateReplaceButtonState() {
       const activeObject = canvas.getActiveObject();
       console.log("this is active now", activeObject);
@@ -6957,260 +7027,118 @@ function showPublicPrivateModal() {
     // Initialize button state when the page loads
     updateReplaceButtonState();
 
-    function ungroupImageAndClipPath() {
-      const activeObject = canvas.getActiveObject();
-      if (activeObject && activeObject.customId === "clipGroup") {
-        document.getElementById("done-masking-img").style.display = "block";
-        document.getElementById("replace-image-btn").style.display = "block";
-        document.getElementById("edit-masking-button").style.display = "none";
-
-        const objects = activeObject.getObjects();
-        const image = objects.find((obj) => obj.type === "image");
-        const clipPathOutline = objects.find((obj) => obj.type === "path");
-
-        const groupScaleX = activeObject.scaleX;
-        const groupScaleY = activeObject.scaleY;
-        const groupLeft = activeObject.left;
-        const groupTop = activeObject.top;
-        const groupAngle = activeObject.angle;
-
-        let imageUrl = image._element.src;
-        let path = clipPathOutline.path;
-
-        console.log(
-          "clipPathoutline",
-          clipPathOutline.left,
-          clipPathOutline.top,
-          clipPathOutline.scaleX,
-          clipPathOutline.scaleY
-        );
-        console.log("image", image.left, image.top, image.scaleX, image.scaleY);
-
-        fabric.Image.fromURL(imageUrl, function (img) {
-          img.set({
-            left: groupLeft + image.left * groupScaleX,
-            top: groupTop + image.top * groupScaleY,
-            scaleX: image.scaleX * groupScaleX,
-            scaleY: image.scaleY * groupScaleY,
-            originX: image.originX,
-            originY: image.originY,
-            angle: groupAngle + image.angle,
-            customId: "clipmask",
-          });
-          img.setCoords();
-          canvas.add(img);
-
-          const shell = new fabric.Path(path, {
-            fill: "",
-            strokeWidth: 5,
-            scaleX: clipPathOutline.scaleX * groupScaleX * image.scaleX,
-            scaleY: clipPathOutline.scaleY * groupScaleY * image.scaleY,
-            lockScalingX: false,
-            lockScalingY: false,
-            lockSkewingX: true,
-            lockSkewingY: true,
-            originX: clipPathOutline.originX,
-            originY: clipPathOutline.originY,
-            top: groupTop + clipPathOutline.top * groupScaleY,
-            left: groupLeft + clipPathOutline.left * groupScaleX,
-            angle: groupAngle + clipPathOutline.angle,
-            customId: "clipmask",
-          });
-
-          const clipPath = new fabric.Path(path, {
-            absolutePositioned: true,
-            originX: "center",
-            originY: "center",
-            scaleX: shell.scaleX / groupScaleX,
-            scaleY: shell.scaleY / groupScaleY,
-            top: shell.top,
-            left: shell.left,
-            customId: "clipmask",
-          });
-
-          img.clipPath = clipPath;
-          img.setCoords();
-          canvas.renderAll();
-
-          shell.on("moving", () => {
-            clipPath.setPositionByOrigin(
-              shell.getCenterPoint(),
-              "center",
-              "center"
-            );
-            img.set("dirty", true);
-            shell.bringToFront();
-            canvas.requestRenderAll(); // Force canvas update
-          });
-
-          shell.on("rotating", () => {
-            clipPath.set({ angle: shell.angle });
-            img.set("dirty", true);
-            shell.bringToFront();
-            canvas.requestRenderAll(); // Force canvas update
-          });
-
-          shell.on("scaling", () => {
-            clipPath.scale(
-              shell.scaleX / groupScaleX,
-              shell.scaleY / groupScaleY
-            );
-            clipPath.set({ top: shell.top, left: shell.left });
-            img.set("dirty", true);
-            shell.bringToFront();
-            canvas.requestRenderAll(); // Force canvas update
-          });
-
-          canvas.add(shell);
-          canvas.setActiveObject(img);
-        });
-
-        onlyDeleteLayerEvent(activeObject.id);
-        canvas.remove(activeObject);
-        canvas.renderAll();
-      }
-    }
-
-    selector.find("#edit-masking-button").on("click", function () {
-      ungroupImageAndClipPath();
-    });
-
-    document
-      .getElementById("done-masking-img")
-      .addEventListener("click", function () {
-        const activeObject = canvas.getActiveObject();
-        console.log("active obj is", activeObject);
-
-        if (activeObject) {
-          this.style.display = "none";
-          document.getElementById("edit-masking-button").style.display =
-            "block";
-          document.getElementById("replace-image-btn").style.display = "none";
-
-          if (activeObject.type === "image" && activeObject.clipPath) {
-            const clipPath = activeObject.clipPath;
-            const image = new fabric.Image(activeObject._element, {
-              left: activeObject.left,
-              top: activeObject.top,
-              scaleX: activeObject.scaleX,
-              scaleY: activeObject.scaleY,
-              originX: activeObject.originX,
-              originY: activeObject.originY,
-            });
-
-            // Remove the old active object
-            canvas.remove(activeObject);
-
-            canvas.remove(image);
-            onlyDeleteLayerEvent(activeObject.id);
-            onlyDeleteLayerEvent(image.id);
-
-            // Group image and clip path
-            groupImageAndClipPath(image, clipPath);
-          } else if (
-            activeObject.type === "path" &&
-            activeObject.customId === "clipmask"
-          ) {
-            const image = canvas
-              .getObjects("image")
-              .find((img) => img.customId === activeObject.customId);
-            if (image) {
-              canvas.remove(image);
-              onlyDeleteLayerEvent(image.id);
-              groupImageAndClipPath(image, image.clipPath);
-            } else {
-              alert("Associated image not found for the selected clip path.");
-            }
-          } else {
-            alert(
-              "Please select an image object or a clip path on the canvas first."
-            );
-            console.log(canvas.getActiveObject());
-          }
-        } else {
-          alert("No object selected on the canvas.");
-        }
-      });
-
-    document
-      .getElementById("replace-image-btn")
-      .addEventListener("click", function () {
-        document.getElementById("image-input").click();
-      });
-
     document.getElementById("image-input").onchange = function () {
       var activeObject = canvas.getActiveObject();
       if (activeObject) {
         var file = this.files[0];
-        console.log("this is the uploaded file", file);
+        if (!file) {
+          alert("No file selected.");
+          return;
+        }
+        console.log("Selected file:", file);
+
         var reader = new FileReader();
+
         reader.onload = function (event) {
           var imageData = event.target.result;
+
           fabric.Image.fromURL(imageData, function (img) {
+            // Get canvas dimensions
+            var canvasWidth = canvas.getWidth();
+            var canvasHeight = canvas.getHeight();
+
+            // Calculate scale to fit the canvas while maintaining aspect ratio
+            var scaleX = canvasWidth / img.width;
+            var scaleY = canvasHeight / img.height;
+            var scale = Math.min(scaleX, scaleY);
+
+            // Apply scaling and set properties from the old image to the new one
             img.set({
               left: activeObject.left,
               top: activeObject.top,
-              scaleX: activeObject.scaleX,
-              scaleY: activeObject.scaleY,
+              // scaleX: scale * activeObject.scaleX,
+              // scaleY: scale * activeObject.scaleY,
+              angle: activeObject.angle,
               originX: activeObject.originX,
-              originY: activeObject.originX,
-              clipPath: activeObject.clipPath,
+              originY: activeObject.originY,
+              clipPath: storedClipPath,
               objectCaching: false,
               customId: "clipmask",
             });
+            storedActiveObject = img;
+            storedClipPath = img.clipPath;
+         
             canvas.remove(activeObject);
-            onlyDeleteLayerEvent(activeObject.id);
+         
             canvas.add(img);
-            setLayerSort(img.id, 3);
 
-            // canvas.setActiveObject(img);
+
+            canvas.renderAll(); // Re-render the canvas to reflect changes
+          }, function (error) {
+            console.error("Error loading image:", error);
+            alert("Failed to load the image. Please try again.");
           });
         };
+
+        reader.onerror = function (error) {
+          console.error("Error reading file:", error);
+          alert("Failed to read the file. Please try again.");
+        };
+
         reader.readAsDataURL(file);
       } else {
         alert("Please select an image object on the canvas first.");
       }
     };
 
-    var maskButton = selector.find(
-      "#hexa-maskbutton, #hexa-maskbutton-outsied"
-    );
-    maskButton.on("click", function () {
-      isAdded = false;
-      // crop();
-    });
-    function activeMaskButton() {
-      maskButton.prop("disabled", !isAdded);
-    }
-    canvas.on("object:modified", activeMaskButton);
-    canvas.on("selection:created", activeMaskButton);
-    canvas.on("selection:cleared", activeMaskButton);
+    document.getElementById("replace-image-btn").onclick = function () {
+      document.getElementById("image-input").click();
+    };
+
+
     const unmaskButton = selector.find("#hexa-unmask");
     unmaskButton.on("click", function () {
       const activeImage = canvas.getActiveObject();
-      if (activeImage) {
-        if (transferedImageArr) {
-          for (let i = 0; i < transferedImageArr.length; i++) {
-            const imageData = transferedImageArr[i].imageData;
-            const revImage = transferedImageArr[i].activeImageData;
-            const layerId = transferedImageArr[i].layId;
-            if (imageData.id == activeImage.id) {
-              transferedImageArr.splice(i, 1);
-              canvas.add(revImage);
-              canvas.remove(imageData);
-              onlyDeleteLayerEvent(imageData.id);
-              canvas.renderAll();
-            }
-          }
-        }
-      }
+  
+      unmaskImage();
       activeUnmaskButton();
     });
 
+    
+    function unmaskImage() {
+      if (storedActiveObject && storedClipPath) {
+        // Remove event listeners for moving, rotating, and scaling
+        storedActiveObject.off('moving');
+        storedActiveObject.off('rotating');
+        storedActiveObject.off('scaling');
+
+        // Remove the clipPath from the active object
+        storedActiveObject.clipPath = null;
+
+        // Optionally, re-add the shell for further editing
+        // canvas.add(shell);
+        // canvas.remove(storedClipPath)
+        // canvas.remove(shell)
+
+        canvas.requestRenderAll()
+
+        // Show the "done" button again for re-applying the clip mask
+        document.getElementById("done-masking-img").style.display = "none";
+        document.getElementById("replace-image-btn").style.display = "none";
+        document.getElementById("edit-masking-button").style.display = "none";
+      } else {
+        alert("No active object found for unlinking the clip path.");
+      }
+    }
+
     function activeUnmaskButton() {
-      var hasData = transferedImageArr && transferedImageArr.length > 0;
-      if (hasData) {
-        unmaskButton.prop("disabled", false);
+      var activeObject = canvas.getActiveObject();
+      if (activeObject) {
+        if (activeObject.type === "group" || activeObject.clipPath) {
+          unmaskButton.prop("disabled", false);
+        } else {
+          unmaskButton.prop("disabled", true);
+        }
       } else {
         unmaskButton.prop("disabled", true);
       }
@@ -7233,6 +7161,13 @@ function showPublicPrivateModal() {
     canvas.on("object:selected", function () {
       activeUnmaskButton();
     });
+
+    var maskButton = selector.find(
+      "#hexa-maskbutton, #hexa-maskbutton-outsied"
+    );
+    maskButton.css("display", "none");
+
+  
 
     // Your addMask function (similar to the one you provided earlier)
     function addMask(canvas, points) {
