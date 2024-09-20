@@ -1548,35 +1548,7 @@
         height: originalHeight,
       };
 
-      var filteredObjects = [];
-      var clipmaskObjects = [];
-
-      json.objects.forEach((obj) => {
-        if (obj.customId === "clipmask") {
-          clipmaskObjects.push(obj);
-          // console.log('this is the filtered object', obj);
-          
-          document.getElementById("done-masking-img").style.display = "block";
-        } else {
-          filteredObjects.push(obj);
-        }
-      });
-    
-      json.objects = filteredObjects;
-      if (clipmaskObjects.length > 0) {
-        console.log("clipobjects", clipmaskObjects);
-      
-        // Convert the object to a fabric object
-        fabric.util.enlivenObjects(clipmaskObjects, function (enlivenedObjects) {
-          // Add the first enlivened clipmask object to the canvas
-          if (enlivenedObjects.length > 0) {
-            console.log('enlivenedObjects',enlivenedObjects);
-            // canvas.add(enlivenedObjects[0]);
-            // canvas.requestRenderAll()
-           applyTemplateClipMask(enlivenedObjects[0]) 
-          }
-        });
-      }
+ 
 
       for (var i = 0; i < json.objects.length; i++) {
         if (json.objects[i].objectType == "textbox") {
@@ -1602,16 +1574,22 @@
           img = selector.find("#hexa-canvas-img")[0];
           canvas.requestRenderAll();
           selector.find("#hexa-canvas-loader").hide();
-          // console.log('clipmask', clipmaskData);
-          // if (clipmaskObjects != null) {
-          //   applyTemplateClipMask(clipmaskObjects[0]);
-          // }
+          objects.forEach((obj) => {
+            if (obj.customId === "clipmask") {
+              console.log("Found clipmask object. Removing...");
+              canvas.remove(obj)
+              canvas.requestRenderAll()
+              document.getElementById("done-masking-img").style.display = "block";
+              applyTemplateClipMask(obj)
+            } 
+          });
         },
         function () { },
         {
           crossOrigin: "anonymous",
         }
       );
+    
       setFileName(new Date().getTime(), "");
       setDimentions(dimentions);
       adjustZoom();
@@ -1632,6 +1610,7 @@
           selector.find("#hexa-overlay-preview").attr("src", "");
         }
       }, 100);
+      
     }
 
     /* Load Template Fonts */
@@ -1734,6 +1713,7 @@
         selector.find("#hexa-layers li").remove();
         checkLayers();
         $.getJSON($(this).data("json"), function (json) {
+          console.log('this is the editedCanvasobject 2',json);
           loadJSON(json);
           setTimeout(function () {
             addToHistory(
@@ -2706,7 +2686,7 @@
         });
 
         // Load the updated JSON into your editor or canvas
-        loadJSON(editedCanvasObject);
+        loadJSON(originalCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
       }
@@ -2750,7 +2730,8 @@
         });
 
         // Load the updated JSON into your editor or canvas
-        loadJSON(editedCanvasObject);
+        console.log('this is the editedCanvasobject 1',originalCanvasObject);
+        loadJSON(originalCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
       }
@@ -6877,31 +6858,106 @@
       }
     });
 
-    function applyTemplateClipMask(clipmaskObject) {
-      console.log('got the image',clipmaskObject);
-      let mainClippath = clipmaskObject.clipPath;
-      
-      // Ensure mainClippath exists and has a valid path
-      if (!mainClippath || !mainClippath.path) {
-        console.log('No valid clipPath found in the clipmaskObject.');
-        return;
-      }
+    // function applyTemplateClipMask(clipmaskObject) {
+    //   console.log('Received image with clipPath:', clipmaskObject);
+    // canvas.remove(clipmaskObject)
+    // canvas.requestRenderAll()
+    //   let mainClippath = clipmaskObject.clipPath;
     
-      let path = mainClippath.path; 
-      // let shell = null;
-      
-      // Define the offset values between shell and clipPath for proper syncing
+    //   // Ensure mainClippath exists and has a valid path
+    //   if (!mainClippath || !mainClippath.path) {
+    //     console.log('No valid clipPath found in the clipmaskObject.');
+    //     return;
+    //   }
+    
+    //   let path = mainClippath.path;
+    
+    //   // Define the offset values between shell and clipPath for proper syncing
+    //   let clipPathOffset = {
+    //     top: clipmaskObject.top - mainClippath.top,
+    //     left: clipmaskObject.left - mainClippath.left,
+    //   };
+    
+    //   // if (clipmaskObject) {
+    //   //   console.log('Clip mask object:', clipmaskObject);
+    
+    //   //   // Create the shell using the mainClippath path
+    //   //   shell = new fabric.Path(path, {
+    //   //     fill: "", // Transparent shell
+    //   //     stroke: "black", 
+    //   //     strokeWidth: 2, 
+    //   //     scaleX: mainClippath.scaleX,
+    //   //     scaleY: mainClippath.scaleY,
+    //   //     lockScalingX: false,
+    //   //     lockScalingY: false,
+    //   //     lockSkewingX: true,
+    //   //     lockSkewingY: true,
+    //   //     originX: mainClippath.originX,
+    //   //     originY: mainClippath.originY,
+    //   //     top: mainClippath.top,
+    //   //     left: mainClippath.left,
+    //   //     selectable: true, // Make it interactive
+    //   //   });
+    
+    //   //   // Store the image and its clip path globally
+    //   //   storedActiveObject = clipmaskObject; // Storing the image object
+    //   //   storedClipPath = mainClippath; // Storing the clip path object
+    
+    //   //   // Add shell to the canvas (image is already added to the canvas)
+    //   //   canvas.add(shell);
+    //   //   canvas.requestRenderAll();
+    
+    //   //   // Function to update the clip path position, scale, and angle as the shell moves
+    //   //   function updateClipPathPosition() {
+    //   //     // Update the clipPath's properties based on the shell's new position
+    //   //     mainClippath.set({
+    //   //       top: shell.top,
+    //   //       left: shell.left,
+    //   //       angle: shell.angle,
+    //   //       scaleX: shell.scaleX,
+    //   //       scaleY: shell.scaleY,
+    //   //     });
+    
+    //   //     // Reassign the updated clipPath to the image
+    //   //     storedActiveObject.clipPath = mainClippath;
+    
+    //   //     // Ensure canvas re-renders with changes
+    //   //     canvas.requestRenderAll();
+    //   //   }
+    
+    //   //   // Sync clipPath updates when the shell is moved, scaled, or rotated
+    //   //   shell.on('moving', updateClipPathPosition);
+    //   //   shell.on('scaling', updateClipPathPosition);
+    //   //   shell.on('rotating', updateClipPathPosition);
+    //   // } else {
+    //   //   console.log('There is no object.');
+    //   // }
+    // }
+    function applyTemplateClipMask(clipmaskObject) {
+    //   console.log('Attempting to remove the object:', clipObject);
+     let mainClippath = clipmaskObject.clipPath;
+    
+      // Ensure mainClippath exists and has a valid path
+     if (!mainClippath || !mainClippath.path) {
+      console.log('No valid clipPath found in the clipmaskObject.');
+       return;
+     }
+  let path = mainClippath.path;
+    
+     // Define the offset values between shell and clipPath for proper syncing
       let clipPathOffset = {
         top: clipmaskObject.top - mainClippath.top,
         left: clipmaskObject.left - mainClippath.left,
       };
     
       if (clipmaskObject) {
-        console.log('clip', clipmaskObject);
-        
+        console.log('Clip mask object:', clipmaskObject);
+    
         // Create the shell using the mainClippath path
         shell = new fabric.Path(path, {
-          fill: "",
+          fill: "", // Transparent shell
+          stroke: "black", 
+          strokeWidth: 2, 
           scaleX: mainClippath.scaleX,
           scaleY: mainClippath.scaleY,
           lockScalingX: false,
@@ -6910,39 +6966,50 @@
           lockSkewingY: true,
           originX: mainClippath.originX,
           originY: mainClippath.originY,
-          top: mainClippath.top,    
+          top: mainClippath.top,
           left: mainClippath.left,
+          selectable: true, // Make it interactive
         });
-        storedActiveObject = clipmaskObject;
-        storedClipPath = mainClippath;
-        // Add clipmaskObject and shell to the canvas
-        canvas.add(clipmaskObject);
-
+    
+        // Store the image and its clip path globally
+        storedActiveObject = clipmaskObject; // Storing the image object
+        storedClipPath = mainClippath; // Storing the clip path object
+    
+        // Add shell to the canvas (image is already added to the canvas)
+        canvas.add(clipmaskObject)
         canvas.add(shell);
         canvas.requestRenderAll();
     
-        // Function to update the clip path position as the shell is moved/scaled/rotated
+        // Function to update the clip path position, scale, and angle as the shell moves
         function updateClipPathPosition() {
+          // Update the clipPath's properties based on the shell's new position
           mainClippath.set({
-            top: shell.top ,
-            left: shell.left ,
+            top: shell.top,
+            left: shell.left,
             angle: shell.angle,
             scaleX: shell.scaleX,
             scaleY: shell.scaleY,
           });
     
-          // Update canvas to reflect changes
+          // Reassign the updated clipPath to the image
+          storedActiveObject.clipPath = mainClippath;
+    
+          // Ensure canvas re-renders with changes
           canvas.requestRenderAll();
         }
     
-        // Attach event handlers to sync the clipPath with the shell
+        // Sync clipPath updates when the shell is moved, scaled, or rotated
         shell.on('moving', updateClipPathPosition);
         shell.on('scaling', updateClipPathPosition);
         shell.on('rotating', updateClipPathPosition);
       } else {
         console.log('There is no object.');
       }
+    
     }
+    
+    
+    
     
 
     function unlinkClipPath() {
