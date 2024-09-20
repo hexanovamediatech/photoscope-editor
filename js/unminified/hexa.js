@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () {},
-        saveTemplate: function () {},
-        saveImage: function () {},
+        customFunctions: function () { },
+        saveTemplate: function () { },
+        saveImage: function () { },
       },
       options
     );
@@ -181,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-                url +
-                '" data-loader="no" title="' +
-                item.icons[ii].name +
-                '">' +
-                '<span class="material-icons">' +
-                item.icons[ii].ligature +
-                "</div>"
+              url +
+              '" data-loader="no" title="' +
+              item.icons[ii].name +
+              '">' +
+              '<span class="material-icons">' +
+              item.icons[ii].ligature +
+              "</div>"
             );
         }
       }
@@ -1050,50 +1050,50 @@
 
     /* Modal Open */
     selector.find(".hexa-modal-open").on("click", function (e) {
-        e.preventDefault();
+      e.preventDefault();
 
-        var clickedElement = $(this); // Store reference to the clicked element
+      var clickedElement = $(this); // Store reference to the clicked element
 
-        // First, check if the user is logged in and email is verified
-        $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/protected-route",
-          type: "GET",
-          xhrFields: {
-            withCredentials: true, // Include credentials for backend token validation
-          },
-          error: function (xhr, status, error) {
-            // If the API call fails, it means the user is not logged in
+      // First, check if the user is logged in and email is verified
+      $.ajax({
+        url: "https://backend.toddlerneeds.com/api/v1/protected-route",
+        type: "GET",
+        xhrFields: {
+          withCredentials: true, // Include credentials for backend token validation
+        },
+        error: function (xhr, status, error) {
+          // If the API call fails, it means the user is not logged in
+          toastr.error("Please log in to proceed.", "Login Required");
+          console.log("User is not logged in.");
+          return;
+        },
+        success: function (response) {
+          // If the user is not logged in
+          if (!response.role) {
             toastr.error("Please log in to proceed.", "Login Required");
             console.log("User is not logged in.");
             return;
-          },
-          success: function (response) {
-            // If the user is not logged in
-            if (!response.role) {
-              toastr.error("Please log in to proceed.", "Login Required");
-              console.log("User is not logged in.");
-              return;
-            }
+          }
 
-            // If the user's email is not verified
-            if (!response.isVerified) {
-              toastr.error(
-                "Please verify your email to proceed.",
-                "Email Verification Required"
-              );
-              console.log("Email is not verified.");
-              return;
-            }
+          // If the user's email is not verified
+          if (!response.isVerified) {
+            toastr.error(
+              "Please verify your email to proceed.",
+              "Email Verification Required"
+            );
+            console.log("Email is not verified.");
+            return;
+          }
 
-            // If the user is logged in and email is verified, proceed to open the modal
-            console.log("User is logged in and email is verified.");
+          // If the user is logged in and email is verified, proceed to open the modal
+          console.log("User is logged in and email is verified.");
 
-            var target = clickedElement.data("target"); // Use the stored clicked element reference
-            selector.find(".hexa-modal").hide(); // Hide any open modals
-            selector.find(target).show(); // Show the target modal
-          },
-        });
+          var target = clickedElement.data("target"); // Use the stored clicked element reference
+          selector.find(".hexa-modal").hide(); // Hide any open modals
+          selector.find(target).show(); // Show the target modal
+        },
       });
+    });
 
 
     /* Modal Close */
@@ -1217,141 +1217,141 @@
         selector.find("#hexa-templates-menu").prop("disabled", true);
       }
     });
-// Show Public/Private modal before saving template
-function showPublicPrivateModal() {
-    return new Promise((resolve, reject) => {
-      // Show the modal
-      $("#templates-public-private-modal").show();
+    // Show Public/Private modal before saving template
+    function showPublicPrivateModal() {
+      return new Promise((resolve, reject) => {
+        // Show the modal
+        $("#templates-public-private-modal").show();
 
-      // Handle public button click
-      $("#saveAsPublic").on("click", function () {
-        resolve(true);  // Return 'true' for public
-        $("#templates-public-private-modal").hide(); // Hide the modal after selection
+        // Handle public button click
+        $("#saveAsPublic").on("click", function () {
+          resolve(true);  // Return 'true' for public
+          $("#templates-public-private-modal").hide(); // Hide the modal after selection
+        });
+
+        // Handle private button click
+        $("#saveAsPrivate").on("click", function () {
+          resolve(false); // Return 'false' for private
+          $("#templates-public-private-modal").hide(); // Hide the modal after selection
+        });
       });
+    }
 
-      // Handle private button click
-      $("#saveAsPrivate").on("click", function () {
-        resolve(false); // Return 'false' for private
-        $("#templates-public-private-modal").hide(); // Hide the modal after selection
-      });
-    });
-  }
+    selector.find("#hexa-json-save").on("click", function () {
+      // Show public/private modal before proceeding
+      showPublicPrivateModal().then((isPublic) => {
+        // Proceed with saving the template based on user's choice
 
-  selector.find("#hexa-json-save").on("click", function () {
-    // Show public/private modal before proceeding
-    showPublicPrivateModal().then((isPublic) => {
-      // Proceed with saving the template based on user's choice
+        // Convert the canvas to a JSON object, including specific properties
+        var json = canvas.toJSON([
+          "objectType",
+          "gradientFill",
+          "roundedCorners",
+          "mode",
+          "selectable",
+          "lockMovementX",
+          "lockMovementY",
+          "lockRotation",
+          "crossOrigin",
+          "layerName",
+          "customId",
+        ]);
 
-      // Convert the canvas to a JSON object, including specific properties
-      var json = canvas.toJSON([
-        "objectType",
-        "gradientFill",
-        "roundedCorners",
-        "mode",
-        "selectable",
-        "lockMovementX",
-        "lockMovementY",
-        "lockRotation",
-        "crossOrigin",
-        "layerName",
-        "customId",
-      ]);
+        var objects = canvas.getObjects();
+        var filteredObjects = objects.filter(function (obj) {
+          return obj.customId !== "layoutImage"; // Filter out layoutImage
+        });
 
-      var objects = canvas.getObjects();
-      var filteredObjects = objects.filter(function (obj) {
-        return obj.customId !== "layoutImage"; // Filter out layoutImage
-      });
+        // Temporarily hide objects that are not filtered
+        canvas.getObjects().forEach(function (obj) {
+          if (!filteredObjects.includes(obj)) {
+            obj.visible = false;
+          }
+        });
 
-      // Temporarily hide objects that are not filtered
-      canvas.getObjects().forEach(function (obj) {
-        if (!filteredObjects.includes(obj)) {
-          obj.visible = false;
-        }
-      });
+        // Generate image URL with only visible (filtered) objects
+        var canvasImageUrl = canvas.toDataURL({
+          format: "png",
+          multiplier: 2,
+        });
 
-      // Generate image URL with only visible (filtered) objects
-      var canvasImageUrl = canvas.toDataURL({
-        format: "png",
-        multiplier: 2,
-      });
+        // Restore visibility of all objects
+        canvas.getObjects().forEach(function (obj) {
+          obj.visible = true;
+        });
 
-      // Restore visibility of all objects
-      canvas.getObjects().forEach(function (obj) {
-        obj.visible = true;
-      });
+        convertToDataURL(json.backgroundImage.src, function (dataUrl) {
+          json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
 
-      convertToDataURL(json.backgroundImage.src, function (dataUrl) {
-        json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
+          var template = JSON.stringify(json);
 
-        var template = JSON.stringify(json);
+          var blob = new Blob([template], { type: "application/json" });
 
-        var blob = new Blob([template], { type: "application/json" });
+          var timestamp = new Date().getTime();
+          var uniqueFileName = "template_" + timestamp + ".json";
+          var formData = new FormData();
+          formData.append("files", blob, uniqueFileName);
 
-        var timestamp = new Date().getTime();
-        var uniqueFileName = "template_" + timestamp + ".json";
-        var formData = new FormData();
-        formData.append("files", blob, uniqueFileName);
+          var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
+          var imageFileName = "template_image_" + timestamp + ".png";
+          formData.append("files", imageBlob, imageFileName);
 
-        var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
-        var imageFileName = "template_image_" + timestamp + ".png";
-        formData.append("files", imageBlob, imageFileName);
-
-        $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
-          type: "POST",
-          data: formData,
-          processData: false,
-          contentType: false,
-          success: function (response) {
-            var imageUrl = "";
-            var jsonUrl = "";
-            response.urls.forEach(function (url) {
-              if (url.endsWith(".json")) {
-                jsonUrl = url;
-              } else if (
-                url.endsWith(".png") ||
-                url.endsWith(".jpeg") ||
-                url.endsWith(".jpg")
-              ) {
-                imageUrl = url;
-              }
-            });
-            const urlParams = new URLSearchParams(window.location.search);
-            const modelName = urlParams.get("name");
-
-            var key = Math.random().toString(36).substr(2, 9);
-            var name = selector.find("#hexa-json-save-name").val();
-
-            var data = {
-              key: key,
-              src: jsonUrl,
-              imageUrl: imageUrl,
-              name: name,
-              type: modelName,
-              isPublic: isPublic, // Add public/private selection to data
-            };
-
-            // Upload the data object to the new API
-            uploadData(data)
-              .then(() => {
-                // Display a success message using toastr after successful upload
-                toastr.success("Data uploaded successfully!", "Success");
-                // Close the modal after saving
-                // selector.find(".hexa-modal").hide();
-              })
-              .catch((error) => {
-                // Display an error message using toastr if uploading fails
-                toastr.error(error.message, "Error");
+          $.ajax({
+            url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              var imageUrl = "";
+              var jsonUrl = "";
+              response.urls.forEach(function (url) {
+                if (url.endsWith(".json")) {
+                  jsonUrl = url;
+                } else if (
+                  url.endsWith(".png") ||
+                  url.endsWith(".jpeg") ||
+                  url.endsWith(".jpg")
+                ) {
+                  imageUrl = url;
+                }
               });
-          },
-          error: function (xhr, status, error) {
-            // Display an error message using toastr if the API call fails
-            toastr.error(error, "Error");
-          },
+              const urlParams = new URLSearchParams(window.location.search);
+              const modelName = urlParams.get("name");
+
+              var key = Math.random().toString(36).substr(2, 9);
+              var name = selector.find("#hexa-json-save-name").val();
+
+              var data = {
+                key: key,
+                src: jsonUrl,
+                imageUrl: imageUrl,
+                name: name,
+                type: modelName,
+                isPublic: isPublic, // Add public/private selection to data
+              };
+
+              // Upload the data object to the new API
+              uploadData(data)
+                .then(() => {
+                  // Display a success message using toastr after successful upload
+                  toastr.success("Data uploaded successfully!", "Success");
+                  // Close the modal after saving
+                  // selector.find(".hexa-modal").hide();
+                })
+                .catch((error) => {
+                  // Display an error message using toastr if uploading fails
+                  toastr.error(error.message, "Error");
+                });
+            },
+            error: function (xhr, status, error) {
+              // Display an error message using toastr if the API call fails
+              toastr.error(error, "Error");
+            },
+          });
         });
       });
     });
-  });
 
 
     function uploadData(data) {
@@ -1554,25 +1554,29 @@ function showPublicPrivateModal() {
       json.objects.forEach((obj) => {
         if (obj.customId === "clipmask") {
           clipmaskObjects.push(obj);
+          // console.log('this is the filtered object', obj);
+          
           document.getElementById("done-masking-img").style.display = "block";
         } else {
           filteredObjects.push(obj);
         }
       });
-      var clipmaskData = {
-        image: null,
-        path: null,
-      };
-
-      clipmaskObjects.forEach((obj) => {
-        if (obj.type === "image") {
-          clipmaskData.image = obj;
-        } else if (obj.type === "path") {
-          clipmaskData.path = obj;
-        }
-      });
-
+    
       json.objects = filteredObjects;
+      if (clipmaskObjects.length > 0) {
+        console.log("clipobjects", clipmaskObjects);
+      
+        // Convert the object to a fabric object
+        fabric.util.enlivenObjects(clipmaskObjects, function (enlivenedObjects) {
+          // Add the first enlivened clipmask object to the canvas
+          if (enlivenedObjects.length > 0) {
+            console.log('enlivenedObjects',enlivenedObjects);
+            // canvas.add(enlivenedObjects[0]);
+            // canvas.requestRenderAll()
+           applyTemplateClipMask(enlivenedObjects[0]) 
+          }
+        });
+      }
 
       for (var i = 0; i < json.objects.length; i++) {
         if (json.objects[i].objectType == "textbox") {
@@ -1598,11 +1602,12 @@ function showPublicPrivateModal() {
           img = selector.find("#hexa-canvas-img")[0];
           canvas.requestRenderAll();
           selector.find("#hexa-canvas-loader").hide();
-          if (clipmaskData.image != null && clipmaskData.path != null) {
-            applyTemplateClipMask(clipmaskData.image, clipmaskData.path);
-          }
+          // console.log('clipmask', clipmaskData);
+          // if (clipmaskObjects != null) {
+          //   applyTemplateClipMask(clipmaskObjects[0]);
+          // }
         },
-        function () {},
+        function () { },
         {
           crossOrigin: "anonymous",
         }
@@ -2335,7 +2340,7 @@ function showPublicPrivateModal() {
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -2541,12 +2546,12 @@ function showPublicPrivateModal() {
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-          action +
-          '<span class="time">' +
-          time +
-          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-          JSON.stringify(json) +
-          "</script></div></li>"
+        action +
+        '<span class="time">' +
+        time +
+        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+        JSON.stringify(json) +
+        "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -5415,8 +5420,8 @@ function showPublicPrivateModal() {
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                            item.find(".select2-item").html() +
-                            "&text=abc",
+                          item.find(".select2-item").html() +
+                          "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5601,18 +5606,18 @@ function showPublicPrivateModal() {
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-            $(originalOption).data("icon") +
-            "</span>" +
-            icon.text +
-            "</div>"
+          $(originalOption).data("icon") +
+          "</span>" +
+          icon.text +
+          "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-            $(originalOption).data("font") +
-            '">' +
-            icon.text +
-            "</div>"
+          $(originalOption).data("font") +
+          '">' +
+          icon.text +
+          "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -6872,93 +6877,73 @@ function showPublicPrivateModal() {
       }
     });
 
-    function applyTemplateClipMask(activeObject, newShell) {
-      let path = newShell.path;
+    function applyTemplateClipMask(clipmaskObject) {
+      console.log('got the image',clipmaskObject);
+      let mainClippath = clipmaskObject.clipPath;
+      
+      // Ensure mainClippath exists and has a valid path
+      if (!mainClippath || !mainClippath.path) {
+        console.log('No valid clipPath found in the clipmaskObject.');
+        return;
+      }
+    
+      let path = mainClippath.path; 
+      // let shell = null;
+      
+      // Define the offset values between shell and clipPath for proper syncing
+      let clipPathOffset = {
+        top: clipmaskObject.top - mainClippath.top,
+        left: clipmaskObject.left - mainClippath.left,
+      };
+    
+      if (clipmaskObject) {
+        console.log('clip', clipmaskObject);
+        
+        // Create the shell using the mainClippath path
+        shell = new fabric.Path(path, {
+          fill: "",
+          scaleX: mainClippath.scaleX,
+          scaleY: mainClippath.scaleY,
+          lockScalingX: false,
+          lockScalingY: false,
+          lockSkewingX: true,
+          lockSkewingY: true,
+          originX: mainClippath.originX,
+          originY: mainClippath.originY,
+          top: mainClippath.top,    
+          left: mainClippath.left,
+        });
+        storedActiveObject = clipmaskObject;
+        storedClipPath = mainClippath;
+        // Add clipmaskObject and shell to the canvas
+        canvas.add(clipmaskObject);
 
-      if (activeObject && newShell) {
-        const url = activeObject.src;
-
-        fabric.Image.fromURL(url, function (img) {
-          img.set({
-            left: activeObject.left,
-            top: activeObject.top,
-            scaleX: activeObject.scaleX,
-            scaleY: activeObject.scaleY,
-            originX: activeObject.originX,
-            originY: activeObject.originY,
-          });
-
-          // Add image to canvas
-          canvas.add(img);
-
-          // Create and configure shell (path)
-          const shell = new fabric.Path(path, {
-            fill: "",
-            // stroke: 'blue',
-            strokeWidth: 5,
-            scaleX: newShell.scaleX,
-            scaleY: newShell.scaleY,
-            lockScalingX: false,
-            lockScalingY: false,
-            lockSkewingX: true,
-            lockSkewingY: true,
-            originX: "center",
-            originY: "center",
-            top: activeObject.top,
-            left: activeObject.left,
-          });
-
-          // Create and configure clipPath (path)
-          const clipPath = new fabric.Path(path, {
-            absolutePositioned: true,
-            originX: "center",
-            originY: "center",
+        canvas.add(shell);
+        canvas.requestRenderAll();
+    
+        // Function to update the clip path position as the shell is moved/scaled/rotated
+        function updateClipPathPosition() {
+          mainClippath.set({
+            top: shell.top ,
+            left: shell.left ,
+            angle: shell.angle,
             scaleX: shell.scaleX,
             scaleY: shell.scaleY,
-            top: activeObject.top,
-            left: activeObject.left,
           });
-
-          img.clipPath = clipPath;
-          img.setCoords();
-          canvas.renderAll();
-
-          // Event handlers for shell (path)
-          shell.on("moving", () => {
-            clipPath.setPositionByOrigin(
-              shell.getCenterPoint(),
-              "center",
-              "center"
-            );
-            img.set("dirty", true);
-            shell.bringToFront();
-            canvas.requestRenderAll(); // Force canvas update
-          });
-
-          shell.on("rotating", () => {
-            clipPath.set({ angle: shell.angle });
-            img.set("dirty", true);
-            shell.bringToFront();
-            canvas.requestRenderAll(); // Force canvas update
-          });
-
-          shell.on("scaling", () => {
-            clipPath.scale(shell.scaleX, shell.scaleY);
-            clipPath.set({ top: shell.top, left: shell.left });
-            img.set("dirty", true);
-            shell.bringToFront();
-            canvas.requestRenderAll(); // Force canvas update
-          });
-
-          // Add shell to canvas
-          canvas.add(shell);
-          canvas.setActiveObject(img);
-          isChangeble = true;
-        });
+    
+          // Update canvas to reflect changes
+          canvas.requestRenderAll();
+        }
+    
+        // Attach event handlers to sync the clipPath with the shell
+        shell.on('moving', updateClipPathPosition);
+        shell.on('scaling', updateClipPathPosition);
+        shell.on('rotating', updateClipPathPosition);
       } else {
-        alert("Both activeObject and shell must be provided.");
+        console.log('There is no object.');
       }
     }
+    
 
     function unlinkClipPath() {
       if (storedActiveObject && storedClipPath) {
@@ -7067,9 +7052,9 @@ function showPublicPrivateModal() {
             });
             storedActiveObject = img;
             storedClipPath = img.clipPath;
-         
+
             canvas.remove(activeObject);
-         
+
             canvas.add(img);
 
 
@@ -7099,12 +7084,12 @@ function showPublicPrivateModal() {
     const unmaskButton = selector.find("#hexa-unmask");
     unmaskButton.on("click", function () {
       const activeImage = canvas.getActiveObject();
-  
+
       unmaskImage();
       activeUnmaskButton();
     });
 
-    
+
     function unmaskImage() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
@@ -7167,7 +7152,7 @@ function showPublicPrivateModal() {
     );
     maskButton.css("display", "none");
 
-  
+
 
     // Your addMask function (similar to the one you provided earlier)
     function addMask(canvas, points) {
@@ -7947,7 +7932,7 @@ function showPublicPrivateModal() {
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8155,7 +8140,7 @@ function showPublicPrivateModal() {
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8306,7 +8291,7 @@ function showPublicPrivateModal() {
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8704,8 +8689,8 @@ function showPublicPrivateModal() {
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-              selector.find("#brush-pattern-width").val()
-            ),
+            selector.find("#brush-pattern-width").val()
+          ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -9079,29 +9064,29 @@ function showPublicPrivateModal() {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    const authContainer = document.querySelector('.auth-container');
-    let isDropdownOpen = false;
+  const authContainer = document.querySelector('.auth-container');
+  let isDropdownOpen = false;
 
-    // Fetch login status from the API
-    fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-      credentials: 'include',
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.role) {
-          const isAdmin = data.role === 'admin';
-          showLoggedInUI(isAdmin);
-        } else {
-          showLoggedOutUI();
-        }
-      })
-      .catch(() => {
+  // Fetch login status from the API
+  fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.role) {
+        const isAdmin = data.role === 'admin';
+        showLoggedInUI(isAdmin);
+      } else {
         showLoggedOutUI();
-      });
+      }
+    })
+    .catch(() => {
+      showLoggedOutUI();
+    });
 
-    // Function to show the UI when the user is logged in
-    function showLoggedInUI(isAdmin) {
-      authContainer.innerHTML = `
+  // Function to show the UI when the user is logged in
+  function showLoggedInUI(isAdmin) {
+    authContainer.innerHTML = `
         <div class="profile-container">
           <div class="profile-icon" id="profileIcon"></div>
           <div class="hex-header-dropdown" id="dropdownMenu">
@@ -9113,114 +9098,114 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `;
 
-      const profileIcon = document.getElementById('profileIcon');
-      const dropdownMenu = document.getElementById('dropdownMenu');
+    const profileIcon = document.getElementById('profileIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
 
-      // Ensure the dropdown is hidden by default
-      dropdownMenu.style.display = 'none';
+    // Ensure the dropdown is hidden by default
+    dropdownMenu.style.display = 'none';
 
-      // Toggle the dropdown menu visibility when the profile icon is clicked
-      profileIcon.addEventListener('click', function (event) {
-        event.stopPropagation();
-        console.log('Profile icon clicked', isDropdownOpen);
-        isDropdownOpen = !isDropdownOpen;
-        dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
-      });
+    // Toggle the dropdown menu visibility when the profile icon is clicked
+    profileIcon.addEventListener('click', function (event) {
+      event.stopPropagation();
+      console.log('Profile icon clicked', isDropdownOpen);
+      isDropdownOpen = !isDropdownOpen;
+      dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+    });
 
-      // Close the dropdown when clicking outside
-      document.addEventListener('click', function () {
-        if (isDropdownOpen) {
-          dropdownMenu.style.display = 'none';
-          isDropdownOpen = false;
-        }
-      });
-
-      // Add event listeners for dashboard/profile and logout actions
-      if (isAdmin) {
-        document.getElementById('adminDashboard').addEventListener('click', function () {
-          window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-        });
-      } else {
-        document.getElementById('profile').addEventListener('click', function () {
-          window.location.href = 'http://54.152.205.55:4000/profile';
-        });
+    // Close the dropdown when clicking outside
+    document.addEventListener('click', function () {
+      if (isDropdownOpen) {
+        dropdownMenu.style.display = 'none';
+        isDropdownOpen = false;
       }
+    });
 
-      document.getElementById('logout').addEventListener('click', handleLogout);
+    // Add event listeners for dashboard/profile and logout actions
+    if (isAdmin) {
+      document.getElementById('adminDashboard').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
+      });
+    } else {
+      document.getElementById('profile').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/profile';
+      });
     }
 
-    // Function to show the UI when the user is logged out
-    function showLoggedOutUI() {
-      authContainer.innerHTML = `
+    document.getElementById('logout').addEventListener('click', handleLogout);
+  }
+
+  // Function to show the UI when the user is logged out
+  function showLoggedOutUI() {
+    authContainer.innerHTML = `
         <div class="auth-buttons">
           <button class="button signup" id="signupBtn">Sign Up</button>
           <button class="button signin" id="signinBtn">Sign In</button>
         </div>
       `;
 
-      // Navigate to the signup and login pages
-      document.getElementById('signupBtn').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/signup';
-      });
+    // Navigate to the signup and login pages
+    document.getElementById('signupBtn').addEventListener('click', function () {
+      window.location.href = 'http://54.152.205.55:4000/signup';
+    });
 
-      document.getElementById('signinBtn').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/login';
-      });
-    }
+    document.getElementById('signinBtn').addEventListener('click', function () {
+      window.location.href = 'http://54.152.205.55:4000/login';
+    });
+  }
 
-    // Function to handle logout action
-    function handleLogout() {
-        fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-        method: 'POST',
-        credentials: 'include',
-        })
-        .then(response => {
+  // Function to handle logout action
+  function handleLogout() {
+    fetch('https://backend.toddlerneeds.com/api/v1/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+      .then(response => {
         if (response) {
-        //  console.log("Logout response:", response);
-         console.log("Logout successful");
-            // window.location.href = '/login';
-            window.location.reload();
+          //  console.log("Logout response:", response);
+          console.log("Logout successful");
+          // window.location.href = '/login';
+          window.location.reload();
         } else {
-            // Handle errors from the server
-            response.json().then(data => {
+          // Handle errors from the server
+          response.json().then(data => {
             console.error('Logout failed:', data.message || 'Unknown error');
             alert('Logout failed. Please try again.');
-            });
+          });
         }
-        })
-        .catch(error => {
+      })
+      .catch(error => {
         // Handle network or other errors
         console.error('Logout request failed:', error);
         alert('Logout request failed. Please check your connection and try again.');
-        });
-    }
+      });
+  }
 
-  });
+});
 
 document.addEventListener('DOMContentLoaded', function () {
-    const authContainer = document.querySelector('.auth-container-min-editor');
-    let isDropdownOpen = false;
+  const authContainer = document.querySelector('.auth-container-min-editor');
+  let isDropdownOpen = false;
 
-    // Fetch login status from the API
-    fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-      credentials: 'include',
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.role) {
-          const isAdmin = data.role === 'admin';
-          showLoggedInUI(isAdmin);
-        } else {
-          showLoggedOutUI();
-        }
-      })
-      .catch(() => {
+  // Fetch login status from the API
+  fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.role) {
+        const isAdmin = data.role === 'admin';
+        showLoggedInUI(isAdmin);
+      } else {
         showLoggedOutUI();
-      });
+      }
+    })
+    .catch(() => {
+      showLoggedOutUI();
+    });
 
-    // Function to show the UI when the user is logged in
-    function showLoggedInUI(isAdmin) {
-      authContainer.innerHTML = `
+  // Function to show the UI when the user is logged in
+  function showLoggedInUI(isAdmin) {
+    authContainer.innerHTML = `
         <div class="profile-container-min-editor">
           <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
@@ -9232,86 +9217,86 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `;
 
-      const profileIcon = document.getElementById('profileIcon-min-editor');
-      const dropdownMenu = document.getElementById('dropdownMenu-min-editor');
+    const profileIcon = document.getElementById('profileIcon-min-editor');
+    const dropdownMenu = document.getElementById('dropdownMenu-min-editor');
 
-      // Ensure the dropdown is hidden by default
-      dropdownMenu.style.display = 'none';
+    // Ensure the dropdown is hidden by default
+    dropdownMenu.style.display = 'none';
 
-      // Toggle the dropdown menu visibility when the profile icon is clicked
-      profileIcon.addEventListener('click', function (event) {
-        event.stopPropagation();
-        console.log('Profile icon clicked', isDropdownOpen);
-        isDropdownOpen = !isDropdownOpen;
-        dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
-      });
+    // Toggle the dropdown menu visibility when the profile icon is clicked
+    profileIcon.addEventListener('click', function (event) {
+      event.stopPropagation();
+      console.log('Profile icon clicked', isDropdownOpen);
+      isDropdownOpen = !isDropdownOpen;
+      dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+    });
 
-      // Close the dropdown when clicking outside
-      document.addEventListener('click', function () {
-        if (isDropdownOpen) {
-          dropdownMenu.style.display = 'none';
-          isDropdownOpen = false;
-        }
-      });
-
-      // Add event listeners for dashboard/profile and logout actions
-      if (isAdmin) {
-        document.getElementById('adminDashboard-min-editor').addEventListener('click', function () {
-          window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-        });
-      } else {
-        document.getElementById('profile-min-editor').addEventListener('click', function () {
-          window.location.href = 'http://54.152.205.55:4000/profile';
-        });
+    // Close the dropdown when clicking outside
+    document.addEventListener('click', function () {
+      if (isDropdownOpen) {
+        dropdownMenu.style.display = 'none';
+        isDropdownOpen = false;
       }
+    });
 
-      document.getElementById('logout-min-editor').addEventListener('click', handleLogout);
+    // Add event listeners for dashboard/profile and logout actions
+    if (isAdmin) {
+      document.getElementById('adminDashboard-min-editor').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
+      });
+    } else {
+      document.getElementById('profile-min-editor').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/profile';
+      });
     }
 
-    // Function to show the UI when the user is logged out
-    function showLoggedOutUI() {
-      authContainer.innerHTML = `
+    document.getElementById('logout-min-editor').addEventListener('click', handleLogout);
+  }
+
+  // Function to show the UI when the user is logged out
+  function showLoggedOutUI() {
+    authContainer.innerHTML = `
         <div class="auth-buttons-min-editor">
           <button class="button-min-editor signup-min-editor" id="signupBtn-min-editor">Sign Up</button>
           <button class="button-min-editor signin-min-editor" id="signinBtn-min-editor">Sign In</button>
         </div>
       `;
 
-      // Navigate to the signup and login pages
-      document.getElementById('signupBtn-min-editor').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/signup';
-      });
+    // Navigate to the signup and login pages
+    document.getElementById('signupBtn-min-editor').addEventListener('click', function () {
+      window.location.href = 'http://54.152.205.55:4000/signup';
+    });
 
-      document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/login';
-      });
-    }
+    document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
+      window.location.href = 'http://54.152.205.55:4000/login';
+    });
+  }
 
-    // Function to handle logout action
-    function handleLogout() {
-        fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-        method: 'POST',
-        credentials: 'include',
-        })
-        .then(response => {
+  // Function to handle logout action
+  function handleLogout() {
+    fetch('https://backend.toddlerneeds.com/api/v1/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+      .then(response => {
         if (response) {
-        //  console.log("Logout response:", response);
-         console.log("Logout successful");
-            // window.location.href = '/login';
-            window.location.reload();
+          //  console.log("Logout response:", response);
+          console.log("Logout successful");
+          // window.location.href = '/login';
+          window.location.reload();
         } else {
-            // Handle errors from the server
-            response.json().then(data => {
+          // Handle errors from the server
+          response.json().then(data => {
             console.error('Logout failed:', data.message || 'Unknown error');
             alert('Logout failed. Please try again.');
-            });
+          });
         }
-        })
-        .catch(error => {
+      })
+      .catch(error => {
         // Handle network or other errors
         console.error('Logout request failed:', error);
         alert('Logout request failed. Please check your connection and try again.');
-        });
-    }
+      });
+  }
 
-  });
+});
