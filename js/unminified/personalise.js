@@ -47,6 +47,54 @@ async function fetchModelData() {
   }
 }
 
+// function initPersonalise() {
+//   const loader = document.getElementById("mini-editor-loader-cont");
+
+//   const mainContainer = document.getElementById("personalise-3d-container");
+//   mainContainer.style.backgroundColor = "#f0f0f0";
+
+//   camera = new THREE.PerspectiveCamera(
+//     45,
+//     window.innerWidth / window.innerHeight,
+//     0.1,
+//     20
+//   );
+//   camera.position.set(0, 0.08, 0.5);
+
+//   scene = new THREE.Scene();
+
+//   // Load the GLB model dynamically based on the 'name' parameter
+//   new GLTFLoader().load(modelSource, function (gltf) {
+//     const loadedModel = gltf.scene;
+
+//     loadedModel.position.set(0, -0.11, 0);
+//     scene.add(gltf.scene);
+//     loader.classList.remove("display-block-prop");
+//     loader.classList.add("display-none-prop");
+//   });
+
+//   renderer = new THREE.WebGLRenderer({ antialias: true });
+//   renderer.setPixelRatio(window.devicePixelRatio);
+//   renderer.setSize(window.innerWidth, window.innerHeight);
+//   renderer.toneMapping = THREE.ACESFilmicToneMapping;
+//   renderer.toneMappingExposure = 0.5;
+//   mainContainer.appendChild(renderer.domElement);
+
+//   const environment = new RoomEnvironment(renderer);
+//   const pmremGenerator = new THREE.PMREMGenerator(renderer);
+
+//   scene.background = new THREE.Color(0x818181);
+//   scene.environment = pmremGenerator.fromScene(environment).texture;
+
+//   controls = new OrbitControls(camera, renderer.domElement);
+//   controls.enableDamping = true;
+//   controls.minDistance = 0.35;
+//   controls.maxDistance = 0.7;
+//   controls.target.set(0, 0, 0);
+//   controls.update();
+
+//   window.addEventListener("resize", onWindowResizePersonalise);
+// }
 function initPersonalise() {
   const loader = document.getElementById("mini-editor-loader-cont");
 
@@ -67,8 +115,27 @@ function initPersonalise() {
   new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
 
-    loadedModel.position.set(0, -0.11, 0);
-    scene.add(gltf.scene);
+    // Calculate the bounding box of the loaded model
+    const boundingBox = new THREE.Box3().setFromObject(loadedModel);
+    const center = boundingBox.getCenter(new THREE.Vector3());
+    const size = boundingBox.getSize(new THREE.Vector3());
+
+    // Reposition the model to center it
+    loadedModel.position.x -= center.x;
+    loadedModel.position.y -= center.y;
+    loadedModel.position.z -= center.z;
+
+    // Fine-tune Y-axis to center vertically (slight downward adjustment)
+    loadedModel.position.y -= size.y * 0.2; // Adjust to center vertically
+
+    // Optionally scale the model to fit within the camera's view
+    const maxSize = Math.max(size.x, size.y, size.z);
+    const scaleFactor = 0.35 / maxSize; // Adjust based on your camera setup
+    loadedModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+    // Add the centered model to the scene
+    scene.add(loadedModel);
+
     loader.classList.remove("display-block-prop");
     loader.classList.add("display-none-prop");
   });
@@ -90,12 +157,20 @@ function initPersonalise() {
   controls.enableDamping = true;
   controls.minDistance = 0.35;
   controls.maxDistance = 0.7;
-  controls.target.set(0, 0, 0);
+  controls.target.set(0, 0, 0); // Ensure controls target the center of the scene
   controls.update();
 
   window.addEventListener("resize", onWindowResizePersonalise);
 }
-
+// function onWindowResizePersonalise() {
+//   const mainContainer = document.getElementById("personalise-3d-container");
+//   const containerWidth = mainContainer.offsetWidth;
+//   const containerHeight = mainContainer.offsetHeight;
+//   const size = Math.min(containerWidth, containerHeight);
+//   camera.aspect = size / size;
+//   camera.updateProjectionMatrix();
+//   renderer.setSize(size, size);
+// }
 function onWindowResizePersonalise() {
   const mainContainer = document.getElementById("personalise-3d-container");
   const containerWidth = mainContainer.offsetWidth;
@@ -129,7 +204,7 @@ function changeTexture(newUrl) {
           textureLoader.load(newUrl, (texture) => {
             const material = new THREE.MeshStandardMaterial({
               map: texture,
-              bumpMap: bumpMap,
+              // bumpMap: bumpMap,
               roughness: 1,
               metalness: 1,
               opacity: 1,
