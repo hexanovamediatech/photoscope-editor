@@ -294,41 +294,73 @@ function updateCanvasText(textIndex, newText) {
   window.editedCanvasJson = updatedCanvasJSON;
 }
 
+// function replaceImageSrc(json, newImageSrc, callback) {
+//   let imageFoundInGroup = false;
+
+//   // Check if there are images within groups
+//   json.objects.forEach((obj) => {
+//     if (obj.type === "group") {
+//       obj.objects.forEach((innerObj) => {
+//         if (innerObj.type === "image") {
+//           innerObj.src = newImageSrc;
+//           imageFoundInGroup = true;
+//         }
+//       });
+//     }
+//   });
+
+//   if (imageFoundInGroup) {
+//     json.objects.forEach((obj) => {
+//       if (obj.type === "group") {
+//         obj.objects.forEach((innerObj) => {
+//           if (innerObj.type === "image") {
+//             innerObj.src = newImageSrc;
+//           }
+//         });
+//       }
+//     });
+//   } else {
+//     if (json.objects.length > 1 && json.objects[1].type === "image") {
+//       json.objects[1].src = newImageSrc;
+//     }
+//     console.log("Image updated in second position or no groups found");
+//   }
+
+//   imageUpdatedJSON = json;
+//   console.log(imageUpdatedJSON, "image updated json strc");
+//   if (callback) callback(imageUpdatedJSON);
+// }
 function replaceImageSrc(json, newImageSrc, callback) {
-  let imageFoundInGroup = false;
+  // Create a new image object to load the base64 image
+  const img = new Image();
+  img.src = newImageSrc;
 
-  // Check if there are images within groups
-  json.objects.forEach((obj) => {
-    if (obj.type === "group") {
-      obj.objects.forEach((innerObj) => {
-        if (innerObj.type === "image") {
-          innerObj.src = newImageSrc;
-          imageFoundInGroup = true;
-        }
-      });
-    }
-  });
+  // Once the image is loaded, get its width and height
+  img.onload = function () {
+    const imageWidth = img.width;
+    const imageHeight = img.height;
 
-  if (imageFoundInGroup) {
+    console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
+
+    // Find the object where obj.type === "image" and obj.src does not start with "http"
     json.objects.forEach((obj) => {
-      if (obj.type === "group") {
-        obj.objects.forEach((innerObj) => {
-          if (innerObj.type === "image") {
-            innerObj.src = newImageSrc;
-          }
-        });
+      if (obj.type === "image" && !obj.src.startsWith("http")) {
+        obj.src = newImageSrc;
+        obj.width = imageWidth; // Set the width and height if needed
+        obj.height = imageHeight;
       }
     });
-  } else {
-    if (json.objects.length > 1 && json.objects[1].type === "image") {
-      json.objects[1].src = newImageSrc;
-    }
-    console.log("Image updated in second position or no groups found");
-  }
 
-  imageUpdatedJSON = json;
-  console.log(imageUpdatedJSON, "image updated json strc");
-  if (callback) callback(imageUpdatedJSON);
+    const imageUpdatedJSON = json;
+    console.log(imageUpdatedJSON, "image updated json structure");
+
+    if (callback) callback(imageUpdatedJSON);
+  };
+
+  // Handle error if the image fails to load
+  img.onerror = function () {
+    console.error("Failed to load the image");
+  };
 }
 
 function loadJSONToCanvas(jsonData) {
