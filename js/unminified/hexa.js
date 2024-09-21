@@ -1337,7 +1337,7 @@
                   // Display a success message using toastr after successful upload
                   toastr.success("Data uploaded successfully!", "Success");
                   // Close the modal after saving
-                  // selector.find(".hexa-modal").hide();
+                  selector.find(".hexa-modal").hide();
                 })
                 .catch((error) => {
                   // Display an error message using toastr if uploading fails
@@ -1548,7 +1548,7 @@
         height: originalHeight,
       };
 
- 
+
 
       for (var i = 0; i < json.objects.length; i++) {
         if (json.objects[i].objectType == "textbox") {
@@ -1581,7 +1581,7 @@
               canvas.requestRenderAll()
               document.getElementById("done-masking-img").style.display = "block";
               applyTemplateClipMask(obj)
-            } 
+            }
           });
         },
         function () { },
@@ -1589,7 +1589,7 @@
           crossOrigin: "anonymous",
         }
       );
-    
+
       setFileName(new Date().getTime(), "");
       setDimentions(dimentions);
       adjustZoom();
@@ -1610,7 +1610,7 @@
           selector.find("#hexa-overlay-preview").attr("src", "");
         }
       }, 100);
-      
+
     }
 
     /* Load Template Fonts */
@@ -6863,29 +6863,29 @@
     // canvas.remove(clipmaskObject)
     // canvas.requestRenderAll()
     //   let mainClippath = clipmaskObject.clipPath;
-    
+
     //   // Ensure mainClippath exists and has a valid path
     //   if (!mainClippath || !mainClippath.path) {
     //     console.log('No valid clipPath found in the clipmaskObject.');
     //     return;
     //   }
-    
+
     //   let path = mainClippath.path;
-    
+
     //   // Define the offset values between shell and clipPath for proper syncing
     //   let clipPathOffset = {
     //     top: clipmaskObject.top - mainClippath.top,
     //     left: clipmaskObject.left - mainClippath.left,
     //   };
-    
+
     //   // if (clipmaskObject) {
     //   //   console.log('Clip mask object:', clipmaskObject);
-    
+
     //   //   // Create the shell using the mainClippath path
     //   //   shell = new fabric.Path(path, {
     //   //     fill: "", // Transparent shell
-    //   //     stroke: "black", 
-    //   //     strokeWidth: 2, 
+    //   //     stroke: "black",
+    //   //     strokeWidth: 2,
     //   //     scaleX: mainClippath.scaleX,
     //   //     scaleY: mainClippath.scaleY,
     //   //     lockScalingX: false,
@@ -6898,15 +6898,15 @@
     //   //     left: mainClippath.left,
     //   //     selectable: true, // Make it interactive
     //   //   });
-    
+
     //   //   // Store the image and its clip path globally
     //   //   storedActiveObject = clipmaskObject; // Storing the image object
     //   //   storedClipPath = mainClippath; // Storing the clip path object
-    
+
     //   //   // Add shell to the canvas (image is already added to the canvas)
     //   //   canvas.add(shell);
     //   //   canvas.requestRenderAll();
-    
+
     //   //   // Function to update the clip path position, scale, and angle as the shell moves
     //   //   function updateClipPathPosition() {
     //   //     // Update the clipPath's properties based on the shell's new position
@@ -6917,14 +6917,14 @@
     //   //       scaleX: shell.scaleX,
     //   //       scaleY: shell.scaleY,
     //   //     });
-    
+
     //   //     // Reassign the updated clipPath to the image
     //   //     storedActiveObject.clipPath = mainClippath;
-    
+
     //   //     // Ensure canvas re-renders with changes
     //   //     canvas.requestRenderAll();
     //   //   }
-    
+
     //   //   // Sync clipPath updates when the shell is moved, scaled, or rotated
     //   //   shell.on('moving', updateClipPathPosition);
     //   //   shell.on('scaling', updateClipPathPosition);
@@ -6936,28 +6936,28 @@
     function applyTemplateClipMask(clipmaskObject) {
     //   console.log('Attempting to remove the object:', clipObject);
      let mainClippath = clipmaskObject.clipPath;
-    
+
       // Ensure mainClippath exists and has a valid path
      if (!mainClippath || !mainClippath.path) {
       console.log('No valid clipPath found in the clipmaskObject.');
        return;
      }
   let path = mainClippath.path;
-    
+
      // Define the offset values between shell and clipPath for proper syncing
       let clipPathOffset = {
         top: clipmaskObject.top - mainClippath.top,
         left: clipmaskObject.left - mainClippath.left,
       };
-    
+
       if (clipmaskObject) {
         console.log('Clip mask object:', clipmaskObject);
-    
+
         // Create the shell using the mainClippath path
         shell = new fabric.Path(path, {
           fill: "", // Transparent shell
-          stroke: "black", 
-          strokeWidth: 2, 
+          stroke: "black",
+          strokeWidth: 2,
           scaleX: mainClippath.scaleX,
           scaleY: mainClippath.scaleY,
           lockScalingX: false,
@@ -6970,16 +6970,16 @@
           left: mainClippath.left,
           selectable: true, // Make it interactive
         });
-    
+
         // Store the image and its clip path globally
         storedActiveObject = clipmaskObject; // Storing the image object
         storedClipPath = mainClippath; // Storing the clip path object
-    
+
         // Add shell to the canvas (image is already added to the canvas)
         canvas.add(clipmaskObject)
         canvas.add(shell);
         canvas.requestRenderAll();
-    
+
         // Function to update the clip path position, scale, and angle as the shell moves
         function updateClipPathPosition() {
           // Update the clipPath's properties based on the shell's new position
@@ -6990,14 +6990,14 @@
             scaleX: shell.scaleX,
             scaleY: shell.scaleY,
           });
-    
+
           // Reassign the updated clipPath to the image
           storedActiveObject.clipPath = mainClippath;
-    
+
           // Ensure canvas re-renders with changes
           canvas.requestRenderAll();
         }
-    
+
         // Sync clipPath updates when the shell is moved, scaled, or rotated
         shell.on('moving', updateClipPathPosition);
         shell.on('scaling', updateClipPathPosition);
@@ -7005,12 +7005,12 @@
       } else {
         console.log('There is no object.');
       }
-    
+
     }
-    
-    
-    
-    
+
+
+
+
 
     function unlinkClipPath() {
       if (storedActiveObject && storedClipPath) {
@@ -9033,6 +9033,63 @@
       adjustZoom();
       canvas.requestRenderAll();
     });
+
+    function loadTemplateFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        var name = params.get('name');
+        var id = params.get('id');
+        var templateName = params.get('templateName');
+        console.log("This is the template params: ", name, id, templateName);
+
+        if (!templateName) {
+            console.error('No template name found in the URL.');
+            return;
+        }
+
+        // Modify the DOM elements using jQuery
+        var $mainContainer = $("#mini-editor-main-cont");
+        var $buttonContainer = $("#webg-buttons-container");
+
+        if ($mainContainer.length && $buttonContainer.length) {
+            // Remove the 'personalise-page-active' class from the main container
+            $mainContainer.removeClass("personalise-page-active");
+            // Add the 'personalise-page-inactive' class to the main container
+            $mainContainer.addClass("personalise-page-inactive");
+
+            // Remove the 'toggle-2d-3d-cont' class from the button container
+            $buttonContainer.removeClass("toggle-2d-3d-cont");
+        } else {
+            console.error("Main container or button container not found in the DOM.");
+        }
+
+        // Fetch the template data using jQuery's AJAX
+        $.ajax({
+            url: `https://backend.toddlerneeds.com/api/v1/user/template/${id}`,
+            method: 'GET',
+            xhrFields: {
+                withCredentials: true // to include credentials (cookies)
+            },
+            success: function(data) {
+                console.log('Template data:', data);
+
+                if (data.src) {
+                    // Fetch the template JSON
+                    $.getJSON(data.src, function(jsonData) {
+                        console.log('Loaded template JSON:', jsonData);
+                        loadJSON(jsonData);
+                    }).fail(function() {
+                        console.error('Error loading template JSON');
+                    });
+                } else {
+                    console.error('No template source URL found in the API response.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching template:', status, error);
+            }
+        });
+    }
+    loadTemplateFromUrl()
     //////////////////////* CUSTOM FUNCTIONS *//////////////////////
     settings.customFunctions.call(this, selector, canvas, lazyLoadInstance);
   };
