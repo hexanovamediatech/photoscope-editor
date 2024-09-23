@@ -3627,7 +3627,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 
 
 
-    .auth-container {
+  .auth-container {
         position: relative;
         margin-right: 10px;
     }
@@ -3769,3 +3769,112 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
         background-color: green;
         border: none;
     }
+
+
+
+/* Login  */
+.login-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .login-popup-content {
+    background-color: #fff;
+    width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: center;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 32px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    z-index: 1001;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .login-title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #000;
+    font-weight: 600;
+  }
+
+
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .login-button:hover {
+    background-color: #0056b3;
+  }
+
+  .google-login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .google-login-button img {
+    width: 20px;
+    margin-right: 10px;
+  }
+
+  .forgot-password {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .forgot-password:hover {
+    color: #0056b3;
+  }
