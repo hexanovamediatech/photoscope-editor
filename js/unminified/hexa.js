@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () { },
-        saveTemplate: function () { },
-        saveImage: function () { },
+        customFunctions: function () {},
+        saveTemplate: function () {},
+        saveImage: function () {},
       },
       options
     );
@@ -181,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-              url +
-              '" data-loader="no" title="' +
-              item.icons[ii].name +
-              '">' +
-              '<span class="material-icons">' +
-              item.icons[ii].ligature +
-              "</div>"
+                url +
+                '" data-loader="no" title="' +
+                item.icons[ii].name +
+                '">' +
+                '<span class="material-icons">' +
+                item.icons[ii].ligature +
+                "</div>"
             );
         }
       }
@@ -1047,7 +1047,6 @@
     //   selector.find(target).show();
     // });
 
-
     /* Modal Open */
     selector.find(".hexa-modal-open").on("click", function (e) {
       e.preventDefault();
@@ -1094,7 +1093,6 @@
         },
       });
     });
-
 
     /* Modal Close */
     selector.find(".hexa-modal-close").on("click", function (e) {
@@ -1225,7 +1223,7 @@
 
         // Handle public button click
         $("#saveAsPublic").on("click", function () {
-          resolve(true);  // Return 'true' for public
+          resolve(true); // Return 'true' for public
           $("#templates-public-private-modal").hide(); // Hide the modal after selection
         });
 
@@ -1352,7 +1350,6 @@
         });
       });
     });
-
 
     function uploadData(data) {
       return new Promise((resolve, reject) => {
@@ -1548,8 +1545,6 @@
         height: originalHeight,
       };
 
-
-
       for (var i = 0; i < json.objects.length; i++) {
         if (json.objects[i].objectType == "textbox") {
           json.objects[i].fontFamily = json.objects[i].fontFamily + "-hexa";
@@ -1577,14 +1572,15 @@
           objects.forEach((obj) => {
             if (obj.customId === "clipmask") {
               console.log("Found clipmask object. Removing...");
-              canvas.remove(obj)
-              canvas.requestRenderAll()
-              document.getElementById("done-masking-img").style.display = "block";
-              applyTemplateClipMask(obj)
+              canvas.remove(obj);
+              canvas.requestRenderAll();
+              document.getElementById("done-masking-img").style.display =
+                "block";
+              applyTemplateClipMask(obj);
             }
           });
         },
-        function () { },
+        function () {},
         {
           crossOrigin: "anonymous",
         }
@@ -1610,7 +1606,6 @@
           selector.find("#hexa-overlay-preview").attr("src", "");
         }
       }, 100);
-
     }
 
     /* Load Template Fonts */
@@ -1713,7 +1708,7 @@
         selector.find("#hexa-layers li").remove();
         checkLayers();
         $.getJSON($(this).data("json"), function (json) {
-          console.log('this is the editedCanvasobject 2',json);
+          console.log("this is the editedCanvasobject 2", json);
           loadJSON(json);
           setTimeout(function () {
             addToHistory(
@@ -2320,7 +2315,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -2526,12 +2521,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-        action +
-        '<span class="time">' +
-        time +
-        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-        JSON.stringify(json) +
-        "</script></div></li>"
+          action +
+          '<span class="time">' +
+          time +
+          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          JSON.stringify(json) +
+          "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -2665,16 +2660,50 @@
         var originalCanvasObject = originalCanvasJson;
         var editedCanvasObject = editedCanvasJson;
 
+        const targetObject = editedCanvasObject.objects.find(
+          (obj) => obj.type === "image" && !obj.src.startsWith("http")
+        );
+
         // Iterate over the objects in canvasObject to update their properties
         editedCanvasObject.objects.forEach((obj, index) => {
           if (originalCanvasObject.objects[index]) {
             var originalObj = originalCanvasObject.objects[index];
 
             // Copy the values for top, left, scaleX, and scaleY from originalObj
-            obj.top = originalObj.top;
-            obj.left = originalObj.left;
-            obj.scaleX = originalObj.scaleX;
-            obj.scaleY = originalObj.scaleY;
+            // obj.top = originalObj.top;
+            // obj.left = originalObj.left;
+            // obj.scaleX = originalObj.scaleX;
+            // obj.scaleY = originalObj.scaleY;
+            if (obj === targetObject) {
+              console.log(targetObject);
+              console.log(obj);
+              // console.log(originalObj);
+              // Modify the targetObject properties by multiplying with specific values
+              obj.scaleX *= 1; // Adjust the scaling factor as needed
+              obj.scaleY *= 1; // Adjust the scaling factor as needed
+
+              // Adjust top and left properties to change the position
+              obj.left *= 1; // Adjust the position as needed
+              obj.top *= 1; // Adjust the position as needed
+
+              // Ensure the clipPath properties remain unchanged
+              if (obj.clipPath) {
+                obj.clipPath.left = originalObj.clipPath.left; // Restore the original clipPath left
+                obj.clipPath.top = originalObj.clipPath.top; // Restore the original clipPath top
+                obj.clipPath.scaleX = originalObj.clipPath.scaleX; // Keep the original clipPath scaleX
+                obj.clipPath.scaleY = originalObj.clipPath.scaleY; // Keep the original clipPath scaleY
+                obj.clipPath.selectable = true;
+                obj.clipPath.lockMovementX = false;
+                obj.clipPath.lockMovementY = false;
+                obj.clipPath.lockRotation = false;
+              }
+            } else {
+              // Copy the values for other objects
+              obj.top = originalObj.top;
+              obj.left = originalObj.left;
+              obj.scaleX = originalObj.scaleX;
+              obj.scaleY = originalObj.scaleY;
+            }
 
             // Iterate over properties of the originalObj and add missing ones to obj
             for (var key in originalObj) {
@@ -2710,15 +2739,68 @@
         var editedCanvasObject = editedCanvasJson;
 
         // Iterate over the objects in canvasObject to update their properties
+        // editedCanvasObject.objects.forEach((obj, index) => {
+        //   if (originalCanvasObject.objects[index]) {
+        //     var originalObj = originalCanvasObject.objects[index];
+
+        //     // Copy the values for top, left, scaleX, and scaleY from originalObj
+        //     obj.top = originalObj.top;
+        //     obj.left = originalObj.left;
+        //     obj.scaleX = originalObj.scaleX;
+        //     obj.scaleY = originalObj.scaleY;
+
+        //     // Iterate over properties of the originalObj and add missing ones to obj
+        //     for (var key in originalObj) {
+        //       if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+        //         obj[key] = originalObj[key];
+        //       }
+        //     }
+        //   }
+        // });
+        const targetObject = editedCanvasObject.objects.find(
+          (obj) => obj.type === "image" && !obj.src.startsWith("http")
+        );
+
+        // Iterate over the objects in canvasObject to update their properties
         editedCanvasObject.objects.forEach((obj, index) => {
           if (originalCanvasObject.objects[index]) {
             var originalObj = originalCanvasObject.objects[index];
 
             // Copy the values for top, left, scaleX, and scaleY from originalObj
-            obj.top = originalObj.top;
-            obj.left = originalObj.left;
-            obj.scaleX = originalObj.scaleX;
-            obj.scaleY = originalObj.scaleY;
+            // obj.top = originalObj.top;
+            // obj.left = originalObj.left;
+            // obj.scaleX = originalObj.scaleX;
+            // obj.scaleY = originalObj.scaleY;
+            if (obj === targetObject) {
+              console.log(targetObject);
+              console.log(obj);
+              // console.log(originalObj);
+              // Modify the targetObject properties by multiplying with specific values
+              obj.scaleX *= 1; // Adjust the scaling factor as needed
+              obj.scaleY *= 1; // Adjust the scaling factor as needed
+
+              // Adjust top and left properties to change the position
+              obj.left *= 1; // Adjust the position as needed
+              obj.top *= 1; // Adjust the position as needed
+
+              // Ensure the clipPath properties remain unchanged
+              if (obj.clipPath) {
+                obj.clipPath.left = originalObj.clipPath.left; // Restore the original clipPath left
+                obj.clipPath.top = originalObj.clipPath.top; // Restore the original clipPath top
+                obj.clipPath.scaleX = originalObj.clipPath.scaleX; // Keep the original clipPath scaleX
+                obj.clipPath.scaleY = originalObj.clipPath.scaleY; // Keep the original clipPath scaleY
+                obj.clipPath.selectable = true;
+                obj.clipPath.lockMovementX = false;
+                obj.clipPath.lockMovementY = false;
+                obj.clipPath.lockRotation = false;
+              }
+            } else {
+              // Copy the values for other objects
+              obj.top = originalObj.top;
+              obj.left = originalObj.left;
+              obj.scaleX = originalObj.scaleX;
+              obj.scaleY = originalObj.scaleY;
+            }
 
             // Iterate over properties of the originalObj and add missing ones to obj
             for (var key in originalObj) {
@@ -2730,7 +2812,7 @@
         });
 
         // Load the updated JSON into your editor or canvas
-        console.log('this is the editedCanvasobject 1',originalCanvasObject);
+        console.log("this is the editedCanvasobject 1", originalCanvasObject);
         loadJSON(originalCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
@@ -5401,8 +5483,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                          item.find(".select2-item").html() +
-                          "&text=abc",
+                            item.find(".select2-item").html() +
+                            "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5587,18 +5669,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-          $(originalOption).data("icon") +
-          "</span>" +
-          icon.text +
-          "</div>"
+            $(originalOption).data("icon") +
+            "</span>" +
+            icon.text +
+            "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-          $(originalOption).data("font") +
-          '">' +
-          icon.text +
-          "</div>"
+            $(originalOption).data("font") +
+            '">' +
+            icon.text +
+            "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -6722,14 +6804,13 @@
       }
     }
 
-
     let storedActiveObject = null;
     let storedClipPath = null;
     let clipPathOffset = { top: 0, left: 0 };
     let shell = null;
 
     function addClipMask(path, activeObject) {
-      console.log('this is the active path and all', path, activeObject);
+      console.log("this is the active path and all", path, activeObject);
       var uniqueId = "clipmask";
       var desiredWidth = 700;
       var desiredHeight = 700;
@@ -6772,7 +6853,7 @@
           left: activeObject.left,
         });
 
-        console.log('clippath to aand ', clipPath.top, clipPath.left);
+        console.log("clippath to aand ", clipPath.top, clipPath.left);
         clipPathOffset.top = clipPath.top - activeObject.top;
         clipPathOffset.left = clipPath.left - activeObject.left;
         activeObject.clipPath = clipPath;
@@ -6781,7 +6862,7 @@
         // Store the activeObject and clipPath for later use when "done" is clicked
         storedActiveObject = activeObject;
         storedClipPath = clipPath;
-        canvas.add(shell)
+        canvas.add(shell);
         // Add the image (with clip path) to the canvas and make it the active object
         canvas.setActiveObject(activeObject);
         canvas.renderAll();
@@ -6792,20 +6873,17 @@
             left: shell.left + clipPathOffset.left,
             angle: shell.angle,
             scaleX: shell.scaleX,
-            scaleY: shell.scaleY
+            scaleY: shell.scaleY,
           });
           clipPath.setCoords();
           canvas.renderAll();
           // console.log("clippathOffset", clipPath.top, activeObject.top);
-
         }
 
-
-
         // Attach the event handlers to sync the clipPath with the shell
-        shell.on('moving', updateClipPathPosition);
-        shell.on('scaling', updateClipPathPosition);
-        shell.on('rotating', updateClipPathPosition);
+        shell.on("moving", updateClipPathPosition);
+        shell.on("scaling", updateClipPathPosition);
+        shell.on("rotating", updateClipPathPosition);
 
         // Show the "done" button
         document.getElementById("done-masking-img").style.display = "block";
@@ -6816,9 +6894,8 @@
       }
     }
 
-
-    let relativeTop
-    let relativeLeft
+    let relativeTop;
+    let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
       clipPath.set({
@@ -6827,36 +6904,46 @@
         angle: activeObject.angle,
         top: activeObject.top + relativeTop,
         left: activeObject.left + relativeLeft,
-
       });
       clipPath.setCoords();
       canvas.renderAll();
     }
 
-    document.getElementById("done-masking-img").addEventListener("click", function () {
-      canvas.remove(shell)
-      onlyDeleteLayerEvent(shell.id)
+    document
+      .getElementById("done-masking-img")
+      .addEventListener("click", function () {
+        canvas.remove(shell);
+        onlyDeleteLayerEvent(shell.id);
 
-      canvas.requestRenderAll()
-      console.log('value is ', clipPathOffset.top, clipPathOffset.left);
+        canvas.requestRenderAll();
+        console.log("value is ", clipPathOffset.top, clipPathOffset.left);
 
-      if (storedActiveObject && storedClipPath) {
-        relativeTop = storedClipPath.top - storedActiveObject.top;
-        relativeLeft = storedClipPath.left - storedActiveObject.left;
+        if (storedActiveObject && storedClipPath) {
+          relativeTop = storedClipPath.top - storedActiveObject.top;
+          relativeLeft = storedClipPath.left - storedActiveObject.left;
 
-        // Attach the event handlers to start syncing the clipPath with the image
-        storedActiveObject.on('moving', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
-        storedActiveObject.on('rotating', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
-        storedActiveObject.on('scaling', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
+          // Attach the event handlers to start syncing the clipPath with the image
+          storedActiveObject.on("moving", () =>
+            syncClipPathWithImage(storedClipPath, storedActiveObject)
+          );
+          storedActiveObject.on("rotating", () =>
+            syncClipPathWithImage(storedClipPath, storedActiveObject)
+          );
+          storedActiveObject.on("scaling", () =>
+            syncClipPathWithImage(storedClipPath, storedActiveObject)
+          );
 
-        // Optionally, hide the "done" button after syncing starts
-        document.getElementById("done-masking-img").style.display = "none";
-        document.getElementById("replace-image-btn").style.display = "none";
-        document.getElementById("edit-masking-button").style.display = "block";
-      } else {
-        alert("No active object found for syncing. Please add a clip mask first.");
-      }
-    });
+          // Optionally, hide the "done" button after syncing starts
+          document.getElementById("done-masking-img").style.display = "none";
+          document.getElementById("replace-image-btn").style.display = "none";
+          document.getElementById("edit-masking-button").style.display =
+            "block";
+        } else {
+          alert(
+            "No active object found for syncing. Please add a clip mask first."
+          );
+        }
+      });
 
     // function applyTemplateClipMask(clipmaskObject) {
     //   console.log('Received image with clipPath:', clipmaskObject);
@@ -6934,24 +7021,24 @@
     //   // }
     // }
     function applyTemplateClipMask(clipmaskObject) {
-    //   console.log('Attempting to remove the object:', clipObject);
-     let mainClippath = clipmaskObject.clipPath;
+      //   console.log('Attempting to remove the object:', clipObject);
+      let mainClippath = clipmaskObject.clipPath;
 
       // Ensure mainClippath exists and has a valid path
-     if (!mainClippath || !mainClippath.path) {
-      console.log('No valid clipPath found in the clipmaskObject.');
-       return;
-     }
-  let path = mainClippath.path;
+      if (!mainClippath || !mainClippath.path) {
+        console.log("No valid clipPath found in the clipmaskObject.");
+        return;
+      }
+      let path = mainClippath.path;
 
-     // Define the offset values between shell and clipPath for proper syncing
+      // Define the offset values between shell and clipPath for proper syncing
       let clipPathOffset = {
         top: clipmaskObject.top - mainClippath.top,
         left: clipmaskObject.left - mainClippath.left,
       };
 
       if (clipmaskObject) {
-        console.log('Clip mask object:', clipmaskObject);
+        console.log("Clip mask object:", clipmaskObject);
 
         // Create the shell using the mainClippath path
         shell = new fabric.Path(path, {
@@ -6976,7 +7063,7 @@
         storedClipPath = mainClippath; // Storing the clip path object
 
         // Add shell to the canvas (image is already added to the canvas)
-        canvas.add(clipmaskObject)
+        canvas.add(clipmaskObject);
         canvas.add(shell);
         canvas.requestRenderAll();
 
@@ -6999,25 +7086,20 @@
         }
 
         // Sync clipPath updates when the shell is moved, scaled, or rotated
-        shell.on('moving', updateClipPathPosition);
-        shell.on('scaling', updateClipPathPosition);
-        shell.on('rotating', updateClipPathPosition);
+        shell.on("moving", updateClipPathPosition);
+        shell.on("scaling", updateClipPathPosition);
+        shell.on("rotating", updateClipPathPosition);
       } else {
-        console.log('There is no object.');
+        console.log("There is no object.");
       }
-
     }
-
-
-
-
 
     function unlinkClipPath() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
-        storedActiveObject.off('moving');
-        storedActiveObject.off('rotating');
-        storedActiveObject.off('scaling');
+        storedActiveObject.off("moving");
+        storedActiveObject.off("rotating");
+        storedActiveObject.off("scaling");
 
         // Remove the clipPath from the active object
         storedActiveObject.clipPath = storedClipPath;
@@ -7043,9 +7125,11 @@
       }
     }
 
-    document.getElementById("edit-masking-button").addEventListener("click", function () {
-      unlinkClipPath();
-    });
+    document
+      .getElementById("edit-masking-button")
+      .addEventListener("click", function () {
+        unlinkClipPath();
+      });
     function updateReplaceButtonState() {
       const activeObject = canvas.getActiveObject();
       console.log("this is active now", activeObject);
@@ -7094,42 +7178,45 @@
         reader.onload = function (event) {
           var imageData = event.target.result;
 
-          fabric.Image.fromURL(imageData, function (img) {
-            // Get canvas dimensions
-            var canvasWidth = canvas.getWidth();
-            var canvasHeight = canvas.getHeight();
+          fabric.Image.fromURL(
+            imageData,
+            function (img) {
+              // Get canvas dimensions
+              var canvasWidth = canvas.getWidth();
+              var canvasHeight = canvas.getHeight();
 
-            // Calculate scale to fit the canvas while maintaining aspect ratio
-            var scaleX = canvasWidth / img.width;
-            var scaleY = canvasHeight / img.height;
-            var scale = Math.min(scaleX, scaleY);
+              // Calculate scale to fit the canvas while maintaining aspect ratio
+              var scaleX = canvasWidth / img.width;
+              var scaleY = canvasHeight / img.height;
+              var scale = Math.min(scaleX, scaleY);
 
-            // Apply scaling and set properties from the old image to the new one
-            img.set({
-              left: activeObject.left,
-              top: activeObject.top,
-              // scaleX: scale * activeObject.scaleX,
-              // scaleY: scale * activeObject.scaleY,
-              angle: activeObject.angle,
-              originX: activeObject.originX,
-              originY: activeObject.originY,
-              clipPath: storedClipPath,
-              objectCaching: false,
-              customId: "clipmask",
-            });
-            storedActiveObject = img;
-            storedClipPath = img.clipPath;
+              // Apply scaling and set properties from the old image to the new one
+              img.set({
+                left: activeObject.left,
+                top: activeObject.top,
+                // scaleX: scale * activeObject.scaleX,
+                // scaleY: scale * activeObject.scaleY,
+                angle: activeObject.angle,
+                originX: activeObject.originX,
+                originY: activeObject.originY,
+                clipPath: storedClipPath,
+                objectCaching: false,
+                customId: "clipmask",
+              });
+              storedActiveObject = img;
+              storedClipPath = img.clipPath;
 
-            canvas.remove(activeObject);
+              canvas.remove(activeObject);
 
-            canvas.add(img);
+              canvas.add(img);
 
-
-            canvas.renderAll(); // Re-render the canvas to reflect changes
-          }, function (error) {
-            console.error("Error loading image:", error);
-            alert("Failed to load the image. Please try again.");
-          });
+              canvas.renderAll(); // Re-render the canvas to reflect changes
+            },
+            function (error) {
+              console.error("Error loading image:", error);
+              alert("Failed to load the image. Please try again.");
+            }
+          );
         };
 
         reader.onerror = function (error) {
@@ -7147,7 +7234,6 @@
       document.getElementById("image-input").click();
     };
 
-
     const unmaskButton = selector.find("#hexa-unmask");
     unmaskButton.on("click", function () {
       const activeImage = canvas.getActiveObject();
@@ -7156,13 +7242,12 @@
       activeUnmaskButton();
     });
 
-
     function unmaskImage() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
-        storedActiveObject.off('moving');
-        storedActiveObject.off('rotating');
-        storedActiveObject.off('scaling');
+        storedActiveObject.off("moving");
+        storedActiveObject.off("rotating");
+        storedActiveObject.off("scaling");
 
         // Remove the clipPath from the active object
         storedActiveObject.clipPath = null;
@@ -7172,7 +7257,7 @@
         // canvas.remove(storedClipPath)
         // canvas.remove(shell)
 
-        canvas.requestRenderAll()
+        canvas.requestRenderAll();
 
         // Show the "done" button again for re-applying the clip mask
         document.getElementById("done-masking-img").style.display = "none";
@@ -7218,8 +7303,6 @@
       "#hexa-maskbutton, #hexa-maskbutton-outsied"
     );
     maskButton.css("display", "none");
-
-
 
     // Your addMask function (similar to the one you provided earlier)
     function addMask(canvas, points) {
@@ -7999,7 +8082,7 @@
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8207,7 +8290,7 @@
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8358,7 +8441,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8756,8 +8839,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-            selector.find("#brush-pattern-width").val()
-          ),
+              selector.find("#brush-pattern-width").val()
+            ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -9035,66 +9118,67 @@
     });
 
     function loadTemplateFromUrl() {
-        var params = new URLSearchParams(window.location.search);
-        var name = params.get('name');
-        var id = params.get('id');
-        var templateName = params.get('templateName');
-        console.log("This is the template params: ", name, id, templateName);
+      var params = new URLSearchParams(window.location.search);
+      var name = params.get("name");
+      var id = params.get("id");
+      var templateName = params.get("templateName");
+      console.log("This is the template params: ", name, id, templateName);
 
-        if (!templateName) {
-            console.error('No template name found in the URL.');
-            return;
-        }
+      if (!templateName) {
+        console.error("No template name found in the URL.");
+        return;
+      }
 
-        // Modify the DOM elements using jQuery
-        var $mainContainer = $("#mini-editor-main-cont");
-        var $buttonContainer = $("#webg-buttons-container");
+      // Modify the DOM elements using jQuery
+      var $mainContainer = $("#mini-editor-main-cont");
+      var $buttonContainer = $("#webg-buttons-container");
 
-        if ($mainContainer.length && $buttonContainer.length) {
-            // Remove the 'personalise-page-active' class from the main container
-            $mainContainer.removeClass("personalise-page-active");
-            // Add the 'personalise-page-inactive' class to the main container
-            $mainContainer.addClass("personalise-page-inactive");
+      if ($mainContainer.length && $buttonContainer.length) {
+        // Remove the 'personalise-page-active' class from the main container
+        $mainContainer.removeClass("personalise-page-active");
+        // Add the 'personalise-page-inactive' class to the main container
+        $mainContainer.addClass("personalise-page-inactive");
 
-            // Remove the 'toggle-2d-3d-cont' class from the button container
-            $buttonContainer.removeClass("toggle-2d-3d-cont");
-        } else {
-            console.error("Main container or button container not found in the DOM.");
-        }
+        // Remove the 'toggle-2d-3d-cont' class from the button container
+        $buttonContainer.removeClass("toggle-2d-3d-cont");
+      } else {
+        console.error(
+          "Main container or button container not found in the DOM."
+        );
+      }
 
-        // Fetch the template data using jQuery's AJAX
-        $.ajax({
-            url: `https://backend.toddlerneeds.com/api/v1/user/template/${id}`,
-            method: 'GET',
-            xhrFields: {
-                withCredentials: true // to include credentials (cookies)
-            },
-            success: function(data) {
-                console.log('Template data:', data);
+      // Fetch the template data using jQuery's AJAX
+      $.ajax({
+        url: `https://backend.toddlerneeds.com/api/v1/user/template/${id}`,
+        method: "GET",
+        xhrFields: {
+          withCredentials: true, // to include credentials (cookies)
+        },
+        success: function (data) {
+          console.log("Template data:", data);
 
-                if (data.src) {
-                    // Fetch the template JSON
-                    $.getJSON(data.src, function(jsonData) {
-                        console.log('Loaded template JSON:', jsonData);
-                        loadJSON(jsonData);
-                    }).fail(function() {
-                        console.error('Error loading template JSON');
-                    });
-                } else {
-                    console.error('No template source URL found in the API response.');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching template:', status, error);
-            }
-        });
+          if (data.src) {
+            // Fetch the template JSON
+            $.getJSON(data.src, function (jsonData) {
+              console.log("Loaded template JSON:", jsonData);
+              loadJSON(jsonData);
+            }).fail(function () {
+              console.error("Error loading template JSON");
+            });
+          } else {
+            console.error("No template source URL found in the API response.");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching template:", status, error);
+        },
+      });
     }
-    loadTemplateFromUrl()
+    loadTemplateFromUrl();
     //////////////////////* CUSTOM FUNCTIONS *//////////////////////
     settings.customFunctions.call(this, selector, canvas, lazyLoadInstance);
   };
 })(jQuery);
-
 
 // document.addEventListener('DOMContentLoaded', function () {
 //     const authContainer = document.querySelector('.auth-container');
@@ -9186,19 +9270,18 @@
 //     }
 //   });
 
-
-document.addEventListener('DOMContentLoaded', function () {
-  const authContainer = document.querySelector('.auth-container');
+document.addEventListener("DOMContentLoaded", function () {
+  const authContainer = document.querySelector(".auth-container");
   let isDropdownOpen = false;
 
   // Fetch login status from the API
-  fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-    credentials: 'include',
+  fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+    credentials: "include",
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       if (data.role) {
-        const isAdmin = data.role === 'admin';
+        const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
       } else {
         showLoggedOutUI();
@@ -9215,47 +9298,53 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="profile-icon" id="profileIcon"></div>
           <div class="hex-header-dropdown" id="dropdownMenu">
             <ul>
-              ${isAdmin ? `<li id="adminDashboard">Dashboard</li>` : `<li id="profile">Profile</li>`}
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard">Dashboard</li>`
+                  : `<li id="profile">Profile</li>`
+              }
               <li id="logout">Logout</li>
             </ul>
           </div>
         </div>
       `;
 
-    const profileIcon = document.getElementById('profileIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
 
     // Ensure the dropdown is hidden by default
-    dropdownMenu.style.display = 'none';
+    dropdownMenu.style.display = "none";
 
     // Toggle the dropdown menu visibility when the profile icon is clicked
-    profileIcon.addEventListener('click', function (event) {
+    profileIcon.addEventListener("click", function (event) {
       event.stopPropagation();
-      console.log('Profile icon clicked', isDropdownOpen);
+      console.log("Profile icon clicked", isDropdownOpen);
       isDropdownOpen = !isDropdownOpen;
-      dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+      dropdownMenu.style.display = isDropdownOpen ? "none" : "block";
     });
 
     // Close the dropdown when clicking outside
-    document.addEventListener('click', function () {
+    document.addEventListener("click", function () {
       if (isDropdownOpen) {
-        dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = "none";
         isDropdownOpen = false;
       }
     });
 
     // Add event listeners for dashboard/profile and logout actions
     if (isAdmin) {
-      document.getElementById('adminDashboard').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-      });
+      document
+        .getElementById("adminDashboard")
+        .addEventListener("click", function () {
+          window.location.href = "http://54.152.205.55:4000/admin-dashboard";
+        });
     } else {
-      document.getElementById('profile').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/profile';
+      document.getElementById("profile").addEventListener("click", function () {
+        window.location.href = "http://54.152.205.55:4000/profile";
       });
     }
 
-    document.getElementById('logout').addEventListener('click', handleLogout);
+    document.getElementById("logout").addEventListener("click", handleLogout);
   }
 
   // Function to show the UI when the user is logged out
@@ -9268,22 +9357,22 @@ document.addEventListener('DOMContentLoaded', function () {
       `;
 
     // Navigate to the signup and login pages
-    document.getElementById('signupBtn').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/signup';
+    document.getElementById("signupBtn").addEventListener("click", function () {
+      window.location.href = "http://54.152.205.55:4000/signup";
     });
 
-    document.getElementById('signinBtn').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/login';
+    document.getElementById("signinBtn").addEventListener("click", function () {
+      window.location.href = "http://54.152.205.55:4000/login";
     });
   }
 
   // Function to handle logout action
   function handleLogout() {
-    fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-      method: 'POST',
-      credentials: 'include',
+    fetch("https://backend.toddlerneeds.com/api/v1/logout", {
+      method: "POST",
+      credentials: "include",
     })
-      .then(response => {
+      .then((response) => {
         if (response) {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
@@ -9291,33 +9380,34 @@ document.addEventListener('DOMContentLoaded', function () {
           window.location.reload();
         } else {
           // Handle errors from the server
-          response.json().then(data => {
-            console.error('Logout failed:', data.message || 'Unknown error');
-            alert('Logout failed. Please try again.');
+          response.json().then((data) => {
+            console.error("Logout failed:", data.message || "Unknown error");
+            alert("Logout failed. Please try again.");
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle network or other errors
-        console.error('Logout request failed:', error);
-        alert('Logout request failed. Please check your connection and try again.');
+        console.error("Logout request failed:", error);
+        alert(
+          "Logout request failed. Please check your connection and try again."
+        );
       });
   }
-
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  const authContainer = document.querySelector('.auth-container-min-editor');
+document.addEventListener("DOMContentLoaded", function () {
+  const authContainer = document.querySelector(".auth-container-min-editor");
   let isDropdownOpen = false;
 
   // Fetch login status from the API
-  fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-    credentials: 'include',
+  fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+    credentials: "include",
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       if (data.role) {
-        const isAdmin = data.role === 'admin';
+        const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
       } else {
         showLoggedOutUI();
@@ -9334,47 +9424,57 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
             <ul>
-              ${isAdmin ? `<li id="adminDashboard-min-editor">Dashboard</li>` : `<li id="profile-min-editor">Profile</li>`}
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard-min-editor">Dashboard</li>`
+                  : `<li id="profile-min-editor">Profile</li>`
+              }
               <li id="logout-min-editor">Logout</li>
             </ul>
           </div>
         </div>
       `;
 
-    const profileIcon = document.getElementById('profileIcon-min-editor');
-    const dropdownMenu = document.getElementById('dropdownMenu-min-editor');
+    const profileIcon = document.getElementById("profileIcon-min-editor");
+    const dropdownMenu = document.getElementById("dropdownMenu-min-editor");
 
     // Ensure the dropdown is hidden by default
-    dropdownMenu.style.display = 'none';
+    dropdownMenu.style.display = "none";
 
     // Toggle the dropdown menu visibility when the profile icon is clicked
-    profileIcon.addEventListener('click', function (event) {
+    profileIcon.addEventListener("click", function (event) {
       event.stopPropagation();
-      console.log('Profile icon clicked', isDropdownOpen);
+      console.log("Profile icon clicked", isDropdownOpen);
       isDropdownOpen = !isDropdownOpen;
-      dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+      dropdownMenu.style.display = isDropdownOpen ? "none" : "block";
     });
 
     // Close the dropdown when clicking outside
-    document.addEventListener('click', function () {
+    document.addEventListener("click", function () {
       if (isDropdownOpen) {
-        dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = "none";
         isDropdownOpen = false;
       }
     });
 
     // Add event listeners for dashboard/profile and logout actions
     if (isAdmin) {
-      document.getElementById('adminDashboard-min-editor').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-      });
+      document
+        .getElementById("adminDashboard-min-editor")
+        .addEventListener("click", function () {
+          window.location.href = "http://54.152.205.55:4000/admin-dashboard";
+        });
     } else {
-      document.getElementById('profile-min-editor').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/profile';
-      });
+      document
+        .getElementById("profile-min-editor")
+        .addEventListener("click", function () {
+          window.location.href = "http://54.152.205.55:4000/profile";
+        });
     }
 
-    document.getElementById('logout-min-editor').addEventListener('click', handleLogout);
+    document
+      .getElementById("logout-min-editor")
+      .addEventListener("click", handleLogout);
   }
 
   // Function to show the UI when the user is logged out
@@ -9387,22 +9487,26 @@ document.addEventListener('DOMContentLoaded', function () {
       `;
 
     // Navigate to the signup and login pages
-    document.getElementById('signupBtn-min-editor').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/signup';
-    });
+    document
+      .getElementById("signupBtn-min-editor")
+      .addEventListener("click", function () {
+        window.location.href = "http://54.152.205.55:4000/signup";
+      });
 
-    document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/login';
-    });
+    document
+      .getElementById("signinBtn-min-editor")
+      .addEventListener("click", function () {
+        window.location.href = "http://54.152.205.55:4000/login";
+      });
   }
 
   // Function to handle logout action
   function handleLogout() {
-    fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-      method: 'POST',
-      credentials: 'include',
+    fetch("https://backend.toddlerneeds.com/api/v1/logout", {
+      method: "POST",
+      credentials: "include",
     })
-      .then(response => {
+      .then((response) => {
         if (response) {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
@@ -9410,17 +9514,18 @@ document.addEventListener('DOMContentLoaded', function () {
           window.location.reload();
         } else {
           // Handle errors from the server
-          response.json().then(data => {
-            console.error('Logout failed:', data.message || 'Unknown error');
-            alert('Logout failed. Please try again.');
+          response.json().then((data) => {
+            console.error("Logout failed:", data.message || "Unknown error");
+            alert("Logout failed. Please try again.");
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle network or other errors
-        console.error('Logout request failed:', error);
-        alert('Logout request failed. Please check your connection and try again.');
+        console.error("Logout request failed:", error);
+        alert(
+          "Logout request failed. Please check your connection and try again."
+        );
       });
   }
-
 });
