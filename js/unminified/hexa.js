@@ -9187,30 +9187,150 @@
 //   });
 
 
+// document.addEventListener('DOMContentLoaded', function () {
+//   const authContainer = document.querySelector('.auth-container');
+//   let isDropdownOpen = false;
+
+//   // Fetch login status from the API
+//   fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+//     credentials: 'include',
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       if (data.role) {
+//         const isAdmin = data.role === 'admin';
+//         showLoggedInUI(isAdmin);
+//       } else {
+//         showLoggedOutUI();
+//       }
+//     })
+//     .catch(() => {
+//       showLoggedOutUI();
+//     });
+
+//   // Function to show the UI when the user is logged in
+//   function showLoggedInUI(isAdmin) {
+//     authContainer.innerHTML = `
+//         <div class="profile-container">
+//           <div class="profile-icon" id="profileIcon"></div>
+//           <div class="hex-header-dropdown" id="dropdownMenu">
+//             <ul>
+//               ${isAdmin ? `<li id="adminDashboard">Dashboard</li>` : `<li id="profile">Profile</li>`}
+//               <li id="logout">Logout</li>
+//             </ul>
+//           </div>
+//         </div>
+//       `;
+
+//     const profileIcon = document.getElementById('profileIcon');
+//     const dropdownMenu = document.getElementById('dropdownMenu');
+
+//     // Ensure the dropdown is hidden by default
+//     dropdownMenu.style.display = 'none';
+
+//     // Toggle the dropdown menu visibility when the profile icon is clicked
+//     profileIcon.addEventListener('click', function (event) {
+//       event.stopPropagation();
+//       console.log('Profile icon clicked', isDropdownOpen);
+//       isDropdownOpen = !isDropdownOpen;
+//       dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+//     });
+
+//     // Close the dropdown when clicking outside
+//     document.addEventListener('click', function () {
+//       if (isDropdownOpen) {
+//         dropdownMenu.style.display = 'none';
+//         isDropdownOpen = false;
+//       }
+//     });
+
+//     // Add event listeners for dashboard/profile and logout actions
+//     if (isAdmin) {
+//       document.getElementById('adminDashboard').addEventListener('click', function () {
+//         window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
+//       });
+//     } else {
+//       document.getElementById('profile').addEventListener('click', function () {
+//         window.location.href = 'http://54.152.205.55:4000/profile';
+//       });
+//     }
+
+//     document.getElementById('logout').addEventListener('click', handleLogout);
+//   }
+
+//   // Function to show the UI when the user is logged out
+//   function showLoggedOutUI() {
+//     authContainer.innerHTML = `
+//         <div class="auth-buttons">
+//           <button class="button signup" id="signupBtn">Sign Up</button>
+//           <button class="button signin" id="signinBtn">Sign In</button>
+//         </div>
+//       `;
+
+//     // Navigate to the signup and login pages
+    // document.getElementById('signupBtn').addEventListener('click', function () {
+    //   window.location.href = 'http://54.152.205.55:4000/signup';
+    // });
+
+//     document.getElementById('signinBtn').addEventListener('click', function () {
+//       window.location.href = 'http://54.152.205.55:4000/login';
+//     });
+//   }
+
+//   // Function to handle logout action
+//   function handleLogout() {
+//     fetch('https://backend.toddlerneeds.com/api/v1/logout', {
+//       method: 'POST',
+//       credentials: 'include',
+//     })
+//       .then(response => {
+//         if (response) {
+//           //  console.log("Logout response:", response);
+//           console.log("Logout successful");
+//           // window.location.href = '/login';
+//           window.location.reload();
+//         } else {
+//           // Handle errors from the server
+//           response.json().then(data => {
+//             console.error('Logout failed:', data.message || 'Unknown error');
+//             alert('Logout failed. Please try again.');
+//           });
+//         }
+//       })
+//       .catch(error => {
+//         // Handle network or other errors
+//         console.error('Logout request failed:', error);
+//         alert('Logout request failed. Please check your connection and try again.');
+//       });
+//   }
+
+// });
+
+
 document.addEventListener('DOMContentLoaded', function () {
-  const authContainer = document.querySelector('.auth-container');
-  let isDropdownOpen = false;
+    const authContainer = document.querySelector('.auth-container');
+    let isDropdownOpen = false;
 
-  // Fetch login status from the API
-  fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-    credentials: 'include',
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.role) {
-        const isAdmin = data.role === 'admin';
-        showLoggedInUI(isAdmin);
-      } else {
-        showLoggedOutUI();
-      }
+    // Fetch login status from the API
+    fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
+      credentials: 'include',
     })
-    .catch(() => {
-      showLoggedOutUI();
-    });
+      .then(response => response.json())
+      .then(data => {
+        if (data.role) {
+          const isAdmin = data.role === 'admin';
+          showLoggedInUI(isAdmin);
+        } else {
+          showLoggedOutUI();
+        }
+      })
+      .catch(() => {
+        showLoggedOutUI();
+      });
 
-  // Function to show the UI when the user is logged in
-  function showLoggedInUI(isAdmin) {
-    authContainer.innerHTML = `
+    // Function to show the UI when the user is logged in
+    function showLoggedInUI(isAdmin) {
+      authContainer.innerHTML = `
         <div class="profile-container">
           <div class="profile-icon" id="profileIcon"></div>
           <div class="hex-header-dropdown" id="dropdownMenu">
@@ -9222,89 +9342,178 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `;
 
-    const profileIcon = document.getElementById('profileIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
+      const profileIcon = document.getElementById('profileIcon');
+      const dropdownMenu = document.getElementById('dropdownMenu');
 
-    // Ensure the dropdown is hidden by default
-    dropdownMenu.style.display = 'none';
+      dropdownMenu.style.display = 'none';
 
-    // Toggle the dropdown menu visibility when the profile icon is clicked
-    profileIcon.addEventListener('click', function (event) {
-      event.stopPropagation();
-      console.log('Profile icon clicked', isDropdownOpen);
-      isDropdownOpen = !isDropdownOpen;
-      dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
-    });
+      profileIcon.addEventListener('click', function (event) {
+        event.stopPropagation();
+        isDropdownOpen = !isDropdownOpen;
+        dropdownMenu.style.display = isDropdownOpen ? 'block' : 'none';
+      });
 
-    // Close the dropdown when clicking outside
-    document.addEventListener('click', function () {
-      if (isDropdownOpen) {
-        dropdownMenu.style.display = 'none';
-        isDropdownOpen = false;
+      document.addEventListener('click', function () {
+        if (isDropdownOpen) {
+          dropdownMenu.style.display = 'none';
+          isDropdownOpen = false;
+        }
+      });
+
+      if (isAdmin) {
+        document.getElementById('adminDashboard').addEventListener('click', function () {
+          window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
+        });
+      } else {
+        document.getElementById('profile').addEventListener('click', function () {
+          window.location.href = 'http://54.152.205.55:4000/profile';
+        });
       }
-    });
 
-    // Add event listeners for dashboard/profile and logout actions
-    if (isAdmin) {
-      document.getElementById('adminDashboard').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-      });
-    } else {
-      document.getElementById('profile').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/profile';
-      });
+      document.getElementById('logout').addEventListener('click', handleLogout);
     }
 
-    document.getElementById('logout').addEventListener('click', handleLogout);
-  }
-
-  // Function to show the UI when the user is logged out
-  function showLoggedOutUI() {
-    authContainer.innerHTML = `
+    // Function to show the UI when the user is logged out
+    function showLoggedOutUI() {
+      authContainer.innerHTML = `
         <div class="auth-buttons">
           <button class="button signup" id="signupBtn">Sign Up</button>
           <button class="button signin" id="signinBtn">Sign In</button>
         </div>
       `;
 
-    // Navigate to the signup and login pages
+    //   document.getElementById('signupBtn').addEventListener('click', function () {
+    //     showSignupPopup();
+    //   });
+
     document.getElementById('signupBtn').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/signup';
-    });
-
-    document.getElementById('signinBtn').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/login';
-    });
-  }
-
-  // Function to handle logout action
-  function handleLogout() {
-    fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-      method: 'POST',
-      credentials: 'include',
-    })
-      .then(response => {
-        if (response) {
-          //  console.log("Logout response:", response);
-          console.log("Logout successful");
-          // window.location.href = '/login';
-          window.location.reload();
-        } else {
-          // Handle errors from the server
-          response.json().then(data => {
-            console.error('Logout failed:', data.message || 'Unknown error');
-            alert('Logout failed. Please try again.');
-          });
-        }
-      })
-      .catch(error => {
-        // Handle network or other errors
-        console.error('Logout request failed:', error);
-        alert('Logout request failed. Please check your connection and try again.');
+        window.location.href = 'http://54.152.205.55:4000/signup';
       });
-  }
 
+      document.getElementById('signinBtn').addEventListener('click', function () {
+        showLoginPopup();
+      });
+    }
+
+    // Function to create and show the login popup
+    function showLoginPopup() {
+      const loginPopupOverlay = document.createElement('div');
+      loginPopupOverlay.className = 'login-popup-overlay';
+      loginPopupOverlay.innerHTML = `
+        <div class="login-popup-content"> <!-- Class for popup content -->
+            <span class="close-button" id="closeLoginPopup">&times;</span>
+            <h2 class="login-title">Login</h2>
+            <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required class="input-field" />
+            <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
+            <button type="submit" id="loginSubmit" class="login-button">Login</button>
+            </form>
+
+            <!-- Google Login Button -->
+            <button class="google-login-button">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
+            </button>
+
+            <!-- Forgot Password -->
+            <div class="forgot-password">Forgot Password?</div>
+        </div>
+        `;
+
+      document.body.appendChild(loginPopupOverlay);
+
+      // Show the popup
+      loginPopupOverlay.style.display = 'block';
+
+      // Close popup on outside click
+      window.addEventListener('click', function (event) {
+        if (event.target === loginPopupOverlay) {
+          closeLoginPopup();
+        }
+      });
+
+      // Close popup on 'X' click
+      document.getElementById('closeLoginPopup').addEventListener('click', closeLoginPopup);
+
+      // Handle login form submission
+      document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    }
+
+    // Function to handle login logic
+    async function handleLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('loginPassword').value;
+
+      const url = window.location.origin;
+      const parseUrl = new URL(url);
+      const origin = parseUrl.hostname;
+
+      try {
+        const response = await fetch('https://backend.toddlerneeds.com/api/v1/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            username,
+            password,
+            origin,
+          }),
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const token = response.headers.get('authorization');
+          if (token) {
+            localStorage.setItem('3DauthToken', token);
+            console.log("Login successful!");
+            closeLoginPopup();
+            window.location.reload();
+          } else {
+            console.error("Login successful, but no token found.");
+          }
+        } else {
+          console.error("Login failed. Please check your credentials.");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+    }
+
+    // Function to close the login popup
+    function closeLoginPopup() {
+      const loginPopup = document.querySelector('.login-popup-overlay');
+      if (loginPopup) {
+        loginPopup.remove();
+      }
+    }
+
+    // Function to handle logout action
+    function handleLogout() {
+      fetch('https://backend.toddlerneeds.com/api/v1/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log("Logout successful");
+            window.location.reload();
+          } else {
+            response.json().then(data => {
+              console.error('Logout failed:', data.message || 'Unknown error');
+              alert('Logout failed. Please try again.');
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Logout request failed:', error);
+          alert('Logout request failed. Please check your connection and try again.');
+        });
+    }
 });
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
   const authContainer = document.querySelector('.auth-container-min-editor');
@@ -9392,9 +9601,106 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/login';
+    //   window.location.href = 'http://54.152.205.55:4000/login';
+    showLoginPopup();
     });
+
+
   }
+
+      // Function to create and show the login popup
+      function showLoginPopup() {
+        const loginPopupOverlay = document.createElement('div');
+        loginPopupOverlay.className = 'login-popup-overlay';
+        loginPopupOverlay.innerHTML = `
+          <div class="login-popup-content"> <!-- Class for popup content -->
+              <span class="close-button" id="closeLoginPopup">&times;</span>
+              <h2 class="login-title">Login</h2>
+              <form id="loginForm">
+              <input type="text" id="username" placeholder="Username" required class="input-field" />
+              <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
+              <button type="submit" id="loginSubmit" class="login-button">Login</button>
+              </form>
+
+              <!-- Google Login Button -->
+              <button class="google-login-button">
+              <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
+              </button>
+
+              <!-- Forgot Password -->
+              <div class="forgot-password">Forgot Password?</div>
+          </div>
+          `;
+
+        document.body.appendChild(loginPopupOverlay);
+
+        // Show the popup
+        loginPopupOverlay.style.display = 'block';
+
+        // Close popup on outside click
+        window.addEventListener('click', function (event) {
+          if (event.target === loginPopupOverlay) {
+            closeLoginPopup();
+          }
+        });
+
+        // Close popup on 'X' click
+        document.getElementById('closeLoginPopup').addEventListener('click', closeLoginPopup);
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+      }
+
+      // Function to handle login logic
+      async function handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const url = window.location.origin;
+        const parseUrl = new URL(url);
+        const origin = parseUrl.hostname;
+
+        try {
+          const response = await fetch('https://backend.toddlerneeds.com/api/v1/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              username,
+              password,
+              origin,
+            }),
+            credentials: 'include',
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const token = response.headers.get('authorization');
+            if (token) {
+              localStorage.setItem('3DauthToken', token);
+              console.log("Login successful!");
+              closeLoginPopup();
+              window.location.reload();
+            } else {
+              console.error("Login successful, but no token found.");
+            }
+          } else {
+            console.error("Login failed. Please check your credentials.");
+          }
+        } catch (error) {
+          console.error("Error during login:", error);
+        }
+      }
+
+      // Function to close the login popup
+      function closeLoginPopup() {
+        const loginPopup = document.querySelector('.login-popup-overlay');
+        if (loginPopup) {
+          loginPopup.remove();
+        }
+      }
 
   // Function to handle logout action
   function handleLogout() {
