@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () { },
-        saveTemplate: function () { },
-        saveImage: function () { },
+        customFunctions: function () {},
+        saveTemplate: function () {},
+        saveImage: function () {},
       },
       options
     );
@@ -181,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-              url +
-              '" data-loader="no" title="' +
-              item.icons[ii].name +
-              '">' +
-              '<span class="material-icons">' +
-              item.icons[ii].ligature +
-              "</div>"
+                url +
+                '" data-loader="no" title="' +
+                item.icons[ii].name +
+                '">' +
+                '<span class="material-icons">' +
+                item.icons[ii].ligature +
+                "</div>"
             );
         }
       }
@@ -456,6 +456,7 @@
     selector.find("#hexa-fit-container").on("click", function () {
       adjustZoom();
       fixZoomOut();
+      centerCanvas();
     });
     /* Numeric Plus */
     selector.find(".hexa-counter .counter-plus").on("click", function () {
@@ -1047,7 +1048,6 @@
     //   selector.find(target).show();
     // });
 
-
     /* Modal Open */
     selector.find(".hexa-modal-open").on("click", function (e) {
       e.preventDefault();
@@ -1094,7 +1094,6 @@
         },
       });
     });
-
 
     /* Modal Close */
     selector.find(".hexa-modal-close").on("click", function (e) {
@@ -1225,14 +1224,18 @@
 
         // Handle public button click
         $("#saveAsPublic").on("click", function () {
-          resolve(true);  // Return 'true' for public
-          $("#templates-public-private-modal").hide(); // Hide the modal after selection
+          resolve(true); // Return 'true' for public
+          // Close the modal after saving
+          selector.find(".hexa-modal").hide();
+          $("#templates-public-private-modal").hide();
         });
 
         // Handle private button click
         $("#saveAsPrivate").on("click", function () {
           resolve(false); // Return 'false' for private
-          $("#templates-public-private-modal").hide(); // Hide the modal after selection
+          // Close the modal after saving
+          selector.find(".hexa-modal").hide();
+          $("#templates-public-private-modal").hide();
         });
       });
     }
@@ -1352,7 +1355,6 @@
         });
       });
     });
-
 
     function uploadData(data) {
       return new Promise((resolve, reject) => {
@@ -1548,8 +1550,6 @@
         height: originalHeight,
       };
 
-
-
       for (var i = 0; i < json.objects.length; i++) {
         if (json.objects[i].objectType == "textbox") {
           json.objects[i].fontFamily = json.objects[i].fontFamily + "-hexa";
@@ -1592,7 +1592,7 @@
           }
           });
         },
-        function () { },
+        function () {},
         {
           crossOrigin: "anonymous",
         }
@@ -1618,7 +1618,6 @@
           selector.find("#hexa-overlay-preview").attr("src", "");
         }
       }, 100);
-
     }
 
     /* Load Template Fonts */
@@ -1721,7 +1720,7 @@
         selector.find("#hexa-layers li").remove();
         checkLayers();
         $.getJSON($(this).data("json"), function (json) {
-          console.log('this is the editedCanvasobject 2',json);
+          console.log("this is the editedCanvasobject 2", json);
           loadJSON(json);
           setTimeout(function () {
             addToHistory(
@@ -2328,7 +2327,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -2534,12 +2533,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-        action +
-        '<span class="time">' +
-        time +
-        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-        JSON.stringify(json) +
-        "</script></div></li>"
+          action +
+          '<span class="time">' +
+          time +
+          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          JSON.stringify(json) +
+          "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -2738,7 +2737,7 @@
         });
 
         // Load the updated JSON into your editor or canvas
-        console.log('this is the editedCanvasobject 1',originalCanvasObject);
+        console.log("this is the editedCanvasobject 1", originalCanvasObject);
         loadJSON(originalCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
@@ -3496,6 +3495,15 @@
           selector.find("#brush-width").trigger("input");
         }
       }
+    }
+
+    function centerCanvas() {
+      // Apply centering styles to both canvases
+      selector.find("#hexa-canvas-wrap").css({
+        top: "50%",
+        left: "25%",
+        transform: "translate(-50%, -50%)",
+      });
     }
     function fixZoomOut() {
       var containerWidth = selector.find("#hexa-content").width();
@@ -5409,8 +5417,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                          item.find(".select2-item").html() +
-                          "&text=abc",
+                            item.find(".select2-item").html() +
+                            "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5595,18 +5603,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-          $(originalOption).data("icon") +
-          "</span>" +
-          icon.text +
-          "</div>"
+            $(originalOption).data("icon") +
+            "</span>" +
+            icon.text +
+            "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-          $(originalOption).data("font") +
-          '">' +
-          icon.text +
-          "</div>"
+            $(originalOption).data("font") +
+            '">' +
+            icon.text +
+            "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -6730,14 +6738,13 @@
       }
     }
 
-
     let storedActiveObject = null;
     let storedClipPath = null;
     let clipPathOffset = { top: 0, left: 0 };
     let shell = null;
 
     function addClipMask(path, activeObject) {
-      console.log('this is the active path and all', path, activeObject);
+      console.log("this is the active path and all", path, activeObject);
       var uniqueId = "clipmask";
       var desiredWidth = 700;
       var desiredHeight = 700;
@@ -6780,7 +6787,7 @@
           left: activeObject.left,
         });
 
-        console.log('clippath to aand ', clipPath.top, clipPath.left);
+        console.log("clippath to aand ", clipPath.top, clipPath.left);
         clipPathOffset.top = clipPath.top - activeObject.top;
         clipPathOffset.left = clipPath.left - activeObject.left;
         activeObject.clipPath = clipPath;
@@ -6789,7 +6796,7 @@
         // Store the activeObject and clipPath for later use when "done" is clicked
         storedActiveObject = activeObject;
         storedClipPath = clipPath;
-        canvas.add(shell)
+        canvas.add(shell);
         // Add the image (with clip path) to the canvas and make it the active object
         canvas.setActiveObject(activeObject);
         canvas.renderAll();
@@ -6800,20 +6807,17 @@
             left: shell.left + clipPathOffset.left,
             angle: shell.angle,
             scaleX: shell.scaleX,
-            scaleY: shell.scaleY
+            scaleY: shell.scaleY,
           });
           clipPath.setCoords();
           canvas.renderAll();
           // console.log("clippathOffset", clipPath.top, activeObject.top);
-
         }
 
-
-
         // Attach the event handlers to sync the clipPath with the shell
-        shell.on('moving', updateClipPathPosition);
-        shell.on('scaling', updateClipPathPosition);
-        shell.on('rotating', updateClipPathPosition);
+        shell.on("moving", updateClipPathPosition);
+        shell.on("scaling", updateClipPathPosition);
+        shell.on("rotating", updateClipPathPosition);
 
         // Show the "done" button
         document.getElementById("done-masking-img").style.display = "block";
@@ -6824,9 +6828,8 @@
       }
     }
 
-
-    let relativeTop
-    let relativeLeft
+    let relativeTop;
+    let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
       clipPath.set({
@@ -6835,36 +6838,46 @@
         angle: activeObject.angle,
         top: activeObject.top + relativeTop,
         left: activeObject.left + relativeLeft,
-
       });
       clipPath.setCoords();
       canvas.renderAll();
     }
 
-    document.getElementById("done-masking-img").addEventListener("click", function () {
-      canvas.remove(shell)
-      onlyDeleteLayerEvent(shell.id)
+    document
+      .getElementById("done-masking-img")
+      .addEventListener("click", function () {
+        canvas.remove(shell);
+        onlyDeleteLayerEvent(shell.id);
 
-      canvas.requestRenderAll()
-      console.log('value is ', clipPathOffset.top, clipPathOffset.left);
+        canvas.requestRenderAll();
+        console.log("value is ", clipPathOffset.top, clipPathOffset.left);
 
-      if (storedActiveObject && storedClipPath) {
-        relativeTop = storedClipPath.top - storedActiveObject.top;
-        relativeLeft = storedClipPath.left - storedActiveObject.left;
+        if (storedActiveObject && storedClipPath) {
+          relativeTop = storedClipPath.top - storedActiveObject.top;
+          relativeLeft = storedClipPath.left - storedActiveObject.left;
 
-        // Attach the event handlers to start syncing the clipPath with the image
-        storedActiveObject.on('moving', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
-        storedActiveObject.on('rotating', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
-        storedActiveObject.on('scaling', () => syncClipPathWithImage(storedClipPath, storedActiveObject));
+          // Attach the event handlers to start syncing the clipPath with the image
+          storedActiveObject.on("moving", () =>
+            syncClipPathWithImage(storedClipPath, storedActiveObject)
+          );
+          storedActiveObject.on("rotating", () =>
+            syncClipPathWithImage(storedClipPath, storedActiveObject)
+          );
+          storedActiveObject.on("scaling", () =>
+            syncClipPathWithImage(storedClipPath, storedActiveObject)
+          );
 
-        // Optionally, hide the "done" button after syncing starts
-        document.getElementById("done-masking-img").style.display = "none";
-        document.getElementById("replace-image-btn").style.display = "none";
-        document.getElementById("edit-masking-button").style.display = "block";
-      } else {
-        alert("No active object found for syncing. Please add a clip mask first.");
-      }
-    });
+          // Optionally, hide the "done" button after syncing starts
+          document.getElementById("done-masking-img").style.display = "none";
+          document.getElementById("replace-image-btn").style.display = "none";
+          document.getElementById("edit-masking-button").style.display =
+            "block";
+        } else {
+          alert(
+            "No active object found for syncing. Please add a clip mask first."
+          );
+        }
+      });
 
     // function applyTemplateClipMask(clipmaskObject) {
     //   console.log('Received image with clipPath:', clipmaskObject);
@@ -6942,24 +6955,24 @@
     //   // }
     // }
     function applyTemplateClipMask(clipmaskObject) {
-    //   console.log('Attempting to remove the object:', clipObject);
-     let mainClippath = clipmaskObject.clipPath;
+      //   console.log('Attempting to remove the object:', clipObject);
+      let mainClippath = clipmaskObject.clipPath;
 
       // Ensure mainClippath exists and has a valid path
-     if (!mainClippath || !mainClippath.path) {
-      console.log('No valid clipPath found in the clipmaskObject.');
-       return;
-     }
-  let path = mainClippath.path;
+      if (!mainClippath || !mainClippath.path) {
+        console.log("No valid clipPath found in the clipmaskObject.");
+        return;
+      }
+      let path = mainClippath.path;
 
-     // Define the offset values between shell and clipPath for proper syncing
+      // Define the offset values between shell and clipPath for proper syncing
       let clipPathOffset = {
         top: clipmaskObject.top - mainClippath.top,
         left: clipmaskObject.left - mainClippath.left,
       };
 
       if (clipmaskObject) {
-        console.log('Clip mask object:', clipmaskObject);
+        console.log("Clip mask object:", clipmaskObject);
 
         // Create the shell using the mainClippath path
         shell = new fabric.Path(path, {
@@ -6984,7 +6997,7 @@
         storedClipPath = mainClippath; // Storing the clip path object
 
         // Add shell to the canvas (image is already added to the canvas)
-        canvas.add(clipmaskObject)
+        canvas.add(clipmaskObject);
         canvas.add(shell);
         canvas.requestRenderAll();
 
@@ -7007,25 +7020,20 @@
         }
 
         // Sync clipPath updates when the shell is moved, scaled, or rotated
-        shell.on('moving', updateClipPathPosition);
-        shell.on('scaling', updateClipPathPosition);
-        shell.on('rotating', updateClipPathPosition);
+        shell.on("moving", updateClipPathPosition);
+        shell.on("scaling", updateClipPathPosition);
+        shell.on("rotating", updateClipPathPosition);
       } else {
-        console.log('There is no object.');
+        console.log("There is no object.");
       }
-
     }
-
-
-
-
 
     function unlinkClipPath() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
-        storedActiveObject.off('moving');
-        storedActiveObject.off('rotating');
-        storedActiveObject.off('scaling');
+        storedActiveObject.off("moving");
+        storedActiveObject.off("rotating");
+        storedActiveObject.off("scaling");
 
         // Remove the clipPath from the active object
         storedActiveObject.clipPath = storedClipPath;
@@ -7051,9 +7059,11 @@
       }
     }
 
-    document.getElementById("edit-masking-button").addEventListener("click", function () {
-      unlinkClipPath();
-    });
+    document
+      .getElementById("edit-masking-button")
+      .addEventListener("click", function () {
+        unlinkClipPath();
+      });
     function updateReplaceButtonState() {
       const activeObject = canvas.getActiveObject();
       console.log("this is active now", activeObject);
@@ -7102,42 +7112,45 @@
         reader.onload = function (event) {
           var imageData = event.target.result;
 
-          fabric.Image.fromURL(imageData, function (img) {
-            // Get canvas dimensions
-            var canvasWidth = canvas.getWidth();
-            var canvasHeight = canvas.getHeight();
+          fabric.Image.fromURL(
+            imageData,
+            function (img) {
+              // Get canvas dimensions
+              var canvasWidth = canvas.getWidth();
+              var canvasHeight = canvas.getHeight();
 
-            // Calculate scale to fit the canvas while maintaining aspect ratio
-            var scaleX = canvasWidth / img.width;
-            var scaleY = canvasHeight / img.height;
-            var scale = Math.min(scaleX, scaleY);
+              // Calculate scale to fit the canvas while maintaining aspect ratio
+              var scaleX = canvasWidth / img.width;
+              var scaleY = canvasHeight / img.height;
+              var scale = Math.min(scaleX, scaleY);
 
-            // Apply scaling and set properties from the old image to the new one
-            img.set({
-              left: activeObject.left,
-              top: activeObject.top,
-              // scaleX: scale * activeObject.scaleX,
-              // scaleY: scale * activeObject.scaleY,
-              angle: activeObject.angle,
-              originX: activeObject.originX,
-              originY: activeObject.originY,
-              clipPath: storedClipPath,
-              objectCaching: false,
-              customId: "clipmask",
-            });
-            storedActiveObject = img;
-            storedClipPath = img.clipPath;
+              // Apply scaling and set properties from the old image to the new one
+              img.set({
+                left: activeObject.left,
+                top: activeObject.top,
+                // scaleX: scale * activeObject.scaleX,
+                // scaleY: scale * activeObject.scaleY,
+                angle: activeObject.angle,
+                originX: activeObject.originX,
+                originY: activeObject.originY,
+                clipPath: storedClipPath,
+                objectCaching: false,
+                customId: "clipmask",
+              });
+              storedActiveObject = img;
+              storedClipPath = img.clipPath;
 
             canvas.remove(activeObject);
             onlyDeleteLayerEvent(activeObject.id)
             canvas.add(img);
 
-
-            canvas.renderAll(); // Re-render the canvas to reflect changes
-          }, function (error) {
-            console.error("Error loading image:", error);
-            alert("Failed to load the image. Please try again.");
-          });
+              canvas.renderAll(); // Re-render the canvas to reflect changes
+            },
+            function (error) {
+              console.error("Error loading image:", error);
+              alert("Failed to load the image. Please try again.");
+            }
+          );
         };
 
         reader.onerror = function (error) {
@@ -7155,7 +7168,6 @@
       document.getElementById("image-input").click();
     };
 
-
     const unmaskButton = selector.find("#hexa-unmask");
     unmaskButton.on("click", function () {
       const activeImage = canvas.getActiveObject();
@@ -7164,13 +7176,12 @@
       activeUnmaskButton();
     });
 
-
     function unmaskImage() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
-        storedActiveObject.off('moving');
-        storedActiveObject.off('rotating');
-        storedActiveObject.off('scaling');
+        storedActiveObject.off("moving");
+        storedActiveObject.off("rotating");
+        storedActiveObject.off("scaling");
 
         // Remove the clipPath from the active object
         storedActiveObject.clipPath = null;
@@ -7180,7 +7191,7 @@
         // canvas.remove(storedClipPath)
         // canvas.remove(shell)
 
-        canvas.requestRenderAll()
+        canvas.requestRenderAll();
 
         // Show the "done" button again for re-applying the clip mask
         document.getElementById("done-masking-img").style.display = "none";
@@ -7226,8 +7237,6 @@
       "#hexa-maskbutton, #hexa-maskbutton-outsied"
     );
     maskButton.css("display", "none");
-
-
 
     // Your addMask function (similar to the one you provided earlier)
     function addMask(canvas, points) {
@@ -8007,7 +8016,7 @@
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8215,7 +8224,7 @@
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8366,7 +8375,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8764,8 +8773,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-            selector.find("#brush-pattern-width").val()
-          ),
+              selector.find("#brush-pattern-width").val()
+            ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -9043,66 +9052,67 @@
     });
 
     function loadTemplateFromUrl() {
-        var params = new URLSearchParams(window.location.search);
-        var name = params.get('name');
-        var id = params.get('id');
-        var templateName = params.get('templateName');
-        console.log("This is the template params: ", name, id, templateName);
+      var params = new URLSearchParams(window.location.search);
+      var name = params.get("name");
+      var id = params.get("id");
+      var templateName = params.get("templateName");
+      console.log("This is the template params: ", name, id, templateName);
 
-        if (!templateName) {
-            console.error('No template name found in the URL.');
-            return;
-        }
+      if (!templateName) {
+        console.error("No template name found in the URL.");
+        return;
+      }
 
-        // Modify the DOM elements using jQuery
-        var $mainContainer = $("#mini-editor-main-cont");
-        var $buttonContainer = $("#webg-buttons-container");
+      // Modify the DOM elements using jQuery
+      var $mainContainer = $("#mini-editor-main-cont");
+      var $buttonContainer = $("#webg-buttons-container");
 
-        if ($mainContainer.length && $buttonContainer.length) {
-            // Remove the 'personalise-page-active' class from the main container
-            $mainContainer.removeClass("personalise-page-active");
-            // Add the 'personalise-page-inactive' class to the main container
-            $mainContainer.addClass("personalise-page-inactive");
+      if ($mainContainer.length && $buttonContainer.length) {
+        // Remove the 'personalise-page-active' class from the main container
+        $mainContainer.removeClass("personalise-page-active");
+        // Add the 'personalise-page-inactive' class to the main container
+        $mainContainer.addClass("personalise-page-inactive");
 
-            // Remove the 'toggle-2d-3d-cont' class from the button container
-            $buttonContainer.removeClass("toggle-2d-3d-cont");
-        } else {
-            console.error("Main container or button container not found in the DOM.");
-        }
+        // Remove the 'toggle-2d-3d-cont' class from the button container
+        $buttonContainer.removeClass("toggle-2d-3d-cont");
+      } else {
+        console.error(
+          "Main container or button container not found in the DOM."
+        );
+      }
 
-        // Fetch the template data using jQuery's AJAX
-        $.ajax({
-            url: `https://backend.toddlerneeds.com/api/v1/user/template/${id}`,
-            method: 'GET',
-            xhrFields: {
-                withCredentials: true // to include credentials (cookies)
-            },
-            success: function(data) {
-                console.log('Template data:', data);
+      // Fetch the template data using jQuery's AJAX
+      $.ajax({
+        url: `https://backend.toddlerneeds.com/api/v1/user/template/${id}`,
+        method: "GET",
+        xhrFields: {
+          withCredentials: true, // to include credentials (cookies)
+        },
+        success: function (data) {
+          console.log("Template data:", data);
 
-                if (data.src) {
-                    // Fetch the template JSON
-                    $.getJSON(data.src, function(jsonData) {
-                        console.log('Loaded template JSON:', jsonData);
-                        loadJSON(jsonData);
-                    }).fail(function() {
-                        console.error('Error loading template JSON');
-                    });
-                } else {
-                    console.error('No template source URL found in the API response.');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching template:', status, error);
-            }
-        });
+          if (data.src) {
+            // Fetch the template JSON
+            $.getJSON(data.src, function (jsonData) {
+              console.log("Loaded template JSON:", jsonData);
+              loadJSON(jsonData);
+            }).fail(function () {
+              console.error("Error loading template JSON");
+            });
+          } else {
+            console.error("No template source URL found in the API response.");
+          }
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching template:", status, error);
+        },
+      });
     }
-    loadTemplateFromUrl()
+    loadTemplateFromUrl();
     //////////////////////* CUSTOM FUNCTIONS *//////////////////////
     settings.customFunctions.call(this, selector, canvas, lazyLoadInstance);
   };
 })(jQuery);
-
 
 // document.addEventListener('DOMContentLoaded', function () {
 //     const authContainer = document.querySelector('.auth-container');
@@ -9194,7 +9204,6 @@
 //     }
 //   });
 
-
 // document.addEventListener('DOMContentLoaded', function () {
 //   const authContainer = document.querySelector('.auth-container');
 //   let isDropdownOpen = false;
@@ -9276,9 +9285,9 @@
 //       `;
 
 //     // Navigate to the signup and login pages
-    // document.getElementById('signupBtn').addEventListener('click', function () {
-    //   window.location.href = 'http://54.152.205.55:4000/signup';
-    // });
+// document.getElementById('signupBtn').addEventListener('click', function () {
+//   window.location.href = 'http://54.152.205.55:4000/signup';
+// });
 
 //     document.getElementById('signinBtn').addEventListener('click', function () {
 //       window.location.href = 'http://54.152.205.55:4000/login';
@@ -9314,100 +9323,105 @@
 
 // });
 
+document.addEventListener("DOMContentLoaded", function () {
+  const authContainer = document.querySelector(".auth-container");
+  let isDropdownOpen = false;
 
-document.addEventListener('DOMContentLoaded', function () {
-    const authContainer = document.querySelector('.auth-container');
-    let isDropdownOpen = false;
-
-    // Fetch login status from the API
-    fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-      credentials: 'include',
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.role) {
-          const isAdmin = data.role === 'admin';
-          showLoggedInUI(isAdmin);
-        } else {
-          showLoggedOutUI();
-        }
-      })
-      .catch(() => {
+  // Fetch login status from the API
+  fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+    credentials: "include",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.role) {
+        const isAdmin = data.role === "admin";
+        showLoggedInUI(isAdmin);
+      } else {
         showLoggedOutUI();
-      });
+      }
+    })
+    .catch(() => {
+      showLoggedOutUI();
+    });
 
-    // Function to show the UI when the user is logged in
-    function showLoggedInUI(isAdmin) {
-      authContainer.innerHTML = `
+  // Function to show the UI when the user is logged in
+  function showLoggedInUI(isAdmin) {
+    authContainer.innerHTML = `
         <div class="profile-container">
           <div class="profile-icon" id="profileIcon"></div>
           <div class="hex-header-dropdown" id="dropdownMenu">
             <ul>
-              ${isAdmin ? `<li id="adminDashboard">Dashboard</li>` : `<li id="profile">Profile</li>`}
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard">Dashboard</li>`
+                  : `<li id="profile">Profile</li>`
+              }
               <li id="logout">Logout</li>
             </ul>
           </div>
         </div>
       `;
 
-      const profileIcon = document.getElementById('profileIcon');
-      const dropdownMenu = document.getElementById('dropdownMenu');
+    const profileIcon = document.getElementById("profileIcon");
+    const dropdownMenu = document.getElementById("dropdownMenu");
 
-      dropdownMenu.style.display = 'none';
+    dropdownMenu.style.display = "none";
 
-      profileIcon.addEventListener('click', function (event) {
-        event.stopPropagation();
-        isDropdownOpen = !isDropdownOpen;
-        dropdownMenu.style.display = isDropdownOpen ? 'block' : 'none';
-      });
+    profileIcon.addEventListener("click", function (event) {
+      event.stopPropagation();
+      isDropdownOpen = !isDropdownOpen;
+      dropdownMenu.style.display = isDropdownOpen ? "block" : "none";
+    });
 
-      document.addEventListener('click', function () {
-        if (isDropdownOpen) {
-          dropdownMenu.style.display = 'none';
-          isDropdownOpen = false;
-        }
-      });
-
-      if (isAdmin) {
-        document.getElementById('adminDashboard').addEventListener('click', function () {
-          window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-        });
-      } else {
-        document.getElementById('profile').addEventListener('click', function () {
-          window.location.href = 'http://54.152.205.55:4000/profile';
-        });
+    document.addEventListener("click", function () {
+      if (isDropdownOpen) {
+        dropdownMenu.style.display = "none";
+        isDropdownOpen = false;
       }
+    });
 
-      document.getElementById('logout').addEventListener('click', handleLogout);
+    if (isAdmin) {
+      document
+        .getElementById("adminDashboard")
+        .addEventListener("click", function () {
+          window.location.href = "http://54.152.205.55:4000/admin-dashboard";
+        });
+    } else {
+      document.getElementById("profile").addEventListener("click", function () {
+        window.location.href = "http://54.152.205.55:4000/profile";
+      });
     }
 
-    // Function to show the UI when the user is logged out
-    function showLoggedOutUI() {
-      authContainer.innerHTML = `
+    document.getElementById("logout").addEventListener("click", handleLogout);
+  }
+
+  // Function to show the UI when the user is logged out
+  function showLoggedOutUI() {
+    authContainer.innerHTML = `
         <div class="auth-buttons">
           <button class="button signup" id="signupBtn">Sign Up</button>
           <button class="button signin" id="signinBtn">Sign In</button>
         </div>
       `;
 
-    //   document.getElementById('signupBtn').addEventListener('click', function () {
-    //     showSignupPopup();
+    document.getElementById("signupBtn").addEventListener("click", function () {
+      showSignupPopup();
+    });
+
+    // document.getElementById('signupBtn').addEventListener('click', function () {
+    //     window.location.href = 'http://54.152.205.55:4000/signup';
     //   });
 
-    document.getElementById('signupBtn').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/signup';
-      });
+    document.getElementById("signinBtn").addEventListener("click", function () {
+      showLoginPopup();
+    });
+  }
 
-      document.getElementById('signinBtn').addEventListener('click', function () {
-        showLoginPopup();
-      });
-    }
-
-    // Function to create and show the login popup
-    function showLoginPopup() {
-      const loginPopupOverlay = document.createElement('div');
-      loginPopupOverlay.className = 'login-popup-overlay';
-      loginPopupOverlay.innerHTML = `
+  // Function to create and show the login popup
+  function showLoginPopup() {
+    const loginPopupOverlay = document.createElement("div");
+    loginPopupOverlay.className = "login-popup-overlay";
+    loginPopupOverlay.innerHTML = `
         <div class="login-popup-content"> <!-- Class for popup content -->
             <span class="close-button" id="closeLoginPopup">&times;</span>
             <h2 class="login-title">Login</h2>
@@ -9418,123 +9432,232 @@ document.addEventListener('DOMContentLoaded', function () {
             </form>
 
             <!-- Google Login Button -->
-            <button class="google-login-button">
+            <button class="google-login-button" id="googleLoginBtn">
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
             </button>
 
             <!-- Forgot Password -->
-            <div class="forgot-password">Forgot Password?</div>
+             <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
         </div>
         `;
 
-      document.body.appendChild(loginPopupOverlay);
+    document.body.appendChild(loginPopupOverlay);
 
-      // Show the popup
-      loginPopupOverlay.style.display = 'block';
+    // Show the popup
+    loginPopupOverlay.style.display = "block";
 
-      // Close popup on outside click
-      window.addEventListener('click', function (event) {
-        if (event.target === loginPopupOverlay) {
-          closeLoginPopup();
-        }
+    // Close popup on outside click
+    window.addEventListener("click", function (event) {
+      if (event.target === loginPopupOverlay) {
+        closeLoginPopup();
+      }
+    });
+
+    // Close popup on 'X' click
+    document
+      .getElementById("closeLoginPopup")
+      .addEventListener("click", closeLoginPopup);
+
+    // Handle login form submission
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", handleLogin);
+
+    // Add the Google Sign-In functionality
+    document.getElementById("googleLoginBtn").addEventListener("click", () => {
+      window.location.href =
+        "https://backend.toddlerneeds.com/api/v1/auth/google";
+    });
+
+    document
+      .getElementById("forgotPass-cont")
+      .addEventListener("click", function () {
+        window.location.href = "http://54.152.205.55:4000/reset-password";
       });
+  }
 
-      // Close popup on 'X' click
-      document.getElementById('closeLoginPopup').addEventListener('click', closeLoginPopup);
+  // Function to handle login logic
+  async function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("loginPassword").value;
 
-      // Handle login form submission
-      document.getElementById('loginForm').addEventListener('submit', handleLogin);
-    }
+    const url = window.location.origin;
+    const parseUrl = new URL(url);
+    const origin = parseUrl.hostname;
 
-    // Function to handle login logic
-    async function handleLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('loginPassword').value;
-
-      const url = window.location.origin;
-      const parseUrl = new URL(url);
-      const origin = parseUrl.hostname;
-
-      try {
-        const response = await fetch('https://backend.toddlerneeds.com/api/v1/login', {
-          method: 'POST',
+    try {
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/login",
+        {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
           body: new URLSearchParams({
             username,
             password,
             origin,
           }),
-          credentials: 'include',
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const token = response.headers.get('authorization');
-          if (token) {
-            localStorage.setItem('3DauthToken', token);
-            console.log("Login successful!");
-            closeLoginPopup();
-            window.location.reload();
-          } else {
-            console.error("Login successful, but no token found.");
-          }
-        } else {
-          console.error("Login failed. Please check your credentials.");
+          credentials: "include",
         }
-      } catch (error) {
-        console.error("Error during login:", error);
-      }
-    }
+      );
 
-    // Function to close the login popup
-    function closeLoginPopup() {
-      const loginPopup = document.querySelector('.login-popup-overlay');
-      if (loginPopup) {
-        loginPopup.remove();
+      if (response.ok) {
+        const data = await response.json();
+        const token = response.headers.get("authorization");
+        if (token) {
+          localStorage.setItem("3DauthToken", token);
+          console.log("Login successful!");
+          closeLoginPopup();
+          window.location.reload();
+        } else {
+          console.error("Login successful, but no token found.");
+        }
+      } else {
+        console.error("Login failed. Please check your credentials.");
       }
+    } catch (error) {
+      console.error("Error during login:", error);
     }
+  }
 
-    // Function to handle logout action
-    function handleLogout() {
-      fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-        method: 'POST',
-        credentials: 'include',
+  // Function to close the login popup
+  function closeLoginPopup() {
+    const loginPopup = document.querySelector(".login-popup-overlay");
+    if (loginPopup) {
+      loginPopup.remove();
+    }
+  }
+
+  // Function to create and show the signup popup
+  function showSignupPopup() {
+    const signupPopupOverlay = document.createElement("div");
+    signupPopupOverlay.className = "signup-popup-overlay";
+    signupPopupOverlay.innerHTML = `
+            <div class="signup-popup-content"> <!-- Class for signup popup content -->
+                <span class="close-button" id="closeSignupPopup">&times;</span>
+                <h2 class="signup-title">Sign Up</h2>
+                <form id="signupForm">
+                    <input type="text" id="firstName" placeholder="First Name" required class="input-field" />
+                    <input type="text" id="lastName" placeholder="Last Name" required class="input-field" />
+                    <input type="email" id="email" placeholder="Email" required class="input-field" />
+                    <input type="text" id="username" placeholder="Username" required class="input-field" />
+                    <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
+                    <button type="submit" id="signupSubmit" class="signup-button">Sign Up</button>
+                </form>
+            </div>
+            `;
+
+    document.body.appendChild(signupPopupOverlay);
+
+    // Show the popup
+    signupPopupOverlay.style.display = "block";
+
+    // Close popup on outside click
+    window.addEventListener("click", function (event) {
+      if (event.target === signupPopupOverlay) {
+        closeSignupPopup();
+      }
+    });
+
+    // Close popup on 'X' click
+    document
+      .getElementById("closeSignupPopup")
+      .addEventListener("click", closeSignupPopup);
+
+    // Handle signup form submission
+    document
+      .getElementById("signupForm")
+      .addEventListener("submit", handleSignup);
+  }
+
+  // Function to handle signup logic
+  async function handleSignup(e) {
+    e.preventDefault();
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("signupPassword").value;
+
+    try {
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            firstName,
+            lastName,
+            email,
+            username,
+            password,
+          }),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("Signup successful!");
+        closeSignupPopup();
+        window.location.reload();
+      } else {
+        console.error("Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
+  }
+
+  // Function to close the signup popup
+  function closeSignupPopup() {
+    const signupPopup = document.querySelector(".signup-popup-overlay");
+    if (signupPopup) {
+      signupPopup.remove();
+    }
+  }
+
+  // Function to handle logout action
+  function handleLogout() {
+    fetch("https://backend.toddlerneeds.com/api/v1/logout", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Logout successful");
+          window.location.reload();
+        } else {
+          response.json().then((data) => {
+            console.error("Logout failed:", data.message || "Unknown error");
+            alert("Logout failed. Please try again.");
+          });
+        }
       })
-        .then(response => {
-          if (response.ok) {
-            console.log("Logout successful");
-            window.location.reload();
-          } else {
-            response.json().then(data => {
-              console.error('Logout failed:', data.message || 'Unknown error');
-              alert('Logout failed. Please try again.');
-            });
-          }
-        })
-        .catch(error => {
-          console.error('Logout request failed:', error);
-          alert('Logout request failed. Please check your connection and try again.');
-        });
-    }
+      .catch((error) => {
+        console.error("Logout request failed:", error);
+        alert(
+          "Logout request failed. Please check your connection and try again."
+        );
+      });
+  }
 });
 
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  const authContainer = document.querySelector('.auth-container-min-editor');
+document.addEventListener("DOMContentLoaded", function () {
+  const authContainer = document.querySelector(".auth-container-min-editor");
   let isDropdownOpen = false;
 
   // Fetch login status from the API
-  fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-    credentials: 'include',
+  fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+    credentials: "include",
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       if (data.role) {
-        const isAdmin = data.role === 'admin';
+        const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
       } else {
         showLoggedOutUI();
@@ -9551,47 +9674,57 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
             <ul>
-              ${isAdmin ? `<li id="adminDashboard-min-editor">Dashboard</li>` : `<li id="profile-min-editor">Profile</li>`}
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard-min-editor">Dashboard</li>`
+                  : `<li id="profile-min-editor">Profile</li>`
+              }
               <li id="logout-min-editor">Logout</li>
             </ul>
           </div>
         </div>
       `;
 
-    const profileIcon = document.getElementById('profileIcon-min-editor');
-    const dropdownMenu = document.getElementById('dropdownMenu-min-editor');
+    const profileIcon = document.getElementById("profileIcon-min-editor");
+    const dropdownMenu = document.getElementById("dropdownMenu-min-editor");
 
     // Ensure the dropdown is hidden by default
-    dropdownMenu.style.display = 'none';
+    dropdownMenu.style.display = "none";
 
     // Toggle the dropdown menu visibility when the profile icon is clicked
-    profileIcon.addEventListener('click', function (event) {
+    profileIcon.addEventListener("click", function (event) {
       event.stopPropagation();
-      console.log('Profile icon clicked', isDropdownOpen);
+      console.log("Profile icon clicked", isDropdownOpen);
       isDropdownOpen = !isDropdownOpen;
-      dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
+      dropdownMenu.style.display = isDropdownOpen ? "none" : "block";
     });
 
     // Close the dropdown when clicking outside
-    document.addEventListener('click', function () {
+    document.addEventListener("click", function () {
       if (isDropdownOpen) {
-        dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = "none";
         isDropdownOpen = false;
       }
     });
 
     // Add event listeners for dashboard/profile and logout actions
     if (isAdmin) {
-      document.getElementById('adminDashboard-min-editor').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-      });
+      document
+        .getElementById("adminDashboard-min-editor")
+        .addEventListener("click", function () {
+          window.location.href = "http://54.152.205.55:4000/admin-dashboard";
+        });
     } else {
-      document.getElementById('profile-min-editor').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/profile';
-      });
+      document
+        .getElementById("profile-min-editor")
+        .addEventListener("click", function () {
+          window.location.href = "http://54.152.205.55:4000/profile";
+        });
     }
 
-    document.getElementById('logout-min-editor').addEventListener('click', handleLogout);
+    document
+      .getElementById("logout-min-editor")
+      .addEventListener("click", handleLogout);
   }
 
   // Function to show the UI when the user is logged out
@@ -9604,23 +9737,26 @@ document.addEventListener('DOMContentLoaded', function () {
       `;
 
     // Navigate to the signup and login pages
-    document.getElementById('signupBtn-min-editor').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/signup';
-    });
+    document
+      .getElementById("signupBtn-min-editor")
+      .addEventListener("click", function () {
+        //   window.location.href = 'http://54.152.205.55:4000/signup';
+        showSignupPopup();
+      });
 
-    document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
-    //   window.location.href = 'http://54.152.205.55:4000/login';
-    showLoginPopup();
-    });
-
-
+    document
+      .getElementById("signinBtn-min-editor")
+      .addEventListener("click", function () {
+        //   window.location.href = 'http://54.152.205.55:4000/login';
+        showLoginPopup();
+      });
   }
 
-      // Function to create and show the login popup
-      function showLoginPopup() {
-        const loginPopupOverlay = document.createElement('div');
-        loginPopupOverlay.className = 'login-popup-overlay';
-        loginPopupOverlay.innerHTML = `
+  // Function to create and show the login popup
+  function showLoginPopup() {
+    const loginPopupOverlay = document.createElement("div");
+    loginPopupOverlay.className = "login-popup-overlay";
+    loginPopupOverlay.innerHTML = `
           <div class="login-popup-content"> <!-- Class for popup content -->
               <span class="close-button" id="closeLoginPopup">&times;</span>
               <h2 class="login-title">Login</h2>
@@ -9631,92 +9767,201 @@ document.addEventListener('DOMContentLoaded', function () {
               </form>
 
               <!-- Google Login Button -->
-              <button class="google-login-button">
+              <button class="google-login-button" id="googleLoginBtn">
               <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
               </button>
 
               <!-- Forgot Password -->
-              <div class="forgot-password">Forgot Password?</div>
+            <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
           </div>
           `;
 
-        document.body.appendChild(loginPopupOverlay);
+    document.body.appendChild(loginPopupOverlay);
 
-        // Show the popup
-        loginPopupOverlay.style.display = 'block';
+    // Show the popup
+    loginPopupOverlay.style.display = "block";
 
-        // Close popup on outside click
-        window.addEventListener('click', function (event) {
-          if (event.target === loginPopupOverlay) {
-            closeLoginPopup();
-          }
-        });
-
-        // Close popup on 'X' click
-        document.getElementById('closeLoginPopup').addEventListener('click', closeLoginPopup);
-
-        // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    // Close popup on outside click
+    window.addEventListener("click", function (event) {
+      if (event.target === loginPopupOverlay) {
+        closeLoginPopup();
       }
+    });
 
-      // Function to handle login logic
-      async function handleLogin(e) {
-        e.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('loginPassword').value;
+    // Close popup on 'X' click
+    document
+      .getElementById("closeLoginPopup")
+      .addEventListener("click", closeLoginPopup);
 
-        const url = window.location.origin;
-        const parseUrl = new URL(url);
-        const origin = parseUrl.hostname;
+    // Handle login form submission
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", handleLogin);
 
-        try {
-          const response = await fetch('https://backend.toddlerneeds.com/api/v1/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-              username,
-              password,
-              origin,
-            }),
-            credentials: 'include',
-          });
+    // Add the Google Sign-In functionality
+    document.getElementById("googleLoginBtn").addEventListener("click", () => {
+      window.location.href =
+        "https://backend.toddlerneeds.com/api/v1/auth/google";
+    });
 
-          if (response.ok) {
-            const data = await response.json();
-            const token = response.headers.get('authorization');
-            if (token) {
-              localStorage.setItem('3DauthToken', token);
-              console.log("Login successful!");
-              closeLoginPopup();
-              window.location.reload();
-            } else {
-              console.error("Login successful, but no token found.");
-            }
-          } else {
-            console.error("Login failed. Please check your credentials.");
-          }
-        } catch (error) {
-          console.error("Error during login:", error);
+    document
+      .getElementById("forgotPass-cont")
+      .addEventListener("click", function () {
+        window.location.href = "http://54.152.205.55:4000/reset-password";
+      });
+  }
+
+  // Function to handle login logic
+  async function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const url = window.location.origin;
+    const parseUrl = new URL(url);
+    const origin = parseUrl.hostname;
+
+    try {
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            username,
+            password,
+            origin,
+          }),
+          credentials: "include",
         }
-      }
+      );
 
-      // Function to close the login popup
-      function closeLoginPopup() {
-        const loginPopup = document.querySelector('.login-popup-overlay');
-        if (loginPopup) {
-          loginPopup.remove();
+      if (response.ok) {
+        const data = await response.json();
+        const token = response.headers.get("authorization");
+        if (token) {
+          localStorage.setItem("3DauthToken", token);
+          console.log("Login successful!");
+          closeLoginPopup();
+          window.location.reload();
+        } else {
+          console.error("Login successful, but no token found.");
         }
+      } else {
+        console.error("Login failed. Please check your credentials.");
       }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  }
+
+  // Function to close the login popup
+  function closeLoginPopup() {
+    const loginPopup = document.querySelector(".login-popup-overlay");
+    if (loginPopup) {
+      loginPopup.remove();
+    }
+  }
+
+  // Function to create and show the signup popup
+  function showSignupPopup() {
+    const signupPopupOverlay = document.createElement("div");
+    signupPopupOverlay.className = "signup-popup-overlay";
+    signupPopupOverlay.innerHTML = `
+                <div class="signup-popup-content"> <!-- Class for signup popup content -->
+                    <span class="close-button" id="closeSignupPopup">&times;</span>
+                    <h2 class="signup-title">Sign Up</h2>
+                    <form id="signupForm">
+                        <input type="text" id="firstName" placeholder="First Name" required class="input-field" />
+                        <input type="text" id="lastName" placeholder="Last Name" required class="input-field" />
+                        <input type="email" id="email" placeholder="Email" required class="input-field" />
+                        <input type="text" id="username" placeholder="Username" required class="input-field" />
+                        <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
+                        <button type="submit" id="signupSubmit" class="signup-button">Sign Up</button>
+                    </form>
+                </div>
+                `;
+
+    document.body.appendChild(signupPopupOverlay);
+
+    // Show the popup
+    signupPopupOverlay.style.display = "block";
+
+    // Close popup on outside click
+    window.addEventListener("click", function (event) {
+      if (event.target === signupPopupOverlay) {
+        closeSignupPopup();
+      }
+    });
+
+    // Close popup on 'X' click
+    document
+      .getElementById("closeSignupPopup")
+      .addEventListener("click", closeSignupPopup);
+
+    // Handle signup form submission
+    document
+      .getElementById("signupForm")
+      .addEventListener("submit", handleSignup);
+  }
+
+  // Function to handle signup logic
+  async function handleSignup(e) {
+    e.preventDefault();
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("signupPassword").value;
+
+    try {
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            firstName,
+            lastName,
+            email,
+            username,
+            password,
+          }),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        console.log("Signup successful!");
+        closeSignupPopup();
+        window.location.reload();
+      } else {
+        console.error("Signup failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+    }
+  }
+
+  // Function to close the signup popup
+  function closeSignupPopup() {
+    const signupPopup = document.querySelector(".signup-popup-overlay");
+    if (signupPopup) {
+      signupPopup.remove();
+    }
+  }
 
   // Function to handle logout action
   function handleLogout() {
-    fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-      method: 'POST',
-      credentials: 'include',
+    fetch("https://backend.toddlerneeds.com/api/v1/logout", {
+      method: "POST",
+      credentials: "include",
     })
-      .then(response => {
+      .then((response) => {
         if (response) {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
@@ -9724,17 +9969,18 @@ document.addEventListener('DOMContentLoaded', function () {
           window.location.reload();
         } else {
           // Handle errors from the server
-          response.json().then(data => {
-            console.error('Logout failed:', data.message || 'Unknown error');
-            alert('Logout failed. Please try again.');
+          response.json().then((data) => {
+            console.error("Logout failed:", data.message || "Unknown error");
+            alert("Logout failed. Please try again.");
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         // Handle network or other errors
-        console.error('Logout request failed:', error);
-        alert('Logout request failed. Please check your connection and try again.');
+        console.error("Logout request failed:", error);
+        alert(
+          "Logout request failed. Please check your connection and try again."
+        );
       });
   }
-
 });
