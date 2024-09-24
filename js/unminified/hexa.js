@@ -1578,10 +1578,18 @@
             if (obj.customId === "clipmask") {
               console.log("Found clipmask object. Removing...");
               canvas.remove(obj)
+              onlyDeleteLayerEvent(obj.id)
               canvas.requestRenderAll()
               document.getElementById("done-masking-img").style.display = "block";
+              document.getElementById("replace-image-btn").style.display = "block";
               applyTemplateClipMask(obj)
             }
+            if (obj.customId === "layoutImage") {
+              // console.log("Found layoutImage object:", obj);
+              console.log('ths is t', obj);
+              onlyDeleteLayerEvent(obj.id)
+              canvas.requestRenderAll()
+          }
           });
         },
         function () { },
@@ -7121,7 +7129,7 @@
             storedClipPath = img.clipPath;
 
             canvas.remove(activeObject);
-
+            onlyDeleteLayerEvent(activeObject.id)
             canvas.add(img);
 
 
