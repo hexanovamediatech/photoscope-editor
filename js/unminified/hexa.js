@@ -1226,13 +1226,17 @@
         // Handle public button click
         $("#saveAsPublic").on("click", function () {
           resolve(true);  // Return 'true' for public
-          $("#templates-public-private-modal").hide(); // Hide the modal after selection
+          // Close the modal after saving
+          selector.find(".hexa-modal").hide();
+          $("#templates-public-private-modal").hide();
         });
 
         // Handle private button click
         $("#saveAsPrivate").on("click", function () {
           resolve(false); // Return 'false' for private
-          $("#templates-public-private-modal").hide(); // Hide the modal after selection
+         // Close the modal after saving
+         selector.find(".hexa-modal").hide();
+          $("#templates-public-private-modal").hide();
         });
       });
     }
@@ -9382,13 +9386,13 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
       `;
 
-    //   document.getElementById('signupBtn').addEventListener('click', function () {
-    //     showSignupPopup();
-    //   });
-
-    document.getElementById('signupBtn').addEventListener('click', function () {
-        window.location.href = 'http://54.152.205.55:4000/signup';
+      document.getElementById('signupBtn').addEventListener('click', function () {
+        showSignupPopup();
       });
+
+    // document.getElementById('signupBtn').addEventListener('click', function () {
+    //     window.location.href = 'http://54.152.205.55:4000/signup';
+    //   });
 
       document.getElementById('signinBtn').addEventListener('click', function () {
         showLoginPopup();
@@ -9410,12 +9414,12 @@ document.addEventListener('DOMContentLoaded', function () {
             </form>
 
             <!-- Google Login Button -->
-            <button class="google-login-button">
+            <button class="google-login-button" id="googleLoginBtn">
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
             </button>
 
             <!-- Forgot Password -->
-            <div class="forgot-password">Forgot Password?</div>
+             <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
         </div>
         `;
 
@@ -9436,6 +9440,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Handle login form submission
       document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+      // Add the Google Sign-In functionality
+      document.getElementById('googleLoginBtn').addEventListener('click', ()=>{
+        window.location.href = "https://backend.toddlerneeds.com/api/v1/auth/google";
+      });
+
+      document.getElementById('forgotPass-cont').addEventListener('click', function () {
+        window.location.href = 'http://54.152.205.55:4000/reset-password';
+      });
     }
 
     // Function to handle login logic
@@ -9488,6 +9501,89 @@ document.addEventListener('DOMContentLoaded', function () {
         loginPopup.remove();
       }
     }
+
+        // Function to create and show the signup popup
+        function showSignupPopup() {
+            const signupPopupOverlay = document.createElement('div');
+            signupPopupOverlay.className = 'signup-popup-overlay';
+            signupPopupOverlay.innerHTML = `
+            <div class="signup-popup-content"> <!-- Class for signup popup content -->
+                <span class="close-button" id="closeSignupPopup">&times;</span>
+                <h2 class="signup-title">Sign Up</h2>
+                <form id="signupForm">
+                    <input type="text" id="firstName" placeholder="First Name" required class="input-field" />
+                    <input type="text" id="lastName" placeholder="Last Name" required class="input-field" />
+                    <input type="email" id="email" placeholder="Email" required class="input-field" />
+                    <input type="text" id="username" placeholder="Username" required class="input-field" />
+                    <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
+                    <button type="submit" id="signupSubmit" class="signup-button">Sign Up</button>
+                </form>
+            </div>
+            `;
+
+            document.body.appendChild(signupPopupOverlay);
+
+            // Show the popup
+            signupPopupOverlay.style.display = 'block';
+
+            // Close popup on outside click
+            window.addEventListener('click', function (event) {
+                if (event.target === signupPopupOverlay) {
+                    closeSignupPopup();
+                }
+            });
+
+            // Close popup on 'X' click
+            document.getElementById('closeSignupPopup').addEventListener('click', closeSignupPopup);
+
+            // Handle signup form submission
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+        }
+
+        // Function to handle signup logic
+        async function handleSignup(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('signupPassword').value;
+
+            try {
+                const response = await fetch('https://backend.toddlerneeds.com/api/v1/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        firstName,
+                        lastName,
+                        email,
+                        username,
+                        password,
+                    }),
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    console.log("Signup successful!");
+                    closeSignupPopup();
+                    window.location.reload();
+                } else {
+                    console.error("Signup failed. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error during signup:", error);
+            }
+        }
+
+        // Function to close the signup popup
+        function closeSignupPopup() {
+            const signupPopup = document.querySelector('.signup-popup-overlay');
+            if (signupPopup) {
+                signupPopup.remove();
+            }
+        }
 
     // Function to handle logout action
     function handleLogout() {
@@ -9597,7 +9693,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Navigate to the signup and login pages
     document.getElementById('signupBtn-min-editor').addEventListener('click', function () {
-      window.location.href = 'http://54.152.205.55:4000/signup';
+    //   window.location.href = 'http://54.152.205.55:4000/signup';
+      showSignupPopup();
     });
 
     document.getElementById('signinBtn-min-editor').addEventListener('click', function () {
@@ -9623,12 +9720,12 @@ document.addEventListener('DOMContentLoaded', function () {
               </form>
 
               <!-- Google Login Button -->
-              <button class="google-login-button">
+              <button class="google-login-button" id="googleLoginBtn">
               <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
               </button>
 
               <!-- Forgot Password -->
-              <div class="forgot-password">Forgot Password?</div>
+            <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
           </div>
           `;
 
@@ -9649,6 +9746,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Handle login form submission
         document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+        // Add the Google Sign-In functionality
+        document.getElementById('googleLoginBtn').addEventListener('click', ()=>{
+            window.location.href = "https://backend.toddlerneeds.com/api/v1/auth/google";
+        });
+
+        document.getElementById('forgotPass-cont').addEventListener('click', function () {
+            window.location.href = 'http://54.152.205.55:4000/reset-password';
+          });
       }
 
       // Function to handle login logic
@@ -9701,6 +9807,89 @@ document.addEventListener('DOMContentLoaded', function () {
           loginPopup.remove();
         }
       }
+
+              // Function to create and show the signup popup
+              function showSignupPopup() {
+                const signupPopupOverlay = document.createElement('div');
+                signupPopupOverlay.className = 'signup-popup-overlay';
+                signupPopupOverlay.innerHTML = `
+                <div class="signup-popup-content"> <!-- Class for signup popup content -->
+                    <span class="close-button" id="closeSignupPopup">&times;</span>
+                    <h2 class="signup-title">Sign Up</h2>
+                    <form id="signupForm">
+                        <input type="text" id="firstName" placeholder="First Name" required class="input-field" />
+                        <input type="text" id="lastName" placeholder="Last Name" required class="input-field" />
+                        <input type="email" id="email" placeholder="Email" required class="input-field" />
+                        <input type="text" id="username" placeholder="Username" required class="input-field" />
+                        <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
+                        <button type="submit" id="signupSubmit" class="signup-button">Sign Up</button>
+                    </form>
+                </div>
+                `;
+
+                document.body.appendChild(signupPopupOverlay);
+
+                // Show the popup
+                signupPopupOverlay.style.display = 'block';
+
+                // Close popup on outside click
+                window.addEventListener('click', function (event) {
+                    if (event.target === signupPopupOverlay) {
+                        closeSignupPopup();
+                    }
+                });
+
+                // Close popup on 'X' click
+                document.getElementById('closeSignupPopup').addEventListener('click', closeSignupPopup);
+
+                // Handle signup form submission
+                document.getElementById('signupForm').addEventListener('submit', handleSignup);
+            }
+
+            // Function to handle signup logic
+            async function handleSignup(e) {
+                e.preventDefault();
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('signupPassword').value;
+
+                try {
+                    const response = await fetch('https://backend.toddlerneeds.com/api/v1/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            firstName,
+                            lastName,
+                            email,
+                            username,
+                            password,
+                        }),
+                        credentials: 'include',
+                    });
+
+                    if (response.ok) {
+                        console.log("Signup successful!");
+                        closeSignupPopup();
+                        window.location.reload();
+                    } else {
+                        console.error("Signup failed. Please try again.");
+                    }
+                } catch (error) {
+                    console.error("Error during signup:", error);
+                }
+            }
+
+            // Function to close the signup popup
+            function closeSignupPopup() {
+                const signupPopup = document.querySelector('.signup-popup-overlay');
+                if (signupPopup) {
+                    signupPopup.remove();
+                }
+            }
 
   // Function to handle logout action
   function handleLogout() {
