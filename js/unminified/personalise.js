@@ -825,7 +825,7 @@ initialize3DViewer();
   // Show loader
   try {
     const response = await fetch(
-      "https://backend.toddlerneeds.com/api/v1/user/get/all"
+      "https://backend.toddlerneeds.com/api/v1/user/get/all/templates"
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
