@@ -9328,21 +9328,42 @@ document.addEventListener("DOMContentLoaded", function () {
   let isDropdownOpen = false;
 
   // Fetch login status from the API
-  fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-    credentials: "include",
-  })
-    .then((response) => response.json())
-    .then((data) => {
+//   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+//     credentials: "include",
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data.role) {
+//         const isAdmin = data.role === "admin";
+//         showLoggedInUI(isAdmin);
+//       } else {
+//         showLoggedOutUI();
+//       }
+//     })
+//     .catch(() => {
+//       showLoggedOutUI();
+//     });
+
+async function fetchUserRole() {
+    try {
+      const response = await fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+        credentials: "include",
+      });
+      const data = await response.json();
+
       if (data.role) {
         const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
       } else {
         showLoggedOutUI();
       }
-    })
-    .catch(() => {
+    } catch (error) {
+      console.error("Error fetching user role:", error);
       showLoggedOutUI();
-    });
+    }
+  }
+
+  fetchUserRole()
 
   // Function to show the UI when the user is logged in
   function showLoggedInUI(isAdmin) {
@@ -9510,7 +9531,11 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-          window.location.reload();
+          //  window.location.reload();
+          // Update the UI dynamically without reloading
+        //   const isAdmin = data.role === "admin";
+        //   showLoggedInUI(isAdmin);
+        await fetchUserRole();
         } else {
           console.error("Login successful, but no token found.");
         }
@@ -9603,7 +9628,10 @@ document.addEventListener("DOMContentLoaded", function () {
       if (response.ok) {
         console.log("Signup successful!");
         closeSignupPopup();
-        window.location.reload();
+        // window.location.reload();
+        // const isAdmin = data.role === "admin";
+        // showLoggedInUI(isAdmin);
+        await fetchUserRole();
       } else {
         console.error("Signup failed. Please try again.");
       }
@@ -9627,9 +9655,11 @@ document.addEventListener("DOMContentLoaded", function () {
       credentials: "include",
     })
       .then((response) => {
-        if (response.ok) {
+        if (response) {
           console.log("Logout successful");
-          window.location.reload();
+        //   window.location.reload();
+        // const isAdmin = data.role === "admin";
+        showLoggedOutUI();
         } else {
           response.json().then((data) => {
             console.error("Logout failed:", data.message || "Unknown error");
@@ -9650,22 +9680,44 @@ document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container-min-editor");
   let isDropdownOpen = false;
 
-  // Fetch login status from the API
-  fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-    credentials: "include",
-  })
-    .then((response) => response.json())
-    .then((data) => {
+//   // Fetch login status from the API
+//   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+//     credentials: "include",
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if (data.role) {
+//         const isAdmin = data.role === "admin";
+//         showLoggedInUI(isAdmin);
+//       } else {
+//         showLoggedOutUI();
+//       }
+//     })
+//     .catch(() => {
+//       showLoggedOutUI();
+//     });
+
+async function fetchUserRole() {
+    try {
+      const response = await fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+        credentials: "include",
+      });
+      const data = await response.json();
+
       if (data.role) {
         const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
       } else {
         showLoggedOutUI();
       }
-    })
-    .catch(() => {
+    } catch (error) {
+      console.error("Error fetching user role:", error);
       showLoggedOutUI();
-    });
+    }
+  }
+
+  fetchUserRole()
+
 
   // Function to show the UI when the user is logged in
   function showLoggedInUI(isAdmin) {
@@ -9845,7 +9897,12 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-          window.location.reload();
+        //   window.location.reload();
+        // Update the UI dynamically without reloading
+        // const isAdmin = data.role === "admin";
+        // showLoggedInUI(isAdmin);
+        await fetchUserRole();
+        closeLoginPopup();
         } else {
           console.error("Login successful, but no token found.");
         }
@@ -9938,7 +9995,10 @@ document.addEventListener("DOMContentLoaded", function () {
       if (response.ok) {
         console.log("Signup successful!");
         closeSignupPopup();
-        window.location.reload();
+        // window.location.reload();
+        // const isAdmin = data.role === "admin";
+        // showLoggedInUI(isAdmin);
+        await fetchUserRole();
       } else {
         console.error("Signup failed. Please try again.");
       }
@@ -9966,7 +10026,10 @@ document.addEventListener("DOMContentLoaded", function () {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
           // window.location.href = '/login';
-          window.location.reload();
+        //   window.location.reload();
+        // const isAdmin = data.role === "admin";
+        // showLoggedInUI(isAdmin);
+        showLoggedOutUI()
         } else {
           // Handle errors from the server
           response.json().then((data) => {
