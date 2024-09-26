@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () {},
-        saveTemplate: function () {},
-        saveImage: function () {},
+        customFunctions: function () { },
+        saveTemplate: function () { },
+        saveImage: function () { },
       },
       options
     );
@@ -181,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-                url +
-                '" data-loader="no" title="' +
-                item.icons[ii].name +
-                '">' +
-                '<span class="material-icons">' +
-                item.icons[ii].ligature +
-                "</div>"
+              url +
+              '" data-loader="no" title="' +
+              item.icons[ii].name +
+              '">' +
+              '<span class="material-icons">' +
+              item.icons[ii].ligature +
+              "</div>"
             );
         }
       }
@@ -1589,10 +1589,10 @@
               console.log('ths is t', obj);
               onlyDeleteLayerEvent(obj.id)
               canvas.requestRenderAll()
-          }
+            }
           });
         },
-        function () {},
+        function () { },
         {
           crossOrigin: "anonymous",
         }
@@ -2327,7 +2327,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -2533,12 +2533,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-          action +
-          '<span class="time">' +
-          time +
-          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-          JSON.stringify(json) +
-          "</script></div></li>"
+        action +
+        '<span class="time">' +
+        time +
+        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+        JSON.stringify(json) +
+        "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -3182,7 +3182,16 @@
         var objects = canvas.getObjects();
         objects
           .filter((element) => element.id == id)
-          .forEach((element) => canvas.remove(element));
+          .forEach((element) => { 
+            if (element.clipPath) {
+              // Hide the "done" and "replace image" buttons only for the object with the clip mask
+              document.getElementById("done-masking-img").style.display = "none";
+              document.getElementById("replace-image-btn").style.display = "none";
+              document.getElementById("edit-masking-button").style.display = "none";
+            }
+    
+            canvas.remove(element) });
+
         item.remove();
         canvas.requestRenderAll();
         selector.find("#hexa-layers").sortable("refresh");
@@ -5417,8 +5426,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                            item.find(".select2-item").html() +
-                            "&text=abc",
+                          item.find(".select2-item").html() +
+                          "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5603,18 +5612,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-            $(originalOption).data("icon") +
-            "</span>" +
-            icon.text +
-            "</div>"
+          $(originalOption).data("icon") +
+          "</span>" +
+          icon.text +
+          "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-            $(originalOption).data("font") +
-            '">' +
-            icon.text +
-            "</div>"
+          $(originalOption).data("font") +
+          '">' +
+          icon.text +
+          "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -7140,9 +7149,9 @@
               storedActiveObject = img;
               storedClipPath = img.clipPath;
 
-            canvas.remove(activeObject);
-            onlyDeleteLayerEvent(activeObject.id)
-            canvas.add(img);
+              canvas.remove(activeObject);
+              onlyDeleteLayerEvent(activeObject.id)
+              canvas.add(img);
 
               canvas.renderAll(); // Re-render the canvas to reflect changes
             },
@@ -8016,7 +8025,7 @@
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8224,7 +8233,7 @@
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8375,7 +8384,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -8773,8 +8782,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-              selector.find("#brush-pattern-width").val()
-            ),
+            selector.find("#brush-pattern-width").val()
+          ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -9328,23 +9337,23 @@ document.addEventListener("DOMContentLoaded", function () {
   let isDropdownOpen = false;
 
   // Fetch login status from the API
-//   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-//     credentials: "include",
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.role) {
-//         const isAdmin = data.role === "admin";
-//         showLoggedInUI(isAdmin);
-//       } else {
-//         showLoggedOutUI();
-//       }
-//     })
-//     .catch(() => {
-//       showLoggedOutUI();
-//     });
+  //   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.role) {
+  //         const isAdmin = data.role === "admin";
+  //         showLoggedInUI(isAdmin);
+  //       } else {
+  //         showLoggedOutUI();
+  //       }
+  //     })
+  //     .catch(() => {
+  //       showLoggedOutUI();
+  //     });
 
-async function fetchUserRole() {
+  async function fetchUserRole() {
     try {
       const response = await fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
         credentials: "include",
@@ -9372,11 +9381,10 @@ async function fetchUserRole() {
           <div class="profile-icon" id="profileIcon"></div>
           <div class="hex-header-dropdown" id="dropdownMenu">
             <ul>
-              ${
-                isAdmin
-                  ? `<li id="adminDashboard">Dashboard</li>`
-                  : `<li id="profile">Profile</li>`
-              }
+              ${isAdmin
+        ? `<li id="adminDashboard">Dashboard</li>`
+        : `<li id="profile">Profile</li>`
+      }
               <li id="logout">Logout</li>
             </ul>
           </div>
@@ -9533,9 +9541,9 @@ async function fetchUserRole() {
           closeLoginPopup();
           //  window.location.reload();
           // Update the UI dynamically without reloading
-        //   const isAdmin = data.role === "admin";
-        //   showLoggedInUI(isAdmin);
-        await fetchUserRole();
+          //   const isAdmin = data.role === "admin";
+          //   showLoggedInUI(isAdmin);
+          await fetchUserRole();
         } else {
           console.error("Login successful, but no token found.");
         }
@@ -9657,9 +9665,9 @@ async function fetchUserRole() {
       .then((response) => {
         if (response) {
           console.log("Logout successful");
-        //   window.location.reload();
-        // const isAdmin = data.role === "admin";
-        showLoggedOutUI();
+          //   window.location.reload();
+          // const isAdmin = data.role === "admin";
+          showLoggedOutUI();
         } else {
           response.json().then((data) => {
             console.error("Logout failed:", data.message || "Unknown error");
@@ -9680,24 +9688,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container-min-editor");
   let isDropdownOpen = false;
 
-//   // Fetch login status from the API
-//   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-//     credentials: "include",
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.role) {
-//         const isAdmin = data.role === "admin";
-//         showLoggedInUI(isAdmin);
-//       } else {
-//         showLoggedOutUI();
-//       }
-//     })
-//     .catch(() => {
-//       showLoggedOutUI();
-//     });
+  //   // Fetch login status from the API
+  //   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
+  //     credentials: "include",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       if (data.role) {
+  //         const isAdmin = data.role === "admin";
+  //         showLoggedInUI(isAdmin);
+  //       } else {
+  //         showLoggedOutUI();
+  //       }
+  //     })
+  //     .catch(() => {
+  //       showLoggedOutUI();
+  //     });
 
-async function fetchUserRole() {
+  async function fetchUserRole() {
     try {
       const response = await fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
         credentials: "include",
@@ -9726,11 +9734,10 @@ async function fetchUserRole() {
           <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
             <ul>
-              ${
-                isAdmin
-                  ? `<li id="adminDashboard-min-editor">Dashboard</li>`
-                  : `<li id="profile-min-editor">Profile</li>`
-              }
+              ${isAdmin
+        ? `<li id="adminDashboard-min-editor">Dashboard</li>`
+        : `<li id="profile-min-editor">Profile</li>`
+      }
               <li id="logout-min-editor">Logout</li>
             </ul>
           </div>
@@ -9897,12 +9904,12 @@ async function fetchUserRole() {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-        //   window.location.reload();
-        // Update the UI dynamically without reloading
-        // const isAdmin = data.role === "admin";
-        // showLoggedInUI(isAdmin);
-        await fetchUserRole();
-        closeLoginPopup();
+          //   window.location.reload();
+          // Update the UI dynamically without reloading
+          // const isAdmin = data.role === "admin";
+          // showLoggedInUI(isAdmin);
+          await fetchUserRole();
+          closeLoginPopup();
         } else {
           console.error("Login successful, but no token found.");
         }
@@ -10026,10 +10033,10 @@ async function fetchUserRole() {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
           // window.location.href = '/login';
-        //   window.location.reload();
-        // const isAdmin = data.role === "admin";
-        // showLoggedInUI(isAdmin);
-        showLoggedOutUI()
+          //   window.location.reload();
+          // const isAdmin = data.role === "admin";
+          // showLoggedInUI(isAdmin);
+          showLoggedOutUI()
         } else {
           // Handle errors from the server
           response.json().then((data) => {
