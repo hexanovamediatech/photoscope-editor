@@ -3182,14 +3182,14 @@
         var objects = canvas.getObjects();
         objects
           .filter((element) => element.id == id)
-          .forEach((element) => { 
+          .forEach((element) => {
             if (element.clipPath) {
               // Hide the "done" and "replace image" buttons only for the object with the clip mask
               document.getElementById("done-masking-img").style.display = "none";
               document.getElementById("replace-image-btn").style.display = "none";
               document.getElementById("edit-masking-button").style.display = "none";
             }
-    
+
             canvas.remove(element) });
 
         item.remove();
@@ -9123,214 +9123,6 @@
   };
 })(jQuery);
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     const authContainer = document.querySelector('.auth-container');
-//     let isDropdownOpen = false;
-
-//     // Fetch login status from the API
-//     fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-//       credentials: 'include', // ensure cookies are sent if required
-//     })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         if (data.role) {
-//           // User is logged in
-//           const isAdmin = data.role === 'admin';
-//           showLoggedInUI(isAdmin);
-//         } else {
-//           // No role, user is not logged in
-//           showLoggedOutUI();
-//         }
-//       })
-//       .catch(() => {
-//         showLoggedOutUI();
-//       });
-
-//     // Function to show the UI when the user is logged in
-//     function showLoggedInUI(isAdmin) {
-//       authContainer.innerHTML = `
-//         <div class="profile-icon" id="profileIcon"></div>
-//         <div class="dropdown" id="dropdownMenu" style="display: none;">
-//           <ul>
-//             ${
-//               isAdmin
-//                 ? `<li id="adminDashboard">Dashboard</li>`
-//                 : `<li id="profile">Profile</li>`
-//             }
-//             <li id="logout">Logout</li>
-//           </ul>
-//         </div>
-//       `;
-
-//       const profileIcon = document.getElementById('profileIcon');
-//       const dropdownMenu = document.getElementById('dropdownMenu');
-
-//       // Toggle the dropdown menu visibility when the profile icon is clicked
-//       profileIcon.addEventListener('click', function () {
-//         console.log("clicked profile icon");
-//         isDropdownOpen = !isDropdownOpen;
-//         dropdownMenu.style.display = isDropdownOpen ? 'block' : 'none';
-//       });
-
-//       // Add event listeners for dashboard/profile and logout actions
-//       if (isAdmin) {
-//         document.getElementById('adminDashboard').addEventListener('click', function () {
-//           window.location.href = '/admin-dashboard';
-//         });
-//       } else {
-//         document.getElementById('profile').addEventListener('click', function () {
-//           window.location.href = '/profile';
-//         });
-//       }
-
-//       document.getElementById('logout').addEventListener('click', handleLogout);
-//     }
-
-//     // Function to show the UI when the user is logged out
-//     function showLoggedOutUI() {
-//       authContainer.innerHTML = `
-//         <div class="flex">
-//           <button class="button signup" id="signupBtn">Sign Up</button>
-//           <button class="button signin" id="signinBtn">Sign In</button>
-//         </div>
-//       `;
-
-//       // Navigate to the signup and login pages
-//       document.getElementById('signupBtn').addEventListener('click', function () {
-//         window.location.href = 'http://54.152.205.55:4000/signup';
-//       });
-
-//       document.getElementById('signinBtn').addEventListener('click', function () {
-//         window.location.href = 'http://54.152.205.55:4000/login';
-//       });
-//     }
-
-//     // Function to handle logout action
-//     function handleLogout() {
-//       // Perform logout API call or clear session cookies here
-//       console.log('Logout clicked');
-//       window.location.href = '/logout';
-//     }
-//   });
-
-// document.addEventListener('DOMContentLoaded', function () {
-//   const authContainer = document.querySelector('.auth-container');
-//   let isDropdownOpen = false;
-
-//   // Fetch login status from the API
-//   fetch('https://backend.toddlerneeds.com/api/v1/protected-route', {
-//     credentials: 'include',
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       if (data.role) {
-//         const isAdmin = data.role === 'admin';
-//         showLoggedInUI(isAdmin);
-//       } else {
-//         showLoggedOutUI();
-//       }
-//     })
-//     .catch(() => {
-//       showLoggedOutUI();
-//     });
-
-//   // Function to show the UI when the user is logged in
-//   function showLoggedInUI(isAdmin) {
-//     authContainer.innerHTML = `
-//         <div class="profile-container">
-//           <div class="profile-icon" id="profileIcon"></div>
-//           <div class="hex-header-dropdown" id="dropdownMenu">
-//             <ul>
-//               ${isAdmin ? `<li id="adminDashboard">Dashboard</li>` : `<li id="profile">Profile</li>`}
-//               <li id="logout">Logout</li>
-//             </ul>
-//           </div>
-//         </div>
-//       `;
-
-//     const profileIcon = document.getElementById('profileIcon');
-//     const dropdownMenu = document.getElementById('dropdownMenu');
-
-//     // Ensure the dropdown is hidden by default
-//     dropdownMenu.style.display = 'none';
-
-//     // Toggle the dropdown menu visibility when the profile icon is clicked
-//     profileIcon.addEventListener('click', function (event) {
-//       event.stopPropagation();
-//       console.log('Profile icon clicked', isDropdownOpen);
-//       isDropdownOpen = !isDropdownOpen;
-//       dropdownMenu.style.display = isDropdownOpen ? 'none' : 'block';
-//     });
-
-//     // Close the dropdown when clicking outside
-//     document.addEventListener('click', function () {
-//       if (isDropdownOpen) {
-//         dropdownMenu.style.display = 'none';
-//         isDropdownOpen = false;
-//       }
-//     });
-
-//     // Add event listeners for dashboard/profile and logout actions
-//     if (isAdmin) {
-//       document.getElementById('adminDashboard').addEventListener('click', function () {
-//         window.location.href = 'http://54.152.205.55:4000/admin-dashboard';
-//       });
-//     } else {
-//       document.getElementById('profile').addEventListener('click', function () {
-//         window.location.href = 'http://54.152.205.55:4000/profile';
-//       });
-//     }
-
-//     document.getElementById('logout').addEventListener('click', handleLogout);
-//   }
-
-//   // Function to show the UI when the user is logged out
-//   function showLoggedOutUI() {
-//     authContainer.innerHTML = `
-//         <div class="auth-buttons">
-//           <button class="button signup" id="signupBtn">Sign Up</button>
-//           <button class="button signin" id="signinBtn">Sign In</button>
-//         </div>
-//       `;
-
-//     // Navigate to the signup and login pages
-// document.getElementById('signupBtn').addEventListener('click', function () {
-//   window.location.href = 'http://54.152.205.55:4000/signup';
-// });
-
-//     document.getElementById('signinBtn').addEventListener('click', function () {
-//       window.location.href = 'http://54.152.205.55:4000/login';
-//     });
-//   }
-
-//   // Function to handle logout action
-//   function handleLogout() {
-//     fetch('https://backend.toddlerneeds.com/api/v1/logout', {
-//       method: 'POST',
-//       credentials: 'include',
-//     })
-//       .then(response => {
-//         if (response) {
-//           //  console.log("Logout response:", response);
-//           console.log("Logout successful");
-//           // window.location.href = '/login';
-//           window.location.reload();
-//         } else {
-//           // Handle errors from the server
-//           response.json().then(data => {
-//             console.error('Logout failed:', data.message || 'Unknown error');
-//             alert('Logout failed. Please try again.');
-//           });
-//         }
-//       })
-//       .catch(error => {
-//         // Handle network or other errors
-//         console.error('Logout request failed:', error);
-//         alert('Logout request failed. Please check your connection and try again.');
-//       });
-//   }
-
-// });
 
 document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container");
@@ -9539,19 +9331,18 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-          //  window.location.reload();
-          // Update the UI dynamically without reloading
-          //   const isAdmin = data.role === "admin";
-          //   showLoggedInUI(isAdmin);
-          await fetchUserRole();
+        await fetchUserRole();
         } else {
           console.error("Login successful, but no token found.");
+          toastr.error("Login successful, but no token found.");
         }
       } else {
         console.error("Login failed. Please check your credentials.");
+        toastr.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error("Error during login:", error);
+      toastr.error("Error during login:", error);
     }
   }
 
@@ -9635,16 +9426,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.ok) {
         console.log("Signup successful!");
+        toastr.success("Signup successful!");
         closeSignupPopup();
-        // window.location.reload();
-        // const isAdmin = data.role === "admin";
-        // showLoggedInUI(isAdmin);
         await fetchUserRole();
       } else {
         console.error("Signup failed. Please try again.");
+        toastr.error("Signup failed. Please try again.");
       }
     } catch (error) {
       console.error("Error during signup:", error);
+      toastr.error("Error during signup:", error);
     }
   }
 
@@ -9671,7 +9462,8 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           response.json().then((data) => {
             console.error("Logout failed:", data.message || "Unknown error");
-            alert("Logout failed. Please try again.");
+            // alert("Logout failed. Please try again.");
+            toastr.error("Logout failed. Please try again.");
           });
         }
       })
@@ -9904,20 +9696,19 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-          //   window.location.reload();
-          // Update the UI dynamically without reloading
-          // const isAdmin = data.role === "admin";
-          // showLoggedInUI(isAdmin);
-          await fetchUserRole();
-          closeLoginPopup();
+        await fetchUserRole();
+        closeLoginPopup();
         } else {
           console.error("Login successful, but no token found.");
+          toastr.error("Login successful, but no token found.");
         }
       } else {
         console.error("Login failed. Please check your credentials.");
+        toastr.error("Login failed. Please check your credentials.");
       }
     } catch (error) {
       console.error("Error during login:", error);
+      toastr.error("Error during login:", error);
     }
   }
 
@@ -10002,15 +9793,14 @@ document.addEventListener("DOMContentLoaded", function () {
       if (response.ok) {
         console.log("Signup successful!");
         closeSignupPopup();
-        // window.location.reload();
-        // const isAdmin = data.role === "admin";
-        // showLoggedInUI(isAdmin);
         await fetchUserRole();
       } else {
         console.error("Signup failed. Please try again.");
+        toastr.error("Signup failed. Please try again.");
       }
     } catch (error) {
       console.error("Error during signup:", error);
+      toastr.error("Error during signup:", error);
     }
   }
 
@@ -10032,11 +9822,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response) {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
-          // window.location.href = '/login';
-          //   window.location.reload();
-          // const isAdmin = data.role === "admin";
-          // showLoggedInUI(isAdmin);
-          showLoggedOutUI()
+        showLoggedOutUI()
         } else {
           // Handle errors from the server
           response.json().then((data) => {
@@ -10046,7 +9832,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       })
       .catch((error) => {
-        // Handle network or other errors
         console.error("Logout request failed:", error);
         alert(
           "Logout request failed. Please check your connection and try again."
