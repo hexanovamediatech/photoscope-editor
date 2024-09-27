@@ -842,18 +842,18 @@ initialize3DViewer();
     const filteredData = dataArray.filter((obj) => obj.type === name && obj.isPublic === true);
 
         // Fetch the user's templates and add them to the filtered data
-        const userTemplatesResponse = await fetch(
-            "https://backend.toddlerneeds.com/api/v1/user/mytemplates",
-            {
-              method: "GET",
-              credentials: "include",
-            }
-          );
-          const userTemplatesData = await userTemplatesResponse.json();
-          const userTemplates = userTemplatesData.data;
+        // const userTemplatesResponse = await fetch(
+        //     "https://backend.toddlerneeds.com/api/v1/user/mytemplates",
+        //     {
+        //       method: "GET",
+        //       credentials: "include",
+        //     }
+        //   );
+        //   const userTemplatesData = await userTemplatesResponse.json();
+        //   const userTemplates = userTemplatesData.data;
 
           // Combine the public templates and user templates
-    const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
+    // const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
 
       // Get the container element where you want to display the names
       const container = document.getElementById("library-container");
@@ -869,7 +869,7 @@ initialize3DViewer();
       const favoriteData = await favoriteResponse.json();
       const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
-      combinedData.forEach((item) => {
+      filteredData.forEach((item) => {
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
 

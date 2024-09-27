@@ -9397,47 +9397,117 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to handle signup logic
-  async function handleSignup(e) {
+//   async function handleSignup(e) {
+//     e.preventDefault();
+//     const firstname = document.getElementById("firstName").value;
+//     const lastname = document.getElementById("lastName").value;
+//     const email = document.getElementById("email").value;
+//     const username = document.getElementById("username").value;
+//     const password = document.getElementById("signupPassword").value;
+
+//     try {
+//       const response = await fetch(
+//         "https://backend.toddlerneeds.com/api/v1/signup",
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/x-www-form-urlencoded",
+//           },
+//           body: new URLSearchParams({
+//             firstname,
+//             lastname,
+//             email,
+//             password,
+//             username,
+//           }),
+//           credentials: "include",
+//         }
+//       );
+
+//       if (response.ok) {
+//         console.log("Signup successful!");
+//         toastr.success("Signup successful!");
+//         closeSignupPopup();
+//         await fetchUserRole();
+//       } else {
+//         console.error("Signup failed. Please try again.");
+//         toastr.error("Signup failed. Please try again.");
+//       }
+//     } catch (error) {
+//       console.error("Error during signup:", error);
+//       toastr.error("Error during signup:", error);
+//     }
+//   }
+
+async function handleSignup(e) {
     e.preventDefault();
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
+
+    const firstname = document.getElementById("firstName").value;
+    const lastname = document.getElementById("lastName").value;
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("signupPassword").value;
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
+
+  if (!firstname) {
+    toastr.error("First name is required.");
+    return;
+  }
+
+  if (!lastname) {
+    toastr.error("Last name is required.");
+    return;
+  }
+
+  if (!emailPattern.test(email)) {
+    toastr.error("Please enter a valid email address.");
+    return;
+  }
+
+  if (!usernamePattern.test(username)) {
+    toastr.error("Username must be alphanumeric and between 4-20 characters.");
+    return;
+  }
+
+  if (password.length < 6) {
+    toastr.error("Password must be at least 5 characters long.");
+    return;
+  }
+
     try {
-      const response = await fetch(
-        "https://backend.toddlerneeds.com/api/v1/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            firstName,
-            lastName,
-            email,
-            username,
-            password,
-          }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch("https://backend.toddlerneeds.com/api/v1/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Send as JSON
+        },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          email,
+          username,
+          password,
+        }),
+        credentials: "include",
+      });
 
       if (response.ok) {
         console.log("Signup successful!");
-        toastr.success("Signup successful!");
+        toastr.success(`Signup Successful, Please Login Now!`);
         closeSignupPopup();
         await fetchUserRole();
       } else {
-        console.error("Signup failed. Please try again.");
-        toastr.error("Signup failed. Please try again.");
+        const errorData = await response.json();
+        console.error("Signup failed:", errorData);
+        toastr.error(`Signup failed: ${errorData.error || "Please try again."}`);
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      toastr.error("Error during signup:", error);
+      toastr.error("Error during signup. Please try again.");
     }
   }
+
 
   // Function to close the signup popup
   function closeSignupPopup() {
@@ -9763,46 +9833,116 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to handle signup logic
-  async function handleSignup(e) {
+//   async function handleSignup(e) {
+//     e.preventDefault();
+//     const firstname = document.getElementById("firstName").value;
+//     const lastname = document.getElementById("lastName").value;
+//     const email = document.getElementById("email").value;
+//     const username = document.getElementById("username").value;
+//     const password = document.getElementById("signupPassword").value;
+
+//     try {
+//       const response = await fetch(
+//         "https://backend.toddlerneeds.com/api/v1/signup",
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/x-www-form-urlencoded",
+//           },
+//           body: new URLSearchParams({
+//             firstname,
+//             lastname,
+//             email,
+//             password,
+//             username,
+//           }),
+//           credentials: "include",
+//         }
+//       );
+
+//       if (response.ok) {
+//         console.log("Signup successful!");
+//         closeSignupPopup();
+//         await fetchUserRole();
+//       } else {
+//         console.error("Signup failed. Please try again.");
+//         toastr.error("Signup failed. Please try again.");
+//       }
+//     } catch (error) {
+//       console.error("Error during signup:", error);
+//       toastr.error("Error during signup:", error);
+//     }
+//   }
+async function handleSignup(e) {
     e.preventDefault();
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
+
+    const firstname = document.getElementById("firstName").value;
+    const lastname = document.getElementById("lastName").value;
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("signupPassword").value;
 
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
+
+  if (!firstname) {
+    toastr.error("First name is required.");
+    return;
+  }
+
+  if (!lastname) {
+    toastr.error("Last name is required.");
+    return;
+  }
+
+  if (!emailPattern.test(email)) {
+    toastr.error("Please enter a valid email address.");
+    return;
+  }
+
+  if (!usernamePattern.test(username)) {
+    toastr.error("Username must be alphanumeric and between 4-20 characters.");
+    return;
+  }
+
+  if (password.length < 6) {
+    toastr.error("Password must be at least 5 characters long.");
+    return;
+  }
+
+
     try {
-      const response = await fetch(
-        "https://backend.toddlerneeds.com/api/v1/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            firstName,
-            lastName,
-            email,
-            username,
-            password,
-          }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch("https://backend.toddlerneeds.com/api/v1/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Send as JSON
+        },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          email,
+          username,
+          password,
+        }),
+        credentials: "include",
+      });
 
       if (response.ok) {
         console.log("Signup successful!");
+        toastr.success(`Signup Successful, Please Login Now!`);
         closeSignupPopup();
         await fetchUserRole();
       } else {
-        console.error("Signup failed. Please try again.");
-        toastr.error("Signup failed. Please try again.");
+        const errorData = await response.json();
+        console.error("Signup failed:", errorData);
+        toastr.error(`Signup failed: ${errorData.error || "Please try again."}`);
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      toastr.error("Error during signup:", error);
+      toastr.error("Error during signup. Please try again.");
     }
   }
+
 
   // Function to close the signup popup
   function closeSignupPopup() {
