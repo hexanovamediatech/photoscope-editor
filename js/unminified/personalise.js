@@ -367,6 +367,7 @@ function updateCanvasText(textIndex, newText) {
 
   const updatedCanvasJSON = newFabricCanvas.toJSON();
   window.editedCanvasJson = updatedCanvasJSON;
+  console.log(window.editedCanvasJson);
 }
 
 // function replaceImageSrc(json, newImageSrc, callback) {
@@ -837,23 +838,35 @@ initialize3DViewer();
       // Filter the objects with type "p2-type1"
       const urlParams = new URLSearchParams(window.location.search);
       const name = urlParams.get("name");
-    //   const filteredData = dataArray.filter((obj) => obj.type === name);
-    // const filteredData = dataArray.filter((obj) => obj.type === name && obj.isPublic);
-    const filteredData = dataArray.filter((obj) => obj.type === name && obj.isPublic === true);
+      //   const filteredData = dataArray.filter((obj) => obj.type === name);
+      // const filteredData = dataArray.filter((obj) => obj.type === name && obj.isPublic);
+      const filteredData = dataArray.filter(
+        (obj) => obj.type === name && obj.isPublic === true
+      );
+      const personaliseButton = document.getElementById(
+        "personaliseOpenPopupBtn"
+      );
 
-        // Fetch the user's templates and add them to the filtered data
-        // const userTemplatesResponse = await fetch(
-        //     "https://backend.toddlerneeds.com/api/v1/user/mytemplates",
-        //     {
-        //       method: "GET",
-        //       credentials: "include",
-        //     }
-        //   );
-        //   const userTemplatesData = await userTemplatesResponse.json();
-        //   const userTemplates = userTemplatesData.data;
+      // Check if the filtered data is empty, and hide the button if it is
+      if (filteredData.length === 0) {
+        personaliseButton.style.display = "none"; // Hide the button
+      } else {
+        personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
+      }
 
-          // Combine the public templates and user templates
-    // const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
+      // Fetch the user's templates and add them to the filtered data
+      // const userTemplatesResponse = await fetch(
+      //     "https://backend.toddlerneeds.com/api/v1/user/mytemplates",
+      //     {
+      //       method: "GET",
+      //       credentials: "include",
+      //     }
+      //   );
+      //   const userTemplatesData = await userTemplatesResponse.json();
+      //   const userTemplates = userTemplatesData.data;
+
+      // Combine the public templates and user templates
+      // const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
 
       // Get the container element where you want to display the names
       const container = document.getElementById("library-container");
