@@ -51,9 +51,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () { },
-        saveTemplate: function () { },
-        saveImage: function () { },
+        customFunctions: function () {},
+        saveTemplate: function () {},
+        saveImage: function () {},
       },
       options
     );
@@ -181,13 +181,13 @@
             .find("#hexa-icons .hexa-grid")
             .append(
               '<div class="hexa-element add-element" data-elsource="' +
-              url +
-              '" data-loader="no" title="' +
-              item.icons[ii].name +
-              '">' +
-              '<span class="material-icons">' +
-              item.icons[ii].ligature +
-              "</div>"
+                url +
+                '" data-loader="no" title="' +
+                item.icons[ii].name +
+                '">' +
+                '<span class="material-icons">' +
+                item.icons[ii].ligature +
+                "</div>"
             );
         }
       }
@@ -1577,22 +1577,24 @@
           objects.forEach((obj) => {
             if (obj.customId === "clipmask") {
               console.log("Found clipmask object. Removing...");
-              canvas.remove(obj)
-              onlyDeleteLayerEvent(obj.id)
-              canvas.requestRenderAll()
-              document.getElementById("done-masking-img").style.display = "block";
-              document.getElementById("replace-image-btn").style.display = "block";
-              applyTemplateClipMask(obj)
+              canvas.remove(obj);
+              onlyDeleteLayerEvent(obj.id);
+              canvas.requestRenderAll();
+              document.getElementById("done-masking-img").style.display =
+                "block";
+              document.getElementById("replace-image-btn").style.display =
+                "block";
+              applyTemplateClipMask(obj);
             }
             if (obj.customId === "layoutImage") {
               // console.log("Found layoutImage object:", obj);
-              console.log('ths is t', obj);
-              onlyDeleteLayerEvent(obj.id)
-              canvas.requestRenderAll()
+              console.log("ths is t", obj);
+              onlyDeleteLayerEvent(obj.id);
+              canvas.requestRenderAll();
             }
           });
         },
-        function () { },
+        function () {},
         {
           crossOrigin: "anonymous",
         }
@@ -2327,7 +2329,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -2533,12 +2535,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-        action +
-        '<span class="time">' +
-        time +
-        '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-        JSON.stringify(json) +
-        "</script></div></li>"
+          action +
+          '<span class="time">' +
+          time +
+          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          JSON.stringify(json) +
+          "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -2653,6 +2655,54 @@
         });
       });
 
+    // selector.find("#openEditor").on("click", function () {
+    //   var $mainContainer = selector.find("#mini-editor-main-cont");
+    //   var $buttonContainer = selector.find("#webg-buttons-container");
+
+    //   // Remove the 'personalise-page-active' class from the main container
+    //   $mainContainer.removeClass("personalise-page-active");
+    //   // Add the 'personalise-page-inactive' class to the main container
+    //   $mainContainer.addClass("personalise-page-inactive");
+
+    //   // Remove the 'toggle-2d-3d-cont' class from the button container
+    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
+
+    //   var editedCanvasJson = window.editedCanvasJson;
+    //   var originalCanvasJson = window.originalCanvasJson;
+    //   console.log(editedCanvasJson);
+    //   if (editedCanvasJson && originalCanvasJson) {
+    //     var originalCanvasObject = originalCanvasJson;
+    //     var editedCanvasObject = editedCanvasJson;
+
+    //     // Iterate over the objects in canvasObject to update their properties
+    //     editedCanvasObject.objects.forEach((obj, index) => {
+    //       if (originalCanvasObject.objects[index]) {
+    //         var originalObj = originalCanvasObject.objects[index];
+
+    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
+    //         obj.top = originalObj.top;
+    //         obj.left = originalObj.left;
+    //         obj.scaleX = originalObj.scaleX;
+    //         obj.scaleY = originalObj.scaleY;
+
+    //         // Iterate over properties of the originalObj and add missing ones to obj
+    //         for (var key in originalObj) {
+    //           if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+    //             obj[key] = originalObj[key];
+    //           }
+    //         }
+    //       }
+    //     });
+    //     console.log(editedCanvasObject);
+    //     console.log(originalCanvasObject);
+
+    //     // Load the updated JSON into your editor or canvas
+    //     loadJSON(originalCanvasObject);
+    //     // loadJSON(editedCanvasObject);
+    //   } else {
+    //     console.log("No saved canvas JSON found in localStorage.");
+    //   }
+    // });
     selector.find("#openEditor").on("click", function () {
       var $mainContainer = selector.find("#mini-editor-main-cont");
       var $buttonContainer = selector.find("#webg-buttons-container");
@@ -2667,37 +2717,96 @@
 
       var editedCanvasJson = window.editedCanvasJson;
       var originalCanvasJson = window.originalCanvasJson;
+      console.log(editedCanvasJson);
 
       if (editedCanvasJson && originalCanvasJson) {
         var originalCanvasObject = originalCanvasJson;
         var editedCanvasObject = editedCanvasJson;
 
-        // Iterate over the objects in canvasObject to update their properties
-        editedCanvasObject.objects.forEach((obj, index) => {
+        // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
+        editedCanvasObject.objects.forEach((editedObj, index) => {
           if (originalCanvasObject.objects[index]) {
             var originalObj = originalCanvasObject.objects[index];
 
             // Copy the values for top, left, scaleX, and scaleY from originalObj
-            obj.top = originalObj.top;
-            obj.left = originalObj.left;
-            obj.scaleX = originalObj.scaleX;
-            obj.scaleY = originalObj.scaleY;
+            editedObj.top = originalObj.top;
+            editedObj.left = originalObj.left;
+            editedObj.scaleX = originalObj.scaleX;
+            editedObj.scaleY = originalObj.scaleY;
 
-            // Iterate over properties of the originalObj and add missing ones to obj
+            // Iterate over properties of the originalObj and add missing ones to editedObj
             for (var key in originalObj) {
-              if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
-                obj[key] = originalObj[key];
+              if (
+                originalObj.hasOwnProperty(key) &&
+                !editedObj.hasOwnProperty(key)
+              ) {
+                editedObj[key] = originalObj[key];
               }
+            }
+
+            // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
+            if (editedObj.type === "textbox") {
+              originalObj.text = editedObj.text;
             }
           }
         });
 
-        // Load the updated JSON into your editor or canvas
+        console.log(editedCanvasObject);
+        console.log(originalCanvasObject);
+
+        // Load the updated original canvas JSON into your editor or canvas
         loadJSON(originalCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
       }
     });
+
+    // selector.find("#editInEditorpBtn").on("click", function () {
+    //   var $mainContainer = selector.find("#mini-editor-main-cont");
+    //   var $buttonContainer = selector.find("#webg-buttons-container");
+
+    //   // Remove the 'personalise-page-active' class from the main container
+    //   $mainContainer.removeClass("personalise-page-active");
+    //   // Add the 'personalise-page-inactive' class to the main container
+    //   $mainContainer.addClass("personalise-page-inactive");
+
+    //   // Remove the 'toggle-2d-3d-cont' class from the button container
+    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
+    //   var editedCanvasJson = window.editedCanvasJson;
+    //   var originalCanvasJson = window.originalCanvasJson;
+    //   console.log(editedCanvasJson);
+    //   if (editedCanvasJson && originalCanvasJson) {
+    //     var originalCanvasObject = originalCanvasJson;
+    //     var editedCanvasObject = editedCanvasJson;
+
+    //     // Iterate over the objects in canvasObject to update their properties
+    //     editedCanvasObject.objects.forEach((obj, index) => {
+    //       if (originalCanvasObject.objects[index]) {
+    //         var originalObj = originalCanvasObject.objects[index];
+
+    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
+    //         obj.top = originalObj.top;
+    //         obj.left = originalObj.left;
+    //         obj.scaleX = originalObj.scaleX;
+    //         obj.scaleY = originalObj.scaleY;
+
+    //         // Iterate over properties of the originalObj and add missing ones to obj
+    //         for (var key in originalObj) {
+    //           if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+    //             obj[key] = originalObj[key];
+    //           }
+    //         }
+    //       }
+    //     });
+
+    //     // Load the updated JSON into your editor or canvas
+    //     console.log("this is the editedCanvasobject 1", originalCanvasObject);
+    //     // loadJSON(originalCanvasObject);
+    //     loadJSON(editedCanvasObject);
+    //   } else {
+    //     console.log("No saved canvas JSON found in localStorage.");
+    //   }
+    // });
     selector.find("#editInEditorpBtn").on("click", function () {
       var $mainContainer = selector.find("#mini-editor-main-cont");
       var $buttonContainer = selector.find("#webg-buttons-container");
@@ -2709,40 +2818,53 @@
 
       // Remove the 'toggle-2d-3d-cont' class from the button container
       $buttonContainer.removeClass("toggle-2d-3d-cont");
+
       var editedCanvasJson = window.editedCanvasJson;
       var originalCanvasJson = window.originalCanvasJson;
+      console.log(editedCanvasJson);
 
       if (editedCanvasJson && originalCanvasJson) {
         var originalCanvasObject = originalCanvasJson;
         var editedCanvasObject = editedCanvasJson;
 
-        // Iterate over the objects in canvasObject to update their properties
-        editedCanvasObject.objects.forEach((obj, index) => {
+        // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
+        editedCanvasObject.objects.forEach((editedObj, index) => {
           if (originalCanvasObject.objects[index]) {
             var originalObj = originalCanvasObject.objects[index];
 
             // Copy the values for top, left, scaleX, and scaleY from originalObj
-            obj.top = originalObj.top;
-            obj.left = originalObj.left;
-            obj.scaleX = originalObj.scaleX;
-            obj.scaleY = originalObj.scaleY;
+            editedObj.top = originalObj.top;
+            editedObj.left = originalObj.left;
+            editedObj.scaleX = originalObj.scaleX;
+            editedObj.scaleY = originalObj.scaleY;
 
-            // Iterate over properties of the originalObj and add missing ones to obj
+            // Iterate over properties of the originalObj and add missing ones to editedObj
             for (var key in originalObj) {
-              if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
-                obj[key] = originalObj[key];
+              if (
+                originalObj.hasOwnProperty(key) &&
+                !editedObj.hasOwnProperty(key)
+              ) {
+                editedObj[key] = originalObj[key];
               }
+            }
+
+            // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
+            if (editedObj.type === "textbox") {
+              originalObj.text = editedObj.text;
             }
           }
         });
 
-        // Load the updated JSON into your editor or canvas
-        console.log("this is the editedCanvasobject 1", originalCanvasObject);
+        console.log(editedCanvasObject);
+        console.log(originalCanvasObject);
+
+        // Load the updated original canvas JSON into your editor or canvas
         loadJSON(originalCanvasObject);
       } else {
         console.log("No saved canvas JSON found in localStorage.");
       }
     });
+
     /**Disable Right Click */
     // 	$(document).on('contextmenu', function(event) {
     // 		event.preventDefault();
@@ -3185,12 +3307,16 @@
           .forEach((element) => {
             if (element.clipPath) {
               // Hide the "done" and "replace image" buttons only for the object with the clip mask
-              document.getElementById("done-masking-img").style.display = "none";
-              document.getElementById("replace-image-btn").style.display = "none";
-              document.getElementById("edit-masking-button").style.display = "none";
+              document.getElementById("done-masking-img").style.display =
+                "none";
+              document.getElementById("replace-image-btn").style.display =
+                "none";
+              document.getElementById("edit-masking-button").style.display =
+                "none";
             }
 
-            canvas.remove(element) });
+            canvas.remove(element);
+          });
 
         item.remove();
         canvas.requestRenderAll();
@@ -5426,8 +5552,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                          item.find(".select2-item").html() +
-                          "&text=abc",
+                            item.find(".select2-item").html() +
+                            "&text=abc",
                         ],
                       },
                       active: function () {
@@ -5612,18 +5738,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-          $(originalOption).data("icon") +
-          "</span>" +
-          icon.text +
-          "</div>"
+            $(originalOption).data("icon") +
+            "</span>" +
+            icon.text +
+            "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-          $(originalOption).data("font") +
-          '">' +
-          icon.text +
-          "</div>"
+            $(originalOption).data("font") +
+            '">' +
+            icon.text +
+            "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -7150,7 +7276,7 @@
               storedClipPath = img.clipPath;
 
               canvas.remove(activeObject);
-              onlyDeleteLayerEvent(activeObject.id)
+              onlyDeleteLayerEvent(activeObject.id);
               canvas.add(img);
 
               canvas.renderAll(); // Re-render the canvas to reflect changes
@@ -8025,7 +8151,7 @@
             canvas.requestRenderAll();
             selector.find("#hexa-canvas-loader").hide();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8233,7 +8359,7 @@
               selector.find("#hexa-canvas-loader").hide();
             }
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8384,7 +8510,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -8782,8 +8908,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-            selector.find("#brush-pattern-width").val()
-          ),
+              selector.find("#brush-pattern-width").val()
+            ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -9123,7 +9249,6 @@
   };
 })(jQuery);
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container");
   let isDropdownOpen = false;
@@ -9147,9 +9272,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function fetchUserRole() {
     try {
-      const response = await fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/protected-route",
+        {
+          credentials: "include",
+        }
+      );
       const data = await response.json();
 
       if (data.role) {
@@ -9164,7 +9292,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  fetchUserRole()
+  fetchUserRole();
 
   // Function to show the UI when the user is logged in
   function showLoggedInUI(isAdmin) {
@@ -9173,10 +9301,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="profile-icon" id="profileIcon"></div>
           <div class="hex-header-dropdown" id="dropdownMenu">
             <ul>
-              ${isAdmin
-        ? `<li id="adminDashboard">Dashboard</li>`
-        : `<li id="profile">Profile</li>`
-      }
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard">Dashboard</li>`
+                  : `<li id="profile">Profile</li>`
+              }
               <li id="logout">Logout</li>
             </ul>
           </div>
@@ -9331,7 +9460,7 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-        await fetchUserRole();
+          await fetchUserRole();
         } else {
           console.error("Login successful, but no token found.");
           toastr.error("Login successful, but no token found.");
@@ -9397,49 +9526,49 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to handle signup logic
-//   async function handleSignup(e) {
-//     e.preventDefault();
-//     const firstname = document.getElementById("firstName").value;
-//     const lastname = document.getElementById("lastName").value;
-//     const email = document.getElementById("email").value;
-//     const username = document.getElementById("username").value;
-//     const password = document.getElementById("signupPassword").value;
+  //   async function handleSignup(e) {
+  //     e.preventDefault();
+  //     const firstname = document.getElementById("firstName").value;
+  //     const lastname = document.getElementById("lastName").value;
+  //     const email = document.getElementById("email").value;
+  //     const username = document.getElementById("username").value;
+  //     const password = document.getElementById("signupPassword").value;
 
-//     try {
-//       const response = await fetch(
-//         "https://backend.toddlerneeds.com/api/v1/signup",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/x-www-form-urlencoded",
-//           },
-//           body: new URLSearchParams({
-//             firstname,
-//             lastname,
-//             email,
-//             password,
-//             username,
-//           }),
-//           credentials: "include",
-//         }
-//       );
+  //     try {
+  //       const response = await fetch(
+  //         "https://backend.toddlerneeds.com/api/v1/signup",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/x-www-form-urlencoded",
+  //           },
+  //           body: new URLSearchParams({
+  //             firstname,
+  //             lastname,
+  //             email,
+  //             password,
+  //             username,
+  //           }),
+  //           credentials: "include",
+  //         }
+  //       );
 
-//       if (response.ok) {
-//         console.log("Signup successful!");
-//         toastr.success("Signup successful!");
-//         closeSignupPopup();
-//         await fetchUserRole();
-//       } else {
-//         console.error("Signup failed. Please try again.");
-//         toastr.error("Signup failed. Please try again.");
-//       }
-//     } catch (error) {
-//       console.error("Error during signup:", error);
-//       toastr.error("Error during signup:", error);
-//     }
-//   }
+  //       if (response.ok) {
+  //         console.log("Signup successful!");
+  //         toastr.success("Signup successful!");
+  //         closeSignupPopup();
+  //         await fetchUserRole();
+  //       } else {
+  //         console.error("Signup failed. Please try again.");
+  //         toastr.error("Signup failed. Please try again.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during signup:", error);
+  //       toastr.error("Error during signup:", error);
+  //     }
+  //   }
 
-async function handleSignup(e) {
+  async function handleSignup(e) {
     e.preventDefault();
 
     const firstname = document.getElementById("firstName").value;
@@ -9449,48 +9578,53 @@ async function handleSignup(e) {
     const password = document.getElementById("signupPassword").value;
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
+    const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
 
-  if (!firstname) {
-    toastr.error("First name is required.");
-    return;
-  }
+    if (!firstname) {
+      toastr.error("First name is required.");
+      return;
+    }
 
-  if (!lastname) {
-    toastr.error("Last name is required.");
-    return;
-  }
+    if (!lastname) {
+      toastr.error("Last name is required.");
+      return;
+    }
 
-  if (!emailPattern.test(email)) {
-    toastr.error("Please enter a valid email address.");
-    return;
-  }
+    if (!emailPattern.test(email)) {
+      toastr.error("Please enter a valid email address.");
+      return;
+    }
 
-  if (!usernamePattern.test(username)) {
-    toastr.error("Username must be alphanumeric and between 4-20 characters.");
-    return;
-  }
+    if (!usernamePattern.test(username)) {
+      toastr.error(
+        "Username must be alphanumeric and between 4-20 characters."
+      );
+      return;
+    }
 
-  if (password.length < 6) {
-    toastr.error("Password must be at least 5 characters long.");
-    return;
-  }
+    if (password.length < 6) {
+      toastr.error("Password must be at least 5 characters long.");
+      return;
+    }
 
     try {
-      const response = await fetch("https://backend.toddlerneeds.com/api/v1/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Send as JSON
-        },
-        body: JSON.stringify({
-          firstname,
-          lastname,
-          email,
-          username,
-          password,
-        }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Send as JSON
+          },
+          body: JSON.stringify({
+            firstname,
+            lastname,
+            email,
+            username,
+            password,
+          }),
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         console.log("Signup successful!");
@@ -9500,14 +9634,15 @@ async function handleSignup(e) {
       } else {
         const errorData = await response.json();
         console.error("Signup failed:", errorData);
-        toastr.error(`Signup failed: ${errorData.error || "Please try again."}`);
+        toastr.error(
+          `Signup failed: ${errorData.error || "Please try again."}`
+        );
       }
     } catch (error) {
       console.error("Error during signup:", error);
       toastr.error("Error during signup. Please try again.");
     }
   }
-
 
   // Function to close the signup popup
   function closeSignupPopup() {
@@ -9569,9 +9704,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function fetchUserRole() {
     try {
-      const response = await fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/protected-route",
+        {
+          credentials: "include",
+        }
+      );
       const data = await response.json();
 
       if (data.role) {
@@ -9586,8 +9724,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  fetchUserRole()
-
+  fetchUserRole();
 
   // Function to show the UI when the user is logged in
   function showLoggedInUI(isAdmin) {
@@ -9596,10 +9733,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
             <ul>
-              ${isAdmin
-        ? `<li id="adminDashboard-min-editor">Dashboard</li>`
-        : `<li id="profile-min-editor">Profile</li>`
-      }
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard-min-editor">Dashboard</li>`
+                  : `<li id="profile-min-editor">Profile</li>`
+              }
               <li id="logout-min-editor">Logout</li>
             </ul>
           </div>
@@ -9766,8 +9904,8 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.setItem("3DauthToken", token);
           console.log("Login successful!");
           closeLoginPopup();
-        await fetchUserRole();
-        closeLoginPopup();
+          await fetchUserRole();
+          closeLoginPopup();
         } else {
           console.error("Login successful, but no token found.");
           toastr.error("Login successful, but no token found.");
@@ -9833,47 +9971,47 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to handle signup logic
-//   async function handleSignup(e) {
-//     e.preventDefault();
-//     const firstname = document.getElementById("firstName").value;
-//     const lastname = document.getElementById("lastName").value;
-//     const email = document.getElementById("email").value;
-//     const username = document.getElementById("username").value;
-//     const password = document.getElementById("signupPassword").value;
+  //   async function handleSignup(e) {
+  //     e.preventDefault();
+  //     const firstname = document.getElementById("firstName").value;
+  //     const lastname = document.getElementById("lastName").value;
+  //     const email = document.getElementById("email").value;
+  //     const username = document.getElementById("username").value;
+  //     const password = document.getElementById("signupPassword").value;
 
-//     try {
-//       const response = await fetch(
-//         "https://backend.toddlerneeds.com/api/v1/signup",
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/x-www-form-urlencoded",
-//           },
-//           body: new URLSearchParams({
-//             firstname,
-//             lastname,
-//             email,
-//             password,
-//             username,
-//           }),
-//           credentials: "include",
-//         }
-//       );
+  //     try {
+  //       const response = await fetch(
+  //         "https://backend.toddlerneeds.com/api/v1/signup",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/x-www-form-urlencoded",
+  //           },
+  //           body: new URLSearchParams({
+  //             firstname,
+  //             lastname,
+  //             email,
+  //             password,
+  //             username,
+  //           }),
+  //           credentials: "include",
+  //         }
+  //       );
 
-//       if (response.ok) {
-//         console.log("Signup successful!");
-//         closeSignupPopup();
-//         await fetchUserRole();
-//       } else {
-//         console.error("Signup failed. Please try again.");
-//         toastr.error("Signup failed. Please try again.");
-//       }
-//     } catch (error) {
-//       console.error("Error during signup:", error);
-//       toastr.error("Error during signup:", error);
-//     }
-//   }
-async function handleSignup(e) {
+  //       if (response.ok) {
+  //         console.log("Signup successful!");
+  //         closeSignupPopup();
+  //         await fetchUserRole();
+  //       } else {
+  //         console.error("Signup failed. Please try again.");
+  //         toastr.error("Signup failed. Please try again.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during signup:", error);
+  //       toastr.error("Error during signup:", error);
+  //     }
+  //   }
+  async function handleSignup(e) {
     e.preventDefault();
 
     const firstname = document.getElementById("firstName").value;
@@ -9882,50 +10020,54 @@ async function handleSignup(e) {
     const username = document.getElementById("username").value;
     const password = document.getElementById("signupPassword").value;
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
 
-  if (!firstname) {
-    toastr.error("First name is required.");
-    return;
-  }
+    if (!firstname) {
+      toastr.error("First name is required.");
+      return;
+    }
 
-  if (!lastname) {
-    toastr.error("Last name is required.");
-    return;
-  }
+    if (!lastname) {
+      toastr.error("Last name is required.");
+      return;
+    }
 
-  if (!emailPattern.test(email)) {
-    toastr.error("Please enter a valid email address.");
-    return;
-  }
+    if (!emailPattern.test(email)) {
+      toastr.error("Please enter a valid email address.");
+      return;
+    }
 
-  if (!usernamePattern.test(username)) {
-    toastr.error("Username must be alphanumeric and between 4-20 characters.");
-    return;
-  }
+    if (!usernamePattern.test(username)) {
+      toastr.error(
+        "Username must be alphanumeric and between 4-20 characters."
+      );
+      return;
+    }
 
-  if (password.length < 6) {
-    toastr.error("Password must be at least 5 characters long.");
-    return;
-  }
-
+    if (password.length < 6) {
+      toastr.error("Password must be at least 5 characters long.");
+      return;
+    }
 
     try {
-      const response = await fetch("https://backend.toddlerneeds.com/api/v1/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Send as JSON
-        },
-        body: JSON.stringify({
-          firstname,
-          lastname,
-          email,
-          username,
-          password,
-        }),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://backend.toddlerneeds.com/api/v1/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Send as JSON
+          },
+          body: JSON.stringify({
+            firstname,
+            lastname,
+            email,
+            username,
+            password,
+          }),
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         console.log("Signup successful!");
@@ -9935,14 +10077,15 @@ async function handleSignup(e) {
       } else {
         const errorData = await response.json();
         console.error("Signup failed:", errorData);
-        toastr.error(`Signup failed: ${errorData.error || "Please try again."}`);
+        toastr.error(
+          `Signup failed: ${errorData.error || "Please try again."}`
+        );
       }
     } catch (error) {
       console.error("Error during signup:", error);
       toastr.error("Error during signup. Please try again.");
     }
   }
-
 
   // Function to close the signup popup
   function closeSignupPopup() {
@@ -9962,7 +10105,7 @@ async function handleSignup(e) {
         if (response) {
           //  console.log("Logout response:", response);
           console.log("Logout successful");
-        showLoggedOutUI()
+          showLoggedOutUI();
         } else {
           // Handle errors from the server
           response.json().then((data) => {
