@@ -768,6 +768,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
     savedCanvasJSON = newFabricCanvas.toJSON();
     window.editedCanvasJson = savedCanvasJSON;
+    console.log(window.editedCanvasJson);
 
     const allObjects = newFabricCanvas.getObjects();
 
