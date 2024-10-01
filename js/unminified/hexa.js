@@ -7323,6 +7323,7 @@
       .getElementById("edit-masking-button")
       .addEventListener("click", function () {
         unlinkClipPath();
+        selector.find("#hexa-image-settings").show();
       });
     function updateReplaceButtonState(e) {
       const activeObject = canvas.getActiveObject();
@@ -7347,6 +7348,7 @@
 
           // Only show the edit button if the done button is NOT visible
           if (!isDoneButtonVisible) {
+            selector.find("#hexa-image-settings").hide();
             document.getElementById("edit-masking-button").style.display = "block";
           }
       }
@@ -7505,61 +7507,7 @@
     );
     maskButton.css("display", "none");
 
-    // Your addMask function (similar to the one you provided earlier)
-    function addMask(canvas, points) {
-      if (points) {
-        const selectedObject = canvas.getActiveObject();
-        const { width, height, scaleY, scaleX, top, left } = selectedObject;
-
-        // Create a polygon mask based on the specified points
-        const svgMask = new fabric.Polygon(points, {
-          originX: "center",
-          originY: "center",
-          strokeWidth: 0,
-          layersType: "shape",
-          left: 0,
-          top: 0,
-          strokeLineJoin: "bevel",
-        });
-
-        // Scale and position the mask
-        svgMask.scaleToWidth(scaleX * width);
-        svgMask.scaleToHeight(scaleY * height);
-
-        // Create a new image object
-        const img = new fabric.Image(selectedObject._originalElement, {
-          originX: "center",
-          originY: "center",
-          flipX: false,
-          flipY: false,
-          layersType: "image",
-          imageFilters: selectedObject.imageFilters,
-          filters: selectedObject.filters,
-        });
-
-        // Scale and position the image
-        img.scaleToWidth(scaleX * width);
-        img.scaleToHeight(scaleY * height);
-        img.applyFilters();
-        img.setCoords();
-
-        // Create a group with the image and mask
-        const group = new fabric.Group([img], {
-          clipPath: svgMask,
-          layout: "clip-path",
-          top,
-          left,
-        });
-
-        // Scale the group
-        group.scaleToWidth(scaleX * width);
-        group.scaleToHeight(scaleY * height);
-
-        // Remove the original selected object and add the group to the canvas
-        canvas.remove(selectedObject);
-        canvas.add(group).setActiveObject(group).renderAll();
-      }
-    }
+ 
 
     /* Image Flip X */
     selector.find("#img-flip-horizontal").on("click", function () {
