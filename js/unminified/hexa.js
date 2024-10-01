@@ -2888,10 +2888,10 @@
             var originalObj = originalCanvasObject.objects[index];
 
             // Copy the values for top, left, scaleX, and scaleY from originalObj
-            editedObj.top = originalObj.top;
-            editedObj.left = originalObj.left;
-            editedObj.scaleX = originalObj.scaleX;
-            editedObj.scaleY = originalObj.scaleY;
+            // editedObj.top = originalObj.top;
+            // editedObj.left = originalObj.left;
+            // editedObj.scaleX = originalObj.scaleX;
+            // editedObj.scaleY = originalObj.scaleY;
 
             // Iterate over properties of the originalObj and add missing ones to editedObj
             for (var key in originalObj) {
@@ -2906,6 +2906,15 @@
             // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
             if (editedObj.type === "textbox") {
               originalObj.text = editedObj.text;
+            }
+            if (
+              editedObj.type === "image" &&
+              !editedObj.src.startsWith("http")
+            ) {
+              originalObj.top = editedObj.top * 4.4;
+              originalObj.left = editedObj.left * 4.4;
+              originalObj.scaleY = editedObj.scaleX * 4.4;
+              originalObj.scaleX = editedObj.scaleY * 4.4;
             }
           }
         });
@@ -2992,10 +3001,10 @@
             var originalObj = originalCanvasObject.objects[index];
 
             // Copy the values for top, left, scaleX, and scaleY from originalObj
-            editedObj.top = originalObj.top;
-            editedObj.left = originalObj.left;
-            editedObj.scaleX = originalObj.scaleX;
-            editedObj.scaleY = originalObj.scaleY;
+            // editedObj.top = originalObj.top;
+            // editedObj.left = originalObj.left;
+            // editedObj.scaleX = originalObj.scaleX;
+            // editedObj.scaleY = originalObj.scaleY;
 
             // Iterate over properties of the originalObj and add missing ones to editedObj
             for (var key in originalObj) {
@@ -3010,6 +3019,15 @@
             // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
             if (editedObj.type === "textbox") {
               originalObj.text = editedObj.text;
+            }
+            if (
+              editedObj.type === "image" &&
+              !editedObj.src.startsWith("http")
+            ) {
+              originalObj.top = editedObj.top * 4.4;
+              originalObj.left = editedObj.left * 4.4;
+              originalObj.scaleY = editedObj.scaleX * 4.4;
+              originalObj.scaleX = editedObj.scaleY * 4.4;
             }
           }
         });
@@ -7039,12 +7057,31 @@
 
     function addClipMask(path, activeObject) {
       console.log("this is the active path and all", path, activeObject);
+      console.log(canvas.toJSON());
       var uniqueId = "clipmask";
       var desiredWidth = 700;
       var desiredHeight = 700;
 
       if (activeObject) {
         activeObject.customId = uniqueId;
+        var objects = canvas.getObjects();
+        console.log(objects);
+        var pathObjects = objects.filter((obj) => obj.type === "path");
+
+        // if (pathObjects.length > 1) {
+        //   // Remove all but the last path object
+        //   for (let i = 0; i < pathObjects.length - 1; i++) {
+        //     canvas.remove(pathObjects[i]);
+        //     onlyDeleteLayerEvent(pathObjects[i].id);
+        //   }
+        // }
+        var pathObjects = objects.filter((obj) => obj.type === "path");
+
+        // Remove all path objects from the canvas
+        pathObjects.forEach((pathObj) => {
+          canvas.remove(pathObj);
+          onlyDeleteLayerEvent(pathObj.id);
+        });
 
         // Calculate the bounding box for the path
         var pathObject = new fabric.Path(path);
