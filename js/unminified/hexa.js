@@ -1063,24 +1063,52 @@
         },
         error: function (xhr, status, error) {
           // If the API call fails, it means the user is not logged in
-          toastr.error("Please log in to proceed.", "Login Required");
+        //   toastr.error("Please log in to proceed.", "Login Required");
+        Swal.fire({
+            title: 'Login Required',
+            text: 'Please log in to proceed.',
+            icon: 'error',
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+            allowOutsideClick: true,
+            allowEscapeKey: true,
+          });
+
           console.log("User is not logged in.");
           return;
         },
         success: function (response) {
           // If the user is not logged in
           if (!response.role) {
-            toastr.error("Please log in to proceed.", "Login Required");
+            // toastr.error("Please log in to proceed.", "Login Required");
+            Swal.fire({
+                title: 'Login Required',
+                text: 'Please log in to proceed.',
+                icon: 'error',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                allowOutsideClick: true,
+                allowEscapeKey: true,
+              });
             console.log("User is not logged in.");
             return;
           }
 
           // If the user's email is not verified
           if (!response.isVerified) {
-            toastr.error(
-              "Please verify your email to proceed.",
-              "Email Verification Required"
-            );
+            // toastr.error(
+            //   "Please verify your email to proceed.",
+            //   "Email Verification Required"
+            // );
+            Swal.fire({
+                title: 'Email Verification Required',
+                text: 'Please verify your email to proceed.',
+                icon: 'error',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                allowOutsideClick: true,
+                allowEscapeKey: true,
+              });
             console.log("Email is not verified.");
             return;
           }
@@ -1228,6 +1256,19 @@
           // Close the modal after saving
           selector.find(".hexa-modal").hide();
           $("#templates-public-private-modal").hide();
+
+      // Show SweetAlert for saving progress
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Your template is being saved...',
+            icon: 'info',
+            allowOutsideClick: true,
+            // showCloseButton: true,
+            confirmButtonText: 'OK',
+            allowEscapeKey: true,
+            showConfirmButton: false,
+        });
+
         });
 
         // Handle private button click
@@ -1236,6 +1277,18 @@
           // Close the modal after saving
           selector.find(".hexa-modal").hide();
           $("#templates-public-private-modal").hide();
+
+          Swal.fire({
+            title: 'Please wait',
+            text: 'Your template is being saved...',
+            icon: 'info',
+            allowOutsideClick: true,
+            // showCloseButton: true,
+            confirmButtonText: 'OK',
+            allowEscapeKey: true,
+            showConfirmButton: false,
+          });
+
         });
       });
     }
@@ -1334,9 +1387,14 @@
                 isPublic: isPublic, // Add public/private selection to data
               };
 
+            //   let isSaving = true;
+            //   if (isSaving) {
+            //     toastr.info("Please wait, the template is being saved", "Saving...");
+            //   }
               // Upload the data object to the new API
               uploadData(data)
                 .then(() => {
+                    // isSaving = false;
                   // Display a success message using toastr after successful upload
                   toastr.success("Data uploaded successfully!", "Success");
                   // Close the modal after saving
@@ -1396,70 +1454,171 @@
     }
 
     function fetchAndDisplayTemplates() {
-      const url = window.location.href;
-      // let type = "";
+        const url = window.location.href;
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelName = urlParams.get("name");
 
-      // if (url.includes("p3-type1.html")) {
-      //   type = "p3-type1";
-      // } else if (url.includes("p2-type1.html")) {
-      //   type = "p2-type1";
-      // }
-      const urlParams = new URLSearchParams(window.location.search);
-      const modelName = urlParams.get("name");
-      getAllSavedData()
-        .then((assets) => {
-          const templatesContainer = $("#hexa-my-templates");
-          templatesContainer.empty(); // Clear existing content
+        // Fetch the user email first
+        getUserEmail()
+          .then((userEmail) => {
+            // After getting the user email, fetch all saved templates
+            return getAllSavedData(userEmail);
+          })
+          .then((assets) => {
+            console.log("all the templates in library:", assets);
+            const templatesContainer = $("#hexa-my-templates");
+            templatesContainer.empty(); // Clear existing content
 
-          if (assets.length === 0) {
+            // Filter templates for the specific model type
+           const filteredAssets = assets.filter((asset) => asset.type === modelName);
+           if (filteredAssets.length === 0) {
+            // If no templates found for the model type, show a message
             templatesContainer.html(
-              '<div class="notice notice-info">No templates found.</div>'
+              `<div class="notice notice-info">No templates found for model: ${modelName}.</div>`
             );
-          } else {
-            assets.forEach((asset) => {
-              if (asset.type === modelName) {
-                const jsonblob = new Blob([asset.src], { type: "text/plain" });
-                const jsonurl = URL.createObjectURL(jsonblob);
-
-                const listItem = $("<li>").attr("data-keyword", asset.name);
-
-                listItem.html(`
-                      <div>${asset.name}</div>
-                      <div>
-                          <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
-                              <span class="material-icons">check</span>Select
-                          </button>
-                          <button type="button" class="hexa-btn danger hexa-template-delete" data-target="${asset.key}">
-                              <span class="material-icons">clear</span>Delete
-                          </button>
-                      </div>
-                  `);
-
-                templatesContainer.append(listItem);
-              }
-            });
           }
-        })
-        .catch((error) => {
-          toastr.error(error.message, "Error retrieving assets");
-        });
-    }
+            if (assets.length === 0) {
+              templatesContainer.html(
+                '<div class="notice notice-info">No templates found.</div>'
+              );
+            } else {
+              assets.forEach((asset) => {
+                if (asset.type === modelName) {
+                  const jsonblob = new Blob([asset.src], { type: "text/plain" });
+                  const jsonurl = URL.createObjectURL(jsonblob);
 
-    function getAllSavedData() {
-      return new Promise((resolve, reject) => {
-        $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/user/get/all",
-          type: "GET",
-          contentType: "application/json",
-          success: function (response) {
-            resolve(response.data);
-          },
-          error: function (xhr, status, error) {
-            reject(error);
-          },
+                  const listItem = $("<li>").attr("data-keyword", asset.name);
+
+                  listItem.html(`
+                        <div>${asset.name}</div>
+                        <div>
+                            <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
+                                <span class="material-icons">check</span>Select
+                            </button>
+                            <button type="button" class="hexa-btn danger hexa-template-delete" data-target="${asset.key}">
+                                <span class="material-icons">clear</span>Delete
+                            </button>
+                        </div>
+                    `);
+
+                  templatesContainer.append(listItem);
+                }
+              });
+            }
+          })
+          .catch((error) => {
+            // toastr.error(error.message, "Error retrieving assets");
+            console.log(error.message, "Error retrieving assets");
+          });
+      }
+
+      // Function to fetch the user email
+      function getUserEmail() {
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: "https://backend.toddlerneeds.com/api/v1/user/profile",
+            type: "GET",
+            contentType: "application/json",
+            xhrFields: {
+              withCredentials: true,
+            },
+            success: function (response) {
+              resolve(response.email); // Resolve with the user email
+            },
+            error: function (xhr, status, error) {
+              reject(error);
+            },
+          });
         });
-      });
-    }
+      }
+
+      // Function to fetch all saved templates and filter them
+      function getAllSavedData(userEmail) {
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: "https://backend.toddlerneeds.com/api/v1/user/get/all/templates",
+            type: "GET",
+            contentType: "application/json",
+            success: function (response) {
+              // Filter the templates: public or created by the user (even if private)
+              const filteredTemplates = response.data.filter(
+                (template) => template.isPublic || template.createdBy === userEmail
+              );
+              console.log("filteredTemplates: ", filteredTemplates);
+              resolve(filteredTemplates);
+            },
+            error: function (xhr, status, error) {
+              reject(error);
+            },
+          });
+        });
+      }
+
+    // function fetchAndDisplayTemplates() {
+    //   const url = window.location.href;
+    //   // let type = "";
+
+    //   // if (url.includes("p3-type1.html")) {
+    //   //   type = "p3-type1";
+    //   // } else if (url.includes("p2-type1.html")) {
+    //   //   type = "p2-type1";
+    //   // }
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const modelName = urlParams.get("name");
+    //   getAllSavedData()
+    //     .then((assets) => {
+    //       const templatesContainer = $("#hexa-my-templates");
+    //       templatesContainer.empty(); // Clear existing content
+
+    //       if (assets.length === 0) {
+    //         templatesContainer.html(
+    //           '<div class="notice notice-info">No templates found.</div>'
+    //         );
+    //       } else {
+    //         assets.forEach((asset) => {
+    //           if (asset.type === modelName) {
+    //             const jsonblob = new Blob([asset.src], { type: "text/plain" });
+    //             const jsonurl = URL.createObjectURL(jsonblob);
+
+    //             const listItem = $("<li>").attr("data-keyword", asset.name);
+
+    //             listItem.html(`
+    //                   <div>${asset.name}</div>
+    //                   <div>
+    //                       <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
+    //                           <span class="material-icons">check</span>Select
+    //                       </button>
+    //                       <button type="button" class="hexa-btn danger hexa-template-delete" data-target="${asset.key}">
+    //                           <span class="material-icons">clear</span>Delete
+    //                       </button>
+    //                   </div>
+    //               `);
+
+    //             templatesContainer.append(listItem);
+    //           }
+    //         });
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       toastr.error(error.message, "Error retrieving assets");
+    //     });
+    // }
+
+    // function getAllSavedData() {
+    //   return new Promise((resolve, reject) => {
+    //     $.ajax({
+    //       url: "https://backend.toddlerneeds.com/api/v1/user/get/all",
+    //       type: "GET",
+    //       contentType: "application/json",
+    //       success: function (response) {
+    //         resolve(response.data);
+    //       },
+    //       error: function (xhr, status, error) {
+    //         reject(error);
+    //       },
+    //     });
+    //   });
+    // }
 
     // Example usage of deleteData function
 
