@@ -7201,90 +7201,19 @@
           // Optionally, hide the "done" button after syncing starts
           document.getElementById("done-masking-img").style.display = "none";
           document.getElementById("replace-image-btn").style.display = "none";
-          document.getElementById("edit-masking-button").style.display =
-            "block";
+          // document.getElementById("edit-masking-button").style.display =
+          //   "block";
+          canvas.on("selection:cleared", function () {
+            document.getElementById("edit-masking-button").style.display = "none";
+          });
+        
         } else {
           alert(
             "No active object found for syncing. Please add a clip mask first."
           );
         }
       });
-
-    // function applyTemplateClipMask(clipmaskObject) {
-    //   console.log('Received image with clipPath:', clipmaskObject);
-    // canvas.remove(clipmaskObject)
-    // canvas.requestRenderAll()
-    //   let mainClippath = clipmaskObject.clipPath;
-
-    //   // Ensure mainClippath exists and has a valid path
-    //   if (!mainClippath || !mainClippath.path) {
-    //     console.log('No valid clipPath found in the clipmaskObject.');
-    //     return;
-    //   }
-
-    //   let path = mainClippath.path;
-
-    //   // Define the offset values between shell and clipPath for proper syncing
-    //   let clipPathOffset = {
-    //     top: clipmaskObject.top - mainClippath.top,
-    //     left: clipmaskObject.left - mainClippath.left,
-    //   };
-
-    //   // if (clipmaskObject) {
-    //   //   console.log('Clip mask object:', clipmaskObject);
-
-    //   //   // Create the shell using the mainClippath path
-    //   //   shell = new fabric.Path(path, {
-    //   //     fill: "", // Transparent shell
-    //   //     stroke: "black",
-    //   //     strokeWidth: 2,
-    //   //     scaleX: mainClippath.scaleX,
-    //   //     scaleY: mainClippath.scaleY,
-    //   //     lockScalingX: false,
-    //   //     lockScalingY: false,
-    //   //     lockSkewingX: true,
-    //   //     lockSkewingY: true,
-    //   //     originX: mainClippath.originX,
-    //   //     originY: mainClippath.originY,
-    //   //     top: mainClippath.top,
-    //   //     left: mainClippath.left,
-    //   //     selectable: true, // Make it interactive
-    //   //   });
-
-    //   //   // Store the image and its clip path globally
-    //   //   storedActiveObject = clipmaskObject; // Storing the image object
-    //   //   storedClipPath = mainClippath; // Storing the clip path object
-
-    //   //   // Add shell to the canvas (image is already added to the canvas)
-    //   //   canvas.add(shell);
-    //   //   canvas.requestRenderAll();
-
-    //   //   // Function to update the clip path position, scale, and angle as the shell moves
-    //   //   function updateClipPathPosition() {
-    //   //     // Update the clipPath's properties based on the shell's new position
-    //   //     mainClippath.set({
-    //   //       top: shell.top,
-    //   //       left: shell.left,
-    //   //       angle: shell.angle,
-    //   //       scaleX: shell.scaleX,
-    //   //       scaleY: shell.scaleY,
-    //   //     });
-
-    //   //     // Reassign the updated clipPath to the image
-    //   //     storedActiveObject.clipPath = mainClippath;
-
-    //   //     // Ensure canvas re-renders with changes
-    //   //     canvas.requestRenderAll();
-    //   //   }
-
-    //   //   // Sync clipPath updates when the shell is moved, scaled, or rotated
-    //   //   shell.on('moving', updateClipPathPosition);
-    //   //   shell.on('scaling', updateClipPathPosition);
-    //   //   shell.on('rotating', updateClipPathPosition);
-    //   // } else {
-    //   //   console.log('There is no object.');
-    //   // }
-    // }
+   
     function applyTemplateClipMask(clipmaskObject) {
       //   console.log('Attempting to remove the object:', clipObject);
       let mainClippath = clipmaskObject.clipPath;
@@ -7395,12 +7324,11 @@
       .addEventListener("click", function () {
         unlinkClipPath();
       });
-    function updateReplaceButtonState() {
+    function updateReplaceButtonState(e) {
       const activeObject = canvas.getActiveObject();
-      console.log("this is active now", activeObject);
+
       const replaceButton = document.getElementById("replace-image-btn");
       const editButton = document.getElementById("edit-masking-button"); // Assuming 'edit-button' is the ID of the edit button
-
       if (activeObject && activeObject.type === "image") {
         replaceButton.disabled = false;
         replaceButton.style.backgroundColor = "#00a3ff";
@@ -7414,8 +7342,16 @@
         replaceButton.disabled = true;
         replaceButton.style.backgroundColor = "#A2A2A2";
       }
-    }
+      if (activeObject && storedActiveObject && activeObject === storedActiveObject){
+        const isDoneButtonVisible = document.getElementById("done-masking-img").style.display !== "none";
 
+          // Only show the edit button if the done button is NOT visible
+          if (!isDoneButtonVisible) {
+            document.getElementById("edit-masking-button").style.display = "block";
+          }
+      }
+    }
+    document.getElementById("edit-masking-button").style.display = "none";
     canvas.on("selection:created", updateReplaceButtonState);
     canvas.on("selection:updated", updateReplaceButtonState);
     canvas.on("selection:cleared", updateReplaceButtonState);
