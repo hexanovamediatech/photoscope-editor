@@ -445,6 +445,32 @@ function loadJSONToCanvas(jsonData) {
 
   newFabricCanvas.clear();
 
+  const input1 = document.getElementById("text-1");
+  const input2 = document.getElementById("text-2");
+  input1.style.display = "none";
+  input2.style.display = "none";
+
+  // Count the number of textboxes in the JSON data
+  const textBoxCount = jsonData.objects.filter(
+    (obj) => obj.type === "textbox"
+  ).length;
+
+  // Show input fields based on the number of textboxes
+  if (textBoxCount > 0) {
+    input1.style.display = "block"; // Show the first input field
+  }
+  if (textBoxCount > 1) {
+    input2.style.display = "block"; // Show the second input field if there are two or more textboxes
+  }
+  const replaceImgBtn = document.getElementById("replace-btn-cont");
+  const imageFound = jsonData.objects.find(
+    (obj) => obj.type === "image" && !obj.src.startsWith("http")
+  );
+  if (imageFound) {
+    replaceImgBtn.style.display = "block";
+  } else {
+    replaceImgBtn.style.display = "none";
+  }
   // Load the JSON data into the existing Fabric.js canvas
   let nextIndex = 1;
   jsonData.objects.forEach((obj) => {
@@ -641,13 +667,71 @@ document
     // Clear the file input field
     const textInput1 = document.getElementById("text-1");
     const textInput2 = document.getElementById("text-2");
-    if (textInput1) {
-      textInput1.value = ""; // Clear the first text input
-    }
-    if (textInput2) {
-      textInput2.value = ""; // Clear the second text input
-    }
+    // if (textInput1) {
+    //   textInput1.value = ""; // Clear the first text input
+    // }
+    // if (textInput2) {
+    //   textInput2.value = ""; // Clear the second text input
+    // }
   });
+document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
+  // Hide the popup
+  document.getElementById("personaliseImageUploadPopup").style.display = "none";
+  const miniEditorCont = document.getElementById("mini-editor-Cont");
+  miniEditorCont.classList.add("display-none-prop");
+  miniEditorCont.classList.remove("display-block-prop");
+  if (newFabricCanvas) {
+    newFabricCanvas.forEachObject((obj) => {
+      obj.set({
+        selectable: false,
+        hasControls: false,
+        hasBorders: false,
+        lockMovementX: true,
+        lockMovementY: true,
+        lockRotation: true,
+        lockScalingX: true,
+        lockScalingY: true,
+      });
+    });
+    newFabricCanvas.renderAll();
+
+    savedCanvasJSON = newFabricCanvas.toJSON();
+    window.editedCanvasJson = savedCanvasJSON;
+    console.log(window.editedCanvasJson);
+
+    const allObjects = newFabricCanvas.getObjects();
+
+    // Save the first object (assuming it's the background image)
+    const firstObject = allObjects[0];
+
+    // Remove the first object from the canvas
+    newFabricCanvas.remove(firstObject);
+
+    // Render the canvas without the first object
+    newFabricCanvas.renderAll();
+
+    // Convert the remaining objects on the canvas to an image
+    const format = "png";
+    const quality = 1;
+    const imgData = newFabricCanvas.toDataURL({
+      format: format,
+      quality: quality,
+      enableRetinaScaling: false,
+    });
+
+    // Pass the image data to the changeTexture function
+    fabricImageConverted = imgData;
+    changeTexture(fabricImageConverted);
+
+    // Add the first object back to its original position
+    newFabricCanvas.insertAt(firstObject, 0);
+
+    // Render the canvas to show all objects again
+    newFabricCanvas.renderAll();
+  }
+
+  // Clear the file input field
+});
 
 // Event listener for the "Adjust" button click
 
@@ -659,14 +743,14 @@ document
     miniEditorCont.classList.remove("display-none-prop");
     miniEditorCont.classList.add("display-block-prop");
     // Display Done Button
-    const miniEditorDone = document.getElementById("miniE-done-Btn");
-    miniEditorDone.classList.remove("display-none-prop");
-    miniEditorDone.classList.add("display-block-prop");
+    // const miniEditorDone = document.getElementById("miniE-done-Btn");
+    // miniEditorDone.classList.remove("display-none-prop");
+    // miniEditorDone.classList.add("display-block-prop");
 
-    // Hide Adjust Button
-    const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    miniEditorAdjust.classList.add("display-none-prop");
-    miniEditorAdjust.classList.remove("display-block-prop");
+    // // // Hide Adjust Button
+    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+    // miniEditorAdjust.classList.add("display-none-prop");
+    // miniEditorAdjust.classList.remove("display-block-prop");
 
     if (newFabricCanvas) {
       // Set properties for the first object in the canvas
@@ -995,7 +1079,10 @@ initialize3DViewer();
             const jsonData = await jsonResponse.json();
             window.originalCanvasJson = jsonData;
             imageReplace = true;
-
+            const miniEditorAdjust =
+              document.getElementById("miniE-adjust-Btn");
+            miniEditorAdjust.classList.add("display-none-prop");
+            miniEditorAdjust.classList.remove("display-block-prop");
             // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
             // setupEventListener();
