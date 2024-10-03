@@ -1067,7 +1067,7 @@
         Swal.fire({
             title: 'Login Required',
             text: 'Please log in to proceed.',
-            icon: 'error',
+            icon: 'warning',
             showConfirmButton: true,
             confirmButtonText: 'OK',
             allowOutsideClick: true,
@@ -1084,7 +1084,7 @@
             Swal.fire({
                 title: 'Login Required',
                 text: 'Please log in to proceed.',
-                icon: 'error',
+                icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'OK',
                 allowOutsideClick: true,
@@ -1103,7 +1103,7 @@
             Swal.fire({
                 title: 'Email Verification Required',
                 text: 'Please verify your email to proceed.',
-                icon: 'error',
+                icon: 'warning',
                 showConfirmButton: true,
                 confirmButtonText: 'OK',
                 allowOutsideClick: true,
@@ -1263,7 +1263,7 @@
             text: 'Your template is being saved...',
             icon: 'info',
             allowOutsideClick: true,
-            // showCloseButton: true,
+            showCloseButton: true,
             confirmButtonText: 'OK',
             allowEscapeKey: true,
             showConfirmButton: false,
@@ -1283,7 +1283,7 @@
             text: 'Your template is being saved...',
             icon: 'info',
             allowOutsideClick: true,
-            // showCloseButton: true,
+            showCloseButton: true,
             confirmButtonText: 'OK',
             allowEscapeKey: true,
             showConfirmButton: false,
@@ -1397,6 +1397,7 @@
                     // isSaving = false;
                   // Display a success message using toastr after successful upload
                   toastr.success("Data uploaded successfully!", "Success");
+                  Swal.close();
                   // Close the modal after saving
                   selector.find(".hexa-modal").hide();
                 })
@@ -9324,6 +9325,30 @@
       });
     }
     loadTemplateFromUrl();
+
+    $(document).on('keydown', function(event) {
+        if (event.key === 'Escape') {
+            $('.hexa-modal:visible').hide();
+        }
+    });
+
+
+// $(document).on('keydown', function(event) {
+//     if (event.key === 'Escape') {
+//         var targetModal = selector.find('.hexa-modal:visible');
+//         if (targetModal.length) {
+//             targetModal.hide();
+//         }
+//     }
+// });
+
+// selector.find(".hexa-modal-close").on("click", function (e) {
+//     e.preventDefault();
+//     var target = $(this).data("target");
+//     selector.find(target).hide();
+// });
+
+
     //////////////////////* CUSTOM FUNCTIONS *//////////////////////
     settings.customFunctions.call(this, selector, canvas, lazyLoadInstance);
   };
@@ -9332,23 +9357,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container");
   let isDropdownOpen = false;
-
-  // Fetch login status from the API
-  //   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       if (data.role) {
-  //         const isAdmin = data.role === "admin";
-  //         showLoggedInUI(isAdmin);
-  //       } else {
-  //         showLoggedOutUI();
-  //       }
-  //     })
-  //     .catch(() => {
-  //       showLoggedOutUI();
-  //     });
 
   async function fetchUserRole() {
     try {
@@ -9764,23 +9772,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container-min-editor");
   let isDropdownOpen = false;
-
-  //   // Fetch login status from the API
-  //   fetch("https://backend.toddlerneeds.com/api/v1/protected-route", {
-  //     credentials: "include",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       if (data.role) {
-  //         const isAdmin = data.role === "admin";
-  //         showLoggedInUI(isAdmin);
-  //       } else {
-  //         showLoggedOutUI();
-  //       }
-  //     })
-  //     .catch(() => {
-  //       showLoggedOutUI();
-  //     });
 
   async function fetchUserRole() {
     try {
