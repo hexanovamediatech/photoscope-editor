@@ -8406,6 +8406,21 @@ Enter Your Text Here</textarea
             />
           </a>
         </div>
+        <div
+          class="hexa-save-new-button-container display-none-prop"
+          id="hexa-save-mini-cont"
+        >
+          <div class="hexa-save">
+            <button
+              id="hexa-mini-editor-save"
+              type="button"
+              class="hexa-btn primary"
+            >
+              <span class="material-icons">save</span
+              ><span class="hexa-btn-text">Save </span>
+            </button>
+          </div>
+        </div>
         <div class="auth-container-min-editor"></div>
       </div>
       <div class="web-thr-d-main-container display-unity">
@@ -8513,6 +8528,51 @@ Enter Your Text Here</textarea
             </div>
           </div>
         </div>
+        <div id="mini-editor-save-modal-cont" class="mini-editor-modal-box">
+          <!-- Modal content -->
+          <div class="mini-editor-modal-content">
+            <span class="close-mini-modal">&times;</span>
+
+            <input
+              type="text"
+              class="mini-editor-input-save"
+              id="mini-editor-template-name"
+              placeholder="Enter template name"
+              type="text"
+              value=""
+              autocomplete="off"
+              data-default=""
+            />
+            <button
+              id="mini-editor-saveTemplateBtn"
+              class="mini-editor-save-btn"
+            >
+              Save as template
+            </button>
+          </div>
+        </div>
+        <!-- <div
+          id="templates-public-private-modal"
+          class="templates-public-private-modal"
+          style="display: flex"
+        >
+          <div class="templates-public-private-modal-content">
+            <h3>Select Template Visibility</h3>
+            <p>Would you like to save the template as public or private?</p>
+            <button
+              id="saveAsPublic"
+              class="templates-public-private-btn templates-public-private-btn-primary"
+            >
+              Public
+            </button>
+            <button
+              id="saveAsPrivate"
+              class="templates-public-private-btn templates-public-private-btn-secondary"
+            >
+              Private
+            </button>
+          </div>
+        </div> -->
       </div>
     </div>
     <script src="js/jquery.min.js"></script>
