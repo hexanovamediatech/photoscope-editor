@@ -1063,13 +1063,13 @@
         },
         error: function (xhr, status, error) {
           // If the API call fails, it means the user is not logged in
-        //   toastr.error("Please log in to proceed.", "Login Required");
-        Swal.fire({
-            title: 'Login Required',
-            text: 'Please log in to proceed.',
-            icon: 'warning',
+          //   toastr.error("Please log in to proceed.", "Login Required");
+          Swal.fire({
+            title: "Login Required",
+            text: "Please log in to proceed.",
+            icon: "warning",
             showConfirmButton: true,
-            confirmButtonText: 'OK',
+            confirmButtonText: "OK",
             allowOutsideClick: true,
             allowEscapeKey: true,
           });
@@ -1082,14 +1082,14 @@
           if (!response.role) {
             // toastr.error("Please log in to proceed.", "Login Required");
             Swal.fire({
-                title: 'Login Required',
-                text: 'Please log in to proceed.',
-                icon: 'warning',
-                showConfirmButton: true,
-                confirmButtonText: 'OK',
-                allowOutsideClick: true,
-                allowEscapeKey: true,
-              });
+              title: "Login Required",
+              text: "Please log in to proceed.",
+              icon: "warning",
+              showConfirmButton: true,
+              confirmButtonText: "OK",
+              allowOutsideClick: true,
+              allowEscapeKey: true,
+            });
             console.log("User is not logged in.");
             return;
           }
@@ -1101,14 +1101,14 @@
             //   "Email Verification Required"
             // );
             Swal.fire({
-                title: 'Email Verification Required',
-                text: 'Please verify your email to proceed.',
-                icon: 'warning',
-                showConfirmButton: true,
-                confirmButtonText: 'OK',
-                allowOutsideClick: true,
-                allowEscapeKey: true,
-              });
+              title: "Email Verification Required",
+              text: "Please verify your email to proceed.",
+              icon: "warning",
+              showConfirmButton: true,
+              confirmButtonText: "OK",
+              allowOutsideClick: true,
+              allowEscapeKey: true,
+            });
             console.log("Email is not verified.");
             return;
           }
@@ -1257,18 +1257,17 @@
           selector.find(".hexa-modal").hide();
           $("#templates-public-private-modal").hide();
 
-      // Show SweetAlert for saving progress
-        Swal.fire({
-            title: 'Please wait',
-            text: 'Your template is being saved...',
-            icon: 'info',
+          // Show SweetAlert for saving progress
+          Swal.fire({
+            title: "Please wait",
+            text: "Your template is being saved...",
+            icon: "info",
             allowOutsideClick: true,
             showCloseButton: true,
-            confirmButtonText: 'OK',
+            confirmButtonText: "OK",
             allowEscapeKey: true,
             showConfirmButton: false,
-        });
-
+          });
         });
 
         // Handle private button click
@@ -1279,16 +1278,15 @@
           $("#templates-public-private-modal").hide();
 
           Swal.fire({
-            title: 'Please wait',
-            text: 'Your template is being saved...',
-            icon: 'info',
+            title: "Please wait",
+            text: "Your template is being saved...",
+            icon: "info",
             allowOutsideClick: true,
             showCloseButton: true,
-            confirmButtonText: 'OK',
+            confirmButtonText: "OK",
             allowEscapeKey: true,
             showConfirmButton: false,
           });
-
         });
       });
     }
@@ -1340,6 +1338,7 @@
           json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
 
           var template = JSON.stringify(json);
+          console.log(json);
 
           var blob = new Blob([template], { type: "application/json" });
 
@@ -1351,7 +1350,7 @@
           var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
           var imageFileName = "template_image_" + timestamp + ".png";
           formData.append("files", imageBlob, imageFileName);
-
+          console.log(formData);
           $.ajax({
             url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
             type: "POST",
@@ -1362,6 +1361,7 @@
               var imageUrl = "";
               var jsonUrl = "";
               response.urls.forEach(function (url) {
+                console.log(url);
                 if (url.endsWith(".json")) {
                   jsonUrl = url;
                 } else if (
@@ -1387,14 +1387,14 @@
                 isPublic: isPublic, // Add public/private selection to data
               };
 
-            //   let isSaving = true;
-            //   if (isSaving) {
-            //     toastr.info("Please wait, the template is being saved", "Saving...");
-            //   }
+              //   let isSaving = true;
+              //   if (isSaving) {
+              //     toastr.info("Please wait, the template is being saved", "Saving...");
+              //   }
               // Upload the data object to the new API
               uploadData(data)
                 .then(() => {
-                    // isSaving = false;
+                  // isSaving = false;
                   // Display a success message using toastr after successful upload
                   toastr.success("Data uploaded successfully!", "Success");
                   Swal.close();
@@ -1416,6 +1416,7 @@
     });
 
     function uploadData(data) {
+      console.log(data);
       return new Promise((resolve, reject) => {
         $.ajax({
           url: "https://backend.toddlerneeds.com/api/v1/user/file-data/upload",
@@ -1455,42 +1456,44 @@
     }
 
     function fetchAndDisplayTemplates() {
-        const url = window.location.href;
-        const urlParams = new URLSearchParams(window.location.search);
-        const modelName = urlParams.get("name");
+      const url = window.location.href;
+      const urlParams = new URLSearchParams(window.location.search);
+      const modelName = urlParams.get("name");
 
-        // Fetch the user email first
-        getUserEmail()
-          .then((userEmail) => {
-            // After getting the user email, fetch all saved templates
-            return getAllSavedData(userEmail);
-          })
-          .then((assets) => {
-            console.log("all the templates in library:", assets);
-            const templatesContainer = $("#hexa-my-templates");
-            templatesContainer.empty(); // Clear existing content
+      // Fetch the user email first
+      getUserEmail()
+        .then((userEmail) => {
+          // After getting the user email, fetch all saved templates
+          return getAllSavedData(userEmail);
+        })
+        .then((assets) => {
+          console.log("all the templates in library:", assets);
+          const templatesContainer = $("#hexa-my-templates");
+          templatesContainer.empty(); // Clear existing content
 
-            // Filter templates for the specific model type
-           const filteredAssets = assets.filter((asset) => asset.type === modelName);
-           if (filteredAssets.length === 0) {
+          // Filter templates for the specific model type
+          const filteredAssets = assets.filter(
+            (asset) => asset.type === modelName
+          );
+          if (filteredAssets.length === 0) {
             // If no templates found for the model type, show a message
             templatesContainer.html(
               `<div class="notice notice-info">No templates found for model: ${modelName}.</div>`
             );
           }
-            if (assets.length === 0) {
-              templatesContainer.html(
-                '<div class="notice notice-info">No templates found.</div>'
-              );
-            } else {
-              assets.forEach((asset) => {
-                if (asset.type === modelName) {
-                  const jsonblob = new Blob([asset.src], { type: "text/plain" });
-                  const jsonurl = URL.createObjectURL(jsonblob);
+          if (assets.length === 0) {
+            templatesContainer.html(
+              '<div class="notice notice-info">No templates found.</div>'
+            );
+          } else {
+            assets.forEach((asset) => {
+              if (asset.type === modelName) {
+                const jsonblob = new Blob([asset.src], { type: "text/plain" });
+                const jsonurl = URL.createObjectURL(jsonblob);
 
-                  const listItem = $("<li>").attr("data-keyword", asset.name);
+                const listItem = $("<li>").attr("data-keyword", asset.name);
 
-                  listItem.html(`
+                listItem.html(`
                         <div>${asset.name}</div>
                         <div>
                             <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
@@ -1502,58 +1505,59 @@
                         </div>
                     `);
 
-                  templatesContainer.append(listItem);
-                }
-              });
-            }
-          })
-          .catch((error) => {
-            // toastr.error(error.message, "Error retrieving assets");
-            console.log(error.message, "Error retrieving assets");
-          });
-      }
-
-      // Function to fetch the user email
-      function getUserEmail() {
-        return new Promise((resolve, reject) => {
-          $.ajax({
-            url: "https://backend.toddlerneeds.com/api/v1/user/profile",
-            type: "GET",
-            contentType: "application/json",
-            xhrFields: {
-              withCredentials: true,
-            },
-            success: function (response) {
-              resolve(response.email); // Resolve with the user email
-            },
-            error: function (xhr, status, error) {
-              reject(error);
-            },
-          });
+                templatesContainer.append(listItem);
+              }
+            });
+          }
+        })
+        .catch((error) => {
+          // toastr.error(error.message, "Error retrieving assets");
+          console.log(error.message, "Error retrieving assets");
         });
-      }
+    }
 
-      // Function to fetch all saved templates and filter them
-      function getAllSavedData(userEmail) {
-        return new Promise((resolve, reject) => {
-          $.ajax({
-            url: "https://backend.toddlerneeds.com/api/v1/user/get/all/templates",
-            type: "GET",
-            contentType: "application/json",
-            success: function (response) {
-              // Filter the templates: public or created by the user (even if private)
-              const filteredTemplates = response.data.filter(
-                (template) => template.isPublic || template.createdBy === userEmail
-              );
-              console.log("filteredTemplates: ", filteredTemplates);
-              resolve(filteredTemplates);
-            },
-            error: function (xhr, status, error) {
-              reject(error);
-            },
-          });
+    // Function to fetch the user email
+    function getUserEmail() {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "https://backend.toddlerneeds.com/api/v1/user/profile",
+          type: "GET",
+          contentType: "application/json",
+          xhrFields: {
+            withCredentials: true,
+          },
+          success: function (response) {
+            resolve(response.email); // Resolve with the user email
+          },
+          error: function (xhr, status, error) {
+            reject(error);
+          },
         });
-      }
+      });
+    }
+
+    // Function to fetch all saved templates and filter them
+    function getAllSavedData(userEmail) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "https://backend.toddlerneeds.com/api/v1/user/get/all/templates",
+          type: "GET",
+          contentType: "application/json",
+          success: function (response) {
+            // Filter the templates: public or created by the user (even if private)
+            const filteredTemplates = response.data.filter(
+              (template) =>
+                template.isPublic || template.createdBy === userEmail
+            );
+            console.log("filteredTemplates: ", filteredTemplates);
+            resolve(filteredTemplates);
+          },
+          error: function (xhr, status, error) {
+            reject(error);
+          },
+        });
+      });
+    }
 
     // function fetchAndDisplayTemplates() {
     //   const url = window.location.href;
@@ -7205,16 +7209,16 @@
           // document.getElementById("edit-masking-button").style.display =
           //   "block";
           canvas.on("selection:cleared", function () {
-            document.getElementById("edit-masking-button").style.display = "none";
+            document.getElementById("edit-masking-button").style.display =
+              "none";
           });
-        
         } else {
           alert(
             "No active object found for syncing. Please add a clip mask first."
           );
         }
       });
-   
+
     function applyTemplateClipMask(clipmaskObject) {
       //   console.log('Attempting to remove the object:', clipObject);
       let mainClippath = clipmaskObject.clipPath;
@@ -7344,14 +7348,20 @@
         replaceButton.disabled = true;
         replaceButton.style.backgroundColor = "#A2A2A2";
       }
-      if (activeObject && storedActiveObject && activeObject === storedActiveObject){
-        const isDoneButtonVisible = document.getElementById("done-masking-img").style.display !== "none";
+      if (
+        activeObject &&
+        storedActiveObject &&
+        activeObject === storedActiveObject
+      ) {
+        const isDoneButtonVisible =
+          document.getElementById("done-masking-img").style.display !== "none";
 
-          // Only show the edit button if the done button is NOT visible
-          if (!isDoneButtonVisible) {
-            selector.find("#hexa-image-settings").hide();
-            document.getElementById("edit-masking-button").style.display = "block";
-          }
+        // Only show the edit button if the done button is NOT visible
+        if (!isDoneButtonVisible) {
+          selector.find("#hexa-image-settings").hide();
+          document.getElementById("edit-masking-button").style.display =
+            "block";
+        }
       }
     }
     document.getElementById("edit-masking-button").style.display = "none";
@@ -7507,8 +7517,6 @@
       "#hexa-maskbutton, #hexa-maskbutton-outsied"
     );
     maskButton.css("display", "none");
-
- 
 
     /* Image Flip X */
     selector.find("#img-flip-horizontal").on("click", function () {
@@ -9326,28 +9334,26 @@
     }
     loadTemplateFromUrl();
 
-    $(document).on('keydown', function(event) {
-        if (event.key === 'Escape') {
-            $('.hexa-modal:visible').hide();
-        }
+    $(document).on("keydown", function (event) {
+      if (event.key === "Escape") {
+        $(".hexa-modal:visible").hide();
+      }
     });
 
+    // $(document).on('keydown', function(event) {
+    //     if (event.key === 'Escape') {
+    //         var targetModal = selector.find('.hexa-modal:visible');
+    //         if (targetModal.length) {
+    //             targetModal.hide();
+    //         }
+    //     }
+    // });
 
-// $(document).on('keydown', function(event) {
-//     if (event.key === 'Escape') {
-//         var targetModal = selector.find('.hexa-modal:visible');
-//         if (targetModal.length) {
-//             targetModal.hide();
-//         }
-//     }
-// });
-
-// selector.find(".hexa-modal-close").on("click", function (e) {
-//     e.preventDefault();
-//     var target = $(this).data("target");
-//     selector.find(target).hide();
-// });
-
+    // selector.find(".hexa-modal-close").on("click", function (e) {
+    //     e.preventDefault();
+    //     var target = $(this).data("target");
+    //     selector.find(target).hide();
+    // });
 
     //////////////////////* CUSTOM FUNCTIONS *//////////////////////
     settings.customFunctions.call(this, selector, canvas, lazyLoadInstance);

@@ -1061,6 +1061,7 @@ initialize3DViewer();
           const previouslyActive = container.querySelector(
             ".personalise-library-box.active"
           );
+
           if (previouslyActive) {
             previouslyActive.classList.remove("active");
           }
@@ -1083,6 +1084,12 @@ initialize3DViewer();
               document.getElementById("miniE-adjust-Btn");
             miniEditorAdjust.classList.add("display-none-prop");
             miniEditorAdjust.classList.remove("display-block-prop");
+            const miniEditorSaveBtnt = document.getElementById(
+              "hexa-save-mini-cont"
+            );
+            miniEditorSaveBtnt.classList.add("display-block-prop");
+            miniEditorSaveBtnt.classList.remove("display-none-prop");
+
             // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
             // setupEventListener();
@@ -1104,7 +1111,285 @@ initialize3DViewer();
     console.error("Error fetching data:", error);
   }
 })();
-setupEventListener();
+
+function openModal() {
+  const modal = document.getElementById("mini-editor-save-modal-cont");
+  console.log("Opening modal..."); // Debugging log
+  if (modal) {
+    modal.style.display = "block";
+  } else {
+    console.error("Modal element not found!");
+  }
+}
+
+// Function to close the modal
+function closeModal() {
+  const modal = document.getElementById("mini-editor-save-modal-cont");
+  if (modal) {
+    modal.style.display = "none";
+    console.log("Modal closed.");
+  } else {
+    console.error("Modal element not found!");
+  }
+}
+
+// Adding event listeners after the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM fully loaded.");
+
+  // Get the button that opens the modal
+  const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  if (openModalBtn) {
+    console.log("Found the open modal button.");
+    openModalBtn.addEventListener("click", openModal);
+  } else {
+    console.error("Open modal button not found!");
+  }
+
+  // Get the <span> element that closes the modal (fix the class here)
+  const closeModalBtn = document.getElementsByClassName("close-mini-modal")[0];
+  if (closeModalBtn) {
+    console.log("Found the close button.");
+    closeModalBtn.addEventListener("click", closeModal);
+  } else {
+    console.error("Close button not found!");
+  }
+
+  // Close the modal when user clicks outside the modal content
+  window.addEventListener("click", function (event) {
+    const modal = document.getElementById("mini-editor-save-modal-cont");
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+});
+function convertToDataURL(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onload = function () {
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      callback(reader.result);
+    };
+    reader.readAsDataURL(xhr.response);
+  };
+  xhr.open("GET", url);
+  xhr.responseType = "blob";
+  xhr.send();
+}
+
+document
+  .querySelector("#mini-editor-saveTemplateBtn")
+  .addEventListener("click", function () {
+    // Show public/private modal before proceeding
+    // showPublicPrivateModal().then((isPublic) => {
+    // Proceed with saving the template based on user's choice
+
+    // Convert the canvas to a JSON object, including specific properties
+    // var json = newFabricCanvas.toJSON([
+    //   "objectType",
+    //   "gradientFill",
+    //   "roundedCorners",
+    //   "mode",
+    //   "selectable",
+    //   "lockMovementX",
+    //   "lockMovementY",
+    //   "lockRotation",
+    //   "crossOrigin",
+    //   "layerName",
+    //   "customId",
+    // ]);
+    var editedCanvasJson = window.editedCanvasJson;
+    var originalCanvasJson = window.originalCanvasJson;
+    var originalCanvasObject = originalCanvasJson;
+    var editedCanvasObject = editedCanvasJson;
+
+    // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
+    editedCanvasObject.objects.forEach((editedObj, index) => {
+      if (originalCanvasObject.objects[index]) {
+        var originalObj = originalCanvasObject.objects[index];
+
+        // Copy the values for top, left, scaleX, and scaleY from originalObj
+        // editedObj.top = originalObj.top;
+        // editedObj.left = originalObj.left;
+        // editedObj.scaleX = originalObj.scaleX;
+        // editedObj.scaleY = originalObj.scaleY;
+
+        // Iterate over properties of the originalObj and add missing ones to editedObj
+        for (var key in originalObj) {
+          if (
+            originalObj.hasOwnProperty(key) &&
+            !editedObj.hasOwnProperty(key)
+          ) {
+            editedObj[key] = originalObj[key];
+          }
+        }
+
+        // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
+        if (editedObj.type === "textbox") {
+          originalObj.text = editedObj.text;
+        }
+        if (editedObj.type === "image" && !editedObj.src.startsWith("http")) {
+          originalObj.top = editedObj.top * 4.4;
+          originalObj.left = editedObj.left * 4.4;
+          originalObj.scaleY = editedObj.scaleX * 4.4;
+          originalObj.scaleX = editedObj.scaleY * 4.4;
+        }
+      }
+    });
+
+    console.log(editedCanvasObject);
+    console.log(originalCanvasObject);
+    const json = originalCanvasObject;
+    var objects = newFabricCanvas.getObjects();
+    var filteredObjects = objects.filter(function (obj) {
+      return obj.customId !== "layoutImage"; // Filter out layoutImage
+    });
+
+    // Temporarily hide objects that are not filtered
+    newFabricCanvas.getObjects().forEach(function (obj) {
+      if (!filteredObjects.includes(obj)) {
+        obj.visible = false;
+      }
+    });
+
+    // Generate image URL with only visible (filtered) objects
+    var canvasImageUrl = newFabricCanvas.toDataURL({
+      format: "png",
+      multiplier: 2,
+    });
+
+    // Restore visibility of all objects
+    newFabricCanvas.getObjects().forEach(function (obj) {
+      obj.visible = true;
+    });
+
+    convertToDataURL(json.backgroundImage.src, function (dataUrl) {
+      json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
+
+      var template = JSON.stringify(json);
+
+      var blob = new Blob([template], { type: "application/json" });
+
+      var timestamp = new Date().getTime();
+      var uniqueFileName = "template_" + timestamp + ".json";
+      var formData = new FormData();
+      formData.append("files", blob, uniqueFileName);
+
+      var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
+      var imageFileName = "template_image_" + timestamp + ".png";
+      formData.append("files", imageBlob, imageFileName);
+
+      // Vanilla JavaScript for AJAX request (XMLHttpRequest)
+      var xhr = new XMLHttpRequest();
+      xhr.open(
+        "POST",
+        "https://backend.toddlerneeds.com/api/v1/user/media/upload",
+        true
+      );
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          var imageUrl = "";
+          var jsonUrl = "";
+          response.urls.forEach(function (url) {
+            if (url.endsWith(".json")) {
+              jsonUrl = url;
+            } else if (
+              url.endsWith(".png") ||
+              url.endsWith(".jpeg") ||
+              url.endsWith(".jpg")
+            ) {
+              imageUrl = url;
+            }
+          });
+          const urlParams = new URLSearchParams(window.location.search);
+          const modelName = urlParams.get("name");
+
+          var key = Math.random().toString(36).substr(2, 9);
+          var name = document.querySelector("#mini-editor-template-name").value;
+
+          var data = {
+            key: key,
+            src: jsonUrl,
+            imageUrl: imageUrl,
+            name: name,
+            type: modelName,
+            // isPublic: isPublic, // Add public/private selection to data
+            isPublic: true,
+          };
+
+          // Upload the data object to the new API
+          uploadData(data)
+            .then(() => {
+              // Display a success message using toastr after successful upload
+              toastr.success("Data uploaded successfully!", "Success");
+              Swal.close();
+              closeModal();
+              // Close the modal after saving
+              // document.querySelector(".hexa-modal").style.display = "none";
+            })
+            .catch((error) => {
+              // Display an error message using toastr if uploading fails
+              toastr.error(error.message, "Error");
+            });
+        } else {
+          // Display an error message using toastr if the API call fails
+          toastr.error(xhr.statusText, "Error");
+        }
+      };
+
+      xhr.onerror = function () {
+        toastr.error("Request failed.", "Error");
+      };
+
+      xhr.send(formData);
+    });
+    // });
+  });
+
+async function uploadData(data) {
+  try {
+    const response = await fetch(
+      "https://backend.toddlerneeds.com/api/v1/user/file-data/upload",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Include credentials for cross-origin requests
+          // Authorization: "Bearer <Your-Token>", // Use if needed for authentication, else remove
+        },
+        body: JSON.stringify(data),
+        credentials: "include", // Equivalent to `xhrFields: { withCredentials: true }`
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Failed to upload data");
+    }
+
+    const responseData = await response.json(); // Parse the response as JSON
+    return responseData; // Resolve the data as success
+  } catch (error) {
+    throw error; // Reject with error message
+  }
+}
+
+// Helper function to convert data URL to Blob
+function dataURLtoBlob(dataurl) {
+  var arr = dataurl.split(",");
+  var mime = arr[0].match(/:(.*?);/)[1];
+  var bstr = atob(arr[1]);
+  var n = bstr.length;
+  var u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
+// setupEventListener();
 
 // document
 //   .getElementById("personaliseOpenPopupBtn")
@@ -1162,3 +1447,9 @@ async function handleFavTempllate(templateKey) {
     // Indicate failure
   }
 }
+
+// Get the modal
+// Function to open the modal
+
+// Function to open the modal
+// Function to open the modal

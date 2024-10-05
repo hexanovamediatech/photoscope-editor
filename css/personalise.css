@@ -299,12 +299,74 @@
   }
 }
 
+.template-fav-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 20px !important;
+  height: 20px !important;
+}
 
-.template-fav-icon{
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 20px !important;
-    height: 20px !important;
+/* The Modal (background) */
+.mini-editor-modal-box {
+  display: none;
+  position: fixed; /* Stay in place */
+  z-index: 999; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
 
+/* Modal Content */
+.mini-editor-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 500px; /* Could be more or less, depending on screen size */
+  text-align: center;
+}
+
+/* The Close Button */
+.close-mini-modal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-mini-modal:hover,
+.close-mini-modal:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Input and button styling */
+.mini-editor-input-save[type="text"] {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.mini-editor-save-btn {
+  background-color: #4caf50; /* Green */
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.mini-editor-save-btn:hover {
+  background-color: #45a049;
+}
+
+.hexa-save-mini-cont {
+  display: none;
 }
