@@ -33,7 +33,12 @@ async function fetchModelData() {
     // Extract the model source (GLB path) based on the name parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const modelName = urlParams.get("name");
-
+    const productNameTag = document.querySelector(
+      ".personalise-product-name-text"
+    );
+    if (productNameTag) {
+      productNameTag.textContent = modelName; // Update the product name
+    }
     const product = data.products.find((item) => item.name === modelName);
     if (product && product.modelsUrl) {
       modelSource = product.modelsUrl; // Set the model URL
@@ -150,7 +155,7 @@ function initPersonalise() {
   const environment = new RoomEnvironment(renderer);
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
-  scene.background = new THREE.Color(0x818181);
+  scene.background = new THREE.Color(0xbfc3cc);
   scene.environment = pmremGenerator.fromScene(environment).texture;
 
   controls = new OrbitControls(camera, renderer.domElement);
@@ -906,8 +911,8 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 initialize3DViewer();
 
 (async () => {
-  const loader = document.getElementById("mini-editor-loader");
-  const templateListCont = document.getElementById("template-list-cont");
+  // const loader = document.getElementById("mini-editor-loader");
+  // const templateListCont = document.getElementById("template-list-cont");
   // Show loader
   try {
     const response = await fetch(
@@ -954,7 +959,8 @@ initialize3DViewer();
       // const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
 
       // Get the container element where you want to display the names
-      const container = document.getElementById("library-container");
+      // const container = document.getElementById("library-container");
+      const container = document.getElementById("template-cont-box");
 
       // Fetch favorites to compare with
       const favoriteResponse = await fetch(
@@ -968,29 +974,44 @@ initialize3DViewer();
       const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
       filteredData.forEach((item) => {
+        // const mainDiv = document.createElement("div");
+        // mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
         const mainDiv = document.createElement("div");
-        mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
-
+        mainDiv.classList.add("template-main-cont");
         // Create the div for the image
-        const newDiv = document.createElement("div");
-        newDiv.classList.add("personalise-library-box");
+        // const newDiv = document.createElement("div");
+        // newDiv.classList.add("personalise-library-box");
+        const imageDiv = document.createElement("div");
+        imageDiv.classList.add("template-image-cont");
 
         // Create and set image tag inside the newDiv
+        // const newImg = document.createElement("img");
+        // newImg.src = item.imageUrl;
+        // newImg.alt = item.name;
+        // newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
         const newImg = document.createElement("img");
         newImg.src = item.imageUrl;
         newImg.alt = item.name;
-        newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
-
+        newImg.classList.add("template-image-box");
+        imageDiv.appendChild(newImg);
         // Append the image to the newDiv
-        newDiv.appendChild(newImg);
+        // newDiv.appendChild(newImg);
 
         // Create a new div to hold the p tag
-        const textDiv = document.createElement("div");
-        textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
-
+        // const textDiv = document.createElement("div");
+        // textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
+        const nameP = document.createElement("p");
+        nameP.textContent = item.name;
+        nameP.classList.add("template-name-tag");
         // Create and set paragraph tag for the name inside the textDiv
-        const newP = document.createElement("p");
-        newP.textContent = item.name;
+        // const newP = document.createElement("p");
+        // newP.textContent = item.name;
+        mainDiv.appendChild(imageDiv);
+        mainDiv.appendChild(nameP);
+        // const gradient = document.createElement("div");
+        // gradient.classList.add("template-gradient-box");
+        // mainDiv.appendChild(gradient);
+        container.appendChild(mainDiv);
         // Favorite icon using PNGs
         const favIcon = document.createElement("img");
         favIcon.classList.add("template-fav-icon");
@@ -999,12 +1020,12 @@ initialize3DViewer();
         const isFavorite = favoriteKeys?.includes(item.key);
         favIcon.src = isFavorite
           ? "../../assets/custom/heart-filled.png"
-          : "../../assets/custom/heart.png";
+          : "../../assets/custom/heart2.png";
         favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
         favIcon.style.cursor = "pointer";
 
-        newDiv.appendChild(favIcon);
-
+        // newDiv.appendChild(favIcon);
+        mainDiv.appendChild(favIcon);
         // // Attach the onclick event to the favIcon
         // favIcon.addEventListener('click', () => {
         //     const templateKey = item.key;
@@ -1046,20 +1067,20 @@ initialize3DViewer();
         });
 
         // Append the paragraph to the textDiv
-        textDiv.appendChild(newP);
+        // textDiv.appendChild(newP);
 
-        // Append both the image div and text div to the main div
-        mainDiv.appendChild(newDiv);
-        mainDiv.appendChild(textDiv);
+        // // Append both the image div and text div to the main div
+        // mainDiv.appendChild(newDiv);
+        // mainDiv.appendChild(textDiv);
 
-        // Append the main div to the container
-        container.appendChild(mainDiv);
+        // // Append the main div to the container
+        // container.appendChild(mainDiv);
 
         // Add click event listener
         mainDiv.addEventListener("click", async () => {
           // Remove active class from previously selected item
-          const previouslyActive = container.querySelector(
-            ".personalise-library-box.active"
+          const previouslyActive = document.querySelector(
+            ".template-image-box.active"
           );
 
           if (previouslyActive) {
@@ -1068,7 +1089,7 @@ initialize3DViewer();
           templateId = item.key;
           console.log("templateId", templateId);
           // Add active class to the clicked item
-          newDiv.classList.add("active");
+          newImg.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
           console.log(activeItem);
           // Fetch the JSON data from the URL in activeItem
@@ -1100,10 +1121,10 @@ initialize3DViewer();
       });
 
       // console.log("Filtered data:", filteredData);
-      loader.classList.remove("template-list-loader-cont");
-      loader.classList.add("display-none-prop");
-      templateListCont.classList.remove("display-none-prop");
-      templateListCont.classList.add("display-block-prop");
+      // loader.classList.remove("template-list-loader-cont");
+      // loader.classList.add("display-none-prop");
+      // templateListCont.classList.remove("display-none-prop");
+      // templateListCont.classList.add("display-block-prop");
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
     }

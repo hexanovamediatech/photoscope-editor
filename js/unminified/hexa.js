@@ -1517,6 +1517,28 @@
     }
 
     // Function to fetch the user email
+    // function getUserEmail() {
+    //   return new Promise((resolve, reject) => {
+    //     $.ajax({
+    //       url: "https://backend.toddlerneeds.com/api/v1/user/profile",
+    //       type: "GET",
+    //       contentType: "application/json",
+    //       xhrFields: {
+    //         withCredentials: true,
+    //       },
+    //       success: function (response) {
+
+    //         // resolve(response.email);
+    //         resolve(response);
+    //       },
+    //       error: function (xhr, status, error) {
+    //         reject(error);
+    //       },
+    //     });
+    //   });
+    // }
+    let email;
+    let username;
     function getUserEmail() {
       return new Promise((resolve, reject) => {
         $.ajax({
@@ -1527,7 +1549,13 @@
             withCredentials: true,
           },
           success: function (response) {
-            resolve(response.email); // Resolve with the user email
+            // Assuming response contains username and email properties
+            // const { username, email, isAdmin } = response;
+            console.log(response);
+            // username = username;
+            // email = email;
+            resolve(response);
+            // resolve({ username, email, isAdmin });
           },
           error: function (xhr, status, error) {
             reject(error);
@@ -9390,17 +9418,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to show the UI when the user is logged in
   function showLoggedInUI(isAdmin) {
+    // authContainer.innerHTML = `
+    //     <div class="profile-container">
+    //       <div class="profile-icon" id="profileIcon"></div>
+    //       <div class="hex-header-dropdown" id="dropdownMenu">
+    //         <ul>
+    //           ${
+    //             isAdmin
+    //               ? `<li id="adminDashboard">Dashboard</li>`
+    //               : `<li id="profile">Profile</li>`
+    //           }
+    //           <li id="logout">Logout</li>
+    //         </ul>
+    //       </div>
+    //     </div>
+    //   `;
+    const storedUsername = localStorage.getItem("username");
+    const storedEmail = localStorage.getItem("email");
     authContainer.innerHTML = `
-        <div class="profile-container">
-          <div class="profile-icon" id="profileIcon"></div>
-          <div class="hex-header-dropdown" id="dropdownMenu">
+        <div class="profile-container-min-editor">
+        <div class="main-cont-profile-data" id="profileIcon">
+          <div class="profile-mini-user-cont-data">
+           <div class="profile-icon-min-editor" ></div>
+            <div class="profile-data-cont-text">
+             <p class="profile-data-username">${
+               storedUsername || "username"
+             }</p>
+             <p class="profile-data-email">${storedEmail || "gmail"}</p>
+           </div>
+          </div>
+          <div>
+          <i class="bi bi-chevron-down profile-down-arrow"> </i>
+          </div>
+        
+        </div>
+          <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
             <ul>
               ${
                 isAdmin
-                  ? `<li id="adminDashboard">Dashboard</li>`
-                  : `<li id="profile">Profile</li>`
+                  ? `<li id="adminDashboard" class="profile-dashboard-li">Dashboard</li>`
+                  : `<li id="profile" class="profile-dashboard-li">Profile</li>`
               }
-              <li id="logout">Logout</li>
+              <li id="logout" class="profile-logout-li">Logout</li>
             </ul>
           </div>
         </div>
@@ -9555,6 +9614,27 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log("Login successful!");
           closeLoginPopup();
           await fetchUserRole();
+          const profileResponse = await fetch(
+            "https://backend.toddlerneeds.com/api/v1/user/profile",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                // Optionally send the token in the Authorization header if required
+                Authorization: `Bearer ${token}`,
+              },
+              credentials: "include", // Send cookies
+            }
+          );
+
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json();
+            // console.log("User profile data:", profileData);
+            localStorage.setItem("email", profileData.email);
+            localStorage.setItem("username", profileData.username);
+          } else {
+            console.error("Failed to fetch user profile data.");
+          }
         } else {
           console.error("Login successful, but no token found.");
           toastr.error("Login successful, but no token found.");
@@ -9805,17 +9885,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to show the UI when the user is logged in
   function showLoggedInUI(isAdmin) {
+    const storedUsername = localStorage.getItem("username");
+    const storedEmail = localStorage.getItem("email");
+    console.log(storedUsername, storedEmail);
     authContainer.innerHTML = `
         <div class="profile-container-min-editor">
-          <div class="profile-icon-min-editor" id="profileIcon-min-editor"></div>
+        <div class="main-cont-profile-data" id="profileIcon-min-editor">
+          <div class="profile-mini-user-cont-data">
+           <div class="profile-icon-min-editor" ></div>
+            <div class="profile-data-cont-text">
+             <p class="profile-data-username">${
+               storedUsername || "username"
+             }</p>
+             <p class="profile-data-email">${storedEmail || "gmail"}</p>
+           </div>
+          </div>
+          <div>
+          <i class="bi bi-chevron-down profile-down-arrow"> </i>
+          </div>
+        
+        </div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
             <ul>
               ${
                 isAdmin
-                  ? `<li id="adminDashboard-min-editor">Dashboard</li>`
-                  : `<li id="profile-min-editor">Profile</li>`
+                  ? `<li id="adminDashboard-min-editor" class="profile-dashboard-li">Dashboard</li>`
+                  : `<li id="profile-min-editor" class="profile-dashboard-li">Profile</li>`
               }
-              <li id="logout-min-editor">Logout</li>
+              <li id="logout-min-editor" class="profile-logout-li">Logout</li>
             </ul>
           </div>
         </div>
@@ -9871,6 +9968,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="button-min-editor signin-min-editor" id="signinBtn-min-editor">Sign In</button>
         </div>
       `;
+    //   authContainer.innerHTML = `
+    //   <div class="auth-buttons-min-editor">
+    //     <button class="button-min-editor signin-min-editor" id="signinBtn-min-editor">Sign In</button>
+    //   </div>
+    // `;
 
     // Navigate to the signup and login pages
     document
@@ -9983,6 +10085,27 @@ document.addEventListener("DOMContentLoaded", function () {
           closeLoginPopup();
           await fetchUserRole();
           closeLoginPopup();
+          const profileResponse = await fetch(
+            "https://backend.toddlerneeds.com/api/v1/user/profile",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                // Optionally send the token in the Authorization header if required
+                Authorization: `Bearer ${token}`,
+              },
+              credentials: "include", // Send cookies
+            }
+          );
+
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json();
+            console.log("User profile data:", profileData);
+            localStorage.setItem("email", profileData.email);
+            localStorage.setItem("username", profileData.username);
+          } else {
+            console.error("Failed to fetch user profile data.");
+          }
         } else {
           console.error("Login successful, but no token found.");
           toastr.error("Login successful, but no token found.");
