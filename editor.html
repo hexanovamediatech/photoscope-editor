@@ -45,7 +45,11 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-
+    <!-- Option 1: Include in HTML -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
     <link href="css/select2.css" rel="stylesheet" type="text/css" />
     <link href="css/spectrum.css" rel="stylesheet" type="text/css" />
     <link href="css/ruler.css" rel="stylesheet" type="text/css" />
@@ -68,50 +72,46 @@
         </div>
       </div>
       <div id="hexa-top-bar">
-        <div class="hexa-logo">
-          <a href="http://54.152.205.55:4000/">
-            <img
-              class="logo-desktop"
-              src="assets/custom/photo-headCover-logo.png"
-            />
-            <img
-              class="logo-mobile"
-              src="assets/custom/photo-headCover-logo.png"
-            />
-          </a>
-        </div>
-        <!-- <button id="hexa-json-save" type="button" class="hexa-btn primary">
-      <span class="material-icons">save</span>Save As Template
-    </button> -->
-        <div class="hexa-save-new-button-container">
-          <div class="hexa-save">
-            <button
-              id="hexa-save"
-              type="button"
-              class="hexa-btn primary hexa-modal-open"
-              autocomplete="off"
-              data-target="#modal-save"
-              disabled
-            >
-              <span class="material-icons">save</span
-              ><span class="hexa-btn-text">Save </span>
-            </button>
+        <div class="hexa-logo-mini-cont">
+          <div class="">
+            <a href="http://54.152.205.55:4000/">
+              <img
+                class="logo-desktop"
+                src="assets/custom/photo-headCover-logo.png"
+              />
+            </a>
           </div>
-          <!-- <button id="openModalButton">Open Assets Modal</button>  -->
-          <div class="hexa-new">
-            <button
-              id="hexa-new"
-              type="button"
-              class="hexa-btn primary hexa-modal-open"
-              autocomplete="off"
-              data-target="#modal-add-new"
-            >
-              <span class="material-icons">add_circle</span
-              ><span class="hexa-btn-text">Library</span>
-            </button>
+
+          <div class="hexa-save-new-button-container">
+            <div class="hexa-save">
+              <button
+                id="hexa-save"
+                type="button"
+                class="hexa-btn primary hexa-modal-open"
+                autocomplete="off"
+                data-target="#modal-save"
+                disabled
+              >
+                <span class="material-icons">save</span
+                ><span class="hexa-btn-text">Save </span>
+              </button>
+            </div>
+            <!-- <button id="openModalButton">Open Assets Modal</button>  -->
+            <div class="hexa-new">
+              <button
+                id="hexa-new"
+                type="button"
+                class="hexa-btn primary hexa-modal-open"
+                autocomplete="off"
+                data-target="#modal-add-new"
+              >
+                <span class="material-icons">add_circle</span
+                ><span class="hexa-btn-text">Library</span>
+              </button>
+            </div>
           </div>
+          <div class="auth-container"></div>
         </div>
-        <div class="auth-container"></div>
       </div>
 
       <!--
@@ -8394,48 +8394,176 @@ Enter Your Text Here</textarea
       </div>
       <!-- existing code -->
       <div id="hexa-top-bar">
-        <div class="hexa-logo hexa-logo-mini">
-          <a href="http://54.152.205.55:4000/">
-            <img
-              class="logo-desktop"
-              src="assets/custom/photo-headCover-logo.png"
-            />
-            <img
-              class="logo-mobile"
-              src="assets/custom/photo-headCover-logo.png"
-            />
-          </a>
-        </div>
-        <div
-          class="hexa-save-new-button-container display-none-prop"
-          id="hexa-save-mini-cont"
-        >
-          <div class="hexa-save">
-            <button
-              id="hexa-mini-editor-save"
-              type="button"
-              class="hexa-btn primary"
-            >
-              <span class="material-icons">save</span
-              ><span class="hexa-btn-text">Save </span>
-            </button>
+        <div class="hexa-logo-mini-cont">
+          <div>
+            <a href="http://54.152.205.55:4000/">
+              <img
+                class="logo-desktop"
+                src="assets/custom/photo-headCover-logo.png"
+              />
+            </a>
           </div>
+
+          <div class="display-none-prop" id="hexa-save-mini-cont">
+            <div class="hexa-save">
+              <button
+                id="hexa-mini-editor-save"
+                type="button"
+                class="hexa-btn primary"
+              >
+                <span class="material-icons">save</span
+                ><span class="hexa-btn-text">Save </span>
+              </button>
+            </div>
+          </div>
+          <div class="auth-container-min-editor"></div>
         </div>
-        <div class="auth-container-min-editor"></div>
       </div>
       <div class="web-thr-d-main-container display-unity">
         <div class="personalise-3d-box">
-          <div class="personalize-3d-main-cont">
-            <!-- <div id="mini-ediotr-loader" class="loader-cont">
-              <div class="threedD-loader" id="mini-ediotr-loader"></div>
-            </div> -->
-
-            <div
-              tabindex="-1"
-              id="personalise-3d-container"
-              class="three-d-canvas-cont"
-            ></div>
+          <div class="personalise-page-content-box">
+            <div class="personalise-template-list-cont">
+              <div
+                class="personalise-template-list-main-box"
+                id="template-cont-box"
+              >
+                <!-- <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                  <p class="template-name-tag">Template Name</p>
+                  
+                </div>
+                <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                </div>
+                <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                </div>
+                <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                </div>
+                <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                </div>
+                <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                </div>
+                <div class="template-main-cont">
+                  <div class="template-image-cont">
+                    <img
+                      src="./assets/3d/Model_1.png"
+                      class="template-image-box"
+                    />
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <div class="personalise-3d-view-cont">
+              <div class="personalise-all-btn-details-cont">
+                <div class="personalise-product-desc-cont">
+                  <p class="personalise-product-name-text">Product Name</p>
+                  <p class="personalise-product-desc-text">Description</p>
+                </div>
+                <div>
+                  <button
+                    id="personaliseOpenPopupBtn"
+                    class="personalise-btn-mini"
+                  >
+                    Personalise
+                  </button>
+                </div>
+                <div>
+                  <button id="editInEditorpBtn" class="edit-design-btn-mini">
+                    Edit in Designing tool
+                  </button>
+                </div>
+              </div>
+              <div class="mini-edit-3d-cont">
+                <div
+                  tabindex="-1"
+                  id="personalise-3d-container"
+                  class="three-d-canvas-cont"
+                ></div>
+                <div id="overlay-message" class="overlay-message">
+                  <div class="overlay-content-cont">
+                    <div class="overlay-content-each-box">
+                      <img src="./assets/custom/orbit.png" alt="orbit" />
+                      <p class="overly-content-title">Orbit around</p>
+                      <p>
+                        Left click + drag or<br />
+                        One finger drag (touch)
+                      </p>
+                    </div>
+                    <div class="overlay-content-each-box">
+                      <img src="./assets/custom/zoom-in.png" alt="orbit" />
+                      <p class="overly-content-title">Zoom</p>
+                      <p>
+                        Double click on model<br />
+                        or scroll anywhere or Pinch (touch)
+                      </p>
+                    </div>
+                    <div class="overlay-content-each-box">
+                      <img src="./assets/custom/pan.png" alt="orbit" />
+                      <p class="overly-content-title">Pan</p>
+                      <p>
+                        Right click + drag or<br />
+                        Two fingers drag (touch)
+                      </p>
+                    </div>
+                  </div>
+                  <button id="close-overlay" class="close-overlay">
+                    &times;
+                  </button>
+                </div>
+                <div class="personalise-icon-cont">
+                  <div class="personalise-icon-box">
+                    <img
+                      src="./assets/custom/question.png"
+                      alt="help"
+                      class="personalise-question-icon"
+                    />
+                  </div>
+                  <div class="personalise-icon-box">
+                    <img
+                      src="./assets/custom/full-screen.png"
+                      alt="fullscreen"
+                      class="personalise-question-fullscreen"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div class="personalise-button-main-cont">
             <div class="personalise-container">
               <div class="template-list-loader-cont" id="mini-editor-loader">
@@ -8449,10 +8577,10 @@ Enter Your Text Here</textarea
               </div>
 
               <div class="personalise-btn-cont">
-                <button id="personaliseOpenPopupBtn">Personalise</button>
+                <!-- <button id="personaliseOpenPopupBtn">Personalise</button> -->
               </div>
               <div class="personalise-btn-cont">
-                <button id="editInEditorpBtn">Edit In Editor</button>
+                <!-- <button id="editInEditorpBtn">Edit In Editor</button> -->
               </div>
             </div>
             <div id="personaliseImageUploadPopup" class="popup-container">
@@ -8551,28 +8679,28 @@ Enter Your Text Here</textarea
             </button>
           </div>
         </div>
-        <!-- <div
-          id="templates-public-private-modal"
+        <div
+          id="mini-templates-public-private-modal"
           class="templates-public-private-modal"
-          style="display: flex"
+          style="display: none"
         >
           <div class="templates-public-private-modal-content">
             <h3>Select Template Visibility</h3>
             <p>Would you like to save the template as public or private?</p>
             <button
-              id="saveAsPublic"
+              id="saveAsPublicMini"
               class="templates-public-private-btn templates-public-private-btn-primary"
             >
               Public
             </button>
             <button
-              id="saveAsPrivate"
+              id="saveAsPrivateMini"
               class="templates-public-private-btn templates-public-private-btn-secondary"
             >
               Private
             </button>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <script src="js/jquery.min.js"></script>

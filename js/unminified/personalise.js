@@ -14,6 +14,7 @@ let fabricImageConverted = null;
 let modelSource = null;
 let templateId = null;
 let selectedMesh = null;
+let isPublic;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -33,7 +34,12 @@ async function fetchModelData() {
     // Extract the model source (GLB path) based on the name parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const modelName = urlParams.get("name");
-
+    const productNameTag = document.querySelector(
+      ".personalise-product-name-text"
+    );
+    if (productNameTag) {
+      productNameTag.textContent = modelName; // Update the product name
+    }
     const product = data.products.find((item) => item.name === modelName);
     if (product && product.modelsUrl) {
       modelSource = product.modelsUrl; // Set the model URL
@@ -107,6 +113,7 @@ function initPersonalise() {
     0.1,
     20
   );
+
   camera.position.set(0, 0.08, 0.5);
 
   scene = new THREE.Scene();
@@ -150,7 +157,7 @@ function initPersonalise() {
   const environment = new RoomEnvironment(renderer);
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
-  scene.background = new THREE.Color(0x818181);
+  scene.background = new THREE.Color(0xbfc3cc);
   scene.environment = pmremGenerator.fromScene(environment).texture;
 
   controls = new OrbitControls(camera, renderer.domElement);
@@ -886,9 +893,9 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
   }
 
   // Hide Done Button
-  const miniEditorDone = document.getElementById("miniE-done-Btn");
-  miniEditorDone.classList.add("display-none-prop");
-  miniEditorDone.classList.remove("display-block-prop");
+  // const miniEditorDone = document.getElementById("miniE-done-Btn");
+  // miniEditorDone.classList.add("display-none-prop");
+  // miniEditorDone.classList.remove("display-block-prop");
 
   //Display Adjust Button
 
@@ -906,8 +913,8 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 initialize3DViewer();
 
 (async () => {
-  const loader = document.getElementById("mini-editor-loader");
-  const templateListCont = document.getElementById("template-list-cont");
+  // const loader = document.getElementById("mini-editor-loader");
+  // const templateListCont = document.getElementById("template-list-cont");
   // Show loader
   try {
     const response = await fetch(
@@ -954,7 +961,8 @@ initialize3DViewer();
       // const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
 
       // Get the container element where you want to display the names
-      const container = document.getElementById("library-container");
+      // const container = document.getElementById("library-container");
+      const container = document.getElementById("template-cont-box");
 
       // Fetch favorites to compare with
       const favoriteResponse = await fetch(
@@ -968,29 +976,44 @@ initialize3DViewer();
       const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
       filteredData.forEach((item) => {
+        // const mainDiv = document.createElement("div");
+        // mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
         const mainDiv = document.createElement("div");
-        mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
-
+        mainDiv.classList.add("template-main-cont");
         // Create the div for the image
-        const newDiv = document.createElement("div");
-        newDiv.classList.add("personalise-library-box");
+        // const newDiv = document.createElement("div");
+        // newDiv.classList.add("personalise-library-box");
+        const imageDiv = document.createElement("div");
+        imageDiv.classList.add("template-image-cont");
 
         // Create and set image tag inside the newDiv
+        // const newImg = document.createElement("img");
+        // newImg.src = item.imageUrl;
+        // newImg.alt = item.name;
+        // newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
         const newImg = document.createElement("img");
         newImg.src = item.imageUrl;
         newImg.alt = item.name;
-        newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
-
+        newImg.classList.add("template-image-box");
+        imageDiv.appendChild(newImg);
         // Append the image to the newDiv
-        newDiv.appendChild(newImg);
+        // newDiv.appendChild(newImg);
 
         // Create a new div to hold the p tag
-        const textDiv = document.createElement("div");
-        textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
-
+        // const textDiv = document.createElement("div");
+        // textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
+        const nameP = document.createElement("p");
+        nameP.textContent = item.name;
+        nameP.classList.add("template-name-tag");
         // Create and set paragraph tag for the name inside the textDiv
-        const newP = document.createElement("p");
-        newP.textContent = item.name;
+        // const newP = document.createElement("p");
+        // newP.textContent = item.name;
+        mainDiv.appendChild(imageDiv);
+        mainDiv.appendChild(nameP);
+        // const gradient = document.createElement("div");
+        // gradient.classList.add("template-gradient-box");
+        // mainDiv.appendChild(gradient);
+        container.appendChild(mainDiv);
         // Favorite icon using PNGs
         const favIcon = document.createElement("img");
         favIcon.classList.add("template-fav-icon");
@@ -999,12 +1022,12 @@ initialize3DViewer();
         const isFavorite = favoriteKeys?.includes(item.key);
         favIcon.src = isFavorite
           ? "../../assets/custom/heart-filled.png"
-          : "../../assets/custom/heart.png";
+          : "../../assets/custom/heart2.png";
         favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
         favIcon.style.cursor = "pointer";
 
-        newDiv.appendChild(favIcon);
-
+        // newDiv.appendChild(favIcon);
+        mainDiv.appendChild(favIcon);
         // // Attach the onclick event to the favIcon
         // favIcon.addEventListener('click', () => {
         //     const templateKey = item.key;
@@ -1025,7 +1048,7 @@ initialize3DViewer();
             const isCurrentlyFavorite =
               favIcon.src.includes("heart-filled.png");
             favIcon.src = isCurrentlyFavorite
-              ? "../../assets/custom/heart.png"
+              ? "../../assets/custom/heart2.png"
               : "../../assets/custom/heart-filled.png";
             favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
 
@@ -1046,20 +1069,20 @@ initialize3DViewer();
         });
 
         // Append the paragraph to the textDiv
-        textDiv.appendChild(newP);
+        // textDiv.appendChild(newP);
 
-        // Append both the image div and text div to the main div
-        mainDiv.appendChild(newDiv);
-        mainDiv.appendChild(textDiv);
+        // // Append both the image div and text div to the main div
+        // mainDiv.appendChild(newDiv);
+        // mainDiv.appendChild(textDiv);
 
-        // Append the main div to the container
-        container.appendChild(mainDiv);
+        // // Append the main div to the container
+        // container.appendChild(mainDiv);
 
         // Add click event listener
         mainDiv.addEventListener("click", async () => {
           // Remove active class from previously selected item
-          const previouslyActive = container.querySelector(
-            ".personalise-library-box.active"
+          const previouslyActive = document.querySelector(
+            ".template-image-box.active"
           );
 
           if (previouslyActive) {
@@ -1068,7 +1091,7 @@ initialize3DViewer();
           templateId = item.key;
           console.log("templateId", templateId);
           // Add active class to the clicked item
-          newDiv.classList.add("active");
+          newImg.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
           console.log(activeItem);
           // Fetch the JSON data from the URL in activeItem
@@ -1100,10 +1123,10 @@ initialize3DViewer();
       });
 
       // console.log("Filtered data:", filteredData);
-      loader.classList.remove("template-list-loader-cont");
-      loader.classList.add("display-none-prop");
-      templateListCont.classList.remove("display-none-prop");
-      templateListCont.classList.add("display-block-prop");
+      // loader.classList.remove("template-list-loader-cont");
+      // loader.classList.add("display-none-prop");
+      // templateListCont.classList.remove("display-none-prop");
+      // templateListCont.classList.add("display-block-prop");
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
     }
@@ -1138,13 +1161,13 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded.");
 
   // Get the button that opens the modal
-  const openModalBtn = document.getElementById("hexa-mini-editor-save");
-  if (openModalBtn) {
-    console.log("Found the open modal button.");
-    openModalBtn.addEventListener("click", openModal);
-  } else {
-    console.error("Open modal button not found!");
-  }
+  // const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  // if (openModalBtn) {
+  //   console.log("Found the open modal button.");
+  //   openModalBtn.addEventListener("click", openModal);
+  // } else {
+  //   console.error("Open modal button not found!");
+  // }
 
   // Get the <span> element that closes the modal (fix the class here)
   const closeModalBtn = document.getElementsByClassName("close-mini-modal")[0];
@@ -1163,6 +1186,75 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+async function handleSaveClick() {
+  try {
+    const response = await fetch(
+      "https://backend.toddlerneeds.com/api/v1/protected-route",
+      {
+        method: "GET",
+        credentials: "include", // Include credentials for backend token validation
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("User is not logged in.");
+    }
+
+    const data = await response.json();
+
+    // If the user is not logged in
+    if (!data.role) {
+      Swal.fire({
+        title: "Login Required",
+        text: "Please log in to proceed.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+      });
+      console.log("User is not logged in.");
+      return;
+    }
+
+    // If the user's email is not verified
+    if (!data.isVerified) {
+      Swal.fire({
+        title: "Email Verification Required",
+        text: "Please verify your email to proceed.",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+      });
+      console.log("Email is not verified.");
+      return;
+    } else {
+      openModal();
+    }
+
+    // Success action (you can add further logic here)
+    console.log("API call successful", data);
+  } catch (error) {
+    Swal.fire({
+      title: "Login Required",
+      text: "Please log in to proceed.",
+      icon: "warning",
+      showConfirmButton: true,
+      confirmButtonText: "OK",
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+    });
+    console.log(error.message);
+  }
+}
+
+// Add event listener to the button
+document
+  .getElementById("hexa-mini-editor-save")
+  .addEventListener("click", handleSaveClick);
 function convertToDataURL(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function () {
@@ -1177,176 +1269,188 @@ function convertToDataURL(url, callback) {
   xhr.send();
 }
 
+function displayTemplateModal() {
+  const modal = document.getElementById("mini-templates-public-private-modal");
+  modal.style.display = "flex"; // Show the modal
+}
+
+// Add event listener to the "Save as template" button
 document
-  .querySelector("#mini-editor-saveTemplateBtn")
+  .getElementById("mini-editor-saveTemplateBtn")
+  .addEventListener("click", displayTemplateModal);
+
+document
+  .getElementById("saveAsPublicMini")
   .addEventListener("click", function () {
-    // Show public/private modal before proceeding
-    // showPublicPrivateModal().then((isPublic) => {
-    // Proceed with saving the template based on user's choice
-
-    // Convert the canvas to a JSON object, including specific properties
-    // var json = newFabricCanvas.toJSON([
-    //   "objectType",
-    //   "gradientFill",
-    //   "roundedCorners",
-    //   "mode",
-    //   "selectable",
-    //   "lockMovementX",
-    //   "lockMovementY",
-    //   "lockRotation",
-    //   "crossOrigin",
-    //   "layerName",
-    //   "customId",
-    // ]);
-    var editedCanvasJson = window.editedCanvasJson;
-    var originalCanvasJson = window.originalCanvasJson;
-    var originalCanvasObject = originalCanvasJson;
-    var editedCanvasObject = editedCanvasJson;
-
-    // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
-    editedCanvasObject.objects.forEach((editedObj, index) => {
-      if (originalCanvasObject.objects[index]) {
-        var originalObj = originalCanvasObject.objects[index];
-
-        // Copy the values for top, left, scaleX, and scaleY from originalObj
-        // editedObj.top = originalObj.top;
-        // editedObj.left = originalObj.left;
-        // editedObj.scaleX = originalObj.scaleX;
-        // editedObj.scaleY = originalObj.scaleY;
-
-        // Iterate over properties of the originalObj and add missing ones to editedObj
-        for (var key in originalObj) {
-          if (
-            originalObj.hasOwnProperty(key) &&
-            !editedObj.hasOwnProperty(key)
-          ) {
-            editedObj[key] = originalObj[key];
-          }
-        }
-
-        // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
-        if (editedObj.type === "textbox") {
-          originalObj.text = editedObj.text;
-        }
-        if (editedObj.type === "image" && !editedObj.src.startsWith("http")) {
-          originalObj.top = editedObj.top * 4.4;
-          originalObj.left = editedObj.left * 4.4;
-          originalObj.scaleY = editedObj.scaleX * 4.4;
-          originalObj.scaleX = editedObj.scaleY * 4.4;
-        }
-      }
-    });
-
-    console.log(editedCanvasObject);
-    console.log(originalCanvasObject);
-    const json = originalCanvasObject;
-    var objects = newFabricCanvas.getObjects();
-    var filteredObjects = objects.filter(function (obj) {
-      return obj.customId !== "layoutImage"; // Filter out layoutImage
-    });
-
-    // Temporarily hide objects that are not filtered
-    newFabricCanvas.getObjects().forEach(function (obj) {
-      if (!filteredObjects.includes(obj)) {
-        obj.visible = false;
-      }
-    });
-
-    // Generate image URL with only visible (filtered) objects
-    var canvasImageUrl = newFabricCanvas.toDataURL({
-      format: "png",
-      multiplier: 2,
-    });
-
-    // Restore visibility of all objects
-    newFabricCanvas.getObjects().forEach(function (obj) {
-      obj.visible = true;
-    });
-
-    convertToDataURL(json.backgroundImage.src, function (dataUrl) {
-      json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
-
-      var template = JSON.stringify(json);
-
-      var blob = new Blob([template], { type: "application/json" });
-
-      var timestamp = new Date().getTime();
-      var uniqueFileName = "template_" + timestamp + ".json";
-      var formData = new FormData();
-      formData.append("files", blob, uniqueFileName);
-
-      var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
-      var imageFileName = "template_image_" + timestamp + ".png";
-      formData.append("files", imageBlob, imageFileName);
-
-      // Vanilla JavaScript for AJAX request (XMLHttpRequest)
-      var xhr = new XMLHttpRequest();
-      xhr.open(
-        "POST",
-        "https://backend.toddlerneeds.com/api/v1/user/media/upload",
-        true
-      );
-
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          var response = JSON.parse(xhr.responseText);
-          var imageUrl = "";
-          var jsonUrl = "";
-          response.urls.forEach(function (url) {
-            if (url.endsWith(".json")) {
-              jsonUrl = url;
-            } else if (
-              url.endsWith(".png") ||
-              url.endsWith(".jpeg") ||
-              url.endsWith(".jpg")
-            ) {
-              imageUrl = url;
-            }
-          });
-          const urlParams = new URLSearchParams(window.location.search);
-          const modelName = urlParams.get("name");
-
-          var key = Math.random().toString(36).substr(2, 9);
-          var name = document.querySelector("#mini-editor-template-name").value;
-
-          var data = {
-            key: key,
-            src: jsonUrl,
-            imageUrl: imageUrl,
-            name: name,
-            type: modelName,
-            // isPublic: isPublic, // Add public/private selection to data
-            isPublic: true,
-          };
-
-          // Upload the data object to the new API
-          uploadData(data)
-            .then(() => {
-              // Display a success message using toastr after successful upload
-              toastr.success("Data uploaded successfully!", "Success");
-              Swal.close();
-              closeModal();
-              // Close the modal after saving
-              // document.querySelector(".hexa-modal").style.display = "none";
-            })
-            .catch((error) => {
-              // Display an error message using toastr if uploading fails
-              toastr.error(error.message, "Error");
-            });
-        } else {
-          // Display an error message using toastr if the API call fails
-          toastr.error(xhr.statusText, "Error");
-        }
-      };
-
-      xhr.onerror = function () {
-        toastr.error("Request failed.", "Error");
-      };
-
-      xhr.send(formData);
-    });
-    // });
+    console.log("function called");
+    isPublic = true; // Set isPublic to true for public templates
+    saveTemplate(); // Call the function to save the template
   });
+
+// Add event listener for "Private" button
+document
+  .getElementById("saveAsPrivateMini")
+  .addEventListener("click", function () {
+    console.log("function called");
+    isPublic = false; // Set isPublic to false for private templates
+    saveTemplate(); // Call the function to save the template
+  });
+function saveTemplate() {
+  var editedCanvasJson = window.editedCanvasJson;
+  var originalCanvasJson = window.originalCanvasJson;
+  var originalCanvasObject = originalCanvasJson;
+  var editedCanvasObject = editedCanvasJson;
+
+  // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
+  editedCanvasObject.objects.forEach((editedObj, index) => {
+    if (originalCanvasObject.objects[index]) {
+      var originalObj = originalCanvasObject.objects[index];
+
+      // Iterate over properties of the originalObj and add missing ones to editedObj
+      for (var key in originalObj) {
+        if (originalObj.hasOwnProperty(key) && !editedObj.hasOwnProperty(key)) {
+          editedObj[key] = originalObj[key];
+        }
+      }
+
+      // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
+      if (editedObj.type === "textbox") {
+        originalObj.text = editedObj.text;
+      }
+      if (editedObj.type === "image" && !editedObj.src.startsWith("http")) {
+        originalObj.top = editedObj.top * 4.4;
+        originalObj.left = editedObj.left * 4.4;
+        originalObj.scaleY = editedObj.scaleX * 4.4;
+        originalObj.scaleX = editedObj.scaleY * 4.4;
+      }
+    }
+  });
+
+  console.log(editedCanvasObject);
+  console.log(originalCanvasObject);
+  const json = originalCanvasObject;
+  var objects = newFabricCanvas.getObjects();
+  var filteredObjects = objects.filter(function (obj) {
+    return obj.customId !== "layoutImage"; // Filter out layoutImage
+  });
+
+  // Temporarily hide objects that are not filtered
+  newFabricCanvas.getObjects().forEach(function (obj) {
+    if (!filteredObjects.includes(obj)) {
+      obj.visible = false;
+    }
+  });
+
+  // Generate image URL with only visible (filtered) objects
+  var canvasImageUrl = newFabricCanvas.toDataURL({
+    format: "png",
+    multiplier: 2,
+  });
+
+  // Restore visibility of all objects
+  newFabricCanvas.getObjects().forEach(function (obj) {
+    obj.visible = true;
+  });
+
+  convertToDataURL(json.backgroundImage.src, function (dataUrl) {
+    json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
+
+    var template = JSON.stringify(json);
+
+    var blob = new Blob([template], { type: "application/json" });
+
+    var timestamp = new Date().getTime();
+    var uniqueFileName = "template_" + timestamp + ".json";
+    var formData = new FormData();
+    formData.append("files", blob, uniqueFileName);
+
+    var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
+    var imageFileName = "template_image_" + timestamp + ".png";
+    formData.append("files", imageBlob, imageFileName);
+
+    // Vanilla JavaScript for AJAX request (XMLHttpRequest)
+    Swal.fire({
+      title: "Please wait",
+      text: "Your template is being saved...",
+      icon: "info",
+      allowOutsideClick: true,
+      showCloseButton: true,
+      confirmButtonText: "OK",
+      allowEscapeKey: true,
+      showConfirmButton: false,
+    });
+
+    var xhr = new XMLHttpRequest();
+    xhr.open(
+      "POST",
+      "https://backend.toddlerneeds.com/api/v1/user/media/upload",
+      true
+    );
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        var imageUrl = "";
+        var jsonUrl = "";
+        response.urls.forEach(function (url) {
+          if (url.endsWith(".json")) {
+            jsonUrl = url;
+          } else if (
+            url.endsWith(".png") ||
+            url.endsWith(".jpeg") ||
+            url.endsWith(".jpg")
+          ) {
+            imageUrl = url;
+          }
+        });
+        const urlParams = new URLSearchParams(window.location.search);
+        const modelName = urlParams.get("name");
+
+        var key = Math.random().toString(36).substr(2, 9);
+        var name = document.querySelector("#mini-editor-template-name").value;
+
+        var data = {
+          key: key,
+          src: jsonUrl,
+          imageUrl: imageUrl,
+          name: name,
+          type: modelName,
+          // isPublic: isPublic, // Add public/private selection to data
+          isPublic: isPublic,
+        };
+
+        // Upload the data object to the new API
+        uploadData(data)
+          .then(() => {
+            // Display a success message using toastr after successful upload
+            toastr.success("Data uploaded successfully!", "Success");
+            Swal.close();
+            closeModal();
+            // Close the modal after saving
+            // document.querySelector(".hexa-modal").style.display = "none";
+            const modal = document.getElementById(
+              "mini-templates-public-private-modal"
+            );
+            modal.style.display = "none"; // Show the modal
+          })
+          .catch((error) => {
+            // Display an error message using toastr if uploading fails
+            toastr.error(error.message, "Error");
+          });
+      } else {
+        // Display an error message using toastr if the API call fails
+        toastr.error(xhr.statusText, "Error");
+      }
+    };
+
+    xhr.onerror = function () {
+      toastr.error("Request failed.", "Error");
+    };
+
+    xhr.send(formData);
+  });
+  // });
+}
 
 async function uploadData(data) {
   try {
@@ -1453,3 +1557,47 @@ async function handleFavTempllate(templateKey) {
 
 // Function to open the modal
 // Function to open the modal
+// Select the necessary elements
+const fullScreenButton = document.querySelector(
+  ".personalise-question-fullscreen"
+);
+const miniEdit3DCont = document.querySelector(".mini-edit-3d-cont");
+
+// Function to toggle fullscreen mode
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    // Request fullscreen for the div
+    miniEdit3DCont.requestFullscreen().catch((err) => {
+      console.error(
+        `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+      );
+    });
+  } else {
+    // Exit fullscreen if already in fullscreen mode
+    document.exitFullscreen();
+  }
+}
+
+// Attach the event listener to the full-screen icon
+fullScreenButton.addEventListener("click", toggleFullScreen);
+// Select elements
+// Select elements
+const questionIcon = document.querySelector(".personalise-question-icon");
+const overlayMessage = document.getElementById("overlay-message");
+const closeOverlayButton = document.getElementById("close-overlay");
+
+// Function to show the overlay
+function showOverlay() {
+  overlayMessage.classList.add("show");
+}
+
+// Function to hide the overlay
+function hideOverlay() {
+  overlayMessage.classList.remove("show");
+}
+
+// Attach click event listener to the question mark icon to show the overlay
+questionIcon.addEventListener("click", showOverlay);
+
+// Attach click event listener to the close button to hide the overlay
+closeOverlayButton.addEventListener("click", hideOverlay);
