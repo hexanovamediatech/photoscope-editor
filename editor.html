@@ -8513,20 +8513,57 @@ Enter Your Text Here</textarea
                   id="personalise-3d-container"
                   class="three-d-canvas-cont"
                 ></div>
+                <div id="overlay-message" class="overlay-message">
+                  <div class="overlay-content-cont">
+                    <div class="overlay-content-each-box">
+                      <img src="./assets/custom/orbit.png" alt="orbit" />
+                      <p class="overly-content-title">Orbit around</p>
+                      <p>
+                        Left click + drag or<br />
+                        One finger drag (touch)
+                      </p>
+                    </div>
+                    <div class="overlay-content-each-box">
+                      <img src="./assets/custom/zoom-in.png" alt="orbit" />
+                      <p class="overly-content-title">Zoom</p>
+                      <p>
+                        Double click on model<br />
+                        or scroll anywhere or Pinch (touch)
+                      </p>
+                    </div>
+                    <div class="overlay-content-each-box">
+                      <img src="./assets/custom/pan.png" alt="orbit" />
+                      <p class="overly-content-title">Pan</p>
+                      <p>
+                        Right click + drag or<br />
+                        Two fingers drag (touch)
+                      </p>
+                    </div>
+                  </div>
+                  <button id="close-overlay" class="close-overlay">
+                    &times;
+                  </button>
+                </div>
+                <div class="personalise-icon-cont">
+                  <div class="personalise-icon-box">
+                    <img
+                      src="./assets/custom/question.png"
+                      alt="help"
+                      class="personalise-question-icon"
+                    />
+                  </div>
+                  <div class="personalise-icon-box">
+                    <img
+                      src="./assets/custom/full-screen.png"
+                      alt="fullscreen"
+                      class="personalise-question-fullscreen"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="personalize-3d-main-cont">
-            <!-- <div id="mini-ediotr-loader" class="loader-cont">
-              <div class="threedD-loader" id="mini-ediotr-loader"></div>
-            </div> -->
 
-            <div
-              tabindex="-1"
-              id="personalise-3d-container"
-              class="three-d-canvas-cont"
-            ></div>
-          </div>
           <div class="personalise-button-main-cont">
             <div class="personalise-container">
               <div class="template-list-loader-cont" id="mini-editor-loader">
@@ -8642,28 +8679,28 @@ Enter Your Text Here</textarea
             </button>
           </div>
         </div>
-        <!-- <div
-          id="templates-public-private-modal"
+        <div
+          id="mini-templates-public-private-modal"
           class="templates-public-private-modal"
-          style="display: flex"
+          style="display: none"
         >
           <div class="templates-public-private-modal-content">
             <h3>Select Template Visibility</h3>
             <p>Would you like to save the template as public or private?</p>
             <button
-              id="saveAsPublic"
+              id="saveAsPublicMini"
               class="templates-public-private-btn templates-public-private-btn-primary"
             >
               Public
             </button>
             <button
-              id="saveAsPrivate"
+              id="saveAsPrivateMini"
               class="templates-public-private-btn templates-public-private-btn-secondary"
             >
               Private
             </button>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <script src="js/jquery.min.js"></script>

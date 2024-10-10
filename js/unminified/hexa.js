@@ -9502,8 +9502,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function showLoggedOutUI() {
     authContainer.innerHTML = `
         <div class="auth-buttons">
-          <button class="button signup" id="signupBtn">Sign Up</button>
-          <button class="button signin" id="signinBtn">Sign In</button>
+          <button class="button signup personalise-page-inactive " id="signupBtn">Sign Up</button>
+          <button class="button-min-editor signin-min-editor" id="signinBtn">Sign In</button>
         </div>
       `;
 

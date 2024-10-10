@@ -3627,7 +3627,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 
 .auth-container {
   position: relative;
-  margin-right: 10px;
+  /* margin-right: 10px; */
 }
 
 .profile-container {

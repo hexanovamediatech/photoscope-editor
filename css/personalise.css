@@ -124,19 +124,110 @@
 
 .mini-edit-3d-cont {
   border-radius: 8px;
+  width: 100%;
   height: 100%;
+  position: relative;
   /* border: 1px solid red; */
   /* height: 90%; */
   /* height: 100%; */
 }
 .three-d-canvas-cont {
   width: 100%;
+  /* height: 100%; */
   border-radius: 8px;
 }
 .three-d-canvas-cont canvas {
   width: 100% !important;
   height: 100% !important;
   border-radius: 8px;
+}
+.personalise-icon-cont {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Positioning the overlay */
+/* The overlay */
+/* The overlay */
+.overlay-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, visibility 0s 0.5s; /* Delays visibility change */
+  pointer-events: none;
+  visibility: hidden;
+  border-radius: 8px;
+}
+
+/* When the overlay is shown */
+.overlay-message.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease-in-out, visibility 0s 0s; /* Removes delay when showing */
+}
+
+/* Close button on the overlay */
+.close-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+/* Ensure close button is interactive */
+.close-overlay:focus {
+  outline: none;
+}
+.overlay-content-cont {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+.overlay-content-each-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.overlay-content-each-box img {
+  width: 50px;
+  height: 50px;
+}
+.overlay-content-each-box p {
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  font-size: 18px;
+  color: #d9d9d9;
+}
+.overly-content-title {
+  font-weight: 700;
+  font-size: 20px;
+}
+.personalise-icon-box img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 }
 .personalise-button-main-cont {
   width: 50%;
@@ -157,6 +248,12 @@
 
 .personalise-btn-mini:hover {
   background: #0188d4;
+}
+.swal2-confirm {
+  background-color: #00a3ff !important;
+}
+.swal2-confirm:hover {
+  background-color: #0188d4 !important;
 }
 .edit-design-btn-mini {
   width: 320px;
