@@ -3884,7 +3884,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  /* background-color: #0056b3; */
 }
 
 .google-login-button {
