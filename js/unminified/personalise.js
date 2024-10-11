@@ -183,9 +183,11 @@ function onWindowResizePersonalise() {
   const containerWidth = mainContainer.offsetWidth;
   const containerHeight = mainContainer.offsetHeight;
   const size = Math.min(containerWidth, containerHeight);
-  camera.aspect = size / size;
+  camera.aspect = containerWidth / containerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(size, size);
+
+  // Resize the renderer to match the new container dimensions
+  renderer.setSize(containerWidth, containerHeight);
 }
 
 function animate() {
@@ -935,6 +937,19 @@ initialize3DViewer();
       const filteredData = dataArray.filter(
         (obj) => obj.type === name && obj.isPublic === true
       );
+      if (filteredData.length < 10) {
+        const dummyTemplateCount = 10 - filteredData.length;
+        for (let i = 0; i < dummyTemplateCount; i++) {
+          const dummyTemplate = {
+            name: `Dummy Template ${i + 1}`,
+            imageUrl: "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/template_image_1728644304787.png", 
+            key: `dummy-template-${i + 1}`,
+            isPublic: true,
+            src: "path/to/dummy/template.json", 
+          };
+          filteredData.push(dummyTemplate);
+        }
+      }
       const personaliseButton = document.getElementById(
         "personaliseOpenPopupBtn"
       );
@@ -995,6 +1010,7 @@ initialize3DViewer();
         newImg.src = item.imageUrl;
         newImg.alt = item.name;
         newImg.classList.add("template-image-box");
+      
         imageDiv.appendChild(newImg);
         // Append the image to the newDiv
         // newDiv.appendChild(newImg);
@@ -1252,9 +1268,9 @@ async function handleSaveClick() {
 }
 
 // Add event listener to the button
-document
-  .getElementById("hexa-mini-editor-save")
-  .addEventListener("click", handleSaveClick);
+// document
+//   .getElementById("hexa-mini-editor-save")
+//   .addEventListener("click", handleSaveClick);
 function convertToDataURL(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function () {
