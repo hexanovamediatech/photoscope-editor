@@ -9450,7 +9450,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div>
           <i class="bi bi-chevron-down profile-down-arrow"> </i>
           </div>
-        
+
         </div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
             <ul>
@@ -9903,7 +9903,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div>
           <i class="bi bi-chevron-down profile-down-arrow"> </i>
           </div>
-        
+
         </div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu-min-editor">
             <ul>
@@ -9991,28 +9991,153 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to create and show the login popup
-  function showLoginPopup() {
+//   function showLoginPopup() {
+//     const loginPopupOverlay = document.createElement("div");
+//     loginPopupOverlay.className = "login-popup-overlay";
+//     loginPopupOverlay.innerHTML = `
+//           <div class="login-popup-content"> <!-- Class for popup content -->
+//               <span class="close-button" id="closeLoginPopup">&times;</span>
+//               <h2 class="login-title">Login</h2>
+//               <form id="loginForm">
+//               <input type="text" id="username" placeholder="Username" required class="input-field" />
+//               <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
+//               <button type="submit" id="loginSubmit" class="login-button">Login</button>
+//               </form>
+
+//               <!-- Google Login Button -->
+//               <button class="google-login-button" id="googleLoginBtn">
+//               <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
+//               </button>
+
+//               <!-- Forgot Password -->
+//             <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
+//           </div>
+//           `;
+
+//     document.body.appendChild(loginPopupOverlay);
+
+//     // Show the popup
+//     loginPopupOverlay.style.display = "block";
+
+//     // Close popup on outside click
+//     window.addEventListener("click", function (event) {
+//       if (event.target === loginPopupOverlay) {
+//         closeLoginPopup();
+//       }
+//     });
+
+//     // Close popup on 'X' click
+//     document
+//       .getElementById("closeLoginPopup")
+//       .addEventListener("click", closeLoginPopup);
+
+//     // Handle login form submission
+//     document
+//       .getElementById("loginForm")
+//       .addEventListener("submit", handleLogin);
+
+//     // Add the Google Sign-In functionality
+//     document.getElementById("googleLoginBtn").addEventListener("click", () => {
+//       window.location.href =
+//         "https://backend.toddlerneeds.com/api/v1/auth/google";
+//     });
+
+//     document
+//       .getElementById("forgotPass-cont")
+//       .addEventListener("click", function () {
+//         window.location.href = "http://54.152.205.55:4000/reset-password";
+//       });
+//   }
+function showLoginPopup() {
     const loginPopupOverlay = document.createElement("div");
-    loginPopupOverlay.className = "login-popup-overlay";
+    // loginPopupOverlay.className = "login-popup-overlay";
+    // loginPopupOverlay.innerHTML = `
+    //       <div class="login-popup-content"> <!-- Class for popup content -->
+    //           <span class="close-button" id="closeLoginPopup">&times;</span>
+    //           <h2 class="login-title">Login</h2>
+    //           <form id="loginForm">
+    //           <input type="text" id="username" placeholder="Username" required class="input-field" />
+    //           <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
+    //           <button type="submit" id="loginSubmit" class="login-button">Login</button>
+    //           </form>
+
+    //           <!-- Google Login Button -->
+    //           <button class="google-login-button" id="googleLoginBtn">
+    //           <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
+    //           </button>
+
+    //           <!-- Forgot Password -->
+    //         <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
+    //       </div>
+    //       `;
+
+    loginPopupOverlay.className = "fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 flex";
+
+
     loginPopupOverlay.innerHTML = `
-          <div class="login-popup-content"> <!-- Class for popup content -->
-              <span class="close-button" id="closeLoginPopup">&times;</span>
-              <h2 class="login-title">Login</h2>
-              <form id="loginForm">
-              <input type="text" id="username" placeholder="Username" required class="input-field" />
-              <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
-              <button type="submit" id="loginSubmit" class="login-button">Login</button>
-              </form>
+      <div class="relative w-[80%] h-4/5 bg-white rounded-lg flex overflow-hidden mt-[100px]">
+        <!-- Close button -->
+        <button id="closeLoginPopup" class="absolute top-3 right-3 text-white bg-gray-800 rounded-full w-8 h-8 flex items-center justify-center transition duration-300">
+          &times;
+        </button>
 
-              <!-- Google Login Button -->
-              <button class="google-login-button" id="googleLoginBtn">
-              <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
-              </button>
-
-              <!-- Forgot Password -->
-            <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
+        <!-- Left side with graphic and text -->
+        <div class="w-1/2 bg-[#242631] text-white p-6 flex flex-col justify-center items-start relative">
+          <h2 class="text-2xl font-bold mb-6 leading-snug">
+            <div class="mb-2">Let’s create</div>
+            <div class="mb-2">something</div>
+            <div class="mb-2">amazing Work</div>
+            <di class="mb-2"v>with Us.</di>
+          </h2>
+          <div class="absolute bottom-8 right-8">
+            <img src="../../assets/custom/singin-3d-shape1.png" alt="Login Graphic" class="h-32 z-10 object-contain mb-2" />
+            <img src="../../assets/custom/singin-3d-shape2.png" alt="Login Graphic" class="h-36 ml-[-20px] z-0 object-contain" />
           </div>
-          `;
+        </div>
+
+        <!-- Right side with login form -->
+        <div class="w-1/2 p-10 flex flex-col justify-center items-start bg-white">
+          <h2 class="text-2xl font-semibold mb-5">Sign In</h2>
+
+          <!-- Google Login Button -->
+         <!--- <button class="flex items-center justify-center w-1/2 bg-[#ff7043] text-white py-3 rounded-lg mb-5">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" class="h-5 mr-2" /> Sign in with Google
+          </button> -->
+
+         <button class="relative flex items-center justify-center w-1/2 bg-[#FB9258] text-white py-2 rounded-2xl shadow-xl mb-5 font-semibold overflow-hidden before:absolute before:top-0 before:left-0 before:h-full before:w-full before:scale-x-0 before:transform-origin-left before:rounded-2xl before:bg-gradient-to-r before:from-[#FB8143] before:to-[#FFB080] before:opacity-75 before:transition-transform before:duration-700 before:z-0 hover:before:scale-x-100 hover:before:opacity-90 hover:shadow-lg">
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" class="relative z-10 h-5 mr-2" />
+        <span class="relative z-10">Sign in with Google</span>
+        </button>
+
+
+
+          <span class="block text-gray-500 mb-5">Or sign in using your email address</span>
+
+          <form id="loginForm" class="w-full">
+          <div class="w-full flex items-center gap-3 mt-3">
+          <div>
+            <label for="username" class="block mb-2 text-sm font-medium">Username</label>
+            <input type="text" id="username" required class="w-full px-2 py-2 border border-gray-100 rounded-2xl focus:none  focus:none focus:outline-none placeholder-gray-500 text-sm placeholder-opacity-75" placeholder="Username" />
+        </div>
+         <div>
+            <label for="password" class="block mb-2 text-sm font-medium">Password</label>
+            <input type="password" id="loginPassword" required class="w-full px-2 py-2 border border-gray-100 rounded-2xl focus:none  focus:none focus:outline-none placeholder-gray-500 text-sm placeholder-opacity-75" placeholder="Password" />
+        </div>
+        </div>
+
+            <div class="w-full text-left mb-4">
+              <a href="/reset-password" class="text-[#fb9258] hover:underline text-sm">Forgot password?</a>
+            </div>
+
+         <button type="submit" id="loginSubmit" class="relative w-1/2 bg-[#00A3FF] text-white py-2 rounded-2xl shadow-xl opacity-90 font-semibold overflow-hidden before:absolute before:top-0 before:left-0 before:h-full before:w-full before:scale-x-0 before:transform-origin-left before:rounded-2xl before:bg-gradient-to-r before:from-[#009CFF] before:to-[#70C9FF] before:opacity-75 before:transition-transform before:duration-700 before:z-0 hover:before:scale-x-100 hover:before:opacity-90 hover:shadow-lg">
+        <span class="relative z-10">
+            Sign in
+        </span>
+        </button>
+          </form>
+        </div>
+      </div>
+    `;
 
     document.body.appendChild(loginPopupOverlay);
 
