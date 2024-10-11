@@ -3990,3 +3990,8 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 .signup-popup-content .signup-button:hover {
   background-color: #0056b3;
 }
+
+.web-thr-d-main-container.display-unity {
+  top: 95px;
+  height: calc(100vh - 95px);
+}
