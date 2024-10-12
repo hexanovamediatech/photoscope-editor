@@ -464,6 +464,21 @@ function loadJSONToCanvas(jsonData) {
     (obj) => obj.type === "textbox"
   ).length;
 
+const showImage = jsonData.objects.filter(
+  (obj) => obj.customId === "clipmask"
+);
+if (showImage.length > 0) {
+  const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
+  
+  const miniEditorPopupImage = document.getElementById("min-editor-popup-image");
+
+  // Check if the image element exists and if the clipmaskImage has a valid src
+  if (miniEditorPopupImage && clipmaskImage.src) {
+    // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+    miniEditorPopupImage.src = clipmaskImage.src;
+  }
+}
+
   // Show input fields based on the number of textboxes
   if (textBoxCount > 0) {
     input1.style.display = "block"; // Show the first input field
@@ -655,6 +670,10 @@ function handleImageUploadAlternate(event) {
     const imageSrc = e.target.result;
     setNewImageSrc(imageSrc); // Store the new image source
     // loadJSONToCanvas(savedCanvasJSON); // Reload the JSON to canvas with the new image
+    const miniEditorPopupImage = document.getElementById("min-editor-popup-image");
+    if (miniEditorPopupImage) {
+      miniEditorPopupImage.src = imageSrc; // Set the new image source
+    }
   };
 
   if (file) {
