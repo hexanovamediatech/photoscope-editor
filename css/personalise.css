@@ -240,7 +240,7 @@
   background: #fff;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
   height: calc(100vh - 125px);
-  width: 325px;
+  width: 350px;
   border-radius: 8px;
   display: none;
 }
@@ -321,7 +321,7 @@
 /* Making Mini editor Visible Css */
 .image-preview-area {
   width: 100%;
-  height: 460px;
+  height: 350px;
   background-color: #d3d3d3;
   display: flex;
   justify-content: center;
@@ -360,23 +360,22 @@
   padding: 12px 50px;
   font-size: 14px;
   cursor: pointer;
-  background-color: #00aaff;
+  background-color: #FB9258;
   border: none;
   color: white;
-  border-radius: 5px;
+  border-radius: 16px;
 }
 
 #openEditor:hover {
-  background-color: #007acc;
+  background-color: #f7803e;
 }
 
 .ediotr-btn-cont {
   display: flex;
-
   align-items: center;
-
   justify-content: center;
   /* margin-top: 20px; */
+  width: 100%;
 }
 .personalise-library-box {
   position: relative;
@@ -430,8 +429,8 @@
   position: relative;
 }
 .personalise-template-img {
-  width: 460px;
-  height: 460px;
+  width: 350px;
+  height: 350px;
   position: absolute;
 }
 
@@ -451,7 +450,7 @@
   padding: 12px 15px;
   border: 1px solid #dbdada;
   font-size: 14px;
-  color: #6f6f6f;
+  color: #959494;
   outline: none;
   margin-bottom: 15px;
   border-radius: 15px;
@@ -596,7 +595,7 @@ p.personalise-product-desc-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 325px;
+  height: 350px;
   margin-bottom: 20px;
 }
 label.min-editor-label {
@@ -604,4 +603,35 @@ label.min-editor-label {
   font-weight: 600;
   font-size: 15px;
   margin-bottom: 6px;
+}
+
+.button-container button, .button-container label {
+  width: 100%;
+  padding: 14px !important;
+  font-size: 14px !important;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 16px;
+}
+
+div#replace-btn-cont {
+  width: 100%;
+}
+
+div#miniE-text-done-Btn {
+  width: 100%;
+}
+
+#miniE-adjust-Btn {
+  position: absolute;
+  top: 275px;
+  right: 4px;
+}
+
+button#personaliseAdjustBtn {
+  background: transparent;
+}
+
+button#personaliseAdjustBtn img {
+  width: 45px;
 }

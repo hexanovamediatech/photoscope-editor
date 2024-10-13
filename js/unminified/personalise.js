@@ -308,8 +308,8 @@ function initializeCanvas() {
   }
 
   newFabricCanvas = new fabric.Canvas(canvasElement);
-  newFabricCanvas.setWidth(460);
-  newFabricCanvas.setHeight(460);
+  newFabricCanvas.setWidth(350);
+  newFabricCanvas.setHeight(350);
 }
 
 document.getElementById("text-1").addEventListener("input", function () {
@@ -454,8 +454,12 @@ function loadJSONToCanvas(jsonData) {
 
   newFabricCanvas.clear();
 
+  const label1 = document.getElementById("label-1");
+  const label2 = document.getElementById("label-2");
   const input1 = document.getElementById("text-1");
   const input2 = document.getElementById("text-2");
+  label1.style.display = "none";
+  label2.style.display = "none";
   input1.style.display = "none";
   input2.style.display = "none";
 
@@ -481,9 +485,11 @@ if (showImage.length > 0) {
 
   // Show input fields based on the number of textboxes
   if (textBoxCount > 0) {
+    label1.style.display = "block";
     input1.style.display = "block"; // Show the first input field
   }
   if (textBoxCount > 1) {
+    label2.style.display = "block";
     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
   }
   const replaceImgBtn = document.getElementById("replace-btn-cont");
@@ -706,6 +712,8 @@ document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
   // Hide the popup
   document.getElementById("personaliseImageUploadPopup").style.display = "none";
   const miniEditorCont = document.getElementById("mini-editor-Cont");
+  miniEditorImgContainerId.style.display = "flex";
+  const miniEditorImgContainerId = document.getElementById("mini-editor-img-container-id");
   miniEditorCont.classList.add("display-none-prop");
   miniEditorCont.classList.remove("display-block-prop");
   if (newFabricCanvas) {
@@ -767,9 +775,11 @@ document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
     // Display Canvas in popup
+    const miniEditorImgContainerId = document.getElementById("mini-editor-img-container-id");
     const miniEditorCont = document.getElementById("mini-editor-Cont");
     miniEditorCont.classList.remove("display-none-prop");
     miniEditorCont.classList.add("display-block-prop");
+    miniEditorImgContainerId.style.display = "none";
     // Display Done Button
     // const miniEditorDone = document.getElementById("miniE-done-Btn");
     // miniEditorDone.classList.remove("display-none-prop");
@@ -928,6 +938,8 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
   const miniEditorCont = document.getElementById("mini-editor-Cont");
   miniEditorCont.classList.add("display-none-prop");
   miniEditorCont.classList.remove("display-block-prop");
+  const miniEditorImgContainerId = document.getElementById("mini-editor-img-container-id");
+  miniEditorImgContainerId.style.display = "flex";
 });
 
 // Initialize the 3D viewer when the page is ready
