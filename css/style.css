@@ -3828,21 +3828,20 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 
 .login-popup-content {
   background-color: #fff;
-  width: 400px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-  text-align: center;
-
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 32px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 400px;
   z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75vh;
+  overflow-y: auto;
+  width: 65vw;
+  border-radius: 20px;
 }
 
 .close-button {
@@ -3864,7 +3863,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 
 .input-field {
   width: 100%;
-  padding: 10px;
+  padding: 15px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -3880,7 +3879,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .login-button:hover {
@@ -3892,13 +3891,16 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  background-color: white;
-  border: 1px solid #ccc;
+  background-color: #FB9258;
+  border: 1px solid #FB9258;
   padding: 10px;
-  width: 100%;
-  font-size: 16px;
+  width: fit-content;
+  font-size: 18px;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 25px;
+  color: #fff;
+  padding: 15px 20px;
+  margin-bottom: 20px;
 }
 
 .google-login-button img {
@@ -3907,11 +3909,11 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 }
 
 .forgot-password {
-  margin-top: 20px;
   font-size: 14px;
-  color: #007bff;
+  color: #fb9258;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
+  margin-top: 8px;
 }
 
 .forgot-password:hover {
@@ -3994,4 +3996,79 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 .web-thr-d-main-container.display-unity {
   top: 95px;
   height: calc(100vh - 95px);
+}
+
+.login-img-main-container {
+  width: 45%;
+  height: 100%;
+  background: #242631;
+}
+
+.login-content-container {
+  width: 60%;
+}
+
+.login-img-inner-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+h3.login-img-head-container {
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 60px;
+  letter-spacing: 2px;
+  padding-top: 75px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.login-img-container img {
+  max-width: 75%;
+}
+
+.login-img-container {
+  text-align: right;
+} 
+
+.login-content-inner-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.login-content-inner-container h3 {
+  color: #242631;
+  font-size: 35px;
+}
+
+.loginFormContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.login-input-form-container label {
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.login-input-form-container input {
+  border-radius: 25px;
+}
+
+.login-input-form-container {
+  width: 100%;
+}
+
+
+form#loginForm button {
+  width: 270px;
+  padding: 15px 20px;
+  font-size: 18px;
+  border-radius: 25px;
 }

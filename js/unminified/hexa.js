@@ -9525,7 +9525,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginPopupOverlay = document.createElement("div");
     loginPopupOverlay.className = "login-popup-overlay";
     loginPopupOverlay.innerHTML = `
-        <div class="login-popup-content"> <!-- Class for popup content -->
+        <div class="login-popup-content">
             <span class="close-button" id="closeLoginPopup">&times;</span>
             <h2 class="login-title">Login</h2>
             <form id="loginForm">
@@ -9533,13 +9533,9 @@ document.addEventListener("DOMContentLoaded", function () {
             <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
             <button type="submit" id="loginSubmit" class="login-button">Login</button>
             </form>
-
-            <!-- Google Login Button -->
             <button class="google-login-button" id="googleLoginBtn">
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
             </button>
-
-            <!-- Forgot Password -->
              <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
         </div>
         `;
@@ -9995,23 +9991,50 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginPopupOverlay = document.createElement("div");
     loginPopupOverlay.className = "login-popup-overlay";
     loginPopupOverlay.innerHTML = `
-          <div class="login-popup-content"> <!-- Class for popup content -->
-              <span class="close-button" id="closeLoginPopup">&times;</span>
-              <h2 class="login-title">Login</h2>
-              <form id="loginForm">
-              <input type="text" id="username" placeholder="Username" required class="input-field" />
-              <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
-              <button type="submit" id="loginSubmit" class="login-button">Login</button>
-              </form>
-
-              <!-- Google Login Button -->
-              <button class="google-login-button" id="googleLoginBtn">
-              <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
-              </button>
-
-              <!-- Forgot Password -->
-            <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
+          <div class="login-popup-content">
+            <div class="login-img-main-container">
+              <div class="login-img-inner-container">
+                <h3 class="login-img-head-container">
+                  Let's create something amazing work with Us.
+                </h3>
+                <div class="login-img-container">
+                  <img class="login-img" src="../../assets/custom/login-img.png" />
+                </div>
+              </div>
+            </div>
+            <div class="login-content-container">
+              <div class="contents">
+                <div class="container">
+                  <div class="row align-items-center justify-content-center">
+                    <span class="close-button" id="closeLoginPopup">&times;</span>
+                    <div class="login-content-inner-container">
+                      <h3>Sign In</h3>
+                      <button class="google-login-button" id="googleLoginBtn">
+                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
+                      </button>
+                      <p class="login-dash">--</p>
+                      <p>Or sign in using your email address</p>
+                      <form id="loginForm">
+                        <div class="loginFormContainer">
+                          <div class="login-input-form-container">
+                            <label>User Name</label>
+                            <input type="text" id="username" placeholder="Username" required class="input-field" />
+                          </div>
+                          <div class="login-input-form-container">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
+                          </div>
+                        </div>
+                        <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
+                        <button type="submit" id="loginSubmit" class="login-button">Sign In</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
           `;
 
     document.body.appendChild(loginPopupOverlay);
@@ -10038,6 +10061,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add the Google Sign-In functionality
     document.getElementById("googleLoginBtn").addEventListener("click", () => {
+      console.log("clicked");
       window.location.href =
         "https://backend.toddlerneeds.com/api/v1/auth/google";
     });
