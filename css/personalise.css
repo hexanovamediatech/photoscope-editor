@@ -128,7 +128,7 @@
 .mini-edit-3d-cont {
   border-radius: 8px;
   width: 100%;
-  height: calc(100% - 100px);
+  height: calc(100% - 120px);
   position: relative;
   /* border: 1px solid red; */
   /* height: 70%; */
@@ -234,7 +234,15 @@
   cursor: pointer;
 }
 .personalise-button-main-cont {
-  width: 50%;
+  position: fixed;
+  top: 110px;
+  right: 100px;
+  background: #fff;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  height: calc(100vh - 125px);
+  width: 325px;
+  border-radius: 8px;
+  display: none;
 }
 
 .personalise-btn-mini {
@@ -289,18 +297,17 @@
   border: none;
 } */
 .popup-container {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 500px;
-  background-color: #e0e0e0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  display: none;
+  /* position: fixed; */
+  /* left: 50%; */
+  /* top: 50%; */
+  /* transform: translate(-50%, -50%); */
+  /* width: 500px; */
+  /* background-color: #e0e0e0; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); */
+  /* display: none; */
 }
 
 .popup-content {
-  padding: 20px;
   position: relative;
 }
 
@@ -329,7 +336,11 @@
 
 .button-container {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 15px;
 }
 
 .button-container button {
@@ -431,19 +442,19 @@
 .mini-ediotr-input-cont {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
   margin-bottom: 20px;
+  padding: 0 15px;
 }
 .mini-editor-input {
-  width: 400px;
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #555;
+  width: 100%;
+  display: block;
+  padding: 12px 15px;
+  border: 1px solid #dbdada;
+  font-size: 14px;
+  color: #6f6f6f;
   outline: none;
+  margin-bottom: 15px;
+  border-radius: 15px;
 }
 
 .mini-editor-input:focus {
@@ -571,6 +582,26 @@ p.personalise-product-desc-text {
 }
 
 .mini-editor-popup-image{
-  height: 100px;
-  width: 100px;
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.personalise-container {
+  display: none;
+}
+.mini-editor-img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 325px;
+  margin-bottom: 20px;
+}
+label.min-editor-label {
+  color: #303030;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 6px;
 }

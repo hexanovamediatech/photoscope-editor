@@ -8562,7 +8562,7 @@ Enter Your Text Here</textarea
             </div>
           </div>
 
-          <div class="personalise-button-main-cont">
+          <div id="personaliseImageUploadPopup" class="personalise-button-main-cont">
             <div class="personalise-container">
               <div class="template-list-loader-cont" id="mini-editor-loader">
                 <div class="threedD-loader"></div>
@@ -8581,26 +8581,26 @@ Enter Your Text Here</textarea
                 <!-- <button id="editInEditorpBtn">Edit In Editor</button> -->
               </div>
             </div>
-            <div id="personaliseImageUploadPopup" class="popup-container">
+            <div class="popup-container">
               <div class="popup-content">
-                <img class="mini-editor-popup-image" id="min-editor-popup-image" src="/assets/3d/76_leather texture-seamless.jpg" alt="">
+                <div class="mini-editor-img-container">
+                  <img class="mini-editor-popup-image" id="min-editor-popup-image" src="/assets/3d/76_leather texture-seamless.jpg" alt="">
+                </div>
                 <div class="mini-ediotr-input-cont">
-                  <div>
-                    <input
-                      type="text"
-                      id="text-1"
-                      class="mini-editor-input"
-                      autocomplete="off"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      id="text-2"
-                      class="mini-editor-input"
-                      autocomplete="off"
-                    />
-                  </div>
+                  <label class="min-editor-label">Text 1</label>
+                  <input
+                    type="text"
+                    id="text-1"
+                    class="mini-editor-input"
+                    autocomplete="off"
+                  />
+                  <label class="min-editor-label">Text 1</label>
+                  <input
+                    type="text"
+                    id="text-2"
+                    class="mini-editor-input"
+                    autocomplete="off"
+                  />
                 </div>
 
                 <span id="personaliseClosePopupBtn" class="close-btn"
