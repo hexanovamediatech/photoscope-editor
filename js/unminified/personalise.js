@@ -358,16 +358,29 @@ function updateCanvasText(textIndex, newText) {
 
   // Render the canvas without the first object
   newFabricCanvas.renderAll();
+  const originalWidth = newFabricCanvas.width;
+      const originalHeight = newFabricCanvas.height;
+      
+      // Set the canvas dimensions to 1080x1080 for the export
+      newFabricCanvas.setDimensions({
+        width: 1080,
+        height: 1080
+      });
+      newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
-  // Convert the remaining objects on the canvas to an image
-  const format = "png";
-  const quality = 1;
-  const imgData = newFabricCanvas.toDataURL({
-    format: format,
-    quality: quality,
-    enableRetinaScaling: false,
-  });
-
+      // Convert the remaining objects on the canvas to an image
+      const format = "jpeg";
+      const quality = 1;
+      const imgData = newFabricCanvas.toDataURL({
+        format: format,
+        quality: quality,
+        enableRetinaScaling: false,
+      });
+      newFabricCanvas.setDimensions({
+        width: originalWidth,
+        height: originalHeight
+      });
+      newFabricCanvas.setZoom(1);
   // Pass the image data to the changeTexture function
   fabricImageConverted = imgData;
   changeTexture(fabricImageConverted);
@@ -598,18 +611,32 @@ function loadJSONToCanvas(jsonData) {
 
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
+      const originalWidth = newFabricCanvas.width;
+      const originalHeight = newFabricCanvas.height;
+      
+      // Set the canvas dimensions to 1080x1080 for the export
+      newFabricCanvas.setDimensions({
+        width: 1080,
+        height: 1080
+      });
+      newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
       // Convert the remaining objects on the canvas to an image
-      const format = "png";
+      const format = "jpeg";
       const quality = 1;
       const imgData = newFabricCanvas.toDataURL({
         format: format,
         quality: quality,
         enableRetinaScaling: false,
       });
-
+      newFabricCanvas.setDimensions({
+        width: originalWidth,
+        height: originalHeight
+      });
+      newFabricCanvas.setZoom(1);
       // Pass the image data to the changeTexture function
       fabricImageConverted = imgData;
+      console.log('this is thefabricImageConverted', fabricImageConverted);
       if (selectedMesh) {
         changeTexture(fabricImageConverted);
       }
@@ -757,17 +784,29 @@ document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
 
     // Render the canvas without the first object
     newFabricCanvas.renderAll();
+    const originalWidth = newFabricCanvas.width;
+    const originalHeight = newFabricCanvas.height;
+    
+    // Set the canvas dimensions to 1080x1080 for the export
+    newFabricCanvas.setDimensions({
+      width: 1080,
+      height: 1080
+    });
+    newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
     // Convert the remaining objects on the canvas to an image
-    const format = "png";
+    const format = "jpeg";
     const quality = 1;
     const imgData = newFabricCanvas.toDataURL({
       format: format,
       quality: quality,
       enableRetinaScaling: false,
     });
-
-    // Pass the image data to the changeTexture function
+    newFabricCanvas.setDimensions({
+      width: originalWidth,
+      height: originalHeight
+    });
+    newFabricCanvas.setZoom(1);
     fabricImageConverted = imgData;
     changeTexture(fabricImageConverted);
 
@@ -864,17 +903,29 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
     // Render the canvas without the first object
     newFabricCanvas.renderAll();
+    const originalWidth = newFabricCanvas.width;
+    const originalHeight = newFabricCanvas.height;
+    
+    // Set the canvas dimensions to 1080x1080 for the export
+    newFabricCanvas.setDimensions({
+      width: 1080,
+      height: 1080
+    });
+    newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
     // Convert the remaining objects on the canvas to an image
-    const format = "png";
+    const format = "jpeg";
     const quality = 1;
     const imgData = newFabricCanvas.toDataURL({
       format: format,
       quality: quality,
       enableRetinaScaling: false,
     });
-
-    // Pass the image data to the changeTexture function
+    newFabricCanvas.setDimensions({
+      width: originalWidth,
+      height: originalHeight
+    });
+    newFabricCanvas.setZoom(1);
     fabricImageConverted = imgData;
     changeTexture(fabricImageConverted);
 
