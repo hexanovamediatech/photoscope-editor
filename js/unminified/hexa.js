@@ -9418,7 +9418,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
       const data = await response.json();
-
+ console.log('this is the data of protected route we got', data);
+ localStorage.setItem("email", data.email);
+ localStorage.setItem("username", data.username);
+ localStorage.setItem("fname",data.firstname)
+ localStorage.setItem("profilepic", data.profilepic)
       if (data.role) {
         const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
@@ -9680,6 +9684,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('this is the lgoin response', response);
         const token = response.headers.get("authorization");
         if (token) {
           localStorage.setItem("3DauthToken", token);
@@ -9705,6 +9710,7 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem("email", profileData.email);
             localStorage.setItem("username", profileData.username);
             localStorage.setItem("fname",profileData.firstname)
+            localStorage.setItem("profilepic", profileData.profilepic)
           } else {
             console.error("Failed to fetch user profile data.");
           }
