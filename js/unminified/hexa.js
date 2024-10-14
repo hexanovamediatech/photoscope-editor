@@ -1396,7 +1396,12 @@
                 .then(() => {
                   // isSaving = false;
                   // Display a success message using toastr after successful upload
-                  toastr.success("Data uploaded successfully!", "Success");
+                //   toastr.success("Data uploaded successfully!", "Success");
+                  Swal.fire({
+                    title: "Success",
+                    text: "Data uploaded successfully!",
+                    icon: "success"
+                  });
                   Swal.close();
                   // Close the modal after saving
                   selector.find(".hexa-modal").hide();
@@ -1404,11 +1409,23 @@
                 .catch((error) => {
                   // Display an error message using toastr if uploading fails
                   toastr.error(error.message, "Error");
+                  const message = error.message || "Something went wrong uploading, try again!"
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'failed',
+                    text: message
+                  });
                 });
             },
             error: function (xhr, status, error) {
               // Display an error message using toastr if the API call fails
-              toastr.error(error, "Error");
+            //   toastr.error(error, "Error");
+            const message = error.message || error || "Something went wrong uploading, try again!"
+            Swal.fire({
+              icon: 'error',
+              title: 'failed',
+              text: message
+            });
             },
           });
         });
@@ -9455,7 +9472,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div>
           <i class="bi bi-chevron-down profile-down-arrow"> </i>
           </div>
-        
+
         </div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
             <ul>
@@ -9507,7 +9524,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function showLoggedOutUI() {
     authContainer.innerHTML = `
         <div class="auth-buttons">
-     
+
           <button class="button-min-editor signin-min-editor" id="signinBtn">Sign In</button>
         </div>
       `;
@@ -9693,15 +9710,34 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         } else {
           console.error("Login successful, but no token found.");
-          toastr.error("Login successful, but no token found.");
+        //   toastr.error("Login successful, but no token found.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Please try again',
+            text: 'Login successful, but no token found',
+          });
         }
       } else {
         console.error("Login failed. Please check your credentials.");
         toastr.error("Login failed. Please check your credentials.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text: 'Login failed, Please check your credentials.',
+          });
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toastr.error("Error during login:", error);
+    //   toastr.error("Error during login:", error);
+      const errResponse = error?.response?.data?.error || "Login failed. Please try agin!.";
+      const errorMessage = errResponse.split(':')[0];
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: errorMessage,
+          showConfirmButton: true,
+        });
     }
   }
 
@@ -9754,7 +9790,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <button class="google-login-button" id="googleSignupBtn">
                   <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign Up with Google
                 </button>
-           
+
                 <p>Or sign Up using your email address</p>
                 <form id="signupForm">
                   <div class="loginFormContainer">
@@ -9782,7 +9818,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       <label>Password</label>
                       <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
                     </div>
-                   
+
                   </div>
                   <div class="sign-in-up-main-cont">
                   <button type="submit" id="signupSubmit" class="login-button sign-up-signin-btn">Sign Up</button>
@@ -9846,29 +9882,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
 
     if (!firstname) {
-      toastr.error("First name is required.");
+      toastr.warning("First name is required.");
       return;
     }
 
     if (!lastname) {
-      toastr.error("Last name is required.");
+      toastr.warning("Last name is required.");
       return;
     }
 
     if (!emailPattern.test(email)) {
-      toastr.error("Please enter a valid email address.");
+      toastr.warning("Please enter a valid email address.");
       return;
     }
 
     if (!usernamePattern.test(username)) {
-      toastr.error(
+      toastr.warning(
         "Username must be alphanumeric and between 4-20 characters."
       );
       return;
     }
 
     if (password.length < 6) {
-      toastr.error("Password must be at least 5 characters long.");
+      toastr.warning("Password must be at least 5 characters long.");
       return;
     }
 
@@ -9893,7 +9929,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.ok) {
         console.log("Signup successful!");
-        toastr.success(`Signup Successful, Please Login Now!`);
+        // toastr.success(`Signup Successful, Please Login Now!`);
+        Swal.fire({
+            title: "Success",
+            text: "Signup successful!",
+            icon: "success"
+          });
         localStorage.setItem("email", email);
         localStorage.setItem("username", username);
         localStorage.setItem("fname",firstname)
@@ -9902,13 +9943,29 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         const errorData = await response.json();
         console.error("Signup failed:", errorData);
-        toastr.error(
-          `Signup failed: ${errorData.error || "Please try again."}`
-        );
+        // toastr.error(
+        //   `Signup failed: ${errorData.error || "Please try again."}`
+        // );
+        const errorMessage = errorData?.error || "Signup failed. Please try again.";
+        // const errorMessage = errResponse.split(':')[0];
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Signup Failed',
+            text: errorMessage,
+            showConfirmButton: true,
+          });
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      toastr.error("Error during signup. Please try again.");
+    //   toastr.error("Error during signup. Please try again.");
+    const errorMessage = error?.response?.data?.error || "Signup failed. Please try again.";
+      Swal.fire({
+        icon: 'error',
+        title: 'Signup Failed',
+        text: errorMessage,
+        showConfirmButton: true,
+      });
     }
   }
 
@@ -9937,6 +9994,11 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Logout failed:", data.message || "Unknown error");
             // alert("Logout failed. Please try again.");
             toastr.error("Logout failed. Please try again.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: 'Logout failed. Please try again.',
+              });
           });
         }
       })

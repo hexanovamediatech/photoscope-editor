@@ -1130,18 +1130,31 @@ initialize3DViewer();
             favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
 
             // Show toastr success message
-            toastr.success(
-              isCurrentlyFavorite
-                ? "Removed from favorites!"
-                : "Added to favorites!",
-              "Success"
-            );
+            // toastr.success(
+            //   isCurrentlyFavorite
+            //     ? "Removed from favorites!"
+            //     : "Added to favorites!",
+            //   "Success"
+            // );
+            const message = isCurrentlyFavorite ? "Removed from favorites!" : "Added to favorites!"
+
+            Swal.fire({
+                title: message,
+                text: "Success",
+                icon: "success"
+              });
+
           } else {
             // Show toastr error message if something went wrong
-            toastr.error(
-              "Please login to add template into Favorites",
-              "Error"
-            );
+            // toastr.error(
+            //   "Please login to add template into Favorites",
+            //   "Error"
+            // );
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please login to add template into Favorites',
+              });
           }
         });
       }
@@ -1500,7 +1513,12 @@ function saveTemplate() {
         uploadData(data)
           .then(() => {
             // Display a success message using toastr after successful upload
-            toastr.success("Data uploaded successfully!", "Success");
+            // toastr.success("Data uploaded successfully!", "Success");
+            Swal.fire({
+                title: "Success",
+                text: "Data uploaded successfully!",
+                icon: "success"
+              });
             Swal.close();
             closeModal();
             // Close the modal after saving
@@ -1512,11 +1530,23 @@ function saveTemplate() {
           })
           .catch((error) => {
             // Display an error message using toastr if uploading fails
-            toastr.error(error.message, "Error");
+            // toastr.error(error.message, "Error");
+            const message = error.message || "Something went wrong uploading, try again!"
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'failed',
+                    text: message
+                  });
           });
       } else {
         // Display an error message using toastr if the API call fails
-        toastr.error(xhr.statusText, "Error");
+        // toastr.error(xhr.statusText, "Error");
+        const message = error.message || error || "Something went wrong uploading, try again!"
+        Swal.fire({
+          icon: 'error',
+          title: 'failed',
+          text: message
+        });
       }
     };
 
@@ -1624,6 +1654,12 @@ async function handleFavTempllate(templateKey) {
     }
   } catch (error) {
     console.error("Error toggling favorite:", error);
+    const message = error.message || error || "Failed to toggling favorite, Please try again later!"
+    Swal.fire({
+      icon: 'error',
+      title: 'failed',
+      text: message
+    });
     return false;
     // Indicate failure
   }
