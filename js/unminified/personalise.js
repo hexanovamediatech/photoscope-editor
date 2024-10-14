@@ -994,6 +994,7 @@ initialize3DViewer();
             key: `dummy-template-${i + 1}`,
             isPublic: true,
             src: "path/to/dummy/template.json",
+            isDummy: true
           };
           filteredData.push(dummyTemplate);
         }
@@ -1079,6 +1080,7 @@ initialize3DViewer();
         // mainDiv.appendChild(gradient);
         container.appendChild(mainDiv);
         // Favorite icon using PNGs
+        if (!item.isDummy) {
         const favIcon = document.createElement("img");
         favIcon.classList.add("template-fav-icon");
         favIcon.id = "templateFavIcon";
@@ -1090,6 +1092,17 @@ initialize3DViewer();
         favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
         favIcon.style.cursor = "pointer";
 
+        favIcon.addEventListener("mouseenter", () => {
+          favIcon.src = isFavorite
+            ? "../../assets/custom/heart2.png"  // On hover, switch to unfilled if it’s already favorite
+            : "../../assets/custom/heart-filled.png"; // On hover, switch to filled if not favorite
+        });
+      
+        favIcon.addEventListener("mouseleave", () => {
+          favIcon.src = isFavorite
+            ? "../../assets/custom/heart-filled.png"  // Return to filled if it’s already favorite
+            : "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
+        });
         // newDiv.appendChild(favIcon);
         mainDiv.appendChild(favIcon);
         // // Attach the onclick event to the favIcon
@@ -1131,7 +1144,7 @@ initialize3DViewer();
             );
           }
         });
-
+      }
         // Append the paragraph to the textDiv
         // textDiv.appendChild(newP);
 
@@ -1665,3 +1678,16 @@ questionIcon.addEventListener("click", showOverlay);
 
 // Attach click event listener to the close button to hide the overlay
 closeOverlayButton.addEventListener("click", hideOverlay);
+
+const favIcon = document.getElementById('templateFavIcon');
+
+favIcon.addEventListener('mouseover', () => {
+  // favIcon.src = '../../assets/custom/heart-filled.png'; // On hover
+  console.log('mouse hoverd');
+});
+
+// Revert the image source when mouse leaves
+favIcon.addEventListener('mouseout', () => {
+  // favIcon.src = '../../assets/custom/heart2.png'; // On mouse leave
+  console.log('mouse out');
+});
