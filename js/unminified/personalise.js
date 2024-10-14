@@ -314,10 +314,14 @@ function initializeCanvas() {
 
 document.getElementById("text-1").addEventListener("input", function () {
   updateCanvasText(1, this.value);
+  const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  openModalBtn.style.display = "block";
 });
 
 document.getElementById("text-2").addEventListener("input", function () {
   updateCanvasText(2, this.value);
+  const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  openModalBtn.style.display = "block";
 });
 
 function updateCanvasText(textIndex, newText) {
@@ -671,6 +675,8 @@ function handleImageUploadAlternate(event) {
   const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
   miniEditorAdjust.classList.remove("display-none-prop");
   miniEditorAdjust.classList.add("display-block-prop");
+  const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  openModalBtn.style.display = "block";
   const file = event.target.files[0];
   const reader = new FileReader();
 
@@ -1219,13 +1225,13 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded.");
 
   // Get the button that opens the modal
-  // const openModalBtn = document.getElementById("hexa-mini-editor-save");
-  // if (openModalBtn) {
-  //   console.log("Found the open modal button.");
-  //   openModalBtn.addEventListener("click", openModal);
-  // } else {
-  //   console.error("Open modal button not found!");
-  // }
+  const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  if (openModalBtn) {
+    console.log("Found the open modal button.");
+    openModalBtn.addEventListener("click", openModal);
+  } else {
+    console.error("Open modal button not found!");
+  }
 
   // Get the <span> element that closes the modal (fix the class here)
   const closeModalBtn = document.getElementsByClassName("close-mini-modal")[0];

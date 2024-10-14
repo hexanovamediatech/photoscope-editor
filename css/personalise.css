@@ -256,9 +256,11 @@
   color: #fff;
   cursor: pointer;
   transition: all 0.3s;
-  margin-right: 30px;
+  /* margin-right: 30px; */
 }
-
+#hexa-mini-editor-save {
+  display: none;
+}
 .personalise-btn-mini:hover {
   background: #0188d4;
 }
@@ -574,6 +576,7 @@
 
 .personalise-btns-container {
   display: flex;
+  gap: 20px;
 }
 
 p.personalise-product-desc-text {
