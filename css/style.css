@@ -361,10 +361,11 @@ body.layers-closed #hexa-body {
 }
 
 .hexa-save-new-button-container {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
+  /* display: flex; */
+  /* flex-direction: row; */
+  /* gap: 20px; */
   /* padding: 20px 200px 20px 100px; */
+  display: none;
 }
 
 .hexa-top-bar-menu {
@@ -3879,7 +3880,6 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 30px;
 }
 
 .login-button:hover {
@@ -3891,8 +3891,8 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  background-color: #FB9258;
-  border: 1px solid #FB9258;
+  background-color: #fb9258;
+  border: 1px solid #fb9258;
   padding: 10px;
   width: fit-content;
   font-size: 18px;
@@ -4031,7 +4031,7 @@ h3.login-img-head-container {
 
 .login-img-container {
   text-align: right;
-} 
+}
 
 .login-content-inner-container {
   padding: 20px;
@@ -4065,10 +4065,32 @@ h3.login-img-head-container {
   width: 100%;
 }
 
-
-form#loginForm button {
+.sign-up-signin-btn {
   width: 270px;
   padding: 15px 20px;
   font-size: 18px;
   border-radius: 25px;
+}
+
+.sign-in-up-main-cont {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 20px;
+  margin-top: 30px;
+}
+.sign-up-main-text {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.sign-up-text-span:hover {
+  /* text-decoration: underline; */
+  color: #00a3ff;
+}
+.sign-up-text-span {
+  color: #fb9258;
+  transition: all 0.3s;
+  margin: 0;
+  padding: 0;
 }

@@ -468,20 +468,22 @@ function loadJSONToCanvas(jsonData) {
     (obj) => obj.type === "textbox"
   ).length;
 
-const showImage = jsonData.objects.filter(
-  (obj) => obj.customId === "clipmask"
-);
-if (showImage.length > 0) {
-  const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
-  
-  const miniEditorPopupImage = document.getElementById("min-editor-popup-image");
+  const showImage = jsonData.objects.filter(
+    (obj) => obj.customId === "clipmask"
+  );
+  if (showImage.length > 0) {
+    const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
 
-  // Check if the image element exists and if the clipmaskImage has a valid src
-  if (miniEditorPopupImage && clipmaskImage.src) {
-    // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-    miniEditorPopupImage.src = clipmaskImage.src;
+    const miniEditorPopupImage = document.getElementById(
+      "min-editor-popup-image"
+    );
+
+    // Check if the image element exists and if the clipmaskImage has a valid src
+    if (miniEditorPopupImage && clipmaskImage.src) {
+      // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+      miniEditorPopupImage.src = clipmaskImage.src;
+    }
   }
-}
 
   // Show input fields based on the number of textboxes
   if (textBoxCount > 0) {
@@ -524,8 +526,8 @@ if (showImage.length > 0) {
         fabric.Image.fromURL(bgImageData, function (bgImage) {
           // Set the background image properties
           bgImage.set({
-            scaleX: 0.225, // Apply the scale factor
-            scaleY: 0.225, // Apply the scale factor
+            scaleX: 0.17, // Apply the scale factor
+            scaleY: 0.17, // Apply the scale factor
             left: jsonData.backgroundImage.left,
             top: jsonData.backgroundImage.top,
             originX: "left",
@@ -543,24 +545,24 @@ if (showImage.length > 0) {
       newFabricCanvas.getObjects().forEach((obj, index) => {
         if (index === 0) {
           // Scale down the first object
-          obj.scaleX *= 0.225;
-          obj.scaleY *= 0.225;
+          obj.scaleX *= 0.17;
+          obj.scaleY *= 0.17;
         } else {
           // Apply a different scaling factor for other objects
-          obj.scaleX *= 0.225; // Adjust the scaling factor as needed
-          obj.scaleY *= 0.225; // Adjust the scaling factor as needed
+          obj.scaleX *= 0.17; // Adjust the scaling factor as needed
+          obj.scaleY *= 0.17; // Adjust the scaling factor as needed
 
           // Adjust top and left properties to make the object visible
-          obj.left *= 0.225; // Adjust the position as needed
-          obj.top *= 0.225; // Adjust the position as needed
+          obj.left *= 0.17; // Adjust the position as needed
+          obj.top *= 0.17; // Adjust the position as needed
         }
 
         if (obj.clipPath) {
           obj.clipPath.set({
-            scaleX: obj.clipPath.scaleX * 0.225, // Adjust the scaling factor as needed
-            scaleY: obj.clipPath.scaleY * 0.225, // Adjust the scaling factor as needed
-            left: obj.clipPath.left * 0.225, // Adjust the position as needed
-            top: obj.clipPath.top * 0.225, // Adjust the position as needed
+            scaleX: obj.clipPath.scaleX * 0.17, // Adjust the scaling factor as needed
+            scaleY: obj.clipPath.scaleY * 0.17, // Adjust the scaling factor as needed
+            left: obj.clipPath.left * 0.17, // Adjust the position as needed
+            top: obj.clipPath.top * 0.17, // Adjust the position as needed
           });
         }
 
@@ -676,7 +678,9 @@ function handleImageUploadAlternate(event) {
     const imageSrc = e.target.result;
     setNewImageSrc(imageSrc); // Store the new image source
     // loadJSONToCanvas(savedCanvasJSON); // Reload the JSON to canvas with the new image
-    const miniEditorPopupImage = document.getElementById("min-editor-popup-image");
+    const miniEditorPopupImage = document.getElementById(
+      "min-editor-popup-image"
+    );
     if (miniEditorPopupImage) {
       miniEditorPopupImage.src = imageSrc; // Set the new image source
     }
@@ -713,7 +717,9 @@ document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
   document.getElementById("personaliseImageUploadPopup").style.display = "none";
   const miniEditorCont = document.getElementById("mini-editor-Cont");
   miniEditorImgContainerId.style.display = "flex";
-  const miniEditorImgContainerId = document.getElementById("mini-editor-img-container-id");
+  const miniEditorImgContainerId = document.getElementById(
+    "mini-editor-img-container-id"
+  );
   miniEditorCont.classList.add("display-none-prop");
   miniEditorCont.classList.remove("display-block-prop");
   if (newFabricCanvas) {
@@ -775,7 +781,9 @@ document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
     // Display Canvas in popup
-    const miniEditorImgContainerId = document.getElementById("mini-editor-img-container-id");
+    const miniEditorImgContainerId = document.getElementById(
+      "mini-editor-img-container-id"
+    );
     const miniEditorCont = document.getElementById("mini-editor-Cont");
     miniEditorCont.classList.remove("display-none-prop");
     miniEditorCont.classList.add("display-block-prop");
@@ -938,7 +946,9 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
   const miniEditorCont = document.getElementById("mini-editor-Cont");
   miniEditorCont.classList.add("display-none-prop");
   miniEditorCont.classList.remove("display-block-prop");
-  const miniEditorImgContainerId = document.getElementById("mini-editor-img-container-id");
+  const miniEditorImgContainerId = document.getElementById(
+    "mini-editor-img-container-id"
+  );
   miniEditorImgContainerId.style.display = "flex";
 });
 
@@ -973,10 +983,11 @@ initialize3DViewer();
         for (let i = 0; i < dummyTemplateCount; i++) {
           const dummyTemplate = {
             name: `Dummy Template ${i + 1}`,
-            imageUrl: "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/template_image_1728644304787.png", 
+            imageUrl:
+              "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/template_image_1728644304787.png",
             key: `dummy-template-${i + 1}`,
             isPublic: true,
-            src: "path/to/dummy/template.json", 
+            src: "path/to/dummy/template.json",
           };
           filteredData.push(dummyTemplate);
         }
@@ -1041,7 +1052,7 @@ initialize3DViewer();
         newImg.src = item.imageUrl;
         newImg.alt = item.name;
         newImg.classList.add("template-image-box");
-      
+
         imageDiv.appendChild(newImg);
         // Append the image to the newDiv
         // newDiv.appendChild(newImg);
