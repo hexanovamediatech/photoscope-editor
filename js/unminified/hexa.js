@@ -9439,6 +9439,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //   `;
     const storedUsername = localStorage.getItem("username");
     const storedEmail = localStorage.getItem("email");
+    const firstname = localStorage.getItem("fname")
     authContainer.innerHTML = `
         <div class="profile-container-min-editor">
         <div class="main-cont-profile-data" id="profileIcon">
@@ -9446,7 +9447,7 @@ document.addEventListener("DOMContentLoaded", function () {
            <div class="profile-icon-min-editor" ></div>
             <div class="profile-data-cont-text">
              <p class="profile-data-username">${
-               storedUsername || "username"
+              firstname || "Name"
              }</p>
              <p class="profile-data-email">${storedEmail || "gmail"}</p>
            </div>
@@ -9686,6 +9687,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // console.log("User profile data:", profileData);
             localStorage.setItem("email", profileData.email);
             localStorage.setItem("username", profileData.username);
+            localStorage.setItem("fname",profileData.firstname)
           } else {
             console.error("Failed to fetch user profile data.");
           }
@@ -9894,6 +9896,7 @@ document.addEventListener("DOMContentLoaded", function () {
         toastr.success(`Signup Successful, Please Login Now!`);
         localStorage.setItem("email", email);
         localStorage.setItem("username", username);
+        localStorage.setItem("fname",firstname)
         closeSignupPopup();
         await fetchUserRole();
       } else {
