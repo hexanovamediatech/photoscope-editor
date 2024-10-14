@@ -1170,7 +1170,7 @@ initialize3DViewer();
             );
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
-
+            document.getElementById("personaliseOpenPopupBtn").disabled = false;
             // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
             // setupEventListener();
