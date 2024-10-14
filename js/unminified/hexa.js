@@ -9867,6 +9867,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (data.role) {
         const isAdmin = data.role === "admin";
+        console.log('this is the data we are getting from the route', data);
         showLoggedInUI(isAdmin);
       } else {
         showLoggedOutUI();

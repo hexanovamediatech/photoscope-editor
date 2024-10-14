@@ -969,7 +969,7 @@ initialize3DViewer();
         (obj) => obj.type === name && obj.isPublic === true
       );
       if (filteredData.length < 10) {
-        const dummyTemplateCount = 10 - filteredData.length;
+        const dummyTemplateCount = 9 - filteredData.length;
         for (let i = 0; i < dummyTemplateCount; i++) {
           const dummyTemplate = {
             name: `Dummy Template ${i + 1}`,
@@ -977,6 +977,7 @@ initialize3DViewer();
             key: `dummy-template-${i + 1}`,
             isPublic: true,
             src: "path/to/dummy/template.json", 
+            isDummy: true 
           };
           filteredData.push(dummyTemplate);
         }
@@ -1062,6 +1063,7 @@ initialize3DViewer();
         // mainDiv.appendChild(gradient);
         container.appendChild(mainDiv);
         // Favorite icon using PNGs
+        if (!item.isDummy) {
         const favIcon = document.createElement("img");
         favIcon.classList.add("template-fav-icon");
         favIcon.id = "templateFavIcon";
@@ -1114,7 +1116,7 @@ initialize3DViewer();
             );
           }
         });
-
+      }
         // Append the paragraph to the textDiv
         // textDiv.appendChild(newP);
 

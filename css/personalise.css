@@ -232,7 +232,33 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease; 
 }
+.icon-box-for-question{
+  height: 27px;
+  width: 26px;
+}
+.personalise-icon-box:hover .personalise-question-fullscreen {
+  transform: scale(1.1); 
+  background-color: rgba(0, 0, 0, 0.1); 
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.1);
+
+}
+.personalise-question-icon{
+  width: 24px;
+  height: 100px;
+}
+.icon-box-for-question:hover .personalise-question-icon {
+  transform: scale(1.1); 
+  background-color: rgba(0, 0, 0, 0.1); 
+  transform: scale(1.1);
+  background-color: rgba(0, 0, 0, 0.1);
+
+}
+
+
+
 .personalise-button-main-cont {
   position: fixed;
   top: 110px;
@@ -635,3 +661,4 @@ button#personaliseAdjustBtn {
 button#personaliseAdjustBtn img {
   width: 45px;
 }
+
