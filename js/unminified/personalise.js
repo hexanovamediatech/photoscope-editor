@@ -811,18 +811,6 @@ document
         (obj) => obj.type === "image" && !obj.src.startsWith("http")
       );
 
-      // if (firstObject) {
-      //   firstObject.set({
-      //     selectable: true,
-      //     hasControls: true,
-      //     hasBorders: true,
-      //     lockMovementX: false,
-      //     lockMovementY: false,
-      //     lockRotation: false,
-      //     lockScalingX: false,
-      //     lockScalingY: false,
-      //   });
-      // }
       if (targetObject) {
         // Set properties for the found object
         targetObject.set({
@@ -836,46 +824,6 @@ document
           lockScalingY: false,
         });
       }
-      // Handle images within groups
-      // newFabricCanvas.forEachObject((obj) => {
-      //   if (obj.type === "group") {
-      //     obj.forEachObject((innerObj) => {
-      //       if (innerObj.type === "image") {
-      //         innerObj.set({
-      //           selectable: true,
-      //           hasControls: true,
-      //           hasBorders: true,
-      //           lockMovementX: false,
-      //           lockMovementY: false,
-      //           lockRotation: false,
-      //           lockScalingX: false,
-      //           lockScalingY: false,
-      //         });
-      //         console.log("Image within group made adjustable");
-      //       }
-      //     });
-      //   }
-      // });
-      // newFabricCanvas.forEachObject((obj) => {
-      //   if (obj.type === "group") {
-      //     // obj.forEachObject((innerObj) => {
-      //     //   if (innerObj.type === "image") {
-
-      //     obj.set({
-      //       selectable: true,
-      //       hasControls: true,
-      //       hasBorders: true,
-      //       lockMovementX: false,
-      //       lockMovementY: false,
-      //       lockRotation: false,
-      //       lockScalingX: false,
-      //       lockScalingY: false,
-      //     });
-      //     console.log("Image within group made adjustable");
-      //     // }
-      //     // });
-      //   }
-      // });
 
       // Render the canvas after adjustments
       newFabricCanvas.renderAll();
@@ -988,13 +936,12 @@ initialize3DViewer();
         const dummyTemplateCount = 10 - filteredData.length;
         for (let i = 0; i < dummyTemplateCount; i++) {
           const dummyTemplate = {
-            name: `Dummy Template ${i + 1}`,
-            imageUrl:
-              "https://interective3d-bucket.s3.ap-south-1.amazonaws.com/template_image_1728644304787.png",
+            name: `Template ${i + 1}`,
+            imageUrl: "../../assets/custom/temp_img.png",
             key: `dummy-template-${i + 1}`,
             isPublic: true,
             src: "path/to/dummy/template.json",
-            isDummy: true
+            isDummy: true,
           };
           filteredData.push(dummyTemplate);
         }
@@ -1075,89 +1022,92 @@ initialize3DViewer();
         // newP.textContent = item.name;
         mainDiv.appendChild(imageDiv);
         mainDiv.appendChild(nameP);
-        // const gradient = document.createElement("div");
-        // gradient.classList.add("template-gradient-box");
-        // mainDiv.appendChild(gradient);
+        // if (item.isDummy) {
+        //   const gradient = document.createElement("div");
+        //   gradient.classList.add("template-gradient-box");
+        //   mainDiv.appendChild(gradient);
+        // }
         container.appendChild(mainDiv);
         // Favorite icon using PNGs
         if (!item.isDummy) {
-        const favIcon = document.createElement("img");
-        favIcon.classList.add("template-fav-icon");
-        favIcon.id = "templateFavIcon";
-        // Check if this template is in the favorites list
-        const isFavorite = favoriteKeys?.includes(item.key);
-        favIcon.src = isFavorite
-          ? "../../assets/custom/heart-filled.png"
-          : "../../assets/custom/heart2.png";
-        favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
-        favIcon.style.cursor = "pointer";
-
-        favIcon.addEventListener("mouseenter", () => {
+          const favIcon = document.createElement("img");
+          favIcon.classList.add("template-fav-icon");
+          favIcon.id = "templateFavIcon";
+          // Check if this template is in the favorites list
+          const isFavorite = favoriteKeys?.includes(item.key);
           favIcon.src = isFavorite
-            ? "../../assets/custom/heart2.png"  // On hover, switch to unfilled if it’s already favorite
-            : "../../assets/custom/heart-filled.png"; // On hover, switch to filled if not favorite
-        });
-      
-        favIcon.addEventListener("mouseleave", () => {
-          favIcon.src = isFavorite
-            ? "../../assets/custom/heart-filled.png"  // Return to filled if it’s already favorite
-            : "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
-        });
-        // newDiv.appendChild(favIcon);
-        mainDiv.appendChild(favIcon);
-        // // Attach the onclick event to the favIcon
-        // favIcon.addEventListener('click', () => {
-        //     const templateKey = item.key;
-        //     handleFavTempllate(templateKey);
-        // });
+            ? "../../assets/custom/heart-filled.png"
+            : "../../assets/custom/heart2.png";
+          favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
+          favIcon.style.cursor = "pointer";
 
-        // Attach the onclick event to the favIcon
-        favIcon.addEventListener("click", async (e) => {
-          e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
+          favIcon.addEventListener("mouseenter", () => {
+            favIcon.src = isFavorite
+              ? "../../assets/custom/heart2.png" // On hover, switch to unfilled if it’s already favorite
+              : "../../assets/custom/heart-filled.png"; // On hover, switch to filled if not favorite
+          });
 
-          const templateKey = item.key;
+          favIcon.addEventListener("mouseleave", () => {
+            favIcon.src = isFavorite
+              ? "../../assets/custom/heart-filled.png" // Return to filled if it’s already favorite
+              : "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
+          });
+          // newDiv.appendChild(favIcon);
+          mainDiv.appendChild(favIcon);
+          // // Attach the onclick event to the favIcon
+          // favIcon.addEventListener('click', () => {
+          //     const templateKey = item.key;
+          //     handleFavTempllate(templateKey);
+          // });
 
-          // Call the favorite toggle function
-          const isSuccess = await handleFavTempllate(templateKey);
+          // Attach the onclick event to the favIcon
+          favIcon.addEventListener("click", async (e) => {
+            e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
 
-          // If the request was successful, immediately toggle the icon
-          if (isSuccess) {
-            const isCurrentlyFavorite =
-              favIcon.src.includes("heart-filled.png");
-            favIcon.src = isCurrentlyFavorite
-              ? "../../assets/custom/heart2.png"
-              : "../../assets/custom/heart-filled.png";
-            favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+            const templateKey = item.key;
 
-            // Show toastr success message
-            // toastr.success(
-            //   isCurrentlyFavorite
-            //     ? "Removed from favorites!"
-            //     : "Added to favorites!",
-            //   "Success"
-            // );
-            const message = isCurrentlyFavorite ? "Removed from favorites!" : "Added to favorites!"
+            // Call the favorite toggle function
+            const isSuccess = await handleFavTempllate(templateKey);
 
-            Swal.fire({
+            // If the request was successful, immediately toggle the icon
+            if (isSuccess) {
+              const isCurrentlyFavorite =
+                favIcon.src.includes("heart-filled.png");
+              favIcon.src = isCurrentlyFavorite
+                ? "../../assets/custom/heart2.png"
+                : "../../assets/custom/heart-filled.png";
+              favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+
+              // Show toastr success message
+              // toastr.success(
+              //   isCurrentlyFavorite
+              //     ? "Removed from favorites!"
+              //     : "Added to favorites!",
+              //   "Success"
+              // );
+              const message = isCurrentlyFavorite
+                ? "Removed from favorites!"
+                : "Added to favorites!";
+
+              Swal.fire({
                 title: message,
                 text: "Success",
-                icon: "success"
+                icon: "success",
               });
-
-          } else {
-            // Show toastr error message if something went wrong
-            // toastr.error(
-            //   "Please login to add template into Favorites",
-            //   "Error"
-            // );
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: 'Please login to add template into Favorites',
+            } else {
+              // Show toastr error message if something went wrong
+              // toastr.error(
+              //   "Please login to add template into Favorites",
+              //   "Error"
+              // );
+              Swal.fire({
+                icon: "warning",
+                title: "Warning",
+                text: "Please login to add template into Favorites",
               });
-          }
-        });
-      }
+            }
+          });
+        }
         // Append the paragraph to the textDiv
         // textDiv.appendChild(newP);
 
@@ -1515,10 +1465,10 @@ function saveTemplate() {
             // Display a success message using toastr after successful upload
             // toastr.success("Data uploaded successfully!", "Success");
             Swal.fire({
-                title: "Success",
-                text: "Data uploaded successfully!",
-                icon: "success"
-              });
+              title: "Success",
+              text: "Data uploaded successfully!",
+              icon: "success",
+            });
             Swal.close();
             closeModal();
             // Close the modal after saving
@@ -1531,21 +1481,25 @@ function saveTemplate() {
           .catch((error) => {
             // Display an error message using toastr if uploading fails
             // toastr.error(error.message, "Error");
-            const message = error.message || "Something went wrong uploading, try again!"
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'failed',
-                    text: message
-                  });
+            const message =
+              error.message || "Something went wrong uploading, try again!";
+            Swal.fire({
+              icon: "error",
+              title: "failed",
+              text: message,
+            });
           });
       } else {
         // Display an error message using toastr if the API call fails
         // toastr.error(xhr.statusText, "Error");
-        const message = error.message || error || "Something went wrong uploading, try again!"
+        const message =
+          error.message ||
+          error ||
+          "Something went wrong uploading, try again!";
         Swal.fire({
-          icon: 'error',
-          title: 'failed',
-          text: message
+          icon: "error",
+          title: "failed",
+          text: message,
         });
       }
     };
@@ -1654,11 +1608,14 @@ async function handleFavTempllate(templateKey) {
     }
   } catch (error) {
     console.error("Error toggling favorite:", error);
-    const message = error.message || error || "Failed to toggling favorite, Please try again later!"
+    const message =
+      error.message ||
+      error ||
+      "Failed to toggling favorite, Please try again later!";
     Swal.fire({
-      icon: 'error',
-      title: 'failed',
-      text: message
+      icon: "error",
+      title: "failed",
+      text: message,
     });
     return false;
     // Indicate failure
@@ -1715,15 +1672,15 @@ questionIcon.addEventListener("click", showOverlay);
 // Attach click event listener to the close button to hide the overlay
 closeOverlayButton.addEventListener("click", hideOverlay);
 
-const favIcon = document.getElementById('templateFavIcon');
+const favIcon = document.getElementById("templateFavIcon");
 
-favIcon.addEventListener('mouseover', () => {
+favIcon.addEventListener("mouseover", () => {
   // favIcon.src = '../../assets/custom/heart-filled.png'; // On hover
-  console.log('mouse hoverd');
+  console.log("mouse hoverd");
 });
 
 // Revert the image source when mouse leaves
-favIcon.addEventListener('mouseout', () => {
+favIcon.addEventListener("mouseout", () => {
   // favIcon.src = '../../assets/custom/heart2.png'; // On mouse leave
-  console.log('mouse out');
+  console.log("mouse out");
 });
