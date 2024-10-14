@@ -188,7 +188,7 @@
 .close-overlay {
   position: absolute;
   top: 20px;
-  left: 20px;
+  right: 20px;
   background: transparent;
   border: none;
   font-size: 2rem;
@@ -360,7 +360,7 @@
   padding: 12px 50px;
   font-size: 14px;
   cursor: pointer;
-  background-color: #FB9258;
+  background-color: #fb9258;
   border: none;
   color: white;
   border-radius: 16px;
@@ -580,7 +580,7 @@ p.personalise-product-desc-text {
   visibility: hidden;
 }
 
-.mini-editor-popup-image{
+.mini-editor-popup-image {
   width: 100%;
   object-fit: cover;
   height: 100%;
@@ -605,7 +605,8 @@ label.min-editor-label {
   margin-bottom: 6px;
 }
 
-.button-container button, .button-container label {
+.button-container button,
+.button-container label {
   width: 100%;
   padding: 14px !important;
   font-size: 14px !important;
@@ -634,4 +635,8 @@ button#personaliseAdjustBtn {
 
 button#personaliseAdjustBtn img {
   width: 45px;
+}
+
+.mini-editor-header-cont {
+  visibility: hidden;
 }
