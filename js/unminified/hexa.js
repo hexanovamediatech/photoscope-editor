@@ -9585,7 +9585,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   <div class="login-content-inner-container">
                     <h3>Sign In</h3>
                     <button class="google-login-button" id="googleLoginBtn">
-                      <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
+                      <img src="../../assets/custom/googlepng.png" alt="Google icon" /> Sign in with Google
                     </button>
                     <p class="login-dash">--</p>
                     <p>Or sign in using your email address</p>
@@ -9794,7 +9794,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="login-content-inner-container">
                 <h3>Sign Up</h3>
                 <button class="google-login-button" id="googleSignupBtn">
-                  <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign Up with Google
+                  <img src="../../assets/custom/googlepng.png" alt="Google icon" />  Sign Up with Google
                 </button>
 
                 <p>Or sign Up using your email address</p>
