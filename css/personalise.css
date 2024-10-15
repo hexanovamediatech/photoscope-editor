@@ -400,17 +400,17 @@
 .button-container button:hover {
   background-color: #007acc;
 }
-#openEditor {
-  padding: 12px 50px;
+.personalise-edit-btn {
+  padding: 8px 50px;
   font-size: 14px;
   cursor: pointer;
   background-color: #00aaff;
   border: none;
   color: white;
-  border-radius: 16px;
+  border-radius: 20px;
 }
 
-#openEditor:hover {
+.personalise-edit-btn:hover {
   background-color: #007acc;
 }
 
@@ -430,6 +430,7 @@
   justify-content: center;
   /* margin-top: 20px; */
   width: 100%;
+  gap: 10px;
 }
 .personalise-library-box {
   position: relative;
@@ -501,13 +502,13 @@
 .mini-editor-input {
   width: 100%;
   display: block;
-  padding: 12px 15px;
+  padding: 14px 15px;
   border: 1px solid #dbdada;
   font-size: 14px;
   color: #959494;
   outline: none;
   margin-bottom: 10px;
-  border-radius: 15px;
+  border-radius: 20px;
 }
 
 .mini-editor-input:focus {
@@ -660,15 +661,18 @@ label.min-editor-label {
   font-size: 15px;
   margin-bottom: 6px;
 }
+.replace-btn-personalise {
+  gap: 10px;
+}
 
 .button-container button,
 .button-container label {
   width: 100%;
-  padding: 14px !important;
+  padding: 10px !important;
   font-size: 14px !important;
   text-transform: uppercase;
   font-weight: bold;
-  border-radius: 16px;
+  border-radius: 20px;
 }
 
 div#replace-btn-cont {
@@ -684,7 +688,10 @@ div#miniE-text-done-Btn {
   bottom: 10px;
   right: 10px;
 }
-
+.personalise-edit-btn img {
+  width: 32px;
+  height: 32px;
+}
 button#personaliseAdjustBtn {
   background: transparent;
   outline: none;

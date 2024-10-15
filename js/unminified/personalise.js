@@ -754,79 +754,79 @@ document
 //     const textInput1 = document.getElementById("text-1");
 //     const textInput2 = document.getElementById("text-2");
 //   });
-document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
-  if (activeItem) {
-    const miniEditorCont = document.getElementById("mini-editor-Cont");
-    miniEditorImgContainerId.style.display = "flex";
-    const miniEditorImgContainerId = document.getElementById(
-      "mini-editor-img-container-id"
-    );
-    miniEditorCont.classList.add("display-none-prop");
-    miniEditorCont.classList.remove("display-block-prop");
-    if (newFabricCanvas) {
-      newFabricCanvas.forEachObject((obj) => {
-        obj.set({
-          selectable: false,
-          hasControls: false,
-          hasBorders: false,
-          lockMovementX: true,
-          lockMovementY: true,
-          lockRotation: true,
-          lockScalingX: true,
-          lockScalingY: true,
-        });
-      });
-      newFabricCanvas.renderAll();
+// document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
+//   if (activeItem) {
+//     const miniEditorCont = document.getElementById("mini-editor-Cont");
+//     miniEditorImgContainerId.style.display = "flex";
+//     const miniEditorImgContainerId = document.getElementById(
+//       "mini-editor-img-container-id"
+//     );
+//     miniEditorCont.classList.add("display-none-prop");
+//     miniEditorCont.classList.remove("display-block-prop");
+//     if (newFabricCanvas) {
+//       newFabricCanvas.forEachObject((obj) => {
+//         obj.set({
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+//       });
+//       newFabricCanvas.renderAll();
 
-      savedCanvasJSON = newFabricCanvas.toJSON();
-      window.editedCanvasJson = savedCanvasJSON;
-      console.log(window.editedCanvasJson);
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       window.editedCanvasJson = savedCanvasJSON;
+//       console.log(window.editedCanvasJson);
 
-      const allObjects = newFabricCanvas.getObjects();
+//       const allObjects = newFabricCanvas.getObjects();
 
-      // Save the first object (assuming it's the background image)
-      const firstObject = allObjects[0];
+//       // Save the first object (assuming it's the background image)
+//       const firstObject = allObjects[0];
 
-      // Remove the first object from the canvas
-      newFabricCanvas.remove(firstObject);
+//       // Remove the first object from the canvas
+//       newFabricCanvas.remove(firstObject);
 
-      // Render the canvas without the first object
-      newFabricCanvas.renderAll();
-      const originalWidth = newFabricCanvas.width;
-      const originalHeight = newFabricCanvas.height;
+//       // Render the canvas without the first object
+//       newFabricCanvas.renderAll();
+//       const originalWidth = newFabricCanvas.width;
+//       const originalHeight = newFabricCanvas.height;
 
-      // Set the canvas dimensions to 1080x1080 for the export
-      newFabricCanvas.setDimensions({
-        width: 1080,
-        height: 1080,
-      });
-      newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+//       // Set the canvas dimensions to 1080x1080 for the export
+//       newFabricCanvas.setDimensions({
+//         width: 1080,
+//         height: 1080,
+//       });
+//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
-      // Convert the remaining objects on the canvas to an image
-      const format = "jpeg";
-      const quality = 1;
-      const imgData = newFabricCanvas.toDataURL({
-        format: format,
-        quality: quality,
-        enableRetinaScaling: false,
-      });
-      newFabricCanvas.setDimensions({
-        width: originalWidth,
-        height: originalHeight,
-      });
-      newFabricCanvas.setZoom(1);
-      fabricImageConverted = imgData;
-      changeTexture(fabricImageConverted);
+//       // Convert the remaining objects on the canvas to an image
+//       const format = "jpeg";
+//       const quality = 1;
+//       const imgData = newFabricCanvas.toDataURL({
+//         format: format,
+//         quality: quality,
+//         enableRetinaScaling: false,
+//       });
+//       newFabricCanvas.setDimensions({
+//         width: originalWidth,
+//         height: originalHeight,
+//       });
+//       newFabricCanvas.setZoom(1);
+//       fabricImageConverted = imgData;
+//       changeTexture(fabricImageConverted);
 
-      // Add the first object back to its original position
-      newFabricCanvas.insertAt(firstObject, 0);
+//       // Add the first object back to its original position
+//       newFabricCanvas.insertAt(firstObject, 0);
 
-      // Render the canvas to show all objects again
-      newFabricCanvas.renderAll();
-    }
-  }
-  // Clear the file input field
-});
+//       // Render the canvas to show all objects again
+//       newFabricCanvas.renderAll();
+//     }
+//   }
+//   // Clear the file input field
+// });
 
 // Event listener for the "Adjust" button click
 
