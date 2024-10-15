@@ -9587,7 +9587,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button class="google-login-button" id="googleLoginBtn">
                       <img src="../../assets/custom/googlepng.png" alt="Google icon" /> Sign in with Google
                     </button>
-                    <p class="login-dash">--</p>
                     <p>Or sign in using your email address</p>
                     <form id="loginForm">
                       <div class="loginFormContainer">
@@ -9598,6 +9597,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="login-input-form-container">
                           <label>Password</label>
                           <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
+                              <span class="toggle-password" id="togglePassword">
+                               <i class="fas fa-eye" id="eyeIcon"></i>
+                             </span>
                         </div>
                       </div>
                       <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
@@ -9619,6 +9621,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show the popup
     loginPopupOverlay.style.display = "block";
+
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('loginPassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        // Toggle the type attribute between password and text
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          eyeIcon.classList.remove('fa-eye');
+          eyeIcon.classList.add('fa-eye-slash');
+        } else {
+          passwordInput.type = 'password';
+          eyeIcon.classList.remove('fa-eye-slash');
+          eyeIcon.classList.add('fa-eye');
+        }
+      });
+
 
     // Close popup on outside click
     window.addEventListener("click", function (event) {
@@ -9823,6 +9842,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="login-input-form-container">
                       <label>Password</label>
                       <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
+
+                          <span class="toggle-password" id="toggleSignupPassword">
+                             <i class="fas fa-eye" id="signupEyeIcon"></i>
+                          </span>
                     </div>
 
                   </div>
@@ -9845,6 +9868,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // Show the popup
     signupPopupOverlay.style.display = "block";
 
+    document.getElementById('toggleSignupPassword').addEventListener('click', function () {
+        const signupPasswordInput = document.getElementById('signupPassword');
+        const signupEyeIcon = document.getElementById('signupEyeIcon');
+
+        // Toggle the type attribute between password and text
+        if (signupPasswordInput.type === 'password') {
+          signupPasswordInput.type = 'text';
+          signupEyeIcon.classList.remove('fa-eye');
+          signupEyeIcon.classList.add('fa-eye-slash');
+        } else {
+          signupPasswordInput.type = 'password';
+          signupEyeIcon.classList.remove('fa-eye-slash');
+          signupEyeIcon.classList.add('fa-eye');
+        }
+      });
+    
+
     // Close popup on outside click
     window.addEventListener("click", function (event) {
       if (event.target === signupPopupOverlay) {
@@ -9865,7 +9905,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .getElementById("signinBtnInSignUp")
       .addEventListener("click", function () {
         closeSignupPopup();
-        console.log("sign in pop up");
+        // console.log("sign in pop up");
         showLoginPopup();
       });
 
