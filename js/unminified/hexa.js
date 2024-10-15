@@ -9550,21 +9550,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function showLoginPopup() {
     const loginPopupOverlay = document.createElement("div");
     loginPopupOverlay.className = "login-popup-overlay";
-    // loginPopupOverlay.innerHTML = `
-    //     <div class="login-popup-content">
-    //         <span class="close-button" id="closeLoginPopup">&times;</span>
-    //         <h2 class="login-title">Login</h2>
-    //         <form id="loginForm">
-    //         <input type="text" id="username" placeholder="Username" required class="input-field" />
-    //         <input type="password" id="loginPassword" placeholder="Password" required class="input-field" />
-    //         <button type="submit" id="loginSubmit" class="login-button">Login</button>
-    //         </form>
-    //         <button class="google-login-button" id="googleLoginBtn">
-    //         <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google icon" /> Sign in with Google
-    //         </button>
-    //          <div class="forgot-password" id="forgotPass-cont">Forgot Password?</div>
-    //     </div>
-    //     `;
     loginPopupOverlay.innerHTML = `
         <div class="login-popup-content">
           <div class="login-img-main-container">
@@ -9583,6 +9568,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="row align-items-center justify-content-center">
                   <span class="close-button" id="closeLoginPopup">&times;</span>
                   <div class="login-content-inner-container">
+                    <div id="signupError" class="error-message" style="display: none;">
+                    <span class="error-icon">&#x26A0;</span>
+                    <span class="error-text"></span>
+                    </div>
                     <h3>Sign In</h3>
                     <button class="google-login-button" id="googleLoginBtn">
                       <img src="../../assets/custom/googlepng.png" alt="Google icon" /> Sign in with Google
@@ -9679,6 +9668,8 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     const username = document.getElementById("username").value;
     const password = document.getElementById("loginPassword").value;
+    const signupErrorElement = document.getElementById("signupError");
+
 
     const url = window.location.origin;
     const parseUrl = new URL(url);
@@ -9736,33 +9727,42 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           console.error("Login successful, but no token found.");
         //   toastr.error("Login successful, but no token found.");
-        Swal.fire({
-            icon: 'error',
-            title: 'Please try again',
-            text: 'Login successful, but no token found',
-          });
+        // Swal.fire({
+        //     icon: 'error',
+        //     title: 'Please try again',
+        //     text: 'Login successful, but no token found',
+        //   });
+        signupErrorElement.style.display = "flex";
+signupErrorElement.querySelector('.error-text').textContent = "Login failed. Please check your credentials!";
+
         }
       } else {
         console.error("Login failed. Please check your credentials.");
-        toastr.error("Login failed. Please check your credentials.");
-        Swal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text: 'Login failed, Please check your credentials.',
-          });
+        // toastr.error("Login failed. Please check your credentials.");
+        // Swal.fire({
+        //     icon: 'error',
+        //     title: 'Failed',
+        //     text: 'Login failed, Please check your credentials.',
+        //   });
+        signupErrorElement.style.display = "flex";
+        signupErrorElement.querySelector('.error-text').textContent = "Login failed. Please check your credentials!";
       }
     } catch (error) {
       console.error("Error during login:", error);
     //   toastr.error("Error during login:", error);
-      const errResponse = error?.response?.data?.error || "Login failed. Please try agin!.";
-      const errorMessage = errResponse.split(':')[0];
+    const errResponse = error?.response?.data?.error || error.message || "Login failed. Please try again!";
+    const errorMessage = errResponse.split(':')[0];
+    signupErrorElement.style.display = "flex";
+    signupErrorElement.querySelector('.error-text').textContent = errorMessage;
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Login Failed',
-          text: errorMessage,
-          showConfirmButton: true,
-        });
+
+        // Swal.fire({
+        //   icon: 'error',
+        //   title: 'Login Failed',
+        //   text: errorMessage,
+        //   showConfirmButton: true,
+        // });
+
     }
   }
 
@@ -9778,20 +9778,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function showSignupPopup() {
     const signupPopupOverlay = document.createElement("div");
     signupPopupOverlay.className = "signup-popup-overlay";
-    // signupPopupOverlay.innerHTML = `
-    //         <div class="signup-popup-content"> <!-- Class for signup popup content -->
-    //             <span class="close-button" id="closeSignupPopup">&times;</span>
-    //             <h2 class="signup-title">Sign Up</h2>
-    //             <form id="signupForm">
-    //                 <input type="text" id="firstName" placeholder="First Name" required class="input-field" />
-    //                 <input type="text" id="lastName" placeholder="Last Name" required class="input-field" />
-    //                 <input type="email" id="email" placeholder="Email" required class="input-field" />
-    //                 <input type="text" id="username" placeholder="Username" required class="input-field" />
-    //                 <input type="password" id="signupPassword" placeholder="Password" required class="input-field" />
-    //                 <button type="submit" id="signupSubmit" class="signup-button">Sign Up</button>
-    //             </form>
-    //         </div>
-    //         `;
 
     signupPopupOverlay.innerHTML = `
     <div class="login-popup-content">
@@ -9811,6 +9797,12 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="row align-items-center justify-content-center">
               <span class="close-button" id="closeSignupPopup">&times;</span>
               <div class="login-content-inner-container">
+
+                <div id="signupError" class="error-message" style="display: none;">
+                <span class="error-icon">&#x26A0;</span>
+                <span class="error-text"></span>
+                </div>
+
                 <h3>Sign Up</h3>
                 <button class="google-login-button" id="googleSignupBtn">
                   <img src="../../assets/custom/googlepng.png" alt="Google icon" />  Sign Up with Google
@@ -9883,7 +9875,7 @@ document.addEventListener("DOMContentLoaded", function () {
           signupEyeIcon.classList.add('fa-eye');
         }
       });
-    
+
 
     // Close popup on outside click
     window.addEventListener("click", function (event) {
@@ -9923,6 +9915,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("signupPassword").value;
+    // const signupErrorElement = document.getElementById("signupError");
+    // signupErrorElement.style.display = "none";
+    const signupErrorElement = document.getElementById("signupError");
+
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
@@ -9973,14 +9969,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
 
-      if (response.ok) {
+      if (response) {
         console.log("Signup successful!");
         // toastr.success(`Signup Successful, Please Login Now!`);
-        Swal.fire({
-            title: "Success",
-            text: "Signup successful!",
-            icon: "success"
-          });
+        // Swal.fire({
+        //     title: "Success",
+        //     text: "Signup successful!",
+        //     icon: "success"
+        //   });
         localStorage.setItem("email", email);
         localStorage.setItem("username", username);
         localStorage.setItem("fname",firstname)
@@ -9995,23 +9991,32 @@ document.addEventListener("DOMContentLoaded", function () {
         const errorMessage = errorData?.error || "Signup failed. Please try again.";
         // const errorMessage = errResponse.split(':')[0];
 
-          Swal.fire({
-            icon: 'error',
-            title: 'Signup Failed',
-            text: errorMessage,
-            showConfirmButton: true,
-          });
+       // Display the error message inside the h4 element
+    //    signupErrorElement.style.display = "block";
+    //    signupErrorElement.textContent = errorMessage;
+    signupErrorElement.style.display = "flex";
+signupErrorElement.querySelector('.error-text').textContent = errorMessage;
+        //   Swal.fire({
+        //     icon: 'error',
+        //     title: 'Signup Failed',
+        //     text: errorMessage,
+        //     showConfirmButton: true,
+        //   });
       }
     } catch (error) {
       console.error("Error during signup:", error);
     //   toastr.error("Error during signup. Please try again.");
     const errorMessage = error?.response?.data?.error || "Signup failed. Please try again.";
-      Swal.fire({
-        icon: 'error',
-        title: 'Signup Failed',
-        text: errorMessage,
-        showConfirmButton: true,
-      });
+    //   Swal.fire({
+    //     icon: 'error',
+    //     title: 'Signup Failed',
+    //     text: errorMessage,
+    //     showConfirmButton: true,
+    //   });
+    // signupErrorElement.style.display = "block";
+    // signupErrorElement.textContent = errorMessage;
+    signupErrorElement.style.display = "flex";
+signupErrorElement.querySelector('.error-text').textContent = errorMessage;
     }
   }
 
@@ -10039,20 +10044,20 @@ document.addEventListener("DOMContentLoaded", function () {
           response.json().then((data) => {
             console.error("Logout failed:", data.message || "Unknown error");
             // alert("Logout failed. Please try again.");
-            toastr.error("Logout failed. Please try again.");
-            Swal.fire({
-                icon: 'error',
-                title: 'Failed',
-                text: 'Logout failed. Please try again.',
-              });
+            // toastr.error("Logout failed. Please try again.");
+            // Swal.fire({
+            //     icon: 'error',
+            //     title: 'Failed',
+            //     text: 'Logout failed. Please try again.',
+            //   });
           });
         }
       })
       .catch((error) => {
         console.error("Logout request failed:", error);
-        alert(
-          "Logout request failed. Please check your connection and try again."
-        );
+        // alert(
+        //   "Logout request failed. Please check your connection and try again."
+        // );
       });
   }
 });
