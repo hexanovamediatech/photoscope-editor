@@ -3893,7 +3893,10 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   cursor: pointer;
 }
 
-.login-button:hover {
+.google-login-button,.login-button:hover {
+  background-color: #0056b3;
+}
+.google-login-button:hover {
   background-color: #0056b3;
 }
 
@@ -3902,8 +3905,8 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  background-color: #fb9258;
-  border: 1px solid #fb9258;
+  background-color: #007bff;
+  border: 1px solid #007bff;
   padding: 10px;
   width: fit-content;
   font-size: 18px;
@@ -4105,3 +4108,18 @@ h3.login-img-head-container {
   margin: 0;
   padding: 0;
 }
+
+/* .password-input-wrapper {
+    position: relative;
+  } */
+.login-input-form-container{
+    position: relative;
+}
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    margin-top: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
