@@ -102,9 +102,18 @@ async function fetchModelData() {
 //   window.addEventListener("resize", onWindowResizePersonalise);
 // }
 function initPersonalise() {
-  const loader = document.getElementById("mini-editor-loader-cont");
 
   const mainContainer = document.getElementById("personalise-3d-container");
+  const loader = document.createElement("div");
+  loader.id = "model-loader";
+  loader.style.position = "absolute";
+  loader.style.top = "50%";
+  loader.style.left = "50%";
+  loader.style.transform = "translate(-50%, -50%)";
+  loader.style.fontSize = "1.5rem";
+  loader.style.color = "#555";
+  loader.innerText = "Loading 3D Model..."; // You can replace this with a spinner icon
+  mainContainer.appendChild(loader);
   mainContainer.style.backgroundColor = "#f0f0f0";
 
   camera = new THREE.PerspectiveCamera(
@@ -142,9 +151,8 @@ function initPersonalise() {
 
     // Add the centered model to the scene
     scene.add(loadedModel);
+    loader.style.display = "none";
 
-    loader.classList.remove("display-block-prop");
-    loader.classList.add("display-none-prop");
   });
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -152,6 +160,7 @@ function initPersonalise() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.5;
+  
   mainContainer.appendChild(renderer.domElement);
 
   const environment = new RoomEnvironment(renderer);
@@ -940,12 +949,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     newFabricCanvas.renderAll();
   }
 
-  // Hide Done Button
-  // const miniEditorDone = document.getElementById("miniE-done-Btn");
-  // miniEditorDone.classList.add("display-none-prop");
-  // miniEditorDone.classList.remove("display-block-prop");
 
-  //Display Adjust Button
 
   const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
   miniEditorAdjust.classList.remove("display-none-prop");
@@ -965,9 +969,36 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 initialize3DViewer();
 
 (async () => {
-  // const loader = document.getElementById("mini-editor-loader");
-  // const templateListCont = document.getElementById("template-list-cont");
-  // Show loader
+  var container = document.getElementById("template-cont-box");
+  function showSkeletonLoader() {
+    const skeletonContainer = document.createElement("div");
+    skeletonContainer.classList.add("skeleton-container");
+
+    for (let i = 0; i < 10; i++) {
+      const skeletonBox = document.createElement("div");
+      skeletonBox.classList.add("skeleton-box");
+
+      const skeletonText = document.createElement("div");
+      skeletonText.classList.add("skeleton-text");
+
+      skeletonBox.appendChild(skeletonText);
+      skeletonContainer.appendChild(skeletonBox);
+    }
+
+    container.appendChild(skeletonContainer);
+  }
+
+  function hideSkeletonLoader() {
+    const skeletonContainer = container.querySelector(".skeleton-container");
+    if (skeletonContainer) {
+      container.removeChild(skeletonContainer); // Remove the skeleton loader
+    }
+  }
+
+  // Show the skeleton loader before fetching data
+  showSkeletonLoader();
+
+
   try {
     const response = await fetch(
       "https://backend.toddlerneeds.com/api/v1/user/get/all/templates"
@@ -979,11 +1010,11 @@ initialize3DViewer();
     const dataArray = data.data; // Access the array from the data object
     console.log(dataArray);
     if (Array.isArray(dataArray)) {
+      hideSkeletonLoader()
       // Filter the objects with type "p2-type1"
       const urlParams = new URLSearchParams(window.location.search);
       const name = urlParams.get("name");
-      //   const filteredData = dataArray.filter((obj) => obj.type === name);
-      // const filteredData = dataArray.filter((obj) => obj.type === name && obj.isPublic);
+
       const filteredData = dataArray.filter(
         (obj) => obj.type === name && obj.isPublic === true
       );
@@ -1012,23 +1043,8 @@ initialize3DViewer();
         personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
       }
 
-      // Fetch the user's templates and add them to the filtered data
-      // const userTemplatesResponse = await fetch(
-      //     "https://backend.toddlerneeds.com/api/v1/user/mytemplates",
-      //     {
-      //       method: "GET",
-      //       credentials: "include",
-      //     }
-      //   );
-      //   const userTemplatesData = await userTemplatesResponse.json();
-      //   const userTemplates = userTemplatesData.data;
 
-      // Combine the public templates and user templates
-      // const combinedData = [...filteredData, ...userTemplates.filter((obj) => obj.type === name)];
 
-      // Get the container element where you want to display the names
-      // const container = document.getElementById("library-container");
-      const container = document.getElementById("template-cont-box");
 
       // Fetch favorites to compare with
       const favoriteResponse = await fetch(
@@ -1042,46 +1058,30 @@ initialize3DViewer();
       const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
       filteredData.forEach((item) => {
-        // const mainDiv = document.createElement("div");
-        // mainDiv.classList.add("personalise-library-main-box"); // Add a class for styling the main container
+
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("template-main-cont");
-        // Create the div for the image
-        // const newDiv = document.createElement("div");
-        // newDiv.classList.add("personalise-library-box");
+
         const imageDiv = document.createElement("div");
         imageDiv.classList.add("template-image-cont");
 
-        // Create and set image tag inside the newDiv
-        // const newImg = document.createElement("img");
-        // newImg.src = item.imageUrl;
-        // newImg.alt = item.name;
-        // newImg.classList.add("personalise-image-template-list"); // Add a class for styling the image if needed
+
         const newImg = document.createElement("img");
         newImg.src = item.imageUrl;
         newImg.alt = item.name;
         newImg.classList.add("template-image-box");
+        newImg.loading = "lazy";
+        
 
         imageDiv.appendChild(newImg);
-        // Append the image to the newDiv
-        // newDiv.appendChild(newImg);
 
-        // Create a new div to hold the p tag
-        // const textDiv = document.createElement("div");
-        // textDiv.classList.add("personalise-text-container"); // Add a class for styling the text container
         const nameP = document.createElement("p");
         nameP.textContent = item.name;
         nameP.classList.add("template-name-tag");
-        // Create and set paragraph tag for the name inside the textDiv
-        // const newP = document.createElement("p");
-        // newP.textContent = item.name;
+
         mainDiv.appendChild(imageDiv);
         mainDiv.appendChild(nameP);
-        // if (item.isDummy) {
-        //   const gradient = document.createElement("div");
-        //   gradient.classList.add("template-gradient-box");
-        //   mainDiv.appendChild(gradient);
-        // }
+
         container.appendChild(mainDiv);
         // Favorite icon using PNGs
         if (!item.isDummy) {
@@ -1109,13 +1109,7 @@ initialize3DViewer();
           });
           // newDiv.appendChild(favIcon);
           mainDiv.appendChild(favIcon);
-          // // Attach the onclick event to the favIcon
-          // favIcon.addEventListener('click', () => {
-          //     const templateKey = item.key;
-          //     handleFavTempllate(templateKey);
-          // });
 
-          // Attach the onclick event to the favIcon
           favIcon.addEventListener("click", async (e) => {
             e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
 
@@ -1133,13 +1127,7 @@ initialize3DViewer();
                 : "../../assets/custom/heart-filled.png";
               favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
 
-              // Show toastr success message
-              // toastr.success(
-              //   isCurrentlyFavorite
-              //     ? "Removed from favorites!"
-              //     : "Added to favorites!",
-              //   "Success"
-              // );
+
               const message = isCurrentlyFavorite
                 ? "Removed from favorites!"
                 : "Added to favorites!";
@@ -1150,11 +1138,7 @@ initialize3DViewer();
                 icon: "success",
               });
             } else {
-              // Show toastr error message if something went wrong
-              // toastr.error(
-              //   "Please login to add template into Favorites",
-              //   "Error"
-              // );
+
               Swal.fire({
                 icon: "warning",
                 title: "Warning",
@@ -1163,17 +1147,7 @@ initialize3DViewer();
             }
           });
         }
-        // Append the paragraph to the textDiv
-        // textDiv.appendChild(newP);
 
-        // // Append both the image div and text div to the main div
-        // mainDiv.appendChild(newDiv);
-        // mainDiv.appendChild(textDiv);
-
-        // // Append the main div to the container
-        // container.appendChild(mainDiv);
-
-        // Add click event listener
         mainDiv.addEventListener("click", async () => {
           // Remove active class from previously selected item
           const previouslyActive = document.querySelector(
@@ -1185,11 +1159,9 @@ initialize3DViewer();
           }
           templateId = item.key;
           console.log("templateId", templateId);
-          // Add active class to the clicked item
           newImg.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
           console.log(activeItem);
-          // Fetch the JSON data from the URL in activeItem
           try {
             const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
             if (!jsonResponse.ok) {
@@ -1208,7 +1180,6 @@ initialize3DViewer();
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
             // document.getElementById("personaliseOpenPopupBtn").disabled = false;
-            // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
             // setupEventListener();
           } catch (fetchError) {
@@ -1217,16 +1188,13 @@ initialize3DViewer();
         });
       });
 
-      // console.log("Filtered data:", filteredData);
-      // loader.classList.remove("template-list-loader-cont");
-      // loader.classList.add("display-none-prop");
-      // templateListCont.classList.remove("display-none-prop");
-      // templateListCont.classList.add("display-block-prop");
+
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
     }
   } catch (error) {
     console.error("Error fetching data:", error);
+    hideSkeletonLoader();
   }
 })();
 
