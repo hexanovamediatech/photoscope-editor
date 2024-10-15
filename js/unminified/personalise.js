@@ -296,8 +296,17 @@ document
       }
 
       // Show the popup
-      document.getElementById("personaliseImageUploadPopup").style.display =
-        "block";
+      document.getElementById("personaliseImageUploadPopup").style.visibility =
+        "visible";
+    } else {
+      Swal.fire({
+        title: "Select any template",
+        icon: "warning",
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+      });
     }
   });
 
@@ -315,13 +324,13 @@ function initializeCanvas() {
 document.getElementById("text-1").addEventListener("input", function () {
   updateCanvasText(1, this.value);
   const openModalBtn = document.getElementById("hexa-mini-editor-save");
-  openModalBtn.style.display = "block";
+  openModalBtn.style.visibility = "visible";
 });
 
 document.getElementById("text-2").addEventListener("input", function () {
   updateCanvasText(2, this.value);
   const openModalBtn = document.getElementById("hexa-mini-editor-save");
-  openModalBtn.style.display = "block";
+  openModalBtn.style.visibility = "visible";
 });
 
 function updateCanvasText(textIndex, newText) {
@@ -359,28 +368,28 @@ function updateCanvasText(textIndex, newText) {
   // Render the canvas without the first object
   newFabricCanvas.renderAll();
   const originalWidth = newFabricCanvas.width;
-      const originalHeight = newFabricCanvas.height;
-      
-      // Set the canvas dimensions to 1080x1080 for the export
-      newFabricCanvas.setDimensions({
-        width: 1080,
-        height: 1080
-      });
-      newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+  const originalHeight = newFabricCanvas.height;
 
-      // Convert the remaining objects on the canvas to an image
-      const format = "jpeg";
-      const quality = 1;
-      const imgData = newFabricCanvas.toDataURL({
-        format: format,
-        quality: quality,
-        enableRetinaScaling: false,
-      });
-      newFabricCanvas.setDimensions({
-        width: originalWidth,
-        height: originalHeight
-      });
-      newFabricCanvas.setZoom(1);
+  // Set the canvas dimensions to 1080x1080 for the export
+  newFabricCanvas.setDimensions({
+    width: 1080,
+    height: 1080,
+  });
+  newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+
+  // Convert the remaining objects on the canvas to an image
+  const format = "jpeg";
+  const quality = 1;
+  const imgData = newFabricCanvas.toDataURL({
+    format: format,
+    quality: quality,
+    enableRetinaScaling: false,
+  });
+  newFabricCanvas.setDimensions({
+    width: originalWidth,
+    height: originalHeight,
+  });
+  newFabricCanvas.setZoom(1);
   // Pass the image data to the changeTexture function
   fabricImageConverted = imgData;
   changeTexture(fabricImageConverted);
@@ -613,11 +622,11 @@ function loadJSONToCanvas(jsonData) {
       newFabricCanvas.renderAll();
       const originalWidth = newFabricCanvas.width;
       const originalHeight = newFabricCanvas.height;
-      
+
       // Set the canvas dimensions to 1080x1080 for the export
       newFabricCanvas.setDimensions({
         width: 1080,
-        height: 1080
+        height: 1080,
       });
       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
@@ -631,12 +640,12 @@ function loadJSONToCanvas(jsonData) {
       });
       newFabricCanvas.setDimensions({
         width: originalWidth,
-        height: originalHeight
+        height: originalHeight,
       });
       newFabricCanvas.setZoom(1);
       // Pass the image data to the changeTexture function
       fabricImageConverted = imgData;
-      console.log('this is thefabricImageConverted', fabricImageConverted);
+      console.log("this is thefabricImageConverted", fabricImageConverted);
       if (selectedMesh) {
         changeTexture(fabricImageConverted);
       }
@@ -703,7 +712,7 @@ function handleImageUploadAlternate(event) {
   miniEditorAdjust.classList.remove("display-none-prop");
   miniEditorAdjust.classList.add("display-block-prop");
   const openModalBtn = document.getElementById("hexa-mini-editor-save");
-  openModalBtn.style.display = "block";
+  openModalBtn.style.visibility = "visible";
   const file = event.target.files[0];
   const reader = new FileReader();
 
@@ -728,26 +737,21 @@ document
   .addEventListener("change", handleImageUploadAlternate);
 // Replace image event listener
 
-document
-  .getElementById("personaliseClosePopupBtn")
-  .addEventListener("click", () => {
-    // Hide the popup
-    document.getElementById("personaliseImageUploadPopup").style.display =
-      "none";
+// document
+//   .getElementById("personaliseClosePopupBtn")
+//   .addEventListener("click", () => {
+//     // Hide the popup
+//     document.getElementById("personaliseImageUploadPopup").style.display =
+//       "none";
 
-    // Clear the file input field
-    const textInput1 = document.getElementById("text-1");
-    const textInput2 = document.getElementById("text-2");
-    // if (textInput1) {
-    //   textInput1.value = ""; // Clear the first text input
-    // }
-    // if (textInput2) {
-    //   textInput2.value = ""; // Clear the second text input
-    // }
-  });
+//     // Clear the file input field
+//     const textInput1 = document.getElementById("text-1");
+//     const textInput2 = document.getElementById("text-2");
+//   });
 document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
   // Hide the popup
-  document.getElementById("personaliseImageUploadPopup").style.display = "none";
+  document.getElementById("personaliseImageUploadPopup").style.visibility =
+    "hidden";
   const miniEditorCont = document.getElementById("mini-editor-Cont");
   miniEditorImgContainerId.style.display = "flex";
   const miniEditorImgContainerId = document.getElementById(
@@ -786,11 +790,11 @@ document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
     newFabricCanvas.renderAll();
     const originalWidth = newFabricCanvas.width;
     const originalHeight = newFabricCanvas.height;
-    
+
     // Set the canvas dimensions to 1080x1080 for the export
     newFabricCanvas.setDimensions({
       width: 1080,
-      height: 1080
+      height: 1080,
     });
     newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
@@ -804,7 +808,7 @@ document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
     });
     newFabricCanvas.setDimensions({
       width: originalWidth,
-      height: originalHeight
+      height: originalHeight,
     });
     newFabricCanvas.setZoom(1);
     fabricImageConverted = imgData;
@@ -905,11 +909,11 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     newFabricCanvas.renderAll();
     const originalWidth = newFabricCanvas.width;
     const originalHeight = newFabricCanvas.height;
-    
+
     // Set the canvas dimensions to 1080x1080 for the export
     newFabricCanvas.setDimensions({
       width: 1080,
-      height: 1080
+      height: 1080,
     });
     newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
@@ -923,7 +927,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     });
     newFabricCanvas.setDimensions({
       width: originalWidth,
-      height: originalHeight
+      height: originalHeight,
     });
     newFabricCanvas.setZoom(1);
     fabricImageConverted = imgData;
@@ -1203,7 +1207,7 @@ initialize3DViewer();
             );
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
-            document.getElementById("personaliseOpenPopupBtn").disabled = false;
+            // document.getElementById("personaliseOpenPopupBtn").disabled = false;
             // Pass the JSON object to loadJSONToCanvas
             loadJSONToCanvas(jsonData);
             // setupEventListener();

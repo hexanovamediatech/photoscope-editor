@@ -730,8 +730,15 @@ button.hexa-icon-menu-btn .material-icons {
   padding: 0;
   list-style: none;
   display: block;
+  max-height: 300px;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
+#hexa-layers::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
 #hexa-layers li {
   position: relative;
   align-items: center;
@@ -3553,8 +3560,11 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
   font-weight: 700;
   border: none;
   width: 70%;
+  transition: all 0.3s;
 }
-
+.hexa-btn-edit-mask:hover {
+  background: #0188d4;
+}
 /* Modal Container */
 .templates-public-private-modal {
   position: fixed;
