@@ -36,7 +36,7 @@
   width: 100%;
 }
 .personalise-template-list-cont {
-  width: 27.5%;
+  width: 40%;
   /* height: 100%; */
   /* border: 1px solid red; */
   overflow: auto;
@@ -271,19 +271,22 @@
 }
 
 .personalise-button-main-cont {
-  position: fixed;
-  top: 110px;
-  right: 100px;
-  background: #fff;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-  height: calc(100vh - 125px);
-  width: 350px;
+  /* position: fixed; */
+  /* top: 110px;
+  right: 100px; */
+  width: 40%;
+  background: #f1f1f1;
+  /* box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); */
+  /* height: calc(100vh - 125px); */
+  /* width: 350px; */
   border-radius: 8px;
-  display: none;
+  /* display: block; */
+  visibility: hidden;
 }
 
 .personalise-btn-mini {
-  width: 275px;
+  /* width: 275px; */
+  width: 100%;
   border-radius: 8px;
   height: 45px;
   font-size: 18px;
@@ -296,7 +299,8 @@
   /* margin-right: 30px; */
 }
 #hexa-mini-editor-save {
-  display: none;
+  /* display: none; */
+  visibility: hidden;
 }
 .personalise-btn-mini:hover {
   background: #0188d4;
@@ -308,7 +312,8 @@
   background-color: #0188d4 !important;
 }
 .edit-design-btn-mini {
-  width: 275px;
+  /* width: 275px; */
+  width: 100%;
   border-radius: 8px;
   height: 45px;
   font-size: 18px;
@@ -399,16 +404,26 @@
   padding: 12px 50px;
   font-size: 14px;
   cursor: pointer;
-  background-color: #fb9258;
+  background-color: #00aaff;
   border: none;
   color: white;
   border-radius: 16px;
 }
 
 #openEditor:hover {
-  background-color: #f7803e;
+  background-color: #007acc;
 }
 
+.personalise-input-buttom-cont {
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  /* max-height: 400px; */
+}
+.personalise-input-buttom-cont::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
 .ediotr-btn-cont {
   display: flex;
   align-items: center;
@@ -480,7 +495,7 @@
 .mini-ediotr-input-cont {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 0 15px;
 }
 .mini-editor-input {
@@ -491,7 +506,7 @@
   font-size: 14px;
   color: #959494;
   outline: none;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   border-radius: 15px;
 }
 
@@ -635,8 +650,9 @@ p.personalise-product-desc-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 350px;
+  height: 250px;
   margin-bottom: 20px;
+  position: relative;
 }
 label.min-editor-label {
   color: #303030;
@@ -665,12 +681,14 @@ div#miniE-text-done-Btn {
 
 #miniE-adjust-Btn {
   position: absolute;
-  top: 275px;
-  right: 4px;
+  bottom: 10px;
+  right: 10px;
 }
 
 button#personaliseAdjustBtn {
   background: transparent;
+  outline: none;
+  border: none;
 }
 
 button#personaliseAdjustBtn img {
@@ -741,10 +759,10 @@ button#personaliseAdjustBtn img {
   width: 2px;
   background: #15151a;
 }
-.personalise-btn-mini:disabled {
+/* .personalise-btn-mini:disabled {
   pointer-events: none;
   opacity: 0.7;
   cursor: not-allowed;
   background-color: #d3d3d3;
   color: #000;
-}
+} */
