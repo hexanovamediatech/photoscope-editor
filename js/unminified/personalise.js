@@ -101,18 +101,39 @@ async function fetchModelData() {
 
 //   window.addEventListener("resize", onWindowResizePersonalise);
 // }
+function showLoader() {
+  const mainContainer = document.getElementById("personalise-3d-container");
+  // Create the loader
+  const loader = document.createElement("div");
+  loader.classList.add("loader3");
+
+  // Add the bars dynamically for the loader
+  for (let i = 1; i <= 10; i++) {
+    const bar = document.createElement("div");
+    bar.classList.add("bars", `bar${i}`);
+    loader.appendChild(bar);
+  }
+
+  // Append loader to the main container
+  mainContainer.appendChild(loader);
+  // mainContainer.style.backgroundColor = "#f0f0f0";
+
+  // Return the loader element so it can be hidden later
+  return loader;
+}
+
+// Call this function to hide the loader after the model is loaded
+function hideLoader(loader) {
+  loader.style.display = "none";
+}
+
+const loader = showLoader()
+
+
+
 function initPersonalise() {
   const mainContainer = document.getElementById("personalise-3d-container");
-  const loader = document.createElement("div");
-  loader.id = "model-loader";
-  loader.style.position = "absolute";
-  loader.style.top = "50%";
-  loader.style.left = "50%";
-  loader.style.transform = "translate(-50%, -50%)";
-  loader.style.fontSize = "1.5rem";
-  loader.style.color = "#555";
-  loader.innerText = "Loading 3D Model..."; // You can replace this with a spinner icon
-  mainContainer.appendChild(loader);
+
   mainContainer.style.backgroundColor = "#f0f0f0";
 
   camera = new THREE.PerspectiveCamera(
@@ -150,7 +171,9 @@ function initPersonalise() {
 
     // Add the centered model to the scene
     scene.add(loadedModel);
-    loader.style.display = "none";
+    // loader.style.display = "none";
+    hideLoader(loader)
+
   });
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -1113,18 +1136,30 @@ initialize3DViewer();
           favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
           favIcon.style.cursor = "pointer";
 
-          favIcon.addEventListener("mouseenter", () => {
-            favIcon.src = isFavorite
-              ? "../../assets/custom/heart2.png" // On hover, switch to unfilled if it’s already favorite
-              : "../../assets/custom/heart-filled.png"; // On hover, switch to filled if not favorite
-          });
+          if (!isFavorite) {
+            favIcon.style.filter = "brightness(0) invert(1)"; // Make heart2.png white
+          }
 
+          favIcon.addEventListener("mouseenter", () => {
+            if (isFavorite) {
+              favIcon.src = "../../assets/custom/heart2.png"; // Switch to unfilled on hover
+              favIcon.style.filter = "brightness(0) invert(1)"; // Make it white on hover
+            } else {
+              favIcon.src = "../../assets/custom/heart-filled.png"; // Switch to filled on hover
+              favIcon.style.filter = ""; // Remove the filter for heart-filled
+            }
+          });
           favIcon.addEventListener("mouseleave", () => {
-            favIcon.src = isFavorite
-              ? "../../assets/custom/heart-filled.png" // Return to filled if it’s already favorite
-              : "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
+            if (isFavorite) {
+              favIcon.src = "../../assets/custom/heart-filled.png"; // Return to filled if it's favorite
+              favIcon.style.filter = ""; // No filter for filled heart
+            } else {
+              favIcon.src = "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
+              favIcon.style.filter = "brightness(0) invert(1)"; // Keep it white
+            }
           });
           // newDiv.appendChild(favIcon);
+        
           mainDiv.appendChild(favIcon);
 
           favIcon.addEventListener("click", async (e) => {

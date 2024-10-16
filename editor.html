@@ -71,11 +71,11 @@
 
   <body id="hexa" class="backend">
     <div id="editor-main-cont" class="main-ediotr-page-active">
-      <div id="hexa-main-loader" class="hexa-loader-wrap">
+      <!-- <div id="hexa-main-loader" class="hexa-loader-wrap">
         <div class="hexa-loader-inner">
           <div class="hexa-loader"></div>
         </div>
-      </div>
+      </div> -->
       <div id="hexa-top-bar">
         <div class="hexa-logo-mini-cont">
           <a href="http://54.152.205.55:4000/">
@@ -7781,7 +7781,7 @@ Enter Your Text Here</textarea
               <div id="hexa-canvas-wrap">
                 <div id="hexa-canvas-overlay"></div>
                 <div id="hexa-canvas-loader">
-                  <div class="hexa-loader"></div>
+                  <!-- <div class="hexa-loader"></div> -->
                 </div>
                 <canvas id="hexa-canvas"></canvas>
 
@@ -8649,7 +8649,8 @@ Enter Your Text Here</textarea
                       alt=""
                     />
                     <div class="display-none-prop" id="miniE-adjust-Btn">
-                      <button id="personaliseAdjustBtn">
+                      <button id="personaliseAdjustBtn" class="hexa-btn tooltip tooltip-top"
+                      data-title="Adjust">
                         <img
                           src="assets/custom/adjust-icon.png"
                           class="adjust-icon"
@@ -8683,9 +8684,9 @@ Enter Your Text Here</textarea
                   <div
                     class="display-block-prop"
                     id="miniE-adjust-Btn"
-                    title="adjust"
                   >
-                    <button id="personaliseAdjustBtn">
+                    <button id="personaliseAdjustBtn" class="hexa-btn tooltip tooltip-top"
+                    data-title="Adjust">
                       <img
                         src="assets/custom/adjust-icon.png"
                         class="adjust-icon"
