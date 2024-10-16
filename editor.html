@@ -8681,12 +8681,12 @@ Enter Your Text Here</textarea
                     src="/assets/custom/no-photo.png"
                     alt=""
                   />
-                  <div
-                    class="display-block-prop"
-                    id="miniE-adjust-Btn"
-                  >
-                    <button id="personaliseAdjustBtn" class="hexa-btn tooltip tooltip-top"
-                    data-title="Adjust">
+                  <div class="display-block-prop" id="miniE-adjust-Btn">
+                    <button
+                      id="personaliseAdjustBtn"
+                      class="hexa-btn tooltip tooltip-top"
+                      data-title="Adjust"
+                    >
                       <img
                         src="assets/custom/adjust-icon.png"
                         class="adjust-icon"
@@ -8694,7 +8694,7 @@ Enter Your Text Here</textarea
                     </button>
                   </div>
                 </div>
-                <div class="display-none-prop" id="mini-editor-Cont">
+                <!-- <div class="display-none-prop" id="mini-editor-Cont">
                   <div class="image-preview-area">
                     <div id="personaliseCanvasWrap">
                       <canvas
@@ -8704,7 +8704,7 @@ Enter Your Text Here</textarea
                       ></canvas>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="personalise-input-buttom-cont">
                 <div class="mini-ediotr-input-cont">
@@ -8752,17 +8752,25 @@ Enter Your Text Here</textarea
                     <img src="./assets/custom/penIcon.png" alt="icon" />
                     <div>Edit in Editor</div>
                   </div>
+
+                  <!-- <div
+                    class="ediotr-btn-cont personalise-edit-btn"
+                    id="openMiniCanvasPopup"
+                  >
+                    <img src="./assets/custom/penIcon.png" alt="icon" />
+                    <div>Open Popup</div>
+                  </div> -->
                   <!-- <div class="" id="miniE-text-done-Btn">
                     <img src="./assets/custom/doneIcon.png" alt="icon" />
                     <button id="personaliseDoneBtn">Done</button>
                   </div> -->
-                  <div
+                  <!-- <div
                     class="ediotr-btn-cont personalise-edit-btn"
                     id="personaliseDoneBtn"
                   >
                     <img src="./assets/custom/doneIcon.png" alt="icon" />
                     <div>Done</div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -8900,6 +8908,23 @@ Enter Your Text Here</textarea
             >
               Private
             </button>
+          </div>
+        </div>
+        <div id="popup-mini-canvas">
+          <div class="popup-mini-canvas-content">
+            <div id="personaliseCanvasWrap">
+              <canvas id="personaliseCanvas" width="325" height="325"></canvas>
+            </div>
+            <span class="close-button-mini-canvas" id="closePopup-mini-canvas">
+              &times;
+            </span>
+            <div
+              class="ediotr-btn-cont mini-canvas-done-btn personalise-edit-btn"
+              id="personaliseDoneBtn"
+            >
+              <img src="./assets/custom/doneIcon.png" alt="icon" />
+              <div>Done</div>
+            </div>
           </div>
         </div>
       </div>

@@ -127,9 +127,7 @@ function hideLoader(loader) {
   loader.style.display = "none";
 }
 
-const loader = showLoader()
-
-
+const loader = showLoader();
 
 function initPersonalise() {
   const mainContainer = document.getElementById("personalise-3d-container");
@@ -172,8 +170,7 @@ function initPersonalise() {
     // Add the centered model to the scene
     scene.add(loadedModel);
     // loader.style.display = "none";
-    hideLoader(loader)
-
+    hideLoader(loader);
   });
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -353,8 +350,8 @@ function initializeCanvas() {
   }
 
   newFabricCanvas = new fabric.Canvas(canvasElement);
-  newFabricCanvas.setWidth(350);
-  newFabricCanvas.setHeight(350);
+  newFabricCanvas.setWidth(440);
+  newFabricCanvas.setHeight(440);
 }
 
 document.getElementById("text-1").addEventListener("input", function () {
@@ -544,18 +541,21 @@ function loadJSONToCanvas(jsonData) {
       "min-editor-popup-image"
     );
 
-    const dummyImage = document.getElementById("min-editor-dummy-image");
+    // const dummyImage = document.getElementById("min-editor-dummy-image");
 
     // Check if the image element exists and if the clipmaskImage has a valid src
     if (miniEditorPopupImage && clipmaskImage.src) {
       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
       miniEditorPopupImage.src = clipmaskImage.src;
-      dummyImage.style.width = "100%";
-      dummyImage.style.height = "100%";
-      dummyImage.style.objectFit = "cover";
-      dummyImage.src = clipmaskImage.src;
-      dummyImage.style.borderRadius = "10px";
+      // dummyImage.style.width = "100%";
+      // dummyImage.style.height = "100%";
+      // dummyImage.style.objectFit = "cover";
+      // dummyImage.src = clipmaskImage.src;
+      // dummyImage.style.borderRadius = "10px";
     }
+    //  else {
+    //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
+    // }
   }
 
   // Show input fields based on the number of textboxes
@@ -599,8 +599,8 @@ function loadJSONToCanvas(jsonData) {
         fabric.Image.fromURL(bgImageData, function (bgImage) {
           // Set the background image properties
           bgImage.set({
-            scaleX: 0.17, // Apply the scale factor
-            scaleY: 0.17, // Apply the scale factor
+            scaleX: 0.22, // Apply the scale factor
+            scaleY: 0.22, // Apply the scale factor
             left: jsonData.backgroundImage.left,
             top: jsonData.backgroundImage.top,
             originX: "left",
@@ -618,24 +618,24 @@ function loadJSONToCanvas(jsonData) {
       newFabricCanvas.getObjects().forEach((obj, index) => {
         if (index === 0) {
           // Scale down the first object
-          obj.scaleX *= 0.17;
-          obj.scaleY *= 0.17;
+          obj.scaleX *= 0.22;
+          obj.scaleY *= 0.22;
         } else {
           // Apply a different scaling factor for other objects
-          obj.scaleX *= 0.17; // Adjust the scaling factor as needed
-          obj.scaleY *= 0.17; // Adjust the scaling factor as needed
+          obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+          obj.scaleY *= 0.22; // Adjust the scaling factor as needed
 
           // Adjust top and left properties to make the object visible
-          obj.left *= 0.17; // Adjust the position as needed
-          obj.top *= 0.17; // Adjust the position as needed
+          obj.left *= 0.22; // Adjust the position as needed
+          obj.top *= 0.22; // Adjust the position as needed
         }
 
         if (obj.clipPath) {
           obj.clipPath.set({
-            scaleX: obj.clipPath.scaleX * 0.17, // Adjust the scaling factor as needed
-            scaleY: obj.clipPath.scaleY * 0.17, // Adjust the scaling factor as needed
-            left: obj.clipPath.left * 0.17, // Adjust the position as needed
-            top: obj.clipPath.top * 0.17, // Adjust the position as needed
+            scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
+            scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
+            left: obj.clipPath.left * 0.22, // Adjust the position as needed
+            top: obj.clipPath.top * 0.22, // Adjust the position as needed
           });
         }
 
@@ -881,19 +881,20 @@ document
     // const miniEditorImgContainerId = document.getElementById(
     //   "mini-editor-img-container-id"
     // );
-    const miniEditorCont = document.getElementById("mini-editor-Cont");
-    miniEditorCont.classList.remove("display-none-prop");
-    miniEditorCont.classList.add("display-block-prop");
+    // const miniEditorCont = document.getElementById("mini-editor-Cont");
+    // miniEditorCont.classList.remove("display-none-prop");
+    // miniEditorCont.classList.add("display-block-prop");
     // miniEditorImgContainerId.style.display = "none";
     // Display Done Button
     // const miniEditorDone = document.getElementById("miniE-done-Btn");
     // miniEditorDone.classList.remove("display-none-prop");
     // miniEditorDone.classList.add("display-block-prop");
-
+    const popupMiniCanvas = document.getElementById("popup-mini-canvas");
+    popupMiniCanvas.style.display = "flex";
     // // // Hide Adjust Button
-    const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    miniEditorAdjust.classList.add("display-none-prop");
-    miniEditorAdjust.classList.remove("display-block-prop");
+    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+    // miniEditorAdjust.classList.add("display-none-prop");
+    // miniEditorAdjust.classList.remove("display-block-prop");
 
     if (newFabricCanvas) {
       // Set properties for the first object in the canvas
@@ -925,6 +926,12 @@ document
     }
   });
 
+document
+  .getElementById("closePopup-mini-canvas")
+  .addEventListener("click", () => {
+    const popupMiniCanvas = document.getElementById("popup-mini-canvas");
+    popupMiniCanvas.style.display = "none";
+  });
 document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
   if (activeItem) {
     if (newFabricCanvas) {
@@ -996,14 +1003,17 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
     //Display Adjust Button
 
-    const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    miniEditorAdjust.classList.remove("display-none-prop");
-    miniEditorAdjust.classList.add("display-block-prop");
+    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+    // miniEditorAdjust.classList.remove("display-none-prop");
+    // miniEditorAdjust.classList.add("display-block-prop");
+
+    const popupMiniCanvas = document.getElementById("popup-mini-canvas");
+    popupMiniCanvas.style.display = "none";
 
     // Hide Canvas in popup
-    const miniEditorCont = document.getElementById("mini-editor-Cont");
-    miniEditorCont.classList.add("display-none-prop");
-    miniEditorCont.classList.remove("display-block-prop");
+    // const miniEditorCont = document.getElementById("mini-editor-Cont");
+    // miniEditorCont.classList.add("display-none-prop");
+    // miniEditorCont.classList.remove("display-block-prop");
     // const miniEditorImgContainerId = document.getElementById(
     //   "mini-editor-img-container-id"
     // );
@@ -1159,7 +1169,7 @@ initialize3DViewer();
             }
           });
           // newDiv.appendChild(favIcon);
-        
+
           mainDiv.appendChild(favIcon);
 
           favIcon.addEventListener("click", async (e) => {
@@ -1236,9 +1246,21 @@ initialize3DViewer();
             miniEditorAdjust.classList.add("display-block-prop");
 
             // Hide Canvas in popup
-            const miniEditorCont = document.getElementById("mini-editor-Cont");
-            miniEditorCont.classList.add("display-none-prop");
-            miniEditorCont.classList.remove("display-block-prop");
+            // const miniEditorCont = document.getElementById("mini-editor-Cont");
+            // miniEditorCont.classList.add("display-none-prop");
+            // miniEditorCont.classList.remove("display-block-prop");
+
+            const dummyCont = document.getElementById(
+              "personaliseImageDummyCont"
+            );
+            dummyCont.style.display = "block";
+            const realEditCont = document.getElementById(
+              "personaliseImageUploadPopup"
+            );
+            realEditCont.style.display = "none";
+            const imageInput = document.getElementById("personaliseImgUpload");
+            imageInput.value = "";
+
             loadJSONToCanvas(jsonData);
             // setupEventListener();
           } catch (fetchError) {
@@ -1438,10 +1460,10 @@ function saveTemplate() {
         originalObj.text = editedObj.text;
       }
       if (editedObj.type === "image" && !editedObj.src.startsWith("http")) {
-        originalObj.top = editedObj.top * 4.4;
-        originalObj.left = editedObj.left * 4.4;
-        originalObj.scaleY = editedObj.scaleX * 4.4;
-        originalObj.scaleX = editedObj.scaleY * 4.4;
+        originalObj.top = editedObj.top * 4.6;
+        originalObj.left = editedObj.left * 4.6;
+        originalObj.scaleY = editedObj.scaleX * 4.6;
+        originalObj.scaleX = editedObj.scaleY * 4.6;
       }
     }
   });

@@ -1396,11 +1396,11 @@
                 .then(() => {
                   // isSaving = false;
                   // Display a success message using toastr after successful upload
-                //   toastr.success("Data uploaded successfully!", "Success");
+                  //   toastr.success("Data uploaded successfully!", "Success");
                   Swal.fire({
                     title: "Success",
                     text: "Data uploaded successfully!",
-                    icon: "success"
+                    icon: "success",
                   });
                   Swal.close();
                   // Close the modal after saving
@@ -1409,23 +1409,28 @@
                 .catch((error) => {
                   // Display an error message using toastr if uploading fails
                   toastr.error(error.message, "Error");
-                  const message = error.message || "Something went wrong uploading, try again!"
+                  const message =
+                    error.message ||
+                    "Something went wrong uploading, try again!";
                   Swal.fire({
-                    icon: 'error',
-                    title: 'failed',
-                    text: message
+                    icon: "error",
+                    title: "failed",
+                    text: message,
                   });
                 });
             },
             error: function (xhr, status, error) {
               // Display an error message using toastr if the API call fails
-            //   toastr.error(error, "Error");
-            const message = error.message || error || "Something went wrong uploading, try again!"
-            Swal.fire({
-              icon: 'error',
-              title: 'failed',
-              text: message
-            });
+              //   toastr.error(error, "Error");
+              const message =
+                error.message ||
+                error ||
+                "Something went wrong uploading, try again!";
+              Swal.fire({
+                icon: "error",
+                title: "failed",
+                text: message,
+              });
             },
           });
         });
@@ -2961,10 +2966,10 @@
               editedObj.type === "image" &&
               !editedObj.src.startsWith("http")
             ) {
-              originalObj.top = editedObj.top * 5.9;
-              originalObj.left = editedObj.left * 5.9;
-              originalObj.scaleY = editedObj.scaleX * 5.9;
-              originalObj.scaleX = editedObj.scaleY * 5.9;
+              originalObj.top = editedObj.top * 4.6;
+              originalObj.left = editedObj.left * 4.6;
+              originalObj.scaleY = editedObj.scaleX * 4.6;
+              originalObj.scaleX = editedObj.scaleY * 4.6;
             }
           }
         });
@@ -3074,10 +3079,10 @@
               editedObj.type === "image" &&
               !editedObj.src.startsWith("http")
             ) {
-              originalObj.top = editedObj.top * 5.9;
-              originalObj.left = editedObj.left * 5.9;
-              originalObj.scaleY = editedObj.scaleX * 5.9;
-              originalObj.scaleX = editedObj.scaleY * 5.9;
+              originalObj.top = editedObj.top * 4.6;
+              originalObj.left = editedObj.left * 4.6;
+              originalObj.scaleY = editedObj.scaleX * 4.6;
+              originalObj.scaleX = editedObj.scaleY * 4.6;
             }
           }
         });
@@ -9418,11 +9423,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
       const data = await response.json();
- console.log('this is the data of protected route we got', data);
- localStorage.setItem("email", data.email);
- localStorage.setItem("username", data.username);
- localStorage.setItem("fname",data.firstname)
- localStorage.setItem("profilepic", data.profilepic)
+      console.log("this is the data of protected route we got", data);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("fname", data.firstname);
+      localStorage.setItem("profilepic", data.profilepic);
       if (data.role) {
         const isAdmin = data.role === "admin";
         showLoggedInUI(isAdmin);
@@ -9460,16 +9465,14 @@ document.addEventListener("DOMContentLoaded", function () {
     //   `;
     const storedUsername = localStorage.getItem("username");
     const storedEmail = localStorage.getItem("email");
-    const firstname = localStorage.getItem("fname")
+    const firstname = localStorage.getItem("fname");
     authContainer.innerHTML = `
         <div class="profile-container-min-editor">
         <div class="main-cont-profile-data" id="profileIcon">
           <div class="profile-mini-user-cont-data">
            <div class="profile-icon-min-editor" ></div>
             <div class="profile-data-cont-text">
-             <p class="profile-data-username">${
-              firstname || "Name"
-             }</p>
+             <p class="profile-data-username">${firstname || "Name"}</p>
              <p class="profile-data-email">${storedEmail || "gmail"}</p>
            </div>
           </div>
@@ -9611,22 +9614,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // Show the popup
     loginPopupOverlay.style.display = "block";
 
-    document.getElementById('togglePassword').addEventListener('click', function () {
-        const passwordInput = document.getElementById('loginPassword');
-        const eyeIcon = document.getElementById('eyeIcon');
+    document
+      .getElementById("togglePassword")
+      .addEventListener("click", function () {
+        const passwordInput = document.getElementById("loginPassword");
+        const eyeIcon = document.getElementById("eyeIcon");
 
         // Toggle the type attribute between password and text
-        if (passwordInput.type === 'password') {
-          passwordInput.type = 'text';
-          eyeIcon.classList.remove('fa-eye');
-          eyeIcon.classList.add('fa-eye-slash');
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          eyeIcon.classList.remove("fa-eye");
+          eyeIcon.classList.add("fa-eye-slash");
         } else {
-          passwordInput.type = 'password';
-          eyeIcon.classList.remove('fa-eye-slash');
-          eyeIcon.classList.add('fa-eye');
+          passwordInput.type = "password";
+          eyeIcon.classList.remove("fa-eye-slash");
+          eyeIcon.classList.add("fa-eye");
         }
       });
-
 
     // Close popup on outside click
     window.addEventListener("click", function (event) {
@@ -9670,7 +9674,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const password = document.getElementById("loginPassword").value;
     const signupErrorElement = document.getElementById("signupError");
 
-
     const url = window.location.origin;
     const parseUrl = new URL(url);
     const origin = parseUrl.hostname;
@@ -9694,7 +9697,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('this is the lgoin response', response);
+        console.log("this is the lgoin response", response);
         const token = response.headers.get("authorization");
         if (token) {
           localStorage.setItem("3DauthToken", token);
@@ -9719,22 +9722,22 @@ document.addEventListener("DOMContentLoaded", function () {
             // console.log("User profile data:", profileData);
             localStorage.setItem("email", profileData.email);
             localStorage.setItem("username", profileData.username);
-            localStorage.setItem("fname",profileData.firstname)
-            localStorage.setItem("profilepic", profileData.profilepic)
+            localStorage.setItem("fname", profileData.firstname);
+            localStorage.setItem("profilepic", profileData.profilepic);
           } else {
             console.error("Failed to fetch user profile data.");
           }
         } else {
           console.error("Login successful, but no token found.");
-        //   toastr.error("Login successful, but no token found.");
-        // Swal.fire({
-        //     icon: 'error',
-        //     title: 'Please try again',
-        //     text: 'Login successful, but no token found',
-        //   });
-        signupErrorElement.style.display = "flex";
-signupErrorElement.querySelector('.error-text').textContent = "Login failed. Please check your credentials!";
-
+          //   toastr.error("Login successful, but no token found.");
+          // Swal.fire({
+          //     icon: 'error',
+          //     title: 'Please try again',
+          //     text: 'Login successful, but no token found',
+          //   });
+          signupErrorElement.style.display = "flex";
+          signupErrorElement.querySelector(".error-text").textContent =
+            "Login failed. Please check your credentials!";
         }
       } else {
         console.error("Login failed. Please check your credentials.");
@@ -9745,24 +9748,27 @@ signupErrorElement.querySelector('.error-text').textContent = "Login failed. Ple
         //     text: 'Login failed, Please check your credentials.',
         //   });
         signupErrorElement.style.display = "flex";
-        signupErrorElement.querySelector('.error-text').textContent = "Login failed. Please check your credentials!";
+        signupErrorElement.querySelector(".error-text").textContent =
+          "Login failed. Please check your credentials!";
       }
     } catch (error) {
       console.error("Error during login:", error);
-    //   toastr.error("Error during login:", error);
-    const errResponse = error?.response?.data?.error || error.message || "Login failed. Please try again!";
-    const errorMessage = errResponse.split(':')[0];
-    signupErrorElement.style.display = "flex";
-    signupErrorElement.querySelector('.error-text').textContent = errorMessage;
+      //   toastr.error("Error during login:", error);
+      const errResponse =
+        error?.response?.data?.error ||
+        error.message ||
+        "Login failed. Please try again!";
+      const errorMessage = errResponse.split(":")[0];
+      signupErrorElement.style.display = "flex";
+      signupErrorElement.querySelector(".error-text").textContent =
+        errorMessage;
 
-
-        // Swal.fire({
-        //   icon: 'error',
-        //   title: 'Login Failed',
-        //   text: errorMessage,
-        //   showConfirmButton: true,
-        // });
-
+      // Swal.fire({
+      //   icon: 'error',
+      //   title: 'Login Failed',
+      //   text: errorMessage,
+      //   showConfirmButton: true,
+      // });
     }
   }
 
@@ -9860,22 +9866,23 @@ signupErrorElement.querySelector('.error-text').textContent = "Login failed. Ple
     // Show the popup
     signupPopupOverlay.style.display = "block";
 
-    document.getElementById('toggleSignupPassword').addEventListener('click', function () {
-        const signupPasswordInput = document.getElementById('signupPassword');
-        const signupEyeIcon = document.getElementById('signupEyeIcon');
+    document
+      .getElementById("toggleSignupPassword")
+      .addEventListener("click", function () {
+        const signupPasswordInput = document.getElementById("signupPassword");
+        const signupEyeIcon = document.getElementById("signupEyeIcon");
 
         // Toggle the type attribute between password and text
-        if (signupPasswordInput.type === 'password') {
-          signupPasswordInput.type = 'text';
-          signupEyeIcon.classList.remove('fa-eye');
-          signupEyeIcon.classList.add('fa-eye-slash');
+        if (signupPasswordInput.type === "password") {
+          signupPasswordInput.type = "text";
+          signupEyeIcon.classList.remove("fa-eye");
+          signupEyeIcon.classList.add("fa-eye-slash");
         } else {
-          signupPasswordInput.type = 'password';
-          signupEyeIcon.classList.remove('fa-eye-slash');
-          signupEyeIcon.classList.add('fa-eye');
+          signupPasswordInput.type = "password";
+          signupEyeIcon.classList.remove("fa-eye-slash");
+          signupEyeIcon.classList.add("fa-eye");
         }
       });
-
 
     // Close popup on outside click
     window.addEventListener("click", function (event) {
@@ -9918,7 +9925,6 @@ signupErrorElement.querySelector('.error-text').textContent = "Login failed. Ple
     // const signupErrorElement = document.getElementById("signupError");
     // signupErrorElement.style.display = "none";
     const signupErrorElement = document.getElementById("signupError");
-
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
@@ -9979,7 +9985,7 @@ signupErrorElement.querySelector('.error-text').textContent = "Login failed. Ple
         //   });
         localStorage.setItem("email", email);
         localStorage.setItem("username", username);
-        localStorage.setItem("fname",firstname)
+        localStorage.setItem("fname", firstname);
         closeSignupPopup();
         await fetchUserRole();
       } else {
@@ -9988,14 +9994,16 @@ signupErrorElement.querySelector('.error-text').textContent = "Login failed. Ple
         // toastr.error(
         //   `Signup failed: ${errorData.error || "Please try again."}`
         // );
-        const errorMessage = errorData?.error || "Signup failed. Please try again.";
+        const errorMessage =
+          errorData?.error || "Signup failed. Please try again.";
         // const errorMessage = errResponse.split(':')[0];
 
-       // Display the error message inside the h4 element
-    //    signupErrorElement.style.display = "block";
-    //    signupErrorElement.textContent = errorMessage;
-    signupErrorElement.style.display = "flex";
-signupErrorElement.querySelector('.error-text').textContent = errorMessage;
+        // Display the error message inside the h4 element
+        //    signupErrorElement.style.display = "block";
+        //    signupErrorElement.textContent = errorMessage;
+        signupErrorElement.style.display = "flex";
+        signupErrorElement.querySelector(".error-text").textContent =
+          errorMessage;
         //   Swal.fire({
         //     icon: 'error',
         //     title: 'Signup Failed',
@@ -10005,18 +10013,20 @@ signupErrorElement.querySelector('.error-text').textContent = errorMessage;
       }
     } catch (error) {
       console.error("Error during signup:", error);
-    //   toastr.error("Error during signup. Please try again.");
-    const errorMessage = error?.response?.data?.error || "Signup failed. Please try again.";
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Signup Failed',
-    //     text: errorMessage,
-    //     showConfirmButton: true,
-    //   });
-    // signupErrorElement.style.display = "block";
-    // signupErrorElement.textContent = errorMessage;
-    signupErrorElement.style.display = "flex";
-signupErrorElement.querySelector('.error-text').textContent = errorMessage;
+      //   toastr.error("Error during signup. Please try again.");
+      const errorMessage =
+        error?.response?.data?.error || "Signup failed. Please try again.";
+      //   Swal.fire({
+      //     icon: 'error',
+      //     title: 'Signup Failed',
+      //     text: errorMessage,
+      //     showConfirmButton: true,
+      //   });
+      // signupErrorElement.style.display = "block";
+      // signupErrorElement.textContent = errorMessage;
+      signupErrorElement.style.display = "flex";
+      signupErrorElement.querySelector(".error-text").textContent =
+        errorMessage;
     }
   }
 

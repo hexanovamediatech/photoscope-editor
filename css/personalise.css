@@ -96,11 +96,10 @@
   border: 2px solid #00a3ff;
 }
 
-
 .template-image-cont {
   position: relative;
   width: 100%;
-  height: auto; 
+  height: auto;
   overflow: hidden;
 }
 
@@ -441,7 +440,7 @@
   background-color: #00aaff;
   border: none;
   color: white;
-  border-radius: 20px;
+  border-radius: 8px;
 }
 
 .personalise-edit-btn:hover {
@@ -465,6 +464,16 @@
   /* margin-top: 20px; */
   width: 100%;
   gap: 10px;
+}
+.mini-canvas-done-btn {
+  position: absolute;
+  bottom: 22px;
+  /* left: 150px; */
+  left: 50%; /* Move to the center */
+  transform: translateX(-50%);
+  width: 200px;
+  border-radius: 8px;
+  transition: all 0.3s;
 }
 .personalise-library-box {
   position: relative;
@@ -516,6 +525,10 @@
 }
 #personaliseCanvasWrap {
   position: relative;
+  border-radius: 10px;
+}
+#personaliseCanvas {
+  border-radius: 10px;
 }
 .personalise-template-img {
   width: 350px;
@@ -542,7 +555,7 @@
   color: #959494;
   outline: none;
   margin-bottom: 10px;
-  border-radius: 20px;
+  border-radius: 8px;
 }
 
 .mini-editor-input:focus {
@@ -587,7 +600,6 @@
   right: 10px;
   width: 20px !important;
   height: 20px !important;
- 
 }
 
 /* The Modal (background) */
@@ -710,7 +722,7 @@ label.min-editor-label {
   font-size: 13px !important;
   text-transform: uppercase;
   font-weight: bold;
-  border-radius: 20px;
+  border-radius: 8px;
 }
 
 div#replace-btn-cont {
@@ -889,6 +901,40 @@ button#personaliseAdjustBtn img {
   margin-top: 40px;
 }
 
+#popup-mini-canvas {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dim background */
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-mini-canvas-content {
+  /* width: 460px; */
+  width: 500px;
+  height: 560px;
+  background-color: #f1f1f1;
+  padding: 30px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  position: relative;
+  border-radius: 5px;
+}
+.close-button-mini-canvas {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
 @media (min-width: 1200px) {
   .personalise-template-list-cont,
   .personalise-button-main-cont {
@@ -903,7 +949,7 @@ button#personaliseAdjustBtn img {
     border-radius: 8px;
   }
 
-  .skeleton-box{
+  .skeleton-box {
     width: 112px;
     height: 112px;
   }
@@ -954,7 +1000,7 @@ button#personaliseAdjustBtn img {
     height: 132px;
     border-radius: 8px;
   }
-  .skeleton-box{
+  .skeleton-box {
     width: 132px;
     height: 132px;
   }
@@ -1003,7 +1049,7 @@ button#personaliseAdjustBtn img {
     height: 163px;
     border-radius: 8px;
   }
-  .skeleton-box{
+  .skeleton-box {
     width: 163px;
     height: 163px;
   }
@@ -1049,9 +1095,12 @@ div#personaliseDoneBtn img {
 }
 .loader3 {
   position: absolute; /* Position it relative to the parent container */
-  top: 50%;           /* Center it vertically */
-  left: 50%;          /* Center it horizontally */
-  transform: translate(-50%, -50%); /* Adjust the position to be exactly centered */
+  top: 50%; /* Center it vertically */
+  left: 50%; /* Center it horizontally */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Adjust the position to be exactly centered */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1065,21 +1114,49 @@ div#personaliseDoneBtn img {
   animation: loader3 3s ease-in-out infinite;
 }
 
-.bar1, .bar2, .bar3, .bar4, .bar5,
-.bar6, .bar7, .bar8, .bar9, .bar10 {
-  background-color: #4285F4;
+.bar1,
+.bar2,
+.bar3,
+.bar4,
+.bar5,
+.bar6,
+.bar7,
+.bar8,
+.bar9,
+.bar10 {
+  background-color: #4285f4;
 }
 
-.bar1 { animation-delay: -0.8s; }
-.bar2 { animation-delay: -0.7s; }
-.bar3 { animation-delay: -0.6s; }
-.bar4 { animation-delay: -0.5s; }
-.bar5 { animation-delay: -0.4s; }
-.bar6 { animation-delay: -0.3s; }
-.bar7 { animation-delay: -0.2s; }
-.bar8 { animation-delay: -0.1s; }
-.bar9 { animation-delay: 0s; }
-.bar10 { animation-delay: 0.1s; }
+.bar1 {
+  animation-delay: -0.8s;
+}
+.bar2 {
+  animation-delay: -0.7s;
+}
+.bar3 {
+  animation-delay: -0.6s;
+}
+.bar4 {
+  animation-delay: -0.5s;
+}
+.bar5 {
+  animation-delay: -0.4s;
+}
+.bar6 {
+  animation-delay: -0.3s;
+}
+.bar7 {
+  animation-delay: -0.2s;
+}
+.bar8 {
+  animation-delay: -0.1s;
+}
+.bar9 {
+  animation-delay: 0s;
+}
+.bar10 {
+  animation-delay: 0.1s;
+}
 
 @keyframes loader3 {
   0% {
@@ -1097,8 +1174,6 @@ div#personaliseDoneBtn img {
   transform: scale(1.2); /* Scale up the icon on hover */
   transition: transform 0.3s ease; /* Smooth scaling transition */
 }
-#personaliseAdjustBtn{
+#personaliseAdjustBtn {
   cursor: pointer;
 }
-
-
