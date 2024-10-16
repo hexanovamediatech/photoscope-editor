@@ -1240,10 +1240,10 @@ initialize3DViewer();
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
             // document.getElementById("personaliseOpenPopupBtn").disabled = false;
-            const miniEditorAdjust =
-              document.getElementById("miniE-adjust-Btn");
-            miniEditorAdjust.classList.remove("display-none-prop");
-            miniEditorAdjust.classList.add("display-block-prop");
+            // const miniEditorAdjust =
+            //   document.getElementById("miniE-adjust-Btn");
+            // miniEditorAdjust.classList.remove("display-none-prop");
+            // miniEditorAdjust.classList.add("display-block-prop");
 
             // Hide Canvas in popup
             // const miniEditorCont = document.getElementById("mini-editor-Cont");

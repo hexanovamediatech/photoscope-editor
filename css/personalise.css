@@ -381,7 +381,7 @@
   position: relative;
 }
 .mini-editor-dummy-image {
-  width: 50%;
+  width: 30%;
 }
 
 .popup-content {
@@ -416,7 +416,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 25px;
+  /* margin-top: 10px; */
   padding: 0 15px;
 }
 
@@ -727,6 +728,7 @@ label.min-editor-label {
 
 div#replace-btn-cont {
   width: 100%;
+  margin-top: 10px;
 }
 
 div#miniE-text-done-Btn {
@@ -739,8 +741,8 @@ div#miniE-text-done-Btn {
   right: 10px;
 }
 .personalise-edit-btn img {
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
 }
 button#personaliseAdjustBtn {
   background: transparent;
