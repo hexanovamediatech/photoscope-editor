@@ -102,7 +102,6 @@ async function fetchModelData() {
 //   window.addEventListener("resize", onWindowResizePersonalise);
 // }
 function initPersonalise() {
-
   const mainContainer = document.getElementById("personalise-3d-container");
   const loader = document.createElement("div");
   loader.id = "model-loader";
@@ -152,7 +151,6 @@ function initPersonalise() {
     // Add the centered model to the scene
     scene.add(loadedModel);
     loader.style.display = "none";
-
   });
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -160,7 +158,7 @@ function initPersonalise() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.5;
-  
+
   mainContainer.appendChild(renderer.domElement);
 
   const environment = new RoomEnvironment(renderer);
@@ -292,6 +290,12 @@ document
   .addEventListener("click", async () => {
     // Check if imageReplace is true before proceeding
     if (imageReplace) {
+      const dummyCont = document.getElementById("personaliseImageDummyCont");
+      dummyCont.style.display = "none";
+      const realEditCont = document.getElementById(
+        "personaliseImageUploadPopup"
+      );
+      realEditCont.style.display = "block";
       // Check if there is an active item
       if (activeItem) {
         try {
@@ -309,7 +313,7 @@ document
       //   "visible";
     } else {
       Swal.fire({
-        title: "Select any template",
+        title: "Select any template to use Personalise",
         icon: "warning",
         showConfirmButton: true,
         confirmButtonText: "OK",
@@ -517,10 +521,17 @@ function loadJSONToCanvas(jsonData) {
       "min-editor-popup-image"
     );
 
+    const dummyImage = document.getElementById("min-editor-dummy-image");
+
     // Check if the image element exists and if the clipmaskImage has a valid src
     if (miniEditorPopupImage && clipmaskImage.src) {
       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
       miniEditorPopupImage.src = clipmaskImage.src;
+      dummyImage.style.width = "100%";
+      dummyImage.style.height = "100%";
+      dummyImage.style.objectFit = "cover";
+      dummyImage.src = clipmaskImage.src;
+      dummyImage.style.borderRadius = "10px";
     }
   }
 
@@ -722,9 +733,10 @@ function setNewImageSrc(imageSrc) {
 // Assuming the user selects an image via an input field
 function handleImageUploadAlternate(event) {
   if (activeItem) {
-    const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    miniEditorAdjust.classList.remove("display-none-prop");
-    miniEditorAdjust.classList.add("display-block-prop");
+    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+    // // miniEditorAdjust.style.display = "none";
+    // miniEditorAdjust.classList.add("display-none-prop");
+    // miniEditorAdjust.classList.remove("display-block-prop");
     const openModalBtn = document.getElementById("hexa-mini-editor-save");
     openModalBtn.style.visibility = "visible";
     const file = event.target.files[0];
@@ -843,22 +855,22 @@ document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
     // Display Canvas in popup
-    const miniEditorImgContainerId = document.getElementById(
-      "mini-editor-img-container-id"
-    );
+    // const miniEditorImgContainerId = document.getElementById(
+    //   "mini-editor-img-container-id"
+    // );
     const miniEditorCont = document.getElementById("mini-editor-Cont");
     miniEditorCont.classList.remove("display-none-prop");
     miniEditorCont.classList.add("display-block-prop");
-    miniEditorImgContainerId.style.display = "none";
+    // miniEditorImgContainerId.style.display = "none";
     // Display Done Button
     // const miniEditorDone = document.getElementById("miniE-done-Btn");
     // miniEditorDone.classList.remove("display-none-prop");
     // miniEditorDone.classList.add("display-block-prop");
 
     // // // Hide Adjust Button
-    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    // miniEditorAdjust.classList.add("display-none-prop");
-    // miniEditorAdjust.classList.remove("display-block-prop");
+    const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
+    miniEditorAdjust.classList.add("display-none-prop");
+    miniEditorAdjust.classList.remove("display-block-prop");
 
     if (newFabricCanvas) {
       // Set properties for the first object in the canvas
@@ -969,10 +981,10 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     const miniEditorCont = document.getElementById("mini-editor-Cont");
     miniEditorCont.classList.add("display-none-prop");
     miniEditorCont.classList.remove("display-block-prop");
-    const miniEditorImgContainerId = document.getElementById(
-      "mini-editor-img-container-id"
-    );
-    miniEditorImgContainerId.style.display = "flex";
+    // const miniEditorImgContainerId = document.getElementById(
+    //   "mini-editor-img-container-id"
+    // );
+    // miniEditorImgContainerId.style.display = "flex";
   }
 });
 
@@ -1008,7 +1020,6 @@ initialize3DViewer();
 
   // Show the skeleton loader before fetching data
   showSkeletonLoader();
-
 
   try {
     const response = await fetch(
@@ -1053,9 +1064,6 @@ initialize3DViewer();
         personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
       }
 
-
-
-
       // Fetch favorites to compare with
       const favoriteResponse = await fetch(
         "https://backend.toddlerneeds.com/api/v1/user/favorite/templates",
@@ -1065,25 +1073,22 @@ initialize3DViewer();
         }
       );
       const favoriteData = await favoriteResponse.json();
-      hideSkeletonLoader()
+      hideSkeletonLoader();
 
       const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
       filteredData.forEach((item) => {
-
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("template-main-cont");
 
         const imageDiv = document.createElement("div");
         imageDiv.classList.add("template-image-cont");
 
-
         const newImg = document.createElement("img");
         newImg.src = item.imageUrl;
         newImg.alt = item.name;
         newImg.classList.add("template-image-box");
         newImg.loading = "lazy";
-        
 
         imageDiv.appendChild(newImg);
 
@@ -1139,7 +1144,6 @@ initialize3DViewer();
                 : "../../assets/custom/heart-filled.png";
               favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
 
-
               const message = isCurrentlyFavorite
                 ? "Removed from favorites!"
                 : "Added to favorites!";
@@ -1150,7 +1154,6 @@ initialize3DViewer();
                 icon: "success",
               });
             } else {
-
               Swal.fire({
                 icon: "warning",
                 title: "Warning",
@@ -1182,16 +1185,25 @@ initialize3DViewer();
             const jsonData = await jsonResponse.json();
             window.originalCanvasJson = jsonData;
             imageReplace = true;
-            const miniEditorAdjust =
-              document.getElementById("miniE-adjust-Btn");
-            miniEditorAdjust.classList.add("display-none-prop");
-            miniEditorAdjust.classList.remove("display-block-prop");
+            // const miniEditorAdjust =
+            //   document.getElementById("miniE-adjust-Btn");
+            // miniEditorAdjust.classList.add("display-none-prop");
+            // miniEditorAdjust.classList.remove("display-block-prop");
             const miniEditorSaveBtnt = document.getElementById(
               "hexa-save-mini-cont"
             );
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
             // document.getElementById("personaliseOpenPopupBtn").disabled = false;
+            const miniEditorAdjust =
+              document.getElementById("miniE-adjust-Btn");
+            miniEditorAdjust.classList.remove("display-none-prop");
+            miniEditorAdjust.classList.add("display-block-prop");
+
+            // Hide Canvas in popup
+            const miniEditorCont = document.getElementById("mini-editor-Cont");
+            miniEditorCont.classList.add("display-none-prop");
+            miniEditorCont.classList.remove("display-block-prop");
             loadJSONToCanvas(jsonData);
             // setupEventListener();
           } catch (fetchError) {
@@ -1199,8 +1211,6 @@ initialize3DViewer();
           }
         });
       });
-
-
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
     }
