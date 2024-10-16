@@ -835,7 +835,7 @@ button#personaliseAdjustBtn img {
 .skeleton-box {
   /* width: 150px;
   height: 150px; */
-  background: #e0e0e0;
+  background: #ffffff;
   border-radius: 10px;
   position: relative;
   overflow: hidden;
@@ -851,7 +851,7 @@ button#personaliseAdjustBtn img {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    #c1c1c1,
     transparent
   );
   animation: loading 1.5s infinite;
@@ -866,20 +866,20 @@ button#personaliseAdjustBtn img {
   }
 }
 
-.skeleton-text {
+/* .skeleton-text {
   width: 70%;
   height: 15px;
   background: #e0e0e0;
   border-radius: 4px;
   margin-top: 10px;
   animation: loading 1.5s infinite;
-}
+} */
 
 /* Skeleton loader for the image */
 .image-skeleton-loader {
   width: 200px;
   height: 200px;
-  background-color: #e0e0e0;
+  background-color: #c1c1c1;
   border-radius: 10px;
   animation: loading 1.5s infinite;
 }
@@ -1107,24 +1107,16 @@ div#personaliseDoneBtn img {
 }
 
 .bars {
-  width: 10px;
-  height: 20px;
-  margin: 0 2px;
-  border-radius: 4px;
+  width: 5px; /* Reduced the width */
+  height: 15px; /* Reduced the height */
+  margin: 0 1px; /* Reduced the margin */
+  border-radius: 2px; /* Adjusted border-radius */
   animation: loader3 3s ease-in-out infinite;
 }
 
-.bar1,
-.bar2,
-.bar3,
-.bar4,
-.bar5,
-.bar6,
-.bar7,
-.bar8,
-.bar9,
-.bar10 {
-  background-color: #4285f4;
+.bar1, .bar2, .bar3, .bar4, .bar5,
+.bar6, .bar7, .bar8, .bar9, .bar10 {
+  background-color: #4285F4;
 }
 
 .bar1 {
@@ -1169,6 +1161,7 @@ div#personaliseDoneBtn img {
     transform: scale(1);
   }
 }
+
 
 #personaliseAdjustBtn:hover .adjust-icon {
   transform: scale(1.2); /* Scale up the icon on hover */
