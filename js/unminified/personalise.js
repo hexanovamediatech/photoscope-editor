@@ -141,7 +141,7 @@ function initPersonalise() {
     20
   );
 
-  camera.position.set(0, 0.08, 0.5);
+  camera.position.set(0, 0.08, 2);
 
   scene = new THREE.Scene();
 
@@ -193,7 +193,7 @@ function initPersonalise() {
   controls.maxDistance = 0.7;
   controls.target.set(0, 0, 0); // Ensure controls target the center of the scene
   controls.update();
-
+  onWindowResizePersonalise()
   window.addEventListener("resize", onWindowResizePersonalise);
 }
 // function onWindowResizePersonalise() {
@@ -209,11 +209,15 @@ function onWindowResizePersonalise() {
   const mainContainer = document.getElementById("personalise-3d-container");
   const containerWidth = mainContainer.offsetWidth;
   const containerHeight = mainContainer.offsetHeight;
-  const size = Math.min(containerWidth, containerHeight);
-  camera.aspect = containerWidth / containerHeight;
+
+  // Calculate the aspect ratio based on container size
+  const aspectRatio = containerWidth / containerHeight;
+
+  // Adjust camera aspect and projection matrix
+  camera.aspect = aspectRatio;
   camera.updateProjectionMatrix();
 
-  // Resize the renderer to match the new container dimensions
+  // Resize the renderer to fit the new container dimensions
   renderer.setSize(containerWidth, containerHeight);
 }
 
