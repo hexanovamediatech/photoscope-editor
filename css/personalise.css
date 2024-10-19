@@ -42,6 +42,7 @@
   overflow: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+  background: #f1f1f1;
 }
 .personalise-template-list-cont::-webkit-scrollbar {
   display: none; /* Chrome, Safari, and Opera */
@@ -50,6 +51,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
   gap: 15px; /* Optional: Adds space between the grid items */
+  /* background: #f1f1f1; */
 }
 .personalise-3d-view-cont {
   width: 100%;
@@ -98,7 +100,9 @@
 
 .template-image-cont {
   position: relative;
-  width: 100%;
+  /* width: 100%; */
+  width: 102px;
+  height: 102px;
   height: auto;
   overflow: hidden;
 }
@@ -125,6 +129,9 @@
   left: 12px;
   color: #ffffff;
   text-transform: capitalize;
+  padding: 1px 6px;
+  background: #00a3ff;
+  border-radius: 8px;
 }
 .template-gradient-box {
   width: 130px;
@@ -888,7 +895,11 @@ button#personaliseAdjustBtn img {
   border-radius: 10px;
   animation: loading 1.5s infinite;
 }
-
+.caret-up-icon {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+}
 @keyframes loading {
   0% {
     background-position: -200px 0;
@@ -1001,13 +1012,13 @@ button#personaliseAdjustBtn img {
     width: calc(100% - 600px);
   }
   .template-image-cont {
-    width: 132px;
-    height: 132px;
+    width: 146px;
+    height: 146px;
     border-radius: 8px;
   }
   .skeleton-box {
-    width: 132px;
-    height: 132px;
+    width: 146px;
+    height: 146px;
   }
   .personalise-btn-mini {
     width: 250px;

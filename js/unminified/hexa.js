@@ -9482,13 +9482,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         </div>
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
+          <i class="bi bi-caret-up-fill caret-up-icon"></i>
             <ul>
               ${
                 isAdmin
-                  ? `<li id="adminDashboard" class="profile-dashboard-li">Dashboard</li>`
-                  : `<li id="profile" class="profile-dashboard-li">Profile</li>`
+                  ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
+                  : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
               }
-              <li id="logout" class="profile-logout-li">Logout</li>
+              <li id="logout" class="profile-logout-li"><i class="bi bi-box-arrow-right profile-dropdown-icon"></i>Logout</li>
             </ul>
           </div>
         </div>
