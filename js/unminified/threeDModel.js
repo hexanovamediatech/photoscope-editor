@@ -289,7 +289,8 @@ async function fetchModelData() {
 function init() {
   const mainContainer = document.getElementById("3d-container");
   mainContainer.style.backgroundColor = "#f0f0f0";
-
+  const urlParams = new URLSearchParams(window.location.search);
+  const modelName = urlParams.get("name");
   camera = new THREE.PerspectiveCamera(
     45,
     window.innerWidth / window.innerHeight,
@@ -404,8 +405,25 @@ function init() {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.minDistance = 0.35;
-  controls.maxDistance = 0.7;
+  if (modelName === 'model-1') {
+    controls.minDistance = 0.14;
+  }else if(modelName === 'model-2'){
+    controls.minDistance = 1;
+  }else if(modelName === 'p4-type1'){
+    controls.minDistance = 0.15;
+  }else if(modelName === 'p5-type1'){
+    controls.minDistance = 0.12;
+  }else if (modelName === 'p9-type1'){
+    controls.minDistance = 0.13
+  }
+  else{
+    controls.minDistance = 0.35;
+  }
+  if(modelName === 'model-2'){
+    controls.maxDistance = 3;
+  }else{
+    controls.maxDistance = 0.7;
+  }
   controls.target.set(0, 0, 0);
   controls.update();
 
