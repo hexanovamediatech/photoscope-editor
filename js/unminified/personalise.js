@@ -131,7 +131,8 @@ const loader = showLoader();
 
 function initPersonalise() {
   const mainContainer = document.getElementById("personalise-3d-container");
-
+  const urlParams = new URLSearchParams(window.location.search);
+  const modelName = urlParams.get("name");
   mainContainer.style.backgroundColor = "#f0f0f0";
 
   camera = new THREE.PerspectiveCamera(
@@ -144,7 +145,7 @@ function initPersonalise() {
   camera.position.set(0, 0.08, 2);
 
   scene = new THREE.Scene();
-
+ 
   // Load the GLB model dynamically based on the 'name' parameter
   new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
@@ -156,11 +157,19 @@ function initPersonalise() {
 
     // Reposition the model to center it
     loadedModel.position.x -= center.x;
-    loadedModel.position.y -= center.y;
     loadedModel.position.z -= center.z;
-
+    if (modelName === 'model-1') {
+      loadedModel.position.y -= size.y * 1.8; // Larger adjustment for 'model-1'
+    }else if(modelName === 'p5-type1'){
+      loadedModel.position.y -= size.y * 2.5;
+    }else if(modelName === 'model-2'){
+      // loadedModel.position.x -= size.y / 2 ;
+    }
+    else{
+      loadedModel.position.y -= center.y;
+    }
     // Fine-tune Y-axis to center vertically (slight downward adjustment)
-    loadedModel.position.y -= size.y * 0.2; // Adjust to center vertically
+    loadedModel.position.y -= size.y * 0.2; 
 
     // Optionally scale the model to fit within the camera's view
     const maxSize = Math.max(size.x, size.y, size.z);
