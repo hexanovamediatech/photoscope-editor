@@ -161,9 +161,12 @@ function initPersonalise() {
     if (modelName === 'model-1') {
       loadedModel.position.y -= size.y * 1.8; // Larger adjustment for 'model-1'
     }else if(modelName === 'p5-type1'){
-      loadedModel.position.y -= size.y * 2.5;
+      loadedModel.position.y -= size.y * 3;
     }else if(modelName === 'model-2'){
       // loadedModel.position.x -= size.y / 2 ;
+      loadedModel.position.x = -0.03 ; 
+      loadedModel.position.y = 0;
+      loadedModel.position.z = 0;
     }
     else{
       loadedModel.position.y -= center.y;
