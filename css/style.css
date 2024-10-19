@@ -3762,7 +3762,7 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 .hex-header-dropdown-min-editor {
   position: absolute;
   top: 50px;
-  /* right: 10px; */
+  right: -10px;
   /* background-color: #fff;
   border: 1px solid #ccc; */
   border-radius: 8px;
@@ -3797,7 +3797,11 @@ ul.hexa-elements-accor-shapes-container.hexa-accordion > li > a svg path {
 }
 
 .hex-header-dropdown-min-editor ul li:hover {
-  background-color: #d9d9d9;
+  background-color: #242631;
+  color: #fff;
+}
+.profile-dropdown-icon {
+  margin-right: 5px;
 }
 
 .button-min-editor {

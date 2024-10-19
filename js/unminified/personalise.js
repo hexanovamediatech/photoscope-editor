@@ -145,7 +145,7 @@ function initPersonalise() {
   camera.position.set(0, 0.08, 2);
 
   scene = new THREE.Scene();
- 
+
   // Load the GLB model dynamically based on the 'name' parameter
   new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
@@ -158,7 +158,7 @@ function initPersonalise() {
     // Reposition the model to center it
     loadedModel.position.x -= center.x;
     loadedModel.position.z -= center.z;
-    if (modelName === 'model-1') {
+    if (modelName === "model-1") {
       loadedModel.position.y -= size.y * 1.8; // Larger adjustment for 'model-1'
     }else if(modelName === 'p5-type1'){
       loadedModel.position.y -= size.y * 3;
@@ -172,7 +172,7 @@ function initPersonalise() {
       loadedModel.position.y -= center.y;
     }
     // Fine-tune Y-axis to center vertically (slight downward adjustment)
-    loadedModel.position.y -= size.y * 0.2; 
+    loadedModel.position.y -= size.y * 0.2;
 
     // Optionally scale the model to fit within the camera's view
     const maxSize = Math.max(size.x, size.y, size.z);
@@ -205,7 +205,7 @@ function initPersonalise() {
   controls.maxDistance = 0.7;
   controls.target.set(0, 0, 0); // Ensure controls target the center of the scene
   controls.update();
-  onWindowResizePersonalise()
+  onWindowResizePersonalise();
   window.addEventListener("resize", onWindowResizePersonalise);
 }
 // function onWindowResizePersonalise() {
@@ -1142,7 +1142,16 @@ initialize3DViewer();
         imageDiv.appendChild(newImg);
 
         const nameP = document.createElement("p");
-        nameP.textContent = item.name;
+        // nameP.textContent = item.name;
+        if (item.name.length > 12) {
+          // Show the first 10 characters followed by "..."
+          nameP.textContent = item.name.substring(0, 12) + "...";
+          // Set the title attribute to show the full name on hover
+          nameP.setAttribute("title", item.name);
+        } else {
+          // If the name is less than or equal to 10 characters, show it fully
+          nameP.textContent = item.name;
+        }
         nameP.classList.add("template-name-tag");
 
         mainDiv.appendChild(imageDiv);
