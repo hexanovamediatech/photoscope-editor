@@ -9513,15 +9513,26 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
+    // if (isAdmin) {
+    //   document
+    //     .getElementById("adminDashboard")
+    //     .addEventListener("click", function () {
+    //       window.location.href = "http://54.152.205.55:4000/admin-dashboard";
+    //     });
+    // } else {
+    //   document.getElementById("profile").addEventListener("click", function () {
+    //     window.location.href = "http://54.152.205.55:4000/profile";
+    //   });
+    // }
     if (isAdmin) {
       document
         .getElementById("adminDashboard")
         .addEventListener("click", function () {
-          window.location.href = "http://54.152.205.55:4000/admin-dashboard";
+          window.open("http://54.152.205.55:4000/admin-dashboard", "_blank");
         });
     } else {
       document.getElementById("profile").addEventListener("click", function () {
-        window.location.href = "http://54.152.205.55:4000/profile";
+        window.open("http://54.152.205.55:4000/profile", "_blank");
       });
     }
 
