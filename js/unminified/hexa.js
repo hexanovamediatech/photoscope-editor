@@ -9954,8 +9954,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("signupPassword").value;
-    // const signupErrorElement = document.getElementById("signupError");
-    // signupErrorElement.style.display = "none";
     const signupErrorElement = document.getElementById("signupError");
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -9977,9 +9975,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (!usernamePattern.test(username)) {
-      toastr.warning(
-        "Username must be alphanumeric and between 4-20 characters."
-      );
+      toastr.warning("Username must be alphanumeric and between 4-20 characters.");
       return;
     }
 
@@ -10008,59 +10004,31 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       if (response) {
+        // If signup is successful
         console.log("Signup successful!");
-        const token = response.headers["authorization"];
-        localStorage.setItem("jwtToken", token);
-        // toastr.success(`Signup Successful, Please Login Now!`);
-        // Swal.fire({
-        //     title: "Success",
-        //     text: "Signup successful!",
-        //     icon: "success"
-        //   });
-        localStorage.setItem("email", email);
-        localStorage.setItem("username", username);
-        localStorage.setItem("fname", firstname);
-        closeSignupPopup();
-        await fetchUserRole();
-      } else {
-        const errorData = await response.json();
-        console.error("Signup failed:", errorData);
-        // toastr.error(
-        //   `Signup failed: ${errorData.error || "Please try again."}`
-        // );
-        const errorMessage =
-          errorData?.error || "Signup failed. Please try again.";
-        // const errorMessage = errResponse.split(':')[0];
+        const token = response.headers.get("authorization");
+        if (token) {
+          closeSignupPopup();
+          localStorage.setItem("email", email);
+          localStorage.setItem("username", username);
+          localStorage.setItem("fname", firstname);
 
-        // Display the error message inside the h4 element
-        //    signupErrorElement.style.display = "block";
-        //    signupErrorElement.textContent = errorMessage;
+          await fetchUserRole();
+        }
+      } else {
+        // If signup fails (HTTP error status)
+        const errorMessage =
+          responseData?.error || "Signup failed. Please try again.";
         signupErrorElement.style.display = "flex";
-        signupErrorElement.querySelector(".error-text").textContent =
-          errorMessage;
-        //   Swal.fire({
-        //     icon: 'error',
-        //     title: 'Signup Failed',
-        //     text: errorMessage,
-        //     showConfirmButton: true,
-        //   });
+        signupErrorElement.querySelector(".error-text").textContent = errorMessage;
       }
     } catch (error) {
+      // For network errors or exceptions
       console.error("Error during signup:", error);
-      //   toastr.error("Error during signup. Please try again.");
       const errorMessage =
-        error?.response?.data?.error || "Signup failed. Please try again.";
-      //   Swal.fire({
-      //     icon: 'error',
-      //     title: 'Signup Failed',
-      //     text: errorMessage,
-      //     showConfirmButton: true,
-      //   });
-      // signupErrorElement.style.display = "block";
-      // signupErrorElement.textContent = errorMessage;
+        error.message || "An unexpected error occurred. Please try again.";
       signupErrorElement.style.display = "flex";
-      signupErrorElement.querySelector(".error-text").textContent =
-        errorMessage;
+      signupErrorElement.querySelector(".error-text").textContent = errorMessage;
     }
   }
 
