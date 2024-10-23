@@ -1288,7 +1288,7 @@ button.hexa-icon-menu-btn .material-icons {
   content: "";
   left: 50%;
   position: absolute;
-  z-index: 99999;
+  z-index: 99999999;
   visibility: hidden;
   transform: translateX(-50%);
 }
@@ -4150,4 +4150,77 @@ h3.login-img-head-container {
 
 .error-text {
   color: #333;
+}
+@media (min-width: 1200px) {
+  .login-content-inner-container h3 {
+    font-size: 30px;
+    margin: 10px 0px;
+  }
+  .google-login-button {
+    padding: 8px 20px;
+    font-size: 14px;
+    margin: 10px 0px;
+  }
+  .input-field {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .sign-up-signin-btn {
+    width: 220px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  .login-input-form-container label {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  .forgot-password {
+    margin-top: 5px;
+  }
+  .sign-in-up-main-cont {
+    margin-top: 15px;
+  }
+  .login-content-inner-container p {
+    /* margin-bottom: 10px; */
+  }
+}
+
+@media (min-width: 1500px) {
+  .login-content-inner-container h3 {
+    font-size: 35px;
+    margin: 20px 0px;
+  }
+  .google-login-button {
+    padding: 15px 20px;
+    font-size: 18px;
+    margin: 20px 0px;
+  }
+  .input-field {
+    padding: 15px 15px;
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .sign-up-signin-btn {
+    width: 270px;
+    padding: 15px 20px;
+    font-size: 18px;
+  }
+  .login-input-form-container label {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .forgot-password {
+    margin-top: 8px;
+  }
+  .sign-in-up-main-cont {
+    margin-top: 30px;
+  }
+  .login-content-inner-container p {
+    /* margin-bottom: 15px; */
+  }
+}
+
+@media (min-width: 1920px) {
 }
