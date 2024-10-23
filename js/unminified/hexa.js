@@ -9414,6 +9414,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container");
   let isDropdownOpen = false;
 
+    // Function to check the jwtToken in localStorage and show appropriate UI
+    function checkAuthToken() {
+        if (localStorage.getItem("jwtToken")) {
+          fetchUserRole(); // If token exists, fetch user role and show logged-in UI
+        } else {
+          showLoggedOutUI(); // If no token, show logged-out UI immediately
+        }
+      }
+
+      // Check authentication status immediately when the page loads
+      checkAuthToken();
+
+      // Listen for changes to localStorage (this works across different tabs)
+      window.addEventListener("storage", function (event) {
+        if (event.key === "jwtToken") {
+          checkAuthToken(); // Re-check token when it is changed or removed
+        }
+      });
+
+
   async function fetchUserRole() {
     try {
       const response = await fetch(
@@ -9712,8 +9732,8 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("this is the lgoin response", response);
         const token = response.headers.get("authorization");
         if (token) {
-          localStorage.setItem("3DauthToken", token);
-          console.log("Login successful!");
+          localStorage.setItem("jwtToken", token);
+        //   console.log("Login successful!");
           closeLoginPopup();
           await fetchUserRole();
           const profileResponse = await fetch(
@@ -9989,6 +10009,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response) {
         console.log("Signup successful!");
+        const token = response.headers["authorization"];
+        localStorage.setItem("jwtToken", token);
         // toastr.success(`Signup Successful, Please Login Now!`);
         // Swal.fire({
         //     title: "Success",
@@ -10059,6 +10081,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => {
         if (response) {
           console.log("Logout successful");
+          localStorage.removeItem("jwtToken");
           //   window.location.reload();
           // const isAdmin = data.role === "admin";
           showLoggedOutUI();
