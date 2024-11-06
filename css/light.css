@@ -1,10 +1,10 @@
 /* ================= LOADER ================== */
 
-.hexa-loader-inner {
+.gauci-loader-inner {
     background: #eee;
 }
 
-.hexa-loader {
+.gauci-loader {
     border: 5px solid rgba(0, 0, 0, 0.1);
     border-top-color: #00A3FF;
 }
@@ -54,7 +54,7 @@ h6 {
     color: #111 !important;
 }
 
-#hexa-icon-panel hr {
+#gauci-icon-panel hr {
     border-bottom: 1px dashed #bcbcbc;
 }
 
@@ -76,247 +76,247 @@ h6 {
     border-left: 4px solid #009688;
 }
 
-.hexa-img-loader {
+.gauci-img-loader {
     border: 3px solid rgba(0, 0, 0, 0.1);
     border-top-color: #00A3FF;
 }
 
-#hexa-overlay-preview {
+#gauci-overlay-preview {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1,0H0V1H2V2H1' fill='%23FFFFFF'/%3E%3C/svg%3E") left top/contain #ccc;
     background-size: 15px 15px;
 }
 
 /* ================= PAGE STRUCTURE ================== */
 
-#hexa-toggle-left,
-#hexa-toggle-right {
+#gauci-toggle-left,
+#gauci-toggle-right {
     background-color: #fff;
     border: 1px solid #bcbcbc;
 }
 
-#hexa-toggle-right.closed,
-#hexa-toggle-left.closed {
+#gauci-toggle-right.closed,
+#gauci-toggle-left.closed {
     background-color: #fff;
 }
 
-#hexa-toggle-left .material-icons,
-#hexa-toggle-right .material-icons {
+#gauci-toggle-left .material-icons,
+#gauci-toggle-right .material-icons {
     color: #111;
 }
 
-#hexa-toggle-left:hover .material-icons,
-#hexa-toggle-right:hover .material-icons {
+#gauci-toggle-left:hover .material-icons,
+#gauci-toggle-right:hover .material-icons {
     color: #00A3FF;
 }
 
 /* ================= TOP BAR ================== */
 
-#hexa-top-bar {
+#gauci-top-bar {
     background: #eee;
     border-bottom: 1px solid #bcbcbc;
 }
 
-.hexa-top-bar-menu .hexa-btn-simple {
+.gauci-top-bar-menu .gauci-btn-simple {
     color:#111;
 }
   
-.hexa-top-bar-menu .hexa-btn-simple:disabled {
+.gauci-top-bar-menu .gauci-btn-simple:disabled {
     color:#494949
 }
 
 /* ================= DROPDOWN ================== */
 
-ul.hexa-dropdown {
+ul.gauci-dropdown {
     background: #fff;
     border: 1px solid #bcbcbc;
 }
 
-ul.hexa-dropdown li {
+ul.gauci-dropdown li {
     border-bottom: 1px solid #bcbcbc;
 }
 
-ul.hexa-dropdown li a {
+ul.gauci-dropdown li a {
     color: #494949;
 }
 
-ul.hexa-dropdown li a:hover {
+ul.gauci-dropdown li a:hover {
     color: #111;
 }
 
-ul.hexa-dropdown li a .material-icons {
+ul.gauci-dropdown li a .material-icons {
     color: #00A3FF;
 }
 
 /* ================= CONTENT BAR ================== */
 
-.hexa-content-bar {
+.gauci-content-bar {
     background: #fff;
     border: 1px solid #bcbcbc;
 }
 
-.hexa-content-bar .hexa-img-size {
+.gauci-content-bar .gauci-img-size {
     border-right: 1px solid #bcbcbc;
 }
 
-.hexa-content-bar .hexa-counter .hexa-btn,
-.hexa-content-bar .hexa-counter .hexa-btn:hover,
-.hexa-content-bar .hexa-counter .hexa-btn:focus {
+.gauci-content-bar .gauci-counter .gauci-btn,
+.gauci-content-bar .gauci-counter .gauci-btn:hover,
+.gauci-content-bar .gauci-counter .gauci-btn:focus {
     background: #fff;
     color: #494949;
 }
 
-.hexa-content-bar .hexa-counter .hexa-btn:hover {
+.gauci-content-bar .gauci-counter .gauci-btn:hover {
     color: #111;
 }
 
-.hexa-counter .hexa-btn:disabled {
+.gauci-counter .gauci-btn:disabled {
     color: rgba(0, 0, 0, 0.3);
 }
 
-.hexa-content-bar .hexa-counter:after {
+.gauci-content-bar .gauci-counter:after {
     background: #eee;
 }
 
-#hexa-img-drag {
+#gauci-img-drag {
     border-right: 1px solid #bcbcbc;
     background: #fff;
     color: #494949;
 }
 
-#hexa-img-drag:hover,
-#hexa-img-drag.active {
+#gauci-img-drag:hover,
+#gauci-img-drag.active {
     background: #eee;
     color: #111;
 }
 
 /* ================= ICON MENU ================== */
 
-#hexa-icon-menu {
+#gauci-icon-menu {
     background: #eee;
 }
 
-#hexa-icon-menu.closed {
+#gauci-icon-menu.closed {
     border-right: 1px solid #bcbcbc;
 }
 
-button.hexa-icon-menu-btn {
+button.gauci-icon-menu-btn {
     color: #494949;
     background: #eee;
 }
 
-button.hexa-icon-menu-btn.active,
-button.hexa-icon-menu-btn:hover {
+button.gauci-icon-menu-btn.active,
+button.gauci-icon-menu-btn:hover {
     color: #000;
     background: #fff;
 }
 
-#hexa-icon-panel {
+#gauci-icon-panel {
     border-right: 1px solid #bcbcbc;
     background: #fff;
 }
 
 /* ================= CONTENT ================== */
 
-#hexa-content {
+#gauci-content {
     background-color: #f9f9f9;
 }
 
-#hexa-canvas-wrap {
+#gauci-canvas-wrap {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1,0H0V1H2V2H1' fill='%23FFFFFF'/%3E%3C/svg%3E") left top/contain #ccc;
     background-size: 15px 15px;
 }
 
-#hexa-canvas-loader {
+#gauci-canvas-loader {
     background: #fff;
 }
 
 /* ================= LAYERS ================== */
 
-#hexa-right-col {
+#gauci-right-col {
     border-left: 1px solid #bcbcbc;
     background: #fff;
 }
 
-.hexa-layers-title {
+.gauci-layers-title {
     background: #eee;
 }
 
-#hexa-layers li {
+#gauci-layers li {
     color: #494949;
     border-bottom: 1px solid #bcbcbc;
     background: #fff;
 }
 
-#hexa-layers li:first-child {
+#gauci-layers li:first-child {
     border-top: 1px solid #bcbcbc;
 }
 
-#hexa-layers li:hover {
+#gauci-layers li:hover {
     color: #111;
 }
 
-#hexa-layers li.active {
+#gauci-layers li.active {
     color: #111;
     background: #eee;
 }
 
-#hexa-layers li .layer-icons {
+#gauci-layers li .layer-icons {
     background: #eee;
 }
 
-#hexa-layers li .layer-name {
+#gauci-layers li .layer-name {
     color:#494949;
 }
 
-#hexa-layers li .layer-name:focus {
+#gauci-layers li .layer-name:focus {
     color:#111;
 }
 
-#hexa-layers li .layer-icons .material-icons {
+#gauci-layers li .layer-icons .material-icons {
     color: #111;
 }
 
-#hexa-layers>li>.material-icons {
+#gauci-layers>li>.material-icons {
     color: #00A3FF;
 }
 
-#hexa-layers>li>.material-icons.layer-settings {
+#gauci-layers>li>.material-icons.layer-settings {
     background: #eee;
     color: #494949;
 }
 
-#hexa-layers>li>.material-icons.layer-settings:hover,
-#hexa-layers>li>.material-icons.layer-settings.active {
+#gauci-layers>li>.material-icons.layer-settings:hover,
+#gauci-layers>li>.material-icons.layer-settings.active {
     color: #111;
 }
 
-#hexa-layers li .layer-icons .layer-visible,
-#hexa-layers li .layer-icons .layer-unlocked {
+#gauci-layers li .layer-icons .layer-visible,
+#gauci-layers li .layer-icons .layer-unlocked {
     color: #009688;
 }
 
-#hexa-layers li .layer-icons .layer-hidden,
-#hexa-layers li .layer-icons .layer-locked {
+#gauci-layers li .layer-icons .layer-hidden,
+#gauci-layers li .layer-icons .layer-locked {
     color: #FFC107;
 }
 
-#hexa-no-layer a {
+#gauci-no-layer a {
     color: #00A3FF;
 }
 
-#hexa-layer-delete-wrap {
+#gauci-layer-delete-wrap {
     border-top: 1px dashed #bcbcbc;
 }
 
 /* ================= GRID ================== */
 
-.hexa-frames-grid .grid-item,
-.hexa-grid .grid-item {
+.gauci-frames-grid .grid-item,
+.gauci-grid .grid-item {
     background: #eee;
 }
 
-.hexa-frame,
-.hexa-element {
+.gauci-frame,
+.gauci-element {
     border: 1px solid #eee;
     background: #eee;
 }
@@ -325,40 +325,40 @@ button.hexa-icon-menu-btn:hover {
     color: #4CAF50;
 }
 
-.hexa-element.light {
+.gauci-element.light {
     background: #eee;
 }
 
-.hexa-element.dark {
+.gauci-element.dark {
     background: #00A3FF;
   border-color: #00A3FF;
 }
 
-.hexa-frame:hover,
-.hexa-element:hover {
+.gauci-frame:hover,
+.gauci-element:hover {
     border: 1px solid #00A3FF;
 }
 
-.hexa-element.dark:hover {
+.gauci-element.dark:hover {
   border-color: #1B1642;
 }
 
 .template-favorite,
-.hexa-frame .frame-favorite,
-.hexa-element .element-favorite {
+.gauci-frame .frame-favorite,
+.gauci-element .element-favorite {
     background: #00A3FF;
 }
 
-.hexa-element.dark .element-favorite {
+.gauci-element.dark .element-favorite {
   background: #1B1642;
 }
 
 
-.hexa-frames-grid .hexa-frame {
+.gauci-frames-grid .gauci-frame {
     border: 3px solid #eee;
 }
 
-.hexa-frames-grid .hexa-frame:hover {
+.gauci-frames-grid .gauci-frame:hover {
     border: 3px solid #111;
 }
 
@@ -382,80 +382,80 @@ button.hexa-icon-menu-btn:hover {
 
 /* ================= ELEMENTS ================== */
 
-#hexa-filters.hexa-grid img:hover {
+#gauci-filters.gauci-grid img:hover {
     border: 3px solid #00A3FF;
 }
 
-#hexa-filters.hexa-grid div label span {
+#gauci-filters.gauci-grid div label span {
     background: #eee;
     color: #494949;
 }
 
-#hexa-filters.hexa-grid input[type=checkbox]:checked+label img,
-#hexa-filters.hexa-grid input[type=radio]:checked+label img {
+#gauci-filters.gauci-grid input[type=checkbox]:checked+label img,
+#gauci-filters.gauci-grid input[type=radio]:checked+label img {
     border: 3px solid #00A3FF
 }
 
-#hexa-filters.hexa-grid div:hover span,
-#hexa-filters.hexa-grid input[type=checkbox]:checked+label>span,
-#hexa-filters.hexa-grid input[type=radio]:checked+label>span {
+#gauci-filters.gauci-grid div:hover span,
+#gauci-filters.gauci-grid input[type=checkbox]:checked+label>span,
+#gauci-filters.gauci-grid input[type=radio]:checked+label>span {
     color: #fff;
     background: #00A3FF
 }
 
-.hexa-element>.material-icons {
+.gauci-element>.material-icons {
     color: #494949;
 }
 
 /* ================= BUTTONS ================== */
 
-.hexa-btn-simple {
+.gauci-btn-simple {
     color: #494949;
 }
 
-.hexa-btn-simple:hover,
-.hexa-btn-simple.active {
+.gauci-btn-simple:hover,
+.gauci-btn-simple.active {
     color: #111;
 }
 
-.hexa-btn-simple:disabled {
+.gauci-btn-simple:disabled {
     color: #494949;
 }
 
-.hexa-btn-simple.star {
+.gauci-btn-simple.star {
     color: #FF9800 !important;
 }
 
-.hexa-btn {
+.gauci-btn {
     background: #eee;
     color: #111;
 }
 
-.hexa-btn:hover,
-.hexa-btn.primary:hover {
+.gauci-btn:hover,
+.gauci-btn.primary:hover {
     background: #5546e8;
     color:#fff;
 }
 
-.hexa-btn.active,
-.hexa-btn.active:hover,
-.hexa-btn.primary {
+.gauci-btn.active,
+.gauci-btn.active:hover,
+.gauci-btn.primary {
     background: #00A3FF;
     color: #fff;
 }
 
-.hexa-btn.danger {
+.gauci-btn.danger {
     background: #F44336;
     color:#fff;
 }
 
-.hexa-btn.danger:hover {
+.gauci-btn.danger:hover {
     background: #D32F2F;
     color:#fff;
 }
 
-.hexa-horizontal-center.active,
-.hexa-vertical-center.active {
+.gauci-horizontal-center.active,
+.gauci-vertical-center.active {
     background: #eee !important;
 }
 
@@ -466,12 +466,12 @@ button.hexa-icon-menu-btn:hover {
     background: #bcbcbc
 }
 
-.icon-group .hexa-btn {
+.icon-group .gauci-btn {
     border-right: 1px solid #bcbcbc;
 }
 
-.icon-group .hexa-btn:hover,
-.icon-group .hexa-btn.active {
+.icon-group .gauci-btn:hover,
+.icon-group .gauci-btn.active {
     background: #fff;
   color:#111
 }
@@ -489,149 +489,149 @@ button.hexa-icon-menu-btn:hover {
 
 /* ================= PAGINATION ================== */
 
-.hexa-pagination ul li {
+.gauci-pagination ul li {
     border: 1px solid #bcbcbc;
     color: #494949;
 }
 
-.hexa-pagination ul li.active,
-.hexa-pagination ul li.active:hover {
+.gauci-pagination ul li.active,
+.gauci-pagination ul li.active:hover {
     background: #00A3FF;
     border-color: #00A3FF;
     color: #fff;
 }
 
-.hexa-pagination ul li:hover {
+.gauci-pagination ul li:hover {
     border-color: #00A3FF;
 }
 
-.hexa-pagination ul li a {
+.gauci-pagination ul li a {
     color: #111;
 }
 
-.hexa-accordion .hexa-pagination ul li {
+.gauci-accordion .gauci-pagination ul li {
     color: #494949;
     background: #eee;
 }
 
-.hexa-accordion .hexa-pagination ul li.active,
-.hexa-accordion .hexa-pagination ul li.active:hover {
+.gauci-accordion .gauci-pagination ul li.active,
+.gauci-accordion .gauci-pagination ul li.active:hover {
     color: #fff;
     background: #00A3FF;
 }
 
-.hexa-accordion .hexa-pagination ul li a,
-.hexa-accordion .hexa-pagination ul li>span {
+.gauci-accordion .gauci-pagination ul li a,
+.gauci-accordion .gauci-pagination ul li>span {
     color: #494949;
 }
 
-.hexa-accordion .hexa-pagination ul li a:hover {
+.gauci-accordion .gauci-pagination ul li a:hover {
     color: #111
 }
 
-.hexa-accordion .hexa-pagination ul li.active>span {
+.gauci-accordion .gauci-pagination ul li.active>span {
     color: #fff
 }
 
 /* ================= ACCORDION ================== */
 
-ul.hexa-accordion>li {
+ul.gauci-accordion>li {
     border: 1px solid #bcbcbc;
 }
 
-ul.hexa-accordion>li.opened {
+ul.gauci-accordion>li.opened {
     border-color: #00A3FF;
 }
 
-ul.hexa-accordion>li>a {
+ul.gauci-accordion>li>a {
     color: #494949;
 }
 
-ul.hexa-accordion>li>a:hover,
-ul.hexa-accordion>li.opened>a {
+ul.gauci-accordion>li>a:hover,
+ul.gauci-accordion>li.opened>a {
     color: #111;
 }
 
-ul.hexa-accordion>li.opened>a {
+ul.gauci-accordion>li.opened>a {
     border-bottom: 1px solid #bcbcbc
 }
 
-ul.hexa-accordion>li>a>.data-count {
+ul.gauci-accordion>li>a>.data-count {
     background: #00A3FF;
     color: #fff;
 }
 
 /* ================= RANGESLIDER ================== */
 
-.hexa-slider {
+.gauci-slider {
     background: #bcbcbc;
 }
 
-.hexa-slider::-webkit-slider-thumb {
+.gauci-slider::-webkit-slider-thumb {
     background: #00A3FF;
     border: 3px solid #fff;
 }
 
-.hexa-slider::-moz-range-thumb {
+.gauci-slider::-moz-range-thumb {
     background: #00A3FF;
     border: 3px solid #fff;
 }
 
 /* ================= COUNTER ================== */
 
-.hexa-counter .hexa-btn,
-.hexa-counter .hexa-btn:hover,
-.hexa-counter .hexa-btn:focus {
+.gauci-counter .gauci-btn,
+.gauci-counter .gauci-btn:hover,
+.gauci-counter .gauci-btn:focus {
     background: #bcbcbc;
 }
 
-.hexa-counter .hexa-btn:disabled {
+.gauci-counter .gauci-btn:disabled {
     color: rgba(0, 0, 0, 0.3);
 }
 
 /* ================= CONTROLS ================== */
 
-.hexa-control-label span {
+.gauci-control-label span {
     background: #eee;
     color: #111;
 }
 
-.hexa-form-field {
+.gauci-form-field {
     background: #eee;
     border: 1px solid #bcbcbc;
     color: #494949;
 }
 
-.hexa-form-field:focus {
+.gauci-form-field:focus {
     background: #fff;
     border: 1px solid #00A3FF;
     color: #111;
 }
 
-.hexa-search-wrap .material-icons {
+.gauci-search-wrap .material-icons {
     color: #494949;
 }
 
-#hexa-element-search-icon.cancel,
-#hexa-icon-search-icon.cancel {
+#gauci-element-search-icon.cancel,
+#gauci-icon-search-icon.cancel {
     color: #F44336;
 }
 
-.hexa-sub-settings {
+.gauci-sub-settings {
     border-top: 1px dashed #bcbcbc;
 }
 
 /* ================= COLORPICKER ================== */
 
-.hexa-colorpicker,
-.hexa-colorpicker:focus,
-.hexa-form-field {
+.gauci-colorpicker,
+.gauci-colorpicker:focus,
+.gauci-form-field {
     background: #eee;
     border: 1px solid #bcbcbc;
     color: #494949;
 }
 
-.hexa-colorpicker:focus {
+.gauci-colorpicker:focus {
     color: #111;
 }
 
@@ -673,18 +673,18 @@ ul.hexa-accordion>li>a>.data-count {
 
 /* ================= SELECT ================== */
 
-.hexa-select {
+.gauci-select {
     color: #494949;
     background: #eee url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23aaaaaa' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E") no-repeat right 0.5rem center;
     background-size: 20px 10px;
     border: 1px solid #bcbcbc;
 }
 
-.hexa-select:focus {
+.gauci-select:focus {
     border: 1px solid #00A3FF;
 }
 
-.hexa-select:focus::-ms-value {
+.gauci-select:focus::-ms-value {
     color: #465362;
     background-color: #fff;
 }
@@ -746,42 +746,42 @@ ul.hexa-accordion>li>a>.data-count {
 
 /* ================= TABS ================== */
 
-.hexa-tabs-menu li:hover {
+.gauci-tabs-menu li:hover {
     color: #111;
 }
 
-.hexa-tabs-menu li.active {
+.gauci-tabs-menu li.active {
     background: #00A3FF;
     color: #fff;
 }
 
 /* ================= TOGGLE ================== */
 
-.hexa-toggle-switch {
+.gauci-toggle-switch {
     background: #bcbcbc;
 }
 
-.hexa-toggle-switch:before {
+.gauci-toggle-switch:before {
     background: #fff;
 }
 
-.hexa-toggle-checkbox:checked+.hexa-toggle-switch {
+.gauci-toggle-checkbox:checked+.gauci-toggle-switch {
     background: #00A3FF;
 }
 
 /* ================= CHECKBOX ================== */
 
-.hexa-checkmark {
+.gauci-checkmark {
     background-color: #eee;
     border: 1px solid #bcbcbc;
 }
 
-.hexa-checkbox input:checked~.hexa-checkmark {
+.gauci-checkbox input:checked~.gauci-checkmark {
     background-color: #00A3FF;
     border-color: #00A3FF;
 }
 
-.hexa-checkbox .hexa-checkmark:after {
+.gauci-checkbox .gauci-checkmark:after {
     border: solid #111;
     border-width: 0 3px 3px 0;
 }
@@ -794,106 +794,106 @@ ul.hexa-accordion>li>a>.data-count {
 
 /* ================= MODAL ================== */
 
-.hexa-modal {
+.gauci-modal {
     background: rgba(224, 224, 224, 0.9);
 }
 
-.hexa-modal-inner>.hexa-tabs>.hexa-tabs-menu>li {
+.gauci-modal-inner>.gauci-tabs>.gauci-tabs-menu>li {
     background: transparent;
   color:#494949;
 }
 
-.hexa-modal-inner>.hexa-tabs>.hexa-tabs-menu>li:hover, 
-.hexa-modal-inner>.hexa-tabs>.hexa-tabs-menu>li.active {
+.gauci-modal-inner>.gauci-tabs>.gauci-tabs-menu>li:hover, 
+.gauci-modal-inner>.gauci-tabs>.gauci-tabs-menu>li.active {
     background: #fff;
   color:#111;
 }
 
-.hexa-modal-inner>.hexa-tabs>.hexa-tab,
-.hexa-modal-bg {
+.gauci-modal-inner>.gauci-tabs>.gauci-tab,
+.gauci-modal-bg {
     background: #fff;
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.20), 0 15px 12px rgba(0, 0, 0, 0.12);
 }
 
-.hexa-modal-close {
+.gauci-modal-close {
     color: #fff;
     background: #F44336;
 }
 
-.hexa-modal-close:hover {
+.gauci-modal-close:hover {
     color: #fff;
     background: #D32F2F;
 }
 
-.hexa-modal-close .material-icons {
+.gauci-modal-close .material-icons {
     font-size: 20px;
     line-height: 36px;
 }
 
-#hexa-download-as-json,
-#hexa-save-as-json {
+#gauci-download-as-json,
+#gauci-save-as-json {
     border-top: 1px dashed #bcbcbc;
 }
 
-.hexa-select-btn-block>div:first-child {
+.gauci-select-btn-block>div:first-child {
     border-right: 1px dashed #bcbcbc
 }
 
 /* ================= TEMPLATE LIBRARY ================== */
 
-.hexa-template-list {
+.gauci-template-list {
     border: 1px solid #bcbcbc;
 }
 
-.hexa-template-list li {
+.gauci-template-list li {
     border-bottom: 1px solid #bcbcbc;
 }
 
-.hexa-template-list li.active {
+.gauci-template-list li.active {
     background:#eee
 }
 
-#hexa-history-list li .info .material-icons {
+#gauci-history-list li .info .material-icons {
     color: #00A3FF;
 }
 
-#hexa-history-list li .info span.time {
+#gauci-history-list li .info span.time {
     background: #fff;
     color:#111;
 }
 
 /* ================= MASONRY ================== */
 
-.hexa-masonry-item .favorite {
+.gauci-masonry-item .favorite {
     background: #fff;
 }
 
-.hexa-masonry-item-inner {
+.gauci-masonry-item-inner {
     border: 4px solid #eee;
 }
 
-.grid-item:hover .hexa-masonry-item-inner,
-.hexa-masonry-item-inner:hover {
+.grid-item:hover .gauci-masonry-item-inner,
+.gauci-masonry-item-inner:hover {
     border-color: #00A3FF;
 }
 
-.hexa-masonry-item-desc {
+.gauci-masonry-item-desc {
     background: #00A3FF;
     color: #fff
 }
 
-.hexa-svg-library-delete,
-.hexa-library-delete {
+.gauci-svg-library-delete,
+.gauci-library-delete {
     color: #fff;
     background: #F44336;
 }
 
-.hexa-svg-library-delete:hover,
-.hexa-library-delete:hover {
+.gauci-svg-library-delete:hover,
+.gauci-library-delete:hover {
     background: #D32F2F;
 }
 
-.hexa-grid.svg-library-grid .hexa-masonry-item-inner {
+.gauci-grid.svg-library-grid .gauci-masonry-item-inner {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='2'%3E%3Cpath d='M1,0H0V1H2V2H1' fill='%23FFFFFF'/%3E%3C/svg%3E") left top/contain #ccc;
     background-size: 15px 15px;
 }
@@ -959,13 +959,13 @@ a.pexels-url:hover {
     border-top: 1px solid #bcbcbc;
 }
 
-#hexa-ruler-icon {
+#gauci-ruler-icon {
   background: #eee;
     border-right:1px solid #bcbcbc;
     border-bottom:1px solid #bcbcbc;
 }
 
-#hexa-ruler-icon.closed {
+#gauci-ruler-icon.closed {
     background: transparent;
 }
 
@@ -995,7 +995,7 @@ a.pexels-url:hover {
 /* ================= MEDIA QUERIES ================== */
 
 @media only screen and (max-width: 800px) {
-    .hexa-modal-inner>.hexa-tabs>.hexa-tabs-menu>li {
+    .gauci-modal-inner>.gauci-tabs>.gauci-tabs-menu>li {
         background: #fff;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }

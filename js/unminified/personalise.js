@@ -373,7 +373,7 @@ function initializeCanvas() {
 document.getElementById("text-1").addEventListener("input", function () {
   updateCanvasText(1, this.value);
   if (activeItem) {
-    const openModalBtn = document.getElementById("hexa-mini-editor-save");
+    const openModalBtn = document.getElementById("gauci-mini-editor-save");
     openModalBtn.style.visibility = "visible";
   }
 });
@@ -381,7 +381,7 @@ document.getElementById("text-1").addEventListener("input", function () {
 document.getElementById("text-2").addEventListener("input", function () {
   updateCanvasText(2, this.value);
   if (activeItem) {
-    const openModalBtn = document.getElementById("hexa-mini-editor-save");
+    const openModalBtn = document.getElementById("gauci-mini-editor-save");
     openModalBtn.style.visibility = "visible";
   }
 });
@@ -776,7 +776,7 @@ function handleImageUploadAlternate(event) {
     // // miniEditorAdjust.style.display = "none";
     // miniEditorAdjust.classList.add("display-none-prop");
     // miniEditorAdjust.classList.remove("display-block-prop");
-    const openModalBtn = document.getElementById("hexa-mini-editor-save");
+    const openModalBtn = document.getElementById("gauci-mini-editor-save");
     openModalBtn.style.visibility = "visible";
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -1260,7 +1260,7 @@ initialize3DViewer();
             // miniEditorAdjust.classList.add("display-none-prop");
             // miniEditorAdjust.classList.remove("display-block-prop");
             const miniEditorSaveBtnt = document.getElementById(
-              "hexa-save-mini-cont"
+              "gauci-save-mini-cont"
             );
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
@@ -1328,7 +1328,7 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded.");
 
   // Get the button that opens the modal
-  const openModalBtn = document.getElementById("hexa-mini-editor-save");
+  const openModalBtn = document.getElementById("gauci-mini-editor-save");
   if (openModalBtn) {
     console.log("Found the open modal button.");
     openModalBtn.addEventListener("click", openModal);
@@ -1420,7 +1420,7 @@ async function handleSaveClick() {
 
 // Add event listener to the button
 // document
-//   .getElementById("hexa-mini-editor-save")
+//   .getElementById("gauci-mini-editor-save")
 //   .addEventListener("click", handleSaveClick);
 function convertToDataURL(url, callback) {
   var xhr = new XMLHttpRequest();
@@ -1599,7 +1599,7 @@ function saveTemplate() {
             Swal.close();
             closeModal();
             // Close the modal after saving
-            // document.querySelector(".hexa-modal").style.display = "none";
+            // document.querySelector(".gauci-modal").style.display = "none";
             const modal = document.getElementById(
               "mini-templates-public-private-modal"
             );

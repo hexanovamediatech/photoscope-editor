@@ -3,9 +3,9 @@
     "use strict";
 
     $(document).ready(function () {
-        /* Initialize hexa plugin */
-        $('#hexa').hexa({
-            baseURL: "./", // The url of the main directory. For example; "http://www.mysite.com/hexa-js/"
+        /* Initialize gauci plugin */
+        $('#gauci').gauci({
+            baseURL: "./", // The url of the main directory. For example; "http://www.mysite.com/gauci-js/"
 
             //////////////////////* CANVAS SETTINGS *//////////////////////
             fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif", // Should be a web safe font
@@ -34,7 +34,7 @@
             enableGLFiltering: true, // set false if you experience issues on image filters.
             textureSize: 4096, // Required for enableGLFiltering
             watermark: false, // true or false
-            watermarkText: 'https://hexa.website/', // The watermark text
+            watermarkText: 'https://gauci.website/', // The watermark text
             watermarkFontFamily: 'Georgia, serif', // Should be a web safe font
             watermarkFontStyle: 'normal', // Possible values: "", "normal", "italic" or "oblique".
             watermarkFontColor: '#000', // Watermark font color
@@ -59,34 +59,34 @@
                     
                     /* Do what you want */
                     
-                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                     // toastr.error("Error!", "Lorem ipsum dolor");
                 });
 
                 /* Frame - Add to Favorite */
-                selector.find('.hexa-frames-grid').on('click','.frame-favorite button.star',function(){
+                selector.find('.gauci-frames-grid').on('click','.frame-favorite button.star',function(){
                     var button = $(this);
                     var frameid = button.data('frameid');
                     
                     /* Do what you want */
 
-                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                     // toastr.error("Error!", "Lorem ipsum dolor");
                 });
 
                 /* Element - Add to Favorite */
-                selector.find('.hexa-grid').on('click','.element-favorite button.star',function(){
+                selector.find('.gauci-grid').on('click','.element-favorite button.star',function(){
                     var button = $(this);
                     var elementid = button.data('elementid');
                     
                     /* Do what you want */
 
-                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                     // toastr.error("Error!", "Lorem ipsum dolor");
                 });
 
                 /* Delete Template From Library */
-                selector.find('.hexa-template-list').on('click','.hexa-template-delete',function(){
+                selector.find('.gauci-template-list').on('click','.gauci-template-delete',function(){
                     var answer = window.confirm("Are you sure you want to delete the template permanently?");
                     if (answer) {
                         var target = $(this).data('target');
@@ -94,23 +94,23 @@
 
                         /* Do what you want */
 
-                        toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                        toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                         // toastr.error("Error!", "Lorem ipsum dolor");
                     }
                 });
 
                 /* Upload Image To Media Library */
-                selector.find('#hexa-library-upload-img').on('change', function (e) {
+                selector.find('#gauci-library-upload-img').on('change', function (e) {
                     var file_data = this.files[0];
 
                     /* Do what you want */
 
-                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                     // toastr.error("Error!", "Lorem ipsum dolor");
                 });
 
                 /* Delete Image From Media Library */
-                selector.find('.media-library-grid').on('click','.hexa-library-delete',function(){
+                selector.find('.media-library-grid').on('click','.gauci-library-delete',function(){
                     var answer = window.confirm("Are you sure you want to delete the image permanently?");
                     if (answer) {
                         var target = $(this).data('target');
@@ -124,17 +124,17 @@
                 });
 
                 /* Upload SVG To Media Library */
-                selector.find('#hexa-svg-library-upload-img').on('change', function (e) {
+                selector.find('#gauci-svg-library-upload-img').on('change', function (e) {
                     var file_data = this.files[0];
 
                     /* Do what you want */
 
-                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                     // toastr.error("Error!", "Lorem ipsum dolor");
                 });
 
                 /* Delete SVG From Media Library */
-                selector.find('.svg-library-grid').on('click','.hexa-svg-library-delete',function(){
+                selector.find('.svg-library-grid').on('click','.gauci-svg-library-delete',function(){
                     var answer = window.confirm("Are you sure you want to delete the image permanently?");
                     if (answer) {
                         var target = $(this).data('target');
@@ -148,12 +148,12 @@
                 });
 
                 // Save preferences
-                selector.find('#hexa-preferences-save').on('click', function() {
+                selector.find('#gauci-preferences-save').on('click', function() {
                     var button = $(this);
                     var settings = {};
                     var keys = [];
                     var values = [];
-                    selector.find('#hexa-preferences .preference').each(function(index, value) {
+                    selector.find('#gauci-preferences .preference').each(function(index, value) {
                         keys.push($(this).attr('id'));
                         values.push($(this).val());
                     });
@@ -166,7 +166,7 @@
 
                     /* Do what you want */
 
-                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                    toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                     // toastr.error("Error!", "Lorem ipsum dolor");
 
                 });
@@ -179,21 +179,21 @@
                  * @see http://fabricjs.com/docs/fabric.Canvas.html#toDataURL
                  */
 
-                // var name = selector.find('#hexa-json-save-name').val();
+                // var name = selector.find('#gauci-json-save-name').val();
                 
                 console.log(template);
 
                 /* Do what you want */
 
-                toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                 // toastr.error("Error!", "Lorem ipsum dolor");
             },
 
             //////////////////////* SAVE IMAGE *//////////////////////
             saveImage: function(selector, imgData) {
-                var name = selector.find('#hexa-save-img-name').val();
-                var quality = parseFloat(selector.find('#hexa-save-img-quality').val());
-                var format = selector.find('#hexa-save-img-format').val();
+                var name = selector.find('#gauci-save-img-name').val();
+                var quality = parseFloat(selector.find('#gauci-save-img-quality').val());
+                var format = selector.find('#gauci-save-img-format').val();
 
                 if (format == 'svg') {
                     // var imgData is raw svg code
@@ -211,26 +211,26 @@
                     /* Do what you want */
                 }
 
-                toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to hexa using a server-side language. See Documentation -> Integration.", "Info");
+                toastr.success("To make 'saving functions' work, you should have a database on your server and integrate it to gauci using a server-side language. See Documentation -> Integration.", "Info");
                 // toastr.error("Error!", "Lorem ipsum dolor");
             }
         });
 
        
-        $("#hexa-bg-color").on("change", function() {
+        $("#gauci-bg-color").on("change", function() {
             var backgroundColor = $(this).val();
-            $('#hexa-canvas').css('background-color', backgroundColor);
+            $('#gauci-canvas').css('background-color', backgroundColor);
             // Additional code for your canvas functionality if needed
         });
 
-        $('.hexa-icon-menu-btn').hover(
+        $('.gauci-icon-menu-btn').hover(
             function() { // Hover in
-                $(this).find('.hexa-hover-img').show();
-                $(this).find('.hexa-normal-state-img').hide();
+                $(this).find('.gauci-hover-img').show();
+                $(this).find('.gauci-normal-state-img').hide();
             },
             function() { // Hover out
-                $(this).find('.hexa-hover-img').hide();
-                $(this).find('.hexa-normal-state-img').show();
+                $(this).find('.gauci-hover-img').hide();
+                $(this).find('.gauci-normal-state-img').show();
             }
         );   
         
@@ -238,7 +238,7 @@
 
     $(document).ready(function() {
         // Click event handler for the custom shape container
-        $('#hexa-shape-select').trigger('click');
+        $('#gauci-shape-select').trigger('click');
 
     });
 

@@ -1,16 +1,16 @@
 /*jshint esversion: 9, undef: false, unused: false */
 /*
- * Plugin Name: hexa
- * Plugin URI: https://hexa.website/js-version/
+ * Plugin Name: gauci
+ * Plugin URI: https://gauci.website/js-version/
  * Version: 1.9.1
- * Description: hexa - Javascript Image Editor
+ * Description: gauci - Javascript Image Editor
  * Author URI: http://codecanyon.net/user/egemenerd
  * License: http://codecanyon.com/licenses
  * Author: ThemeMasters
  */
 (function ($) {
   "use strict";
-  $.fn.hexa = function (options) {
+  $.fn.gauci = function (options) {
     var selector = $(this);
     var windowWidth = document.body.clientWidth;
     // Default settings
@@ -43,7 +43,7 @@
         enableGLFiltering: true,
         textureSize: 4096,
         watermark: false,
-        watermarkText: "hexa.website",
+        watermarkText: "gauci.website",
         watermarkFontFamily: "Georgia, serif",
         watermarkFontStyle: "normal",
         watermarkFontColor: "#000",
@@ -59,7 +59,7 @@
     );
     // Define Variables
     var c = "",
-      // db = new Localbase('hexa'),
+      // db = new Localbase('gauci'),
       mode = "none",
       img = "",
       imgurl = "",
@@ -121,22 +121,22 @@
     materialIcons
       .load(null, 10000)
       .then(function () {
-        $("#hexa").find("#hexa-main-loader").fadeOut(200);
+        $("#gauci").find("#gauci-main-loader").fadeOut(200);
       })
       .catch(function (e) {
         console.log(e);
-        $("#hexa").find("#hexa-main-loader").hide();
+        $("#gauci").find("#gauci-main-loader").hide();
       });
     /* LazyLoad */
     var lazyLoadInstance = new LazyLoad({
       callback_error: (img) => {
         img.setAttribute("src", settings.baseURL + "assets/placeholder.png");
         $(img).parent().css("min-height", "auto");
-        $(img).parent().find(".hexa-img-loader").remove();
+        $(img).parent().find(".gauci-img-loader").remove();
       },
       callback_loaded: (img) => {
         $(img).parent().css("min-height", "auto");
-        $(img).parent().find(".hexa-img-loader").remove();
+        $(img).parent().find(".gauci-img-loader").remove();
       },
     });
     // Populate Websafe Fonts
@@ -178,9 +178,9 @@
             "/" +
             item.icons[ii].ligature;
           selector
-            .find("#hexa-icons .hexa-grid")
+            .find("#gauci-icons .gauci-grid")
             .append(
-              '<div class="hexa-element add-element" data-elsource="' +
+              '<div class="gauci-element add-element" data-elsource="' +
                 url +
                 '" data-loader="no" title="' +
                 item.icons[ii].name +
@@ -193,7 +193,7 @@
       }
     });
     // Select2
-    selector.find(".hexa-select.hexa-select2").select2({
+    selector.find(".gauci-select.gauci-select2").select2({
       theme: "dark",
       width: "100%",
       templateSelection: select2format,
@@ -201,12 +201,12 @@
       allowHtml: true,
     });
     // Spectrum Colorpicker
-    selector.find(".hexa-colorpicker.disallow-empty").spectrum({
+    selector.find(".gauci-colorpicker.disallow-empty").spectrum({
       allowEmpty: false,
       showInitial: true,
       hideAfterPaletteSelect: true,
     });
-    selector.find(".hexa-colorpicker.allow-empty").spectrum({
+    selector.find(".gauci-colorpicker.allow-empty").spectrum({
       allowEmpty: true,
       showInitial: false,
       hideAfterPaletteSelect: true,
@@ -220,7 +220,7 @@
     toastr.options.hideEasing = "linear";
     toastr.options.closeEasing = "linear";
     // UI Draggable
-    selector.find("#hexa-canvas-wrap").draggable({
+    selector.find("#gauci-canvas-wrap").draggable({
       disabled: true,
     });
     // Pagination
@@ -234,7 +234,7 @@
           '<div id="' +
           target.attr("id") +
           "-pagination" +
-          '" class="hexa-pagination"></div>';
+          '" class="gauci-pagination"></div>';
         target.after(paginationDiv);
         selector.find("#" + target.attr("id") + "-pagination").pagination({
           items: num,
@@ -290,32 +290,32 @@
     /* Open Panel */
     function openPanel() {
       selector.removeClass("panel-closed");
-      selector.find(".hexa-icon-menu-btn").removeClass("active");
-      selector.find("#hexa-icon-menu").removeClass("closed");
-      selector.find("#hexa-toggle-left").removeClass("closed");
+      selector.find(".gauci-icon-menu-btn").removeClass("active");
+      selector.find("#gauci-icon-menu").removeClass("closed");
+      selector.find("#gauci-toggle-left").removeClass("closed");
       selector
-        .find("#hexa-toggle-left")
+        .find("#gauci-toggle-left")
         .find(".material-icons")
         .html("chevron_left");
-      selector.find("#hexa-icon-panel").show();
+      selector.find("#gauci-icon-panel").show();
     }
     /* Close Panel */
     function closePanel() {
       selector.addClass("panel-closed");
-      selector.find(".hexa-icon-menu-btn").removeClass("active");
-      selector.find("#hexa-icon-menu").addClass("closed");
-      selector.find("#hexa-toggle-left").addClass("closed");
+      selector.find(".gauci-icon-menu-btn").removeClass("active");
+      selector.find("#gauci-icon-menu").addClass("closed");
+      selector.find("#gauci-toggle-left").addClass("closed");
       selector
-        .find("#hexa-toggle-left")
+        .find("#gauci-toggle-left")
         .find(".material-icons")
         .html("chevron_right");
-      selector.find("#hexa-icon-panel").hide();
+      selector.find("#gauci-icon-panel").hide();
     }
     $(document).ready(function () {
       closePanel();
     });
     /* Left Panel Toggle */
-    selector.find("#hexa-toggle-left").on("click", function () {
+    selector.find("#gauci-toggle-left").on("click", function () {
       if ($(this).hasClass("closed")) {
         openPanel();
       } else {
@@ -323,76 +323,76 @@
       }
     });
     /* Right Panel Toggle */
-    selector.find("#hexa-toggle-right").on("click", function () {
+    selector.find("#gauci-toggle-right").on("click", function () {
       if ($(this).hasClass("closed")) {
         selector.removeClass("layers-closed");
         $(this).removeClass("closed");
         $(this).find(".material-icons").html("chevron_right");
-        selector.find("#hexa-right-col").show();
+        selector.find("#gauci-right-col").show();
       } else {
         selector.addClass("layers-closed");
         $(this).addClass("closed");
         $(this).find(".material-icons").html("chevron_left");
-        selector.find("#hexa-right-col").hide();
+        selector.find("#gauci-right-col").hide();
       }
     });
-    selector.find(".hexa-toggle-right").on("click", function (e) {
+    selector.find(".gauci-toggle-right").on("click", function (e) {
       e.preventDefault();
-      selector.find("#hexa-toggle-right").trigger("click");
+      selector.find("#gauci-toggle-right").trigger("click");
     });
     /* Close panels if needed */
     if (windowWidth <= 1200) {
-      selector.find("#hexa-toggle-right").trigger("click");
-      selector.find("#hexa-toggle-left").trigger("click");
+      selector.find("#gauci-toggle-right").trigger("click");
+      selector.find("#gauci-toggle-left").trigger("click");
     }
     /* Icon Button */
-    selector.find(".hexa-icon-menu-btn").on("click", function () {
+    selector.find(".gauci-icon-menu-btn").on("click", function () {
       if ($(this).data("target")) {
         if ($(this).hasClass("active")) {
           closePanel();
         } else {
           openPanel();
           $(this).addClass("active");
-          selector.find(".hexa-icon-panel-content").addClass("panel-hide");
+          selector.find(".gauci-icon-panel-content").addClass("panel-hide");
           selector.find($(this).data("target")).removeClass("panel-hide");
         }
       }
-      if ($(this).attr("id") == "hexa-btn-elements") {
-        selector.find("#hexa-all-elements-open").trigger("click");
+      if ($(this).attr("id") == "gauci-btn-elements") {
+        selector.find("#gauci-all-elements-open").trigger("click");
       }
     });
     /* Dropdown Menu */
-    selector.find(".hexa-dropdown-wrap").on("click", function () {
+    selector.find(".gauci-dropdown-wrap").on("click", function () {
       if ($(this).hasClass("opened")) {
         $(this).removeClass("opened");
-        $(this).find(".hexa-dropdown").hide();
+        $(this).find(".gauci-dropdown").hide();
       } else {
         $(this).addClass("opened");
-        $(this).find(".hexa-dropdown").show();
+        $(this).find(".gauci-dropdown").show();
       }
     });
 
-    selector.find(".hexa-accordion-mask").on("click", function () {
+    selector.find(".gauci-accordion-mask").on("click", function () {
       if ($(this).hasClass("opened")) {
         $(this).removeClass("opened");
       } else {
         $(this).addClass("opened");
       }
     });
-    $("#hexa-accordion-maskbutton").on("click", function () {
+    $("#gauci-accordion-maskbutton").on("click", function () {
       var arrowIcon = $(this).find(".arrow");
       arrowIcon.toggleClass("arrow-down arrow-up");
       if (arrowIcon.hasClass("arrow-up")) {
         arrowIcon.text("keyboard_arrow_up");
-        $("#hexa-mydiv").addClass("active");
+        $("#gauci-mydiv").addClass("active");
       } else {
         arrowIcon.text("keyboard_arrow_down");
-        $("#hexa-mydiv").removeClass("active");
+        $("#gauci-mydiv").removeClass("active");
       }
     });
     /* Accordion */
     selector
-      .find(".hexa-icon-panel-content ul.hexa-accordion > li > a")
+      .find(".gauci-icon-panel-content ul.gauci-accordion > li > a")
       .on("click", function (e) {
         e.preventDefault();
         var parent = $(this).parent().parent();
@@ -404,7 +404,7 @@
         }
       });
     /* Lock/Unlock Button */
-    selector.find(".hexa-lock-unlock").on("click", function () {
+    selector.find(".gauci-lock-unlock").on("click", function () {
       if ($(this).hasClass("active")) {
         $(this).removeClass("active");
         $(this).find(".material-icons").html("lock_open");
@@ -414,7 +414,7 @@
       }
     });
     /* Rangeslider */
-    selector.find(".hexa-slider").on("input", function () {
+    selector.find(".gauci-slider").on("input", function () {
       var wrapper = $(this).parent().parent();
       wrapper.find(".slider-label span").html($(this).val());
       selector.find("span.tm-count-zoom").html($(this).val());
@@ -430,12 +430,12 @@
       }
     });
     /* Tabs */
-    selector.find(".hexa-tabs-menu li").on("click", function () {
+    selector.find(".gauci-tabs-menu li").on("click", function () {
       var target = $(this).data("target");
       var wrapper = $(this).parent().parent();
-      wrapper.find("> .hexa-tab").removeClass("active");
+      wrapper.find("> .gauci-tab").removeClass("active");
       $(target).addClass("active");
-      wrapper.find("> .hexa-tabs-menu li").removeClass("active");
+      wrapper.find("> .gauci-tabs-menu li").removeClass("active");
       $(this).addClass("active");
     });
     /* Numeric validation */
@@ -453,14 +453,14 @@
         }
       });
     // Click event handler for the "Fit" button
-    selector.find("#hexa-fit-container").on("click", function () {
+    selector.find("#gauci-fit-container").on("click", function () {
       adjustZoom();
       fixZoomOut();
       centerCanvas();
     });
     /* Numeric Plus */
-    selector.find(".hexa-counter .counter-plus").on("click", function () {
-      var input = $(this).parent().find("input.hexa-form-field");
+    selector.find(".gauci-counter .counter-plus").on("click", function () {
+      var input = $(this).parent().find("input.gauci-form-field");
       var val = parseInt(input.val()) + parseInt(input.data("step"));
       if (input.data("max") && val > input.data("max")) {
         val = input.data("max");
@@ -472,13 +472,13 @@
         val = 0;
       }
       input.val(val);
-      if ($(this).attr("id") == "hexa-img-zoom-in") {
+      if ($(this).attr("id") == "gauci-img-zoom-in") {
         adjustZoom(val);
       }
     });
     /* Numeric Minus */
-    selector.find(".hexa-counter .counter-minus").on("click", function () {
-      var input = $(this).parent().find("input.hexa-form-field");
+    selector.find(".gauci-counter .counter-minus").on("click", function () {
+      var input = $(this).parent().find("input.gauci-form-field");
       var val = parseInt(input.val()) - parseInt(input.data("step"));
       if (input.data("max") && val > input.data("max")) {
         val = input.data("max");
@@ -490,14 +490,14 @@
         val = 0;
       }
       input.val(val);
-      if ($(this).attr("id") == "hexa-img-zoom-out") {
+      if ($(this).attr("id") == "gauci-img-zoom-out") {
         adjustZoom(val);
       }
     });
     /* Deselect Active Object */
-    selector.find(".hexa-wrap").on("click", function (e) {
+    selector.find(".gauci-wrap").on("click", function (e) {
       var target = e.target["id"];
-      if (target != "" && target == "hexa-content") {
+      if (target != "" && target == "gauci-content") {
         canvas.discardActiveObject();
         canvas.requestRenderAll();
       }
@@ -531,12 +531,12 @@
       var target = transform.target;
       if (target.type === "activeSelection") {
         $.each(target._objects, function (index, val) {
-          var item = selector.find("#hexa-layers #" + val.id);
+          var item = selector.find("#gauci-layers #" + val.id);
           item.find("a.delete-layer").trigger("click");
         });
         canvas.discardActiveObject();
       } else {
-        var item = selector.find("#hexa-layers #" + target.id);
+        var item = selector.find("#gauci-layers #" + target.id);
         item.find("a.delete-layer").trigger("click");
       }
     }
@@ -571,9 +571,9 @@
     function cloneObject(eventData, transform) {
       var target = transform.target;
       if (target.type === "activeSelection") {
-        toastr.warning(hexaParams.noDuplicate, hexaParams.warning);
+        toastr.warning(gauciParams.noDuplicate, gauciParams.warning);
       } else {
-        var item = selector.find("#hexa-layers #" + target.id);
+        var item = selector.find("#gauci-layers #" + target.id);
         item.find("a.duplicate-layer").trigger("click");
       }
     }
@@ -610,7 +610,7 @@
       }
     );
     // selecting user defined color
-    selector.find("#hexa-bg-color").on("change", function () {
+    selector.find("#gauci-bg-color").on("change", function () {
       var bgColor = $(this).val();
       setCanvasColor(bgColor);
     });
@@ -632,7 +632,7 @@
       });
     });
     /* Create Canvas */
-    c = selector.find("#hexa-canvas")[0];
+    c = selector.find("#gauci-canvas")[0];
     canvas = new fabric.Canvas(c, { preserveObjectStacking: true });
     canvas.backgroundColor = settings.canvasColor;
     /* Set File Name */
@@ -645,17 +645,17 @@
       } else if (fileExtention == "jpg") {
         fileExtention = "jpeg";
       }
-      selector.find(".hexa-file-name").val(fileName);
-      selector.find(".hexa-file-name").data("default", fileName);
-      selector.find("#hexa-save-img-format").val(fileExtention);
-      selector.find("#hexa-save-img-format").trigger("change");
+      selector.find(".gauci-file-name").val(fileName);
+      selector.find(".gauci-file-name").data("default", fileName);
+      selector.find("#gauci-save-img-format").val(fileExtention);
+      selector.find("#gauci-save-img-format").trigger("change");
     }
     /* Init */
     function init(getMode) {
       rotate = 0;
-      selector.find("#hexa-canvas-loader").css("display", "flex");
+      selector.find("#gauci-canvas-loader").css("display", "flex");
       selector
-        .find("#hexa-canvas-wrap, .hexa-content-bar")
+        .find("#gauci-canvas-wrap, .gauci-content-bar")
         .css("visibility", "visible");
       mode = getMode;
       if (canvas.backgroundImage) {
@@ -663,14 +663,14 @@
       }
       // Temp Canvas
       if (mode == "canvas") {
-        selector.find("#hexa-canvas-color").trigger("change");
+        selector.find("#gauci-canvas-color").trigger("change");
         var newCanvas = document.createElement("canvas");
         var canvas2 = new fabric.Canvas(newCanvas, {
           preserveObjectStacking: true,
         });
-        var canvas2Width = parseInt(selector.find("#hexa-canvas-width").val());
+        var canvas2Width = parseInt(selector.find("#gauci-canvas-width").val());
         var canvas2Height = parseInt(
-          selector.find("#hexa-canvas-height").val()
+          selector.find("#gauci-canvas-height").val()
         );
         if (canvas2Width == "") {
           canvas2Width = 800;
@@ -687,13 +687,13 @@
         });
         var blob = dataURLtoBlob(imgData);
         var newurl = URL.createObjectURL(blob);
-        selector.find("#hexa-canvas-img").attr("src", newurl);
+        selector.find("#gauci-canvas-img").attr("src", newurl);
         canvas2.dispose();
       }
       // Canvas Init
-      selector.find("#hexa-canvas-img-wrap").imagesLoaded(function () {
-        img = selector.find("#hexa-canvas-img")[0];
-        imgurl = selector.find("#hexa-canvas-img").attr("src");
+      selector.find("#gauci-canvas-img-wrap").imagesLoaded(function () {
+        img = selector.find("#gauci-canvas-img")[0];
+        imgurl = selector.find("#gauci-canvas-img").attr("src");
         originalWidth = img.width;
         originalHeight = img.height;
         // Display image dimentions
@@ -727,18 +727,18 @@
         setTimeout(function () {
           reset();
           addToHistory(
-            '<span class="material-icons">flag</span>' + hexaParams.started
+            '<span class="material-icons">flag</span>' + gauciParams.started
           );
         }, 100);
-        selector.find("#hexa-canvas-loader").hide();
+        selector.find("#gauci-canvas-loader").hide();
       });
     }
     // Open the editor with a default image if exists
-    if (selector.find("#hexa-canvas-img").attr("src") != "") {
+    if (selector.find("#gauci-canvas-img").attr("src") != "") {
       mode = "image";
-      var fileName = selector.find("#hexa-canvas-img").data("filename");
+      var fileName = selector.find("#gauci-canvas-img").data("filename");
       var fileExtention = selector
-        .find("#hexa-canvas-img")
+        .find("#gauci-canvas-img")
         .attr("src")
         .match(/\.[0-9a-z]+$/i)[0]
         .replace(/\./g, "");
@@ -747,36 +747,36 @@
     }
     modeCheck();
     // Open the editor with a default template if exists
-    if (selector.find("#hexa-canvas-img").data("template") != "") {
-      var fileName = selector.find("#hexa-canvas-img").data("filename");
-      selector.find("#hexa-canvas-loader").css("display", "flex");
+    if (selector.find("#gauci-canvas-img").data("template") != "") {
+      var fileName = selector.find("#gauci-canvas-img").data("filename");
+      selector.find("#gauci-canvas-loader").css("display", "flex");
       selector
-        .find("#hexa-canvas-wrap, .hexa-content-bar")
+        .find("#gauci-canvas-wrap, .gauci-content-bar")
         .css("visibility", "visible");
-      selector.find(".hexa-modal").hide();
+      selector.find(".gauci-modal").hide();
       var objects = canvas.getObjects();
       objects
         .filter((element) => element.objectType != "BG")
         .forEach((element) => canvas.remove(element));
-      selector.find("#hexa-layers li").remove();
+      selector.find("#gauci-layers li").remove();
       checkLayers();
       $.getJSON(
-        selector.find("#hexa-canvas-img").data("template"),
+        selector.find("#gauci-canvas-img").data("template"),
         function (json) {
           loadJSON(json);
           setTimeout(function () {
             addToHistory(
-              '<span class="material-icons">flag</span>' + hexaParams.started
+              '<span class="material-icons">flag</span>' + gauciParams.started
             );
             setFileName(fileName, "");
           }, 100);
         }
       )
         .fail(function (jqxhr, textStatus, error) {
-          toastr.error("Request Failed: " + error, hexaParams.error);
+          toastr.error("Request Failed: " + error, gauciParams.error);
         })
         .always(function () {
-          selector.find("#hexa-canvas-loader").hide();
+          selector.find("#gauci-canvas-loader").hide();
         });
     }
     /* Reset */
@@ -795,23 +795,23 @@
       }
       if (!selector.find("#keep-data").is(":checked")) {
         canvas.backgroundImage.filters = [];
-        selector.find("#hexa-adjust .conditional-settings").addClass("d-none");
-        selector.find("#hexa-brightness").prop("checked", false);
+        selector.find("#gauci-adjust .conditional-settings").addClass("d-none");
+        selector.find("#gauci-brightness").prop("checked", false);
         selector.find("#brightness").val(0);
-        selector.find("#hexa-contrast").prop("checked", false);
+        selector.find("#gauci-contrast").prop("checked", false);
         selector.find("#contrast").val(0);
-        selector.find("#hexa-saturation").prop("checked", false);
+        selector.find("#gauci-saturation").prop("checked", false);
         selector.find("#saturation").val(0);
-        selector.find("#hexa-hue").prop("checked", false);
+        selector.find("#gauci-hue").prop("checked", false);
         selector.find("#hue").val(0);
         selector
-          .find("#hexa-filters input[type=checkbox]")
+          .find("#gauci-filters input[type=checkbox]")
           .prop("checked", false);
-        selector.find("#hexa-gamma").prop("checked", false);
+        selector.find("#gauci-gamma").prop("checked", false);
         selector.find("#gamma-red").val(1);
         selector.find("#gamma-green").val(1);
         selector.find("#gamma-blue").val(1);
-        selector.find("#hexa-blend-color").prop("checked", false);
+        selector.find("#gauci-blend-color").prop("checked", false);
         selector.find("#blend-color-mode").val("add");
         selector.find("#blend-color-color").spectrum("set", "#ffffff");
         selector.find("#blend-color-alpha").val(0.5);
@@ -821,21 +821,21 @@
           .parent()
           .find(".slider-label span")
           .html(0.5);
-        selector.find("#hexa-duotone-color").prop("checked", false);
+        selector.find("#gauci-duotone-color").prop("checked", false);
         selector.find("#duotone-light-color").spectrum("set", "green");
         selector.find("#duotone-dark-color").spectrum("set", "blue");
-        selector.find("#hexa-swap-colors").prop("checked", false);
-        selector.find("#hexa-blur").prop("checked", false);
+        selector.find("#gauci-swap-colors").prop("checked", false);
+        selector.find("#gauci-blur").prop("checked", false);
         selector.find("#blur").val(0);
-        selector.find("#hexa-noise").prop("checked", false);
+        selector.find("#gauci-noise").prop("checked", false);
         selector.find("#noise").val(0);
-        selector.find("#hexa-pixelate").prop("checked", false);
+        selector.find("#gauci-pixelate").prop("checked", false);
         selector.find("#pixelate").val(1);
         var objects = canvas.getObjects();
         objects
           .filter((element) => element.objectType != "BG")
           .forEach((element) => canvas.remove(element));
-        selector.find("#hexa-layers li").remove();
+        selector.find("#gauci-layers li").remove();
         checkLayers();
       } else {
         canvas.backgroundImage.filters = filters;
@@ -847,10 +847,10 @@
     /* Adjust Filter Controls */
     function adjustFilterControls(filters) {
       // Reset
-      selector.find("#hexa-brightness").prop("checked", false);
-      selector.find("#hexa-contrast").prop("checked", false);
-      selector.find("#hexa-saturation").prop("checked", false);
-      selector.find("#hexa-hue").prop("checked", false);
+      selector.find("#gauci-brightness").prop("checked", false);
+      selector.find("#gauci-contrast").prop("checked", false);
+      selector.find("#gauci-saturation").prop("checked", false);
+      selector.find("#gauci-hue").prop("checked", false);
       selector.find("#grayscale").prop("checked", false);
       selector.find("#sepia").prop("checked", false);
       selector.find("#brownie").prop("checked", false);
@@ -862,17 +862,17 @@
       selector.find("#invert").prop("checked", false);
       selector.find("#sharpen").prop("checked", false);
       selector.find("#emboss").prop("checked", false);
-      selector.find("#hexa-gamma").prop("checked", false);
-      selector.find("#hexa-blend-color").prop("checked", false);
-      selector.find("#hexa-duotone-color").prop("checked", false);
-      selector.find("#hexa-blur").prop("checked", false);
-      selector.find("#hexa-noise").prop("checked", false);
-      selector.find("#hexa-pixelate").prop("checked", false);
+      selector.find("#gauci-gamma").prop("checked", false);
+      selector.find("#gauci-blend-color").prop("checked", false);
+      selector.find("#gauci-duotone-color").prop("checked", false);
+      selector.find("#gauci-blur").prop("checked", false);
+      selector.find("#gauci-noise").prop("checked", false);
+      selector.find("#gauci-pixelate").prop("checked", false);
       // Get Values
       if (filters.length !== 0) {
         $.each(filters, function (index, val) {
           if (val.type == "Brightness") {
-            selector.find("#hexa-brightness").prop("checked", true);
+            selector.find("#gauci-brightness").prop("checked", true);
             selector.find("#brightness").val(val.brightness);
             selector
               .find("#brightness")
@@ -881,7 +881,7 @@
               .find(".slider-label span")
               .html(val.brightness);
           } else if (val.type == "Contrast") {
-            selector.find("#hexa-contrast").prop("checked", true);
+            selector.find("#gauci-contrast").prop("checked", true);
             selector.find("#contrast").val(val.brightness);
             selector
               .find("#contrast")
@@ -890,7 +890,7 @@
               .find(".slider-label span")
               .html(val.contrast);
           } else if (val.type == "Saturation") {
-            selector.find("#hexa-saturation").prop("checked", true);
+            selector.find("#gauci-saturation").prop("checked", true);
             selector.find("#saturation").val(val.brightness);
             selector
               .find("#saturation")
@@ -899,7 +899,7 @@
               .find(".slider-label span")
               .html(val.saturation);
           } else if (val.type == "HueRotation") {
-            selector.find("#hexa-hue").prop("checked", true);
+            selector.find("#gauci-hue").prop("checked", true);
             selector.find("#hue").val(val.rotation);
             selector
               .find("#hue")
@@ -936,7 +936,7 @@
               selector.find("#sobelY").prop("checked", true);
             }
           } else if (val.type == "Gamma") {
-            selector.find("#hexa-gamma").prop("checked", true);
+            selector.find("#gauci-gamma").prop("checked", true);
             selector.find("#gamma-red").val(val.gamma[0]);
             selector
               .find("#gamma-red")
@@ -959,7 +959,7 @@
               .find(".slider-label span")
               .html(val.gamma[2]);
           } else if (val.type == "BlendColor") {
-            selector.find("#hexa-blend-color").prop("checked", true);
+            selector.find("#gauci-blend-color").prop("checked", true);
             selector.find("#blend-color-mode").val(val.mode);
             selector.find("#blend-color-color").val(val.color);
             selector.find("#blend-color-alpha").val(val.alpha);
@@ -970,11 +970,11 @@
               .find(".slider-label span")
               .html(val.alpha);
           } else if (val.type == "Composed") {
-            selector.find("#hexa-duotone-color").prop("checked", true);
+            selector.find("#gauci-duotone-color").prop("checked", true);
             selector.find("#duotone-light-color").val(val.subFilters[1].color);
             selector.find("#duotone-dark-color").val(val.subFilters[2].color);
           } else if (val.type == "Blur") {
-            selector.find("#hexa-blur").prop("checked", true);
+            selector.find("#gauci-blur").prop("checked", true);
             selector.find("#blur").val(val.blur);
             selector
               .find("#blur")
@@ -983,7 +983,7 @@
               .find(".slider-label span")
               .html(val.blur);
           } else if (val.type == "Noise") {
-            selector.find("#hexa-noise").prop("checked", true);
+            selector.find("#gauci-noise").prop("checked", true);
             selector.find("#noise").val(val.noise);
             selector
               .find("#noise")
@@ -992,7 +992,7 @@
               .find(".slider-label span")
               .html(val.noise);
           } else if (val.type == "Pixelate") {
-            selector.find("#hexa-pixelate").prop("checked", true);
+            selector.find("#gauci-pixelate").prop("checked", true);
             selector.find("#pixelate").val(val.blocksize);
             selector
               .find("#pixelate")
@@ -1003,35 +1003,35 @@
           }
         });
       }
-      selector.find("#hexa-brightness").trigger("change");
-      selector.find("#hexa-contrast").trigger("change");
-      selector.find("#hexa-saturation").trigger("change");
-      selector.find("#hexa-hue").trigger("change");
-      selector.find("#hexa-gamma").trigger("change");
-      selector.find("#hexa-blend-color").trigger("change");
-      selector.find("#hexa-blur").trigger("change");
-      selector.find("#hexa-noise").trigger("change");
-      selector.find("#hexa-pixelate").trigger("change");
+      selector.find("#gauci-brightness").trigger("change");
+      selector.find("#gauci-contrast").trigger("change");
+      selector.find("#gauci-saturation").trigger("change");
+      selector.find("#gauci-hue").trigger("change");
+      selector.find("#gauci-gamma").trigger("change");
+      selector.find("#gauci-blend-color").trigger("change");
+      selector.find("#gauci-blur").trigger("change");
+      selector.find("#gauci-noise").trigger("change");
+      selector.find("#gauci-pixelate").trigger("change");
     }
     /* Adjust Mode */
     function modeCheck() {
       if (mode == "none") {
         selector
-          .find("#hexa-icon-menu, #hexa-icon-panel, #hexa-ruler-icon")
+          .find("#gauci-icon-menu, #gauci-icon-panel, #gauci-ruler-icon")
           .css("pointer-events", "none");
-        selector.find(".hexa-keep, #modal-add-new .hexa-modal-close").hide();
+        selector.find(".gauci-keep, #modal-add-new .gauci-modal-close").hide();
         selector.find("#modal-add-new").show();
-        selector.find("#hexa-save").prop("disabled", true);
+        selector.find("#gauci-save").prop("disabled", true);
       } else {
         selector
-          .find("#hexa-canvas-wrap, .hexa-content-bar")
+          .find("#gauci-canvas-wrap, .gauci-content-bar")
           .css("visibility", "visible");
         selector
-          .find("#hexa-icon-menu, #hexa-icon-panel, #hexa-ruler-icon")
+          .find("#gauci-icon-menu, #gauci-icon-panel, #gauci-ruler-icon")
           .css("pointer-events", "auto");
-        selector.find(".hexa-keep, #modal-add-new .hexa-modal-close").show();
+        selector.find(".gauci-keep, #modal-add-new .gauci-modal-close").show();
         selector.find("#modal-add-new").hide();
-        selector.find("#hexa-save").prop("disabled", false);
+        selector.find("#gauci-save").prop("disabled", false);
       }
       if (mode == "canvas") {
         selector.find(".hide-on-canvas-mode").hide();
@@ -1041,15 +1041,15 @@
     }
     /* MODAL */
     // /* Modal Open */
-    // selector.find(".hexa-modal-open").on("click", function (e) {
+    // selector.find(".gauci-modal-open").on("click", function (e) {
     //   e.preventDefault();
     //   var target = $(this).data("target");
-    //   selector.find(".hexa-modal").hide();
+    //   selector.find(".gauci-modal").hide();
     //   selector.find(target).show();
     // });
 
     /* Modal Open */
-    selector.find(".hexa-modal-open").on("click", function (e) {
+    selector.find(".gauci-modal-open").on("click", function (e) {
       e.preventDefault();
 
       var clickedElement = $(this); // Store reference to the clicked element
@@ -1117,27 +1117,27 @@
           console.log("User is logged in and email is verified.");
 
           var target = clickedElement.data("target"); // Use the stored clicked element reference
-          selector.find(".hexa-modal").hide(); // Hide any open modals
+          selector.find(".gauci-modal").hide(); // Hide any open modals
           selector.find(target).show(); // Show the target modal
         },
       });
     });
 
     /* Modal Close */
-    selector.find(".hexa-modal-close").on("click", function (e) {
+    selector.find(".gauci-modal-close").on("click", function (e) {
       e.preventDefault();
       var target = $(this).data("target");
       selector.find(target).hide();
     });
     /* Upload Image */
-    selector.find("#hexa-image-upload").on("change", function () {
-      selector.find(".hexa-modal").hide();
+    selector.find("#gauci-image-upload").on("change", function () {
+      selector.find(".gauci-modal").hide();
       selector
-        .find("#hexa-canvas-wrap, .hexa-content-bar")
+        .find("#gauci-canvas-wrap, .gauci-content-bar")
         .css("visibility", "visible");
       var reader = new FileReader();
       reader.onload = function (ev) {
-        selector.find("#hexa-canvas-img").attr("src", reader.result);
+        selector.find("#gauci-canvas-img").attr("src", reader.result);
         init("image");
       };
       reader.readAsDataURL(this.files[0]);
@@ -1148,23 +1148,23 @@
       setFileName(fileName, fileExtention);
     });
     /* Empty Canvas */
-    selector.find("#hexa-canvas-create").on("click", function () {
+    selector.find("#gauci-canvas-create").on("click", function () {
       setFileName(new Date().getTime(), "");
       init("canvas");
     });
     /* TEMPLATE LIBRARY */
     /* Template Search */
-    selector.find("#hexa-template-search").on("click", function () {
-      var category = selector.find("#hexa-templates-menu").val();
+    selector.find("#gauci-template-search").on("click", function () {
+      var category = selector.find("#gauci-templates-menu").val();
       var input = $(this).parent().find("input");
-      selector.find("#hexa-all-templates-noimg").addClass("d-none");
-      selector.find("#hexa-templates-grid .grid-item").each(function () {
+      selector.find("#gauci-all-templates-noimg").addClass("d-none");
+      selector.find("#gauci-templates-grid .grid-item").each(function () {
         $(this).attr("data-keyword", $(this).data("keyword").toLowerCase());
       });
       if ($(this).hasClass("cancel")) {
-        selector.find("#hexa-templates-menu").val("all").change();
+        selector.find("#gauci-templates-menu").val("all").change();
         selector
-          .find("#hexa-templates-menu")
+          .find("#gauci-templates-menu")
           .parent()
           .find("span.select2-container")
           .css("opacity", 1);
@@ -1173,18 +1173,18 @@
         $(this).removeClass("danger");
         $(this).addClass("primary");
         input.val("");
-        selector.find("#hexa-templates-grid .grid-item").show();
-        if (selector.find("#hexa-templates-grid-pagination").length) {
-          selector.find("#hexa-templates-grid-pagination").pagination("redraw");
+        selector.find("#gauci-templates-grid .grid-item").show();
+        if (selector.find("#gauci-templates-grid-pagination").length) {
+          selector.find("#gauci-templates-grid-pagination").pagination("redraw");
           selector
-            .find("#hexa-templates-grid-pagination")
+            .find("#gauci-templates-grid-pagination")
             .pagination("selectPage", 1);
         }
         input.prop("disabled", false);
-        selector.find("#hexa-templates-menu").prop("disabled", false);
+        selector.find("#gauci-templates-menu").prop("disabled", false);
       } else {
         selector
-          .find("#hexa-templates-menu")
+          .find("#gauci-templates-menu")
           .parent()
           .find("span.select2-container")
           .css("opacity", 0.5);
@@ -1194,25 +1194,25 @@
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         if ((searchTerm == "" || searchTerm.length < 1) && category == "all") {
-          selector.find("#hexa-templates-grid .grid-item").show();
-          if (selector.find("#hexa-templates-grid-pagination").length) {
+          selector.find("#gauci-templates-grid .grid-item").show();
+          if (selector.find("#gauci-templates-grid-pagination").length) {
             selector
-              .find("#hexa-templates-grid-pagination")
+              .find("#gauci-templates-grid-pagination")
               .pagination("redraw");
             selector
-              .find("#hexa-templates-grid-pagination")
+              .find("#gauci-templates-grid-pagination")
               .pagination("selectPage", 1);
           }
         } else {
-          if (selector.find("#hexa-templates-grid-pagination").length) {
+          if (selector.find("#gauci-templates-grid-pagination").length) {
             selector
-              .find("#hexa-templates-grid-pagination")
+              .find("#gauci-templates-grid-pagination")
               .pagination("destroy");
           }
           if (category == "all") {
             if (searchTerm != "" || searchTerm.length > 1) {
               selector
-                .find("#hexa-templates-grid .grid-item")
+                .find("#gauci-templates-grid .grid-item")
                 .hide()
                 .filter('[data-keyword*="' + searchTerm + '"]')
                 .show();
@@ -1220,28 +1220,28 @@
           } else {
             if (searchTerm != "" || searchTerm.length > 1) {
               selector
-                .find("#hexa-templates-grid .grid-item")
+                .find("#gauci-templates-grid .grid-item")
                 .hide()
                 .filter('[data-keyword*="' + searchTerm + '"]')
                 .filter('[data-category*="' + category + '"]')
                 .show();
             } else {
               selector
-                .find("#hexa-templates-grid .grid-item")
+                .find("#gauci-templates-grid .grid-item")
                 .hide()
                 .filter('[data-category*="' + category + '"]')
                 .show();
             }
           }
           if (
-            selector.find("#hexa-templates-grid .grid-item:visible").length ===
+            selector.find("#gauci-templates-grid .grid-item:visible").length ===
             0
           ) {
-            selector.find("#hexa-all-templates-noimg").removeClass("d-none");
+            selector.find("#gauci-all-templates-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
-        selector.find("#hexa-templates-menu").prop("disabled", true);
+        selector.find("#gauci-templates-menu").prop("disabled", true);
       }
     });
     // Show Public/Private modal before saving template
@@ -1254,7 +1254,7 @@
         $("#saveAsPublic").on("click", function () {
           resolve(true); // Return 'true' for public
           // Close the modal after saving
-          selector.find(".hexa-modal").hide();
+          selector.find(".gauci-modal").hide();
           $("#templates-public-private-modal").hide();
 
           // Show SweetAlert for saving progress
@@ -1274,7 +1274,7 @@
         $("#saveAsPrivate").on("click", function () {
           resolve(false); // Return 'false' for private
           // Close the modal after saving
-          selector.find(".hexa-modal").hide();
+          selector.find(".gauci-modal").hide();
           $("#templates-public-private-modal").hide();
 
           Swal.fire({
@@ -1291,7 +1291,7 @@
       });
     }
 
-    selector.find("#hexa-json-save").on("click", function () {
+    selector.find("#gauci-json-save").on("click", function () {
       // Show public/private modal before proceeding
       showPublicPrivateModal().then((isPublic) => {
         // Proceed with saving the template based on user's choice
@@ -1376,7 +1376,7 @@
               const modelName = urlParams.get("name");
 
               var key = Math.random().toString(36).substr(2, 9);
-              var name = selector.find("#hexa-json-save-name").val();
+              var name = selector.find("#gauci-json-save-name").val();
 
               var data = {
                 key: key,
@@ -1404,7 +1404,7 @@
                   });
                   Swal.close();
                   // Close the modal after saving
-                  selector.find(".hexa-modal").hide();
+                  selector.find(".gauci-modal").hide();
                 })
                 .catch((error) => {
                   // Display an error message using toastr if uploading fails
@@ -1458,7 +1458,7 @@
       });
     }
 
-    $(document).on("click", "#hexa-new", function () {
+    $(document).on("click", "#gauci-new", function () {
       fetchAndDisplayTemplates();
     });
 
@@ -1490,7 +1490,7 @@
         })
         .then((assets) => {
           console.log("all the templates in library:", assets);
-          const templatesContainer = $("#hexa-my-templates");
+          const templatesContainer = $("#gauci-my-templates");
           templatesContainer.empty(); // Clear existing content
 
           // Filter templates for the specific model type
@@ -1518,10 +1518,10 @@
                 listItem.html(`
                         <div>${asset.name}</div>
                         <div>
-                            <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
+                            <button type="button" class="gauci-btn primary gauci-select-template" data-json="${asset.src}">
                                 <span class="material-icons">check</span>Select
                             </button>
-                            <button type="button" class="hexa-btn danger hexa-template-delete" data-target="${asset.key}">
+                            <button type="button" class="gauci-btn danger gauci-template-delete" data-target="${asset.key}">
                                 <span class="material-icons">clear</span>Delete
                             </button>
                         </div>
@@ -1622,7 +1622,7 @@
     //   const modelName = urlParams.get("name");
     //   getAllSavedData()
     //     .then((assets) => {
-    //       const templatesContainer = $("#hexa-my-templates");
+    //       const templatesContainer = $("#gauci-my-templates");
     //       templatesContainer.empty(); // Clear existing content
 
     //       if (assets.length === 0) {
@@ -1640,10 +1640,10 @@
     //             listItem.html(`
     //                   <div>${asset.name}</div>
     //                   <div>
-    //                       <button type="button" class="hexa-btn primary hexa-select-template" data-json="${asset.src}">
+    //                       <button type="button" class="gauci-btn primary gauci-select-template" data-json="${asset.src}">
     //                           <span class="material-icons">check</span>Select
     //                       </button>
-    //                       <button type="button" class="hexa-btn danger hexa-template-delete" data-target="${asset.key}">
+    //                       <button type="button" class="gauci-btn danger gauci-template-delete" data-target="${asset.key}">
     //                           <span class="material-icons">clear</span>Delete
     //                       </button>
     //                   </div>
@@ -1677,7 +1677,7 @@
 
     // Example usage of deleteData function
 
-    $(document).on("click", ".hexa-template-delete", function () {
+    $(document).on("click", ".gauci-template-delete", function () {
       var assetKey = $(this).data("target");
 
       // Function to handle the template deletion
@@ -1715,8 +1715,8 @@
     }
 
     /* Download Template */
-    selector.find("#hexa-json-download").on("click", function () {
-      var name = selector.find("#hexa-json-download-name").val();
+    selector.find("#gauci-json-download").on("click", function () {
+      var name = selector.find("#gauci-json-download-name").val();
       var json = canvas.toJSON([
         "objectType",
         "gradientFill",
@@ -1739,24 +1739,24 @@
         a.href = URL.createObjectURL(file);
         a.download = name + ".json";
         a.click();
-        selector.find(".hexa-modal").hide();
+        selector.find(".gauci-modal").hide();
       });
     });
     /* Load JSON */
     function loadJSON(json) {
       console.log("this is the json", json.objects);
-      selector.find("#hexa-canvas-loader").css("display", "flex");
+      selector.find("#gauci-canvas-loader").css("display", "flex");
       rotate = json.backgroundImage.angle;
       scaleX = json.backgroundImage.scaleX;
       scaleY = json.backgroundImage.scaleY;
       originX = json.backgroundImage.originX;
       originY = json.backgroundImage.originY;
       canvas.clear();
-      selector.find("#hexa-layers li").remove();
+      selector.find("#gauci-layers li").remove();
       mode = json.backgroundImage.mode;
       var blob = dataURLtoBlob(json.backgroundImage.src);
       imgurl = URL.createObjectURL(blob);
-      selector.find("#hexa-canvas-img").attr("src", imgurl);
+      selector.find("#gauci-canvas-img").attr("src", imgurl);
       originalWidth = json.backgroundImage.width;
       originalHeight = json.backgroundImage.height;
       var dimentions = {
@@ -1766,7 +1766,7 @@
 
       for (var i = 0; i < json.objects.length; i++) {
         if (json.objects[i].objectType == "textbox") {
-          json.objects[i].fontFamily = json.objects[i].fontFamily + "-hexa";
+          json.objects[i].fontFamily = json.objects[i].fontFamily + "-gauci";
         }
       }
 
@@ -1780,14 +1780,14 @@
           loadTemplateFonts(textboxes);
           checkLayers();
           selector
-            .find("#hexa-canvas-color")
+            .find("#gauci-canvas-color")
             .spectrum("set", canvas.backgroundColor);
           selector
             .find("#custom-image-background")
             .spectrum("set", canvas.backgroundColor);
-          img = selector.find("#hexa-canvas-img")[0];
+          img = selector.find("#gauci-canvas-img")[0];
           canvas.requestRenderAll();
-          selector.find("#hexa-canvas-loader").hide();
+          selector.find("#gauci-canvas-loader").hide();
           objects.forEach((obj) => {
             if (obj.customId === "clipmask") {
               console.log("Found clipmask object. Removing...");
@@ -1820,18 +1820,18 @@
       modeCheck();
       canvas.fire("selection:cleared");
       setTimeout(function () {
-        selector.find("#hexa-layers > li").removeClass("active");
+        selector.find("#gauci-layers > li").removeClass("active");
         if (json.backgroundImage) {
           adjustFilterControls(json.backgroundImage["filters"]);
         }
         if (json.overlayImage) {
-          selector.find("#hexa-overlay-wrap").show();
+          selector.find("#gauci-overlay-wrap").show();
           selector
-            .find("#hexa-overlay-preview")
+            .find("#gauci-overlay-preview")
             .attr("src", json.overlayImage.src);
         } else {
-          selector.find("#hexa-overlay-wrap").hide();
-          selector.find("#hexa-overlay-preview").attr("src", "");
+          selector.find("#gauci-overlay-wrap").hide();
+          selector.find("#gauci-overlay-preview").attr("src", "");
         }
       }, 100);
     }
@@ -1840,7 +1840,7 @@
     function loadTemplateFonts(objects) {
       if (objects.length !== 0) {
         $.each(objects, function (index, val) {
-          var font = val.fontFamily.replace("-hexa", "");
+          var font = val.fontFamily.replace("-gauci", "");
           val.fontFamily = settings.fontFamily;
           var loadFonts = "yes";
           if (font == "") {
@@ -1899,63 +1899,63 @@
       }
     }
     /* Upload Template */
-    selector.find("#hexa-json-upload").on("change", function (e) {
+    selector.find("#gauci-json-upload").on("change", function (e) {
       selector
-        .find("#hexa-canvas-wrap, .hexa-content-bar")
+        .find("#gauci-canvas-wrap, .gauci-content-bar")
         .css("visibility", "visible");
-      selector.find("#hexa-canvas-loader").css("display", "flex");
+      selector.find("#gauci-canvas-loader").css("display", "flex");
       var reader = new FileReader();
       var json = "";
       reader.onload = function (ev) {
         json = JSON.parse(reader.result);
 
         loadJSON(json);
-        selector.find("#hexa-canvas-loader").hide();
+        selector.find("#gauci-canvas-loader").hide();
         setTimeout(function () {
           addToHistory(
-            '<span class="material-icons">flag</span>' + hexaParams.started
+            '<span class="material-icons">flag</span>' + gauciParams.started
           );
         }, 100);
       };
       reader.readAsText(e.target.files[0]);
-      selector.find(".hexa-modal").hide();
+      selector.find(".gauci-modal").hide();
     });
     /* Add Template */
     selector
       .find(".template-selection")
-      .on("click", ".hexa-select-template", function () {
+      .on("click", ".gauci-select-template", function () {
         selector
-          .find("#hexa-canvas-wrap, .hexa-content-bar")
+          .find("#gauci-canvas-wrap, .gauci-content-bar")
           .css("visibility", "visible");
-        selector.find(".hexa-modal").hide();
-        selector.find("#hexa-canvas-loader").css("display", "flex");
+        selector.find(".gauci-modal").hide();
+        selector.find("#gauci-canvas-loader").css("display", "flex");
         var objects = canvas.getObjects();
         objects
           .filter((element) => element.objectType != "BG")
           .forEach((element) => canvas.remove(element));
-        selector.find("#hexa-layers li").remove();
+        selector.find("#gauci-layers li").remove();
         checkLayers();
         $.getJSON($(this).data("json"), function (json) {
           console.log("this is the editedCanvasobject 2", json);
           loadJSON(json);
           setTimeout(function () {
             addToHistory(
-              '<span class="material-icons">flag</span>' + hexaParams.started
+              '<span class="material-icons">flag</span>' + gauciParams.started
             );
           }, 100);
         })
           .fail(function (jqxhr, textStatus, error) {
-            toastr.error("Request Failed: " + error, hexaParams.error);
+            toastr.error("Request Failed: " + error, gauciParams.error);
           })
           .always(function () {
-            selector.find("#hexa-canvas-loader").hide();
+            selector.find("#gauci-canvas-loader").hide();
           });
       });
     /* Search My Templates */
-    selector.find("#hexa-my-templates-search").on("click", function () {
+    selector.find("#gauci-my-templates-search").on("click", function () {
       var input = $(this).parent().find("input");
-      selector.find("#hexa-my-templates-noimg").addClass("d-none");
-      selector.find("#hexa-my-templates li").each(function () {
+      selector.find("#gauci-my-templates-noimg").addClass("d-none");
+      selector.find("#gauci-my-templates li").each(function () {
         $(this).attr("data-keyword", $(this).data("keyword").toLowerCase());
       });
       if (input.val() == "") {
@@ -1967,11 +1967,11 @@
         $(this).removeClass("danger");
         $(this).addClass("primary");
         input.val("");
-        selector.find("#hexa-my-templates li").show();
-        if (selector.find("#hexa-my-templates-pagination").length) {
-          selector.find("#hexa-my-templates-pagination").pagination("redraw");
+        selector.find("#gauci-my-templates li").show();
+        if (selector.find("#gauci-my-templates-pagination").length) {
+          selector.find("#gauci-my-templates-pagination").pagination("redraw");
           selector
-            .find("#hexa-my-templates-pagination")
+            .find("#gauci-my-templates-pagination")
             .pagination("selectPage", 1);
         }
         input.prop("disabled", false);
@@ -1983,26 +1983,26 @@
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         console.log(searchTerm);
         if (searchTerm == "" || searchTerm.length < 1) {
-          selector.find("#hexa-my-templates li").show();
-          if (selector.find("#hexa-my-templates-pagination").length) {
-            selector.find("#hexa-my-templates-pagination").pagination("redraw");
+          selector.find("#gauci-my-templates li").show();
+          if (selector.find("#gauci-my-templates-pagination").length) {
+            selector.find("#gauci-my-templates-pagination").pagination("redraw");
             selector
-              .find("#hexa-my-templates-pagination")
+              .find("#gauci-my-templates-pagination")
               .pagination("selectPage", 1);
           }
         } else {
-          if (selector.find("#hexa-my-templates-pagination").length) {
+          if (selector.find("#gauci-my-templates-pagination").length) {
             selector
-              .find("#hexa-my-templates-pagination")
+              .find("#gauci-my-templates-pagination")
               .pagination("destroy");
           }
           selector
-            .find("#hexa-my-templates li")
+            .find("#gauci-my-templates li")
             .hide()
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
-          if (selector.find("#hexa-my-templates li:visible").length === 0) {
-            selector.find("#hexa-my-templates-noimg").removeClass("d-none");
+          if (selector.find("#gauci-my-templates li:visible").length === 0) {
+            selector.find("#gauci-my-templates-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
@@ -2054,14 +2054,14 @@
       }
     }
     /* Download Image */
-    selector.find("#hexa-download").on("click", function () {
-      var name = selector.find("#hexa-download-name").val();
-      var quality = parseFloat(selector.find("#hexa-download-quality").val());
-      var format = selector.find("#hexa-download-format").val();
+    selector.find("#gauci-download").on("click", function () {
+      var name = selector.find("#gauci-download-name").val();
+      var quality = parseFloat(selector.find("#gauci-download-quality").val());
+      var format = selector.find("#gauci-download-format").val();
       var link = document.createElement("a");
       add_watermark();
       canvas.setZoom(1);
-      selector.find("#hexa-img-zoom").val(100);
+      selector.find("#gauci-img-zoom").val(100);
       var zoomWidth = originalHeight;
       var zoomHeight = originalWidth;
       if (rotate == 0 || rotate == 180 || rotate == -180) {
@@ -2127,9 +2127,9 @@
               },
               error: function (jqXHR, error, errorThrown) {
                 if (jqXHR.status && jqXHR.status == 400) {
-                  toastr.error(jqXHR.responseText, hexaParams.error);
+                  toastr.error(jqXHR.responseText, gauciParams.error);
                 } else {
-                  toastr.error(hexaParams.wrong, hexaParams.error);
+                  toastr.error(gauciParams.wrong, gauciParams.error);
                 }
               },
             });
@@ -2152,7 +2152,7 @@
         if (format != "webp") {
           imgData = changeDpiDataUrl(
             imgData,
-            selector.find("#hexa-download-img-dpi").val()
+            selector.find("#gauci-download-img-dpi").val()
           );
         }
         blob = dataURLtoBlob(imgData);
@@ -2164,43 +2164,43 @@
       remove_watermark();
       adjustZoom();
       canvas.requestRenderAll();
-      selector.find(".hexa-modal").hide();
+      selector.find(".gauci-modal").hide();
     });
     /* Download File Format Select */
-    selector.find("#hexa-download-format").on("change", function () {
+    selector.find("#gauci-download-format").on("change", function () {
       if ($(this).val() == "png" || $(this).val() == "svg") {
-        selector.find("#hexa-download-quality").prop("disabled", true);
+        selector.find("#gauci-download-quality").prop("disabled", true);
       } else {
-        selector.find("#hexa-download-quality").prop("disabled", false);
+        selector.find("#gauci-download-quality").prop("disabled", false);
       }
     });
     /* Save File Format Select */
-    selector.find("#hexa-save-img-format").on("change", function () {
+    selector.find("#gauci-save-img-format").on("change", function () {
       if ($(this).val() == "png" || $(this).val() == "svg") {
-        selector.find("#hexa-save-img-quality").prop("disabled", true);
+        selector.find("#gauci-save-img-quality").prop("disabled", true);
       } else {
-        selector.find("#hexa-save-img-quality").prop("disabled", false);
+        selector.find("#gauci-save-img-quality").prop("disabled", false);
       }
     });
     /* BLANK CANVAS */
-    selector.find("#hexa-canvas-size-select").on("change", function () {
+    selector.find("#gauci-canvas-size-select").on("change", function () {
       var val = $(this).val();
       if (val == "custom") {
-        selector.find("#hexa-canvas-width").prop("disabled", false);
-        selector.find("#hexa-canvas-height").prop("disabled", false);
+        selector.find("#gauci-canvas-width").prop("disabled", false);
+        selector.find("#gauci-canvas-height").prop("disabled", false);
       } else {
-        selector.find("#hexa-canvas-width").prop("disabled", true);
-        selector.find("#hexa-canvas-height").prop("disabled", true);
+        selector.find("#gauci-canvas-width").prop("disabled", true);
+        selector.find("#gauci-canvas-height").prop("disabled", true);
       }
       selector
-        .find("#hexa-canvas-width")
+        .find("#gauci-canvas-width")
         .val($(this).find(":selected").data("width"));
       selector
-        .find("#hexa-canvas-height")
+        .find("#gauci-canvas-height")
         .val($(this).find(":selected").data("height"));
     });
     // Canvas Background
-    selector.find("#hexa-canvas-color").on("change", function () {
+    selector.find("#gauci-canvas-color").on("change", function () {
       var val = $(this).val();
       selector.find("#custom-image-background").spectrum("set", val);
       if (val == "") {
@@ -2212,16 +2212,16 @@
       }
     });
     /* MEDIA LIBRARY */
-    selector.find("#hexa-media-library").on("click", function () {
+    selector.find("#gauci-media-library").on("click", function () {
       mmediaLibraryMode = "add-to-canvas";
     });
-    selector.find("#hexa-img-media-library").on("click", function () {
+    selector.find("#gauci-img-media-library").on("click", function () {
       mmediaLibraryMode = "add-as-object";
     });
-    selector.find("#hexa-img-replace-media-library").on("click", function () {
+    selector.find("#gauci-img-replace-media-library").on("click", function () {
       mmediaLibraryMode = "replace-image";
     });
-    selector.find("#hexa-overlay-img-media-library").on("click", function () {
+    selector.find("#gauci-overlay-img-media-library").on("click", function () {
       mmediaLibraryMode = "overlay-image";
     });
     /* Select Image */
@@ -2229,10 +2229,10 @@
       .find("#modal-media-library")
       .on(
         "click",
-        ".media-library-grid>.hexa-masonry-item>.hexa-masonry-item-inner",
+        ".media-library-grid>.gauci-masonry-item>.gauci-masonry-item-inner",
         function () {
-          selector.find("#hexa-canvas-loader").css("display", "flex");
-          selector.find("#hexa-canvas-wrap").css("visibility", "visible");
+          selector.find("#gauci-canvas-loader").css("display", "flex");
+          selector.find("#gauci-canvas-wrap").css("visibility", "visible");
           var fullImg = $(this).find("img").data("full");
           var tempImg = new Image();
           if (mmediaLibraryMode == "add-to-canvas") {
@@ -2252,7 +2252,7 @@
             convertToDataURL(fullImg, function (dataUrl) {
               tempImg.src = dataUrl;
               tempImg.onload = function () {
-                selector.find("#hexa-canvas-img").attr("src", dataUrl);
+                selector.find("#gauci-canvas-img").attr("src", dataUrl);
                 init("image");
               };
             });
@@ -2277,10 +2277,10 @@
                 }
                 canvas.setActiveObject(image);
                 canvas.requestRenderAll();
-                selector.find("#hexa-canvas-loader").hide();
-                canvas.fire("hexa:history", {
+                selector.find("#gauci-canvas-loader").hide();
+                canvas.fire("gauci:history", {
                   type: "image",
-                  text: hexaParams.added,
+                  text: gauciParams.added,
                 });
               };
             });
@@ -2290,10 +2290,10 @@
               tempImg.onload = function () {
                 canvas.getActiveObject().setSrc(dataUrl);
                 canvas.requestRenderAll();
-                selector.find("#hexa-canvas-loader").hide();
-                canvas.fire("hexa:history", {
+                selector.find("#gauci-canvas-loader").hide();
+                canvas.fire("gauci:history", {
                   type: "image",
-                  text: hexaParams.replaced,
+                  text: gauciParams.replaced,
                 });
               };
             });
@@ -2312,10 +2312,10 @@
                 erasable: true,
               });
               canvas.setOverlayImage(img, canvas.renderAll.bind(canvas));
-              selector.find("#hexa-overlay-wrap").show();
-              selector.find("#hexa-overlay-preview").attr("src", fullImg);
+              selector.find("#gauci-overlay-wrap").show();
+              selector.find("#gauci-overlay-preview").attr("src", fullImg);
               setTimeout(function () {
-                selector.find("#hexa-canvas-loader").hide();
+                selector.find("#gauci-canvas-loader").hide();
               }, 500);
             });
           }
@@ -2323,9 +2323,9 @@
         }
       );
     /* Search My Images */
-    selector.find("#hexa-library-my-search").on("click", function () {
+    selector.find("#gauci-library-my-search").on("click", function () {
       var input = $(this).parent().find("input");
-      selector.find("#hexa-library-my-noimg").addClass("d-none");
+      selector.find("#gauci-library-my-noimg").addClass("d-none");
       if (input.val() == "") {
         return;
       }
@@ -2335,11 +2335,11 @@
         $(this).removeClass("danger");
         $(this).addClass("primary");
         input.val("");
-        selector.find("#hexa-library-my .hexa-masonry-item").show();
-        if (selector.find("#hexa-library-my-pagination").length) {
-          selector.find("#hexa-library-my-pagination").pagination("redraw");
+        selector.find("#gauci-library-my .gauci-masonry-item").show();
+        if (selector.find("#gauci-library-my-pagination").length) {
+          selector.find("#gauci-library-my-pagination").pagination("redraw");
           selector
-            .find("#hexa-library-my-pagination")
+            .find("#gauci-library-my-pagination")
             .pagination("selectPage", 1);
         }
         input.prop("disabled", false);
@@ -2350,36 +2350,36 @@
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         if (searchTerm == "" || searchTerm.length < 1) {
-          selector.find("#hexa-library-my .hexa-masonry-item").show();
-          if (selector.find("#hexa-library-my-pagination").length) {
-            selector.find("#hexa-library-my-pagination").pagination("redraw");
+          selector.find("#gauci-library-my .gauci-masonry-item").show();
+          if (selector.find("#gauci-library-my-pagination").length) {
+            selector.find("#gauci-library-my-pagination").pagination("redraw");
             selector
-              .find("#hexa-library-my-pagination")
+              .find("#gauci-library-my-pagination")
               .pagination("selectPage", 1);
           }
         } else {
-          if (selector.find("#hexa-library-my-pagination").length) {
-            selector.find("#hexa-library-my-pagination").pagination("destroy");
+          if (selector.find("#gauci-library-my-pagination").length) {
+            selector.find("#gauci-library-my-pagination").pagination("destroy");
           }
           selector
-            .find("#hexa-library-my .hexa-masonry-item")
+            .find("#gauci-library-my .gauci-masonry-item")
             .hide()
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
           if (
-            selector.find("#hexa-library-my .hexa-masonry-item:visible")
+            selector.find("#gauci-library-my .gauci-masonry-item:visible")
               .length === 0
           ) {
-            selector.find("#hexa-library-my-noimg").removeClass("d-none");
+            selector.find("#gauci-library-my-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
       }
     });
     /* Search All Images */
-    selector.find("#hexa-library-all-search").on("click", function () {
+    selector.find("#gauci-library-all-search").on("click", function () {
       var input = $(this).parent().find("input");
-      selector.find("#hexa-library-all-noimg").addClass("d-none");
+      selector.find("#gauci-library-all-noimg").addClass("d-none");
       if (input.val() == "") {
         return;
       }
@@ -2389,11 +2389,11 @@
         $(this).removeClass("danger");
         $(this).addClass("primary");
         input.val("");
-        selector.find("#hexa-library-all .hexa-masonry-item").show();
-        if (selector.find("#hexa-library-all-pagination").length) {
-          selector.find("#hexa-library-all-pagination").pagination("redraw");
+        selector.find("#gauci-library-all .gauci-masonry-item").show();
+        if (selector.find("#gauci-library-all-pagination").length) {
+          selector.find("#gauci-library-all-pagination").pagination("redraw");
           selector
-            .find("#hexa-library-all-pagination")
+            .find("#gauci-library-all-pagination")
             .pagination("selectPage", 1);
         }
         input.prop("disabled", false);
@@ -2404,40 +2404,40 @@
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         if (searchTerm == "" || searchTerm.length < 1) {
-          selector.find("#hexa-library-all .hexa-masonry-item").show();
-          if (selector.find("#hexa-library-all-pagination").length) {
-            selector.find("#hexa-library-all-pagination").pagination("redraw");
+          selector.find("#gauci-library-all .gauci-masonry-item").show();
+          if (selector.find("#gauci-library-all-pagination").length) {
+            selector.find("#gauci-library-all-pagination").pagination("redraw");
             selector
-              .find("#hexa-library-all-pagination")
+              .find("#gauci-library-all-pagination")
               .pagination("selectPage", 1);
           }
         } else {
-          if (selector.find("#hexa-library-all-pagination").length) {
-            selector.find("#hexa-library-all-pagination").pagination("destroy");
+          if (selector.find("#gauci-library-all-pagination").length) {
+            selector.find("#gauci-library-all-pagination").pagination("destroy");
           }
           selector
-            .find("#hexa-library-all .hexa-masonry-item")
+            .find("#gauci-library-all .gauci-masonry-item")
             .hide()
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
           if (
-            selector.find("#hexa-library-all .hexa-masonry-item:visible")
+            selector.find("#gauci-library-all .gauci-masonry-item:visible")
               .length === 0
           ) {
-            selector.find("#hexa-library-all-noimg").removeClass("d-none");
+            selector.find("#gauci-library-all-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
       }
     });
     /* Save Image */
-    selector.find("#hexa-save-img").on("click", function () {
-      var quality = parseFloat(selector.find("#hexa-save-img-quality").val());
-      var format = selector.find("#hexa-save-img-format").val();
+    selector.find("#gauci-save-img").on("click", function () {
+      var quality = parseFloat(selector.find("#gauci-save-img-quality").val());
+      var format = selector.find("#gauci-save-img-format").val();
       var imgData = "";
       add_watermark();
       canvas.setZoom(1);
-      selector.find("#hexa-img-zoom").val(100);
+      selector.find("#gauci-img-zoom").val(100);
       var zoomWidth = originalHeight;
       var zoomHeight = originalWidth;
       if (rotate == 0 || rotate == 180 || rotate == -180) {
@@ -2494,9 +2494,9 @@
               },
               error: function (jqXHR, error, errorThrown) {
                 if (jqXHR.status && jqXHR.status == 400) {
-                  toastr.error(jqXHR.responseText, hexaParams.error);
+                  toastr.error(jqXHR.responseText, gauciParams.error);
                 } else {
-                  toastr.error(hexaParams.wrong, hexaParams.error);
+                  toastr.error(gauciParams.wrong, gauciParams.error);
                 }
               },
             });
@@ -2512,12 +2512,12 @@
         if (format != "webp") {
           imgData = changeDpiDataUrl(
             imgData,
-            selector.find("#hexa-download-img-dpi").val()
+            selector.find("#gauci-download-img-dpi").val()
           );
         }
       }
       settings.saveImage.call(this, selector, imgData);
-      selector.find(".hexa-modal").hide();
+      selector.find(".gauci-modal").hide();
       remove_watermark();
       adjustZoom();
       canvas.requestRenderAll();
@@ -2526,7 +2526,7 @@
     /* Select SVG */
     selector
       .find(".svg-library-grid")
-      .on("click", ">.hexa-masonry-item>.hexa-masonry-item-inner", function () {
+      .on("click", ">.gauci-masonry-item>.gauci-masonry-item-inner", function () {
         var fullSVG = $(this).find("img").data("full");
         fabric.loadSVGFromURL(
           fullSVG,
@@ -2551,9 +2551,9 @@
         selector.find("#modal-svg-library").hide();
       });
     /* Search My SVGs */
-    selector.find("#hexa-svg-library-my-search").on("click", function () {
+    selector.find("#gauci-svg-library-my-search").on("click", function () {
       var input = $(this).parent().find("input");
-      selector.find("#hexa-svg-library-my-noimg").addClass("d-none");
+      selector.find("#gauci-svg-library-my-noimg").addClass("d-none");
       if (input.val() == "") {
         return;
       }
@@ -2563,11 +2563,11 @@
         $(this).removeClass("danger");
         $(this).addClass("primary");
         input.val("");
-        selector.find("#hexa-svg-library-my .hexa-masonry-item").show();
-        if (selector.find("#hexa-svg-library-my-pagination").length) {
-          selector.find("#hexa-svg-library-my-pagination").pagination("redraw");
+        selector.find("#gauci-svg-library-my .gauci-masonry-item").show();
+        if (selector.find("#gauci-svg-library-my-pagination").length) {
+          selector.find("#gauci-svg-library-my-pagination").pagination("redraw");
           selector
-            .find("#hexa-svg-library-my-pagination")
+            .find("#gauci-svg-library-my-pagination")
             .pagination("selectPage", 1);
         }
         input.prop("disabled", false);
@@ -2578,40 +2578,40 @@
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         if (searchTerm == "" || searchTerm.length < 1) {
-          selector.find("#hexa-svg-library-my .hexa-masonry-item").show();
-          if (selector.find("#hexa-svg-library-my-pagination").length) {
+          selector.find("#gauci-svg-library-my .gauci-masonry-item").show();
+          if (selector.find("#gauci-svg-library-my-pagination").length) {
             selector
-              .find("#hexa-svg-library-my-pagination")
+              .find("#gauci-svg-library-my-pagination")
               .pagination("redraw");
             selector
-              .find("#hexa-svg-library-my-pagination")
+              .find("#gauci-svg-library-my-pagination")
               .pagination("selectPage", 1);
           }
         } else {
-          if (selector.find("#hexa-svg-library-my-pagination").length) {
+          if (selector.find("#gauci-svg-library-my-pagination").length) {
             selector
-              .find("#hexa-svg-library-my-pagination")
+              .find("#gauci-svg-library-my-pagination")
               .pagination("destroy");
           }
           selector
-            .find("#hexa-svg-library-my .hexa-masonry-item")
+            .find("#gauci-svg-library-my .gauci-masonry-item")
             .hide()
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
           if (
-            selector.find("#hexa-svg-library-my .hexa-masonry-item:visible")
+            selector.find("#gauci-svg-library-my .gauci-masonry-item:visible")
               .length === 0
           ) {
-            selector.find("#hexa-svg-library-my-noimg").removeClass("d-none");
+            selector.find("#gauci-svg-library-my-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
       }
     });
     /* Search All SVGs */
-    selector.find("#hexa-svg-library-all-search").on("click", function () {
+    selector.find("#gauci-svg-library-all-search").on("click", function () {
       var input = $(this).parent().find("input");
-      selector.find("#hexa-library-all-noimg").addClass("d-none");
+      selector.find("#gauci-library-all-noimg").addClass("d-none");
       if (input.val() == "") {
         return;
       }
@@ -2621,13 +2621,13 @@
         $(this).removeClass("danger");
         $(this).addClass("primary");
         input.val("");
-        selector.find("#hexa-svg-library-all .hexa-masonry-item").show();
-        if (selector.find("#hexa-svg-library-all-pagination").length) {
+        selector.find("#gauci-svg-library-all .gauci-masonry-item").show();
+        if (selector.find("#gauci-svg-library-all-pagination").length) {
           selector
-            .find("#hexa-svg-library-all-pagination")
+            .find("#gauci-svg-library-all-pagination")
             .pagination("redraw");
           selector
-            .find("#hexa-svg-library-all-pagination")
+            .find("#gauci-svg-library-all-pagination")
             .pagination("selectPage", 1);
         }
         input.prop("disabled", false);
@@ -2638,31 +2638,31 @@
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
         if (searchTerm == "" || searchTerm.length < 1) {
-          selector.find("#hexa-svg-library-all .hexa-masonry-item").show();
-          if (selector.find("#hexa-svg-library-all-pagination").length) {
+          selector.find("#gauci-svg-library-all .gauci-masonry-item").show();
+          if (selector.find("#gauci-svg-library-all-pagination").length) {
             selector
-              .find("#hexa-svg-library-all-pagination")
+              .find("#gauci-svg-library-all-pagination")
               .pagination("redraw");
             selector
-              .find("#hexa-svg-library-all-pagination")
+              .find("#gauci-svg-library-all-pagination")
               .pagination("selectPage", 1);
           }
         } else {
-          if (selector.find("#hexa-svg-library-all-pagination").length) {
+          if (selector.find("#gauci-svg-library-all-pagination").length) {
             selector
-              .find("#hexa-svg-library-all-pagination")
+              .find("#gauci-svg-library-all-pagination")
               .pagination("destroy");
           }
           selector
-            .find("#hexa-svg-library-all .hexa-masonry-item")
+            .find("#gauci-svg-library-all .gauci-masonry-item")
             .hide()
             .filter('[data-keyword*="' + searchTerm + '"]')
             .show();
           if (
-            selector.find("#hexa-svg-library-all .hexa-masonry-item:visible")
+            selector.find("#gauci-svg-library-all .gauci-masonry-item:visible")
               .length === 0
           ) {
-            selector.find("#hexa-svg-library-all-noimg").removeClass("d-none");
+            selector.find("#gauci-svg-library-all-noimg").removeClass("d-none");
           }
         }
         input.prop("disabled", true);
@@ -2670,53 +2670,53 @@
     });
     /* HISTORY */
     function objectName(type) {
-      var layerName = hexaParams.object;
+      var layerName = gauciParams.object;
       var layerIcon = "category";
       if (type == null) {
-        layerName = hexaParams.object;
+        layerName = gauciParams.object;
         layerIcon = "category";
       } else if (type == "textbox") {
-        layerName = hexaParams.text;
+        layerName = gauciParams.text;
         layerIcon = "title";
       } else if (type == "drawing") {
-        layerName = hexaParams.freeDrawing;
+        layerName = gauciParams.freeDrawing;
         layerIcon = "brush";
       } else if (type == "frame") {
-        layerName = hexaParams.frame;
+        layerName = gauciParams.frame;
         layerIcon = "wallpaper";
       } else if (type == "image") {
-        layerName = hexaParams.image;
+        layerName = gauciParams.image;
         layerIcon = "image";
       } else if (type == "circle") {
-        layerName = hexaParams.circle;
+        layerName = gauciParams.circle;
       } else if (type == "square") {
-        layerName = hexaParams.square;
+        layerName = gauciParams.square;
       } else if (type == "rectangle") {
-        layerName = hexaParams.rectangle;
+        layerName = gauciParams.rectangle;
       } else if (type == "triangle") {
-        layerName = hexaParams.triangle;
+        layerName = gauciParams.triangle;
       } else if (type == "ellipse") {
-        layerName = hexaParams.ellipse;
+        layerName = gauciParams.ellipse;
       } else if (type == "trapezoid") {
-        layerName = hexaParams.trapezoid;
+        layerName = gauciParams.trapezoid;
       } else if (type == "pentagon") {
-        layerName = hexaParams.pentagon;
+        layerName = gauciParams.pentagon;
       } else if (type == "octagon") {
-        layerName = hexaParams.octagon;
+        layerName = gauciParams.octagon;
       } else if (type == "emerald") {
-        layerName = hexaParams.emerald;
+        layerName = gauciParams.emerald;
       } else if (type == "star") {
-        layerName = hexaParams.star;
+        layerName = gauciParams.star;
       } else if (type == "element") {
-        layerName = hexaParams.element;
+        layerName = gauciParams.element;
         layerIcon = "star";
       } else if (type == "BG") {
-        layerName = hexaParams.bg;
+        layerName = gauciParams.bg;
         layerIcon = "image";
       } else if (type == "customSVG") {
-        layerName = hexaParams.customSvg;
+        layerName = gauciParams.customSvg;
       } else if (type == "qrCode") {
-        layerName = hexaParams.qrCode;
+        layerName = gauciParams.qrCode;
         layerIcon = "qr_code";
       }
       return (
@@ -2725,7 +2725,7 @@
     }
     // Add to history
     function addToHistory(action) {
-      var list = selector.find("#hexa-history-list");
+      var list = selector.find("#gauci-history-list");
       var today = new Date();
       var time =
         String(today.getHours()).padStart(2, "0") +
@@ -2745,14 +2745,14 @@
         "crossOrigin",
         "layerName",
       ]);
-      selector.find("#hexa-history").prop("disabled", false);
+      selector.find("#gauci-history").prop("disabled", false);
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
           action +
           '<span class="time">' +
           time +
-          '</span></div><div><button type="button" class="hexa-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="hexa-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
           JSON.stringify(json) +
           "</script></div></li>"
       );
@@ -2761,32 +2761,32 @@
       if (count > limit) {
         list.find("li").last().remove();
       }
-      selector.find("#hexa-history-count").html(list.find("li").length);
+      selector.find("#gauci-history-count").html(list.find("li").length);
       var undo = list.find("li.active").next("li");
       var redo = list.find("li.active").prev("li");
       if (undo.length) {
-        selector.find("#hexa-undo").prop("disabled", false);
+        selector.find("#gauci-undo").prop("disabled", false);
       } else {
-        selector.find("#hexa-undo").prop("disabled", true);
+        selector.find("#gauci-undo").prop("disabled", true);
       }
       if (redo.length) {
-        selector.find("#hexa-redo").prop("disabled", false);
+        selector.find("#gauci-redo").prop("disabled", false);
       } else {
-        selector.find("#hexa-redo").prop("disabled", true);
+        selector.find("#gauci-redo").prop("disabled", true);
       }
     }
     // Undo
-    // selector.find("#hexa-undo").on("click", function() {
-    // 	var target = selector.find("#hexa-history-list li.active").next("li");
+    // selector.find("#gauci-undo").on("click", function() {
+    // 	var target = selector.find("#gauci-history-list li.active").next("li");
     // if (target.length) {
-    // 	target.find(".hexa-btn.primary").trigger("click");
-    // 	selector.find("#hexa-redo").prop("disabled", false);
+    // 	target.find(".gauci-btn.primary").trigger("click");
+    // 	selector.find("#gauci-redo").prop("disabled", false);
     // } else {
-    // 	selector.find("#hexa-undo").prop("disabled", true);
+    // 	selector.find("#gauci-undo").prop("disabled", true);
     // }
     // });
-    selector.find("#hexa-undo").on("click", function () {
-      var historyList = selector.find("#hexa-history-list");
+    selector.find("#gauci-undo").on("click", function () {
+      var historyList = selector.find("#gauci-history-list");
       var activeListItem = historyList.find("li.active");
 
       if (activeListItem.length) {
@@ -2800,11 +2800,11 @@
           // Trigger other actions based on the lastAction if needed
           if (lastAction.json.objects.length > 0) {
             console.log(lastAction.json.objects.length > 0);
-            target.find(".hexa-btn.primary").trigger("click");
-            selector.find("#hexa-redo").prop("disabled", false);
+            target.find(".gauci-btn.primary").trigger("click");
+            selector.find("#gauci-redo").prop("disabled", false);
           }
         } else {
-          selector.find("#hexa-undo").prop("disabled", true);
+          selector.find("#gauci-undo").prop("disabled", true);
         }
       }
     });
@@ -2821,51 +2821,51 @@
     }
 
     // Redo
-    selector.find("#hexa-redo").on("click", function () {
-      var target = selector.find("#hexa-history-list li.active").prev("li");
+    selector.find("#gauci-redo").on("click", function () {
+      var target = selector.find("#gauci-history-list li.active").prev("li");
       if (target.length) {
-        target.find(".hexa-btn.primary").trigger("click");
-        selector.find("#hexa-undo").prop("disabled", false);
+        target.find(".gauci-btn.primary").trigger("click");
+        selector.find("#gauci-undo").prop("disabled", false);
       } else {
-        selector.find("#hexa-redo").prop("disabled", true);
+        selector.find("#gauci-redo").prop("disabled", true);
       }
     });
     // Delete history
     selector
-      .find("#hexa-history-list")
-      .on("click", ".hexa-btn.danger", function () {
+      .find("#gauci-history-list")
+      .on("click", ".gauci-btn.danger", function () {
         $(this).parent().parent().remove();
-        if (!$("#hexa-history-list li").length) {
-          selector.find("#hexa-history").prop("disabled", true);
-          selector.find("#hexa-undo").prop("disabled", true);
-          selector.find("#hexa-redo").prop("disabled", true);
-          selector.find(".hexa-modal").hide();
+        if (!$("#gauci-history-list li").length) {
+          selector.find("#gauci-history").prop("disabled", true);
+          selector.find("#gauci-undo").prop("disabled", true);
+          selector.find("#gauci-redo").prop("disabled", true);
+          selector.find(".gauci-modal").hide();
         }
       });
     // Restore history
     selector
-      .find("#hexa-history-list")
-      .on("click", ".hexa-btn.primary", function () {
-        selector.find("#hexa-history-list li").removeClass("active");
+      .find("#gauci-history-list")
+      .on("click", ".gauci-btn.primary", function () {
+        selector.find("#gauci-history-list li").removeClass("active");
         $(this).parent().parent().addClass("active");
-        var undo = selector.find("#hexa-history-list li.active").next("li");
-        var redo = selector.find("#hexa-history-list li.active").prev("li");
+        var undo = selector.find("#gauci-history-list li.active").next("li");
+        var redo = selector.find("#gauci-history-list li.active").prev("li");
         if (undo.length) {
-          selector.find("#hexa-undo").prop("disabled", false);
+          selector.find("#gauci-undo").prop("disabled", false);
         } else {
-          selector.find("#hexa-undo").prop("disabled", true);
+          selector.find("#gauci-undo").prop("disabled", true);
         }
         if (redo.length) {
-          selector.find("#hexa-redo").prop("disabled", false);
+          selector.find("#gauci-redo").prop("disabled", false);
         } else {
-          selector.find("#hexa-redo").prop("disabled", true);
+          selector.find("#gauci-redo").prop("disabled", true);
         }
         var json = JSON.parse($(this).parent().find("script").html());
-        selector.find(".hexa-modal").hide();
+        selector.find(".gauci-modal").hide();
         convertToDataURL(json.backgroundImage.src, function (dataUrl) {
           json.backgroundImage.src = dataUrl;
           loadJSON(json);
-          selector.find("#hexa-canvas-loader").hide();
+          selector.find("#gauci-canvas-loader").hide();
         });
       });
 
@@ -3111,18 +3111,18 @@
     // });
 
     /* Clear history */
-    selector.find("#hexa-clear-history").on("click", function () {
-      var answer = window.confirm(hexaParams.question1);
+    selector.find("#gauci-clear-history").on("click", function () {
+      var answer = window.confirm(gauciParams.question1);
       if (answer) {
-        selector.find("#hexa-history-list li").remove();
-        selector.find("#hexa-history").prop("disabled", true);
-        selector.find("#hexa-undo").prop("disabled", true);
-        selector.find("#hexa-redo").prop("disabled", true);
-        selector.find(".hexa-modal").hide();
+        selector.find("#gauci-history-list li").remove();
+        selector.find("#gauci-history").prop("disabled", true);
+        selector.find("#gauci-undo").prop("disabled", true);
+        selector.find("#gauci-redo").prop("disabled", true);
+        selector.find(".gauci-modal").hide();
       }
     });
     /* EVENTS */
-    canvas.on("hexa:history", function (e) {
+    canvas.on("gauci:history", function (e) {
       addToHistory(objectName(e.type) + " " + e.text);
     });
     var isObjectMoving = false;
@@ -3131,7 +3131,7 @@
       if (obj !== null) {
         var objType = obj.objectType;
         if (isObjectMoving) {
-          addToHistory(objectName(objType) + " " + hexaParams.moved);
+          addToHistory(objectName(objType) + " " + gauciParams.moved);
         }
       }
       if (
@@ -3296,46 +3296,46 @@
             lockTag = "lock";
           }
           obj.set("id", new Date().getTime());
-          selector.find("#hexa-layers > li").removeClass("active");
+          selector.find("#gauci-layers > li").removeClass("active");
           if (obj.objectType == "textbox") {
             layerName = obj.text;
             layerIcon = "title";
           } else if (obj.objectType == "drawing") {
-            layerName = hexaParams.freeDrawing;
+            layerName = gauciParams.freeDrawing;
             layerIcon = "brush";
           } else if (obj.objectType == "frame") {
-            layerName = hexaParams.frame;
+            layerName = gauciParams.frame;
             layerIcon = "wallpaper";
           } else if (obj.objectType == "image") {
-            layerName = hexaParams.image;
+            layerName = gauciParams.image;
             layerIcon = "image";
           } else if (obj.objectType == "circle") {
-            layerName = hexaParams.circle;
+            layerName = gauciParams.circle;
           } else if (obj.objectType == "square") {
-            layerName = hexaParams.square;
+            layerName = gauciParams.square;
           } else if (obj.objectType == "rectangle") {
-            layerName = hexaParams.rectangle;
+            layerName = gauciParams.rectangle;
           } else if (obj.objectType == "triangle") {
-            layerName = hexaParams.triangle;
+            layerName = gauciParams.triangle;
           } else if (obj.objectType == "ellipse") {
-            layerName = hexaParams.ellipse;
+            layerName = gauciParams.ellipse;
           } else if (obj.objectType == "trapezoid") {
-            layerName = hexaParams.trapezoid;
+            layerName = gauciParams.trapezoid;
           } else if (obj.objectType == "pentagon") {
-            layerName = hexaParams.pentagon;
+            layerName = gauciParams.pentagon;
           } else if (obj.objectType == "octagon") {
-            layerName = hexaParams.octagon;
+            layerName = gauciParams.octagon;
           } else if (obj.objectType == "emerald") {
-            layerName = hexaParams.emerald;
+            layerName = gauciParams.emerald;
           } else if (obj.objectType == "star") {
-            layerName = hexaParams.star;
+            layerName = gauciParams.star;
           } else if (obj.objectType == "element") {
-            layerName = hexaParams.element;
+            layerName = gauciParams.element;
             layerIcon = "star";
           } else if (obj.objectType == "customSVG") {
-            layerName = hexaParams.customSvg;
+            layerName = gauciParams.customSvg;
           } else if (obj.objectType == "qrCode") {
-            layerName = hexaParams.qrCode;
+            layerName = gauciParams.qrCode;
             layerIcon = "qr_code";
           }
           if ("layerName" in obj) {
@@ -3357,28 +3357,28 @@
             '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
             lock +
             '" title="' +
-            hexaParams.lockunlock +
+            gauciParams.lockunlock +
             '">' +
             lockTag +
             '</a><a class="material-icons text-success duplicate-layer" title="' +
-            hexaParams.duplicate +
+            gauciParams.duplicate +
             '">content_copy</a><a class="material-icons layer-visibility ' +
             visibility +
             '" title="' +
-            hexaParams.showhide +
+            gauciParams.showhide +
             '">' +
             visibilityTag +
             '</a><a class="material-icons text-danger delete-layer" title="' +
-            hexaParams.delete +
+            gauciParams.delete +
             '">clear</a></div></li>';
-          selector.find("#hexa-layers").prepend(output);
+          selector.find("#gauci-layers").prepend(output);
           deleteLayerEvent(obj.id);
           cloneLayerEvent(obj.id);
           visibilityLayerEvent(obj.id);
           lockLayerEvent(obj.id);
           clickLayerEvent(obj.id);
           layerNameEvent(obj.id);
-          selector.find("#hexa-layers").sortable("refresh");
+          selector.find("#gauci-layers").sortable("refresh");
           checkLayers();
           addDeleteIcon(obj);
           addCloneIcon(obj);
@@ -3389,7 +3389,7 @@
       var obj = e.target;
       if (obj.objectType == "textbox" && obj.id) {
         selector
-          .find("#hexa-layers #" + obj.id + " .layer-name")
+          .find("#gauci-layers #" + obj.id + " .layer-name")
           .html(obj.text);
         selector
           .find("#text-rotate")
@@ -3454,18 +3454,18 @@
     });
     canvas.on("erasing:end", function () {
       addToHistory(
-        '<span class="material-icons">brush</span>' + hexaParams.erased
+        '<span class="material-icons">brush</span>' + gauciParams.erased
       );
     });
     /* Horizontal Align Center */
-    selector.find(".hexa-horizontal-center").on("click", function () {
+    selector.find(".gauci-horizontal-center").on("click", function () {
       var obj = canvas.getActiveObject();
       obj.set("originX", "center");
       obj.set("left", getScaledSize()[0] / 2);
       canvas.requestRenderAll();
     });
     /* Vertical Align Center */
-    selector.find(".hexa-vertical-center").on("click", function () {
+    selector.find(".gauci-vertical-center").on("click", function () {
       var obj = canvas.getActiveObject();
       obj.set("originY", "center");
       obj.set("top", getScaledSize()[1] / 2);
@@ -3479,26 +3479,26 @@
     canvas.on("selection:updated", function (e) {
       var obj = e.selected;
       layerToggle(obj);
-      selector.find("#hexa-font-family").trigger("change");
+      selector.find("#gauci-font-family").trigger("change");
     });
     canvas.on("selection:cleared", function () {
-      selector.find("#hexa-text-settings").hide();
-      selector.find("#hexa-image-settings").hide();
-      selector.find("#hexa-shape-settings").hide();
-      selector.find("#hexa-custom-element-options").hide();
-      selector.find("#hexa-custom-element-options-info").show();
-      selector.find("#hexa-custom-svg-options").hide();
-      selector.find("#hexa-layers > li").removeClass("active");
+      selector.find("#gauci-text-settings").hide();
+      selector.find("#gauci-image-settings").hide();
+      selector.find("#gauci-shape-settings").hide();
+      selector.find("#gauci-custom-element-options").hide();
+      selector.find("#gauci-custom-element-options-info").show();
+      selector.find("#gauci-custom-svg-options").hide();
+      selector.find("#gauci-layers > li").removeClass("active");
     });
     /* Layers */
     selector
-      .find("#hexa-layers")
+      .find("#gauci-layers")
       .sortable({
         placeholder: "layer-placeholder",
         axis: "y",
         update: function (e, ui) {
           var objects = canvas.getObjects();
-          $("#hexa-layers li").each(function (index, value) {
+          $("#gauci-layers li").each(function (index, value) {
             $(this).attr("data-sort", index + 1);
             objects
               .filter((element) => element.id == value.id)
@@ -3512,26 +3512,26 @@
       })
       .disableSelection();
     /* Settings toggle */
-    selector.find("#hexa-layers").on("click", ".layer-settings", function () {
+    selector.find("#gauci-layers").on("click", ".layer-settings", function () {
       var layerSettings = $(this).next();
       if ($(this).hasClass("active")) {
         $(this).removeClass("active");
         layerSettings.hide();
       } else {
-        selector.find("#hexa-layers .layer-icons").hide();
-        selector.find("#hexa-layers .layer-settings").removeClass("active");
+        selector.find("#gauci-layers .layer-icons").hide();
+        selector.find("#gauci-layers .layer-settings").removeClass("active");
         $(this).addClass("active");
         layerSettings.show();
       }
     });
     /* Delete Layer Event */
     function deleteLayerEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.find("a.delete-layer").on("click", function (e) {
         e.preventDefault();
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: item.data("type"),
-          text: hexaParams.removed,
+          text: gauciParams.removed,
         });
         var objects = canvas.getObjects();
         objects
@@ -3552,13 +3552,13 @@
 
         item.remove();
         canvas.requestRenderAll();
-        selector.find("#hexa-layers").sortable("refresh");
+        selector.find("#gauci-layers").sortable("refresh");
         checkLayers();
       });
     }
     /* Clone Layer Event */
     function cloneLayerEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.find("a.duplicate-layer").on("click", function (e) {
         e.preventDefault();
         var objects = canvas.getObjects();
@@ -3573,16 +3573,16 @@
             })
           );
         canvas.requestRenderAll();
-        selector.find("#hexa-layers").sortable("refresh");
-        canvas.fire("hexa:history", {
+        selector.find("#gauci-layers").sortable("refresh");
+        canvas.fire("gauci:history", {
           type: item.data("type"),
-          text: hexaParams.added,
+          text: gauciParams.added,
         });
       });
     }
     /* Visibility Layer Event */
     function visibilityLayerEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.find("a.layer-visibility").on("click", function (e) {
         e.preventDefault();
         var objects = canvas.getObjects();
@@ -3606,7 +3606,7 @@
     }
     /* Lock/Unlock Layer Event */
     function lockLayerEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.find("a.lock-layer").on("click", function (e) {
         e.preventDefault();
         var obj = canvas.getActiveObject();
@@ -3636,21 +3636,21 @@
     }
     /* Layer Click Event */
     function clickLayerEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.on("click", function (e) {
         var objects = canvas.getObjects();
         var id = $(this).attr("id");
         objects
           .filter((element) => element.id == id)
           .forEach((element) => canvas.setActiveObject(element));
-        selector.find("#hexa-layers > li").removeClass("active");
+        selector.find("#gauci-layers > li").removeClass("active");
         $(this).addClass("active");
         canvas.requestRenderAll();
       });
     }
     /* Layer Name Event */
     function layerNameEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.find(".layer-name").on("change", function (e) {
         var objects = canvas.getObjects();
         var id = $(this).parent("li").attr("id");
@@ -3665,75 +3665,75 @@
     }
     /* Layer Click Event */
     function checkLayers() {
-      if (!selector.find("#hexa-layers li").length) {
-        selector.find("#hexa-no-layer").show();
-        selector.find("#hexa-layer-delete-wrap").css("visibility", "hidden");
+      if (!selector.find("#gauci-layers li").length) {
+        selector.find("#gauci-no-layer").show();
+        selector.find("#gauci-layer-delete-wrap").css("visibility", "hidden");
       } else {
-        selector.find("#hexa-no-layer").hide();
-        selector.find("#hexa-layer-delete-wrap").css("visibility", "visible");
+        selector.find("#gauci-no-layer").hide();
+        selector.find("#gauci-layer-delete-wrap").css("visibility", "visible");
       }
     }
     /* Layer Toggle */
     function layerToggle(obj) {
-      selector.find("#hexa-layers li").removeClass("active");
+      selector.find("#gauci-layers li").removeClass("active");
       if (obj.length >= 2) {
         for (var i = 0; i < obj.length; i++) {
-          selector.find("#hexa-layers #" + obj[i].id).addClass("active");
+          selector.find("#gauci-layers #" + obj[i].id).addClass("active");
         }
       } else {
         obj = obj[0];
         if (obj.objectType) {
           // Textbox
           if (obj.objectType == "textbox") {
-            selector.find("#hexa-text-settings").show();
+            selector.find("#gauci-text-settings").show();
             setTextSettings(obj);
-            if (!selector.find("#hexa-btn-text").hasClass("active")) {
-              selector.find("#hexa-btn-text").trigger("click");
+            if (!selector.find("#gauci-btn-text").hasClass("active")) {
+              selector.find("#gauci-btn-text").trigger("click");
             }
-            selector.find("#hexa-font-family").trigger("change");
+            selector.find("#gauci-font-family").trigger("change");
           } else {
-            selector.find("#hexa-text-settings").hide();
+            selector.find("#gauci-text-settings").hide();
           }
           // Image
           if (obj.objectType == "image") {
-            selector.find("#hexa-image-settings").show();
+            selector.find("#gauci-image-settings").show();
             setImageSettings(obj);
-            if (!selector.find("#hexa-btn-image").hasClass("active")) {
-              selector.find("#hexa-btn-image").trigger("click");
-              selector.find("#hexa-img-mode").trigger("click");
+            if (!selector.find("#gauci-btn-image").hasClass("active")) {
+              selector.find("#gauci-btn-image").trigger("click");
+              selector.find("#gauci-img-mode").trigger("click");
             }
           } else {
-            selector.find("#hexa-image-settings").hide();
+            selector.find("#gauci-image-settings").hide();
           }
           // Frames
           if (obj.objectType == "frame") {
-            if (!selector.find("#hexa-btn-frames").hasClass("active")) {
-              selector.find("#hexa-btn-frames").trigger("click");
+            if (!selector.find("#gauci-btn-frames").hasClass("active")) {
+              selector.find("#gauci-btn-frames").trigger("click");
             }
           }
           // Elements
           if (obj.objectType == "element") {
-            selector.find("#hexa-custom-element-options").show();
-            selector.find("#hexa-custom-element-options-info").hide();
+            selector.find("#gauci-custom-element-options").show();
+            selector.find("#gauci-custom-element-options-info").hide();
             setElementSettings(obj);
-            if (!selector.find("#hexa-btn-elements").hasClass("active")) {
-              selector.find("#hexa-btn-elements").trigger("click");
+            if (!selector.find("#gauci-btn-elements").hasClass("active")) {
+              selector.find("#gauci-btn-elements").trigger("click");
             }
-            selector.find("#hexa-custom-element-open").trigger("click");
+            selector.find("#gauci-custom-element-open").trigger("click");
           } else {
-            selector.find("#hexa-custom-element-options").hide();
-            selector.find("#hexa-custom-element-options-info").show();
+            selector.find("#gauci-custom-element-options").hide();
+            selector.find("#gauci-custom-element-options-info").show();
           }
           // Custom SVG
           if (obj.objectType == "customSVG") {
-            selector.find("#hexa-custom-svg-options").show();
+            selector.find("#gauci-custom-svg-options").show();
             setCustomSVGSettings(obj);
-            if (!selector.find("#hexa-btn-icons").hasClass("active")) {
-              selector.find("#hexa-btn-icons").trigger("click");
+            if (!selector.find("#gauci-btn-icons").hasClass("active")) {
+              selector.find("#gauci-btn-icons").trigger("click");
             }
-            selector.find("#hexa-custom-svg-open").trigger("click");
+            selector.find("#gauci-custom-svg-open").trigger("click");
           } else {
-            selector.find("#hexa-custom-svg-options").hide();
+            selector.find("#gauci-custom-svg-options").hide();
           }
           // Shapes
           if (shapeTypes.includes(obj.objectType)) {
@@ -3742,41 +3742,41 @@
             } else {
               selector.find("#shape-custom-width-wrap").hide();
             }
-            selector.find("#hexa-shape-settings").show();
+            selector.find("#gauci-shape-settings").show();
             setShapeSettings(obj);
-            if (!selector.find("#hexa-btn-shapes").hasClass("active")) {
-              selector.find("#hexa-btn-shapes").trigger("click");
+            if (!selector.find("#gauci-btn-shapes").hasClass("active")) {
+              selector.find("#gauci-btn-shapes").trigger("click");
             }
           } else {
-            selector.find("#hexa-shape-settings").hide();
+            selector.find("#gauci-shape-settings").hide();
           }
           if (obj.id) {
-            selector.find("#hexa-layers #" + obj.id).addClass("active");
+            selector.find("#gauci-layers #" + obj.id).addClass("active");
           }
         } else {
           $.each(obj, function (index, val) {
-            selector.find("#hexa-layers #" + val.id).addClass("active");
+            selector.find("#gauci-layers #" + val.id).addClass("active");
           });
         }
       }
     }
     /* Layer Delete */
-    selector.find("#hexa-layer-delete").on("click", function () {
-      var answer = window.confirm(hexaParams.question2);
+    selector.find("#gauci-layer-delete").on("click", function () {
+      var answer = window.confirm(gauciParams.question2);
       if (answer) {
-        var type = selector.find("#hexa-layer-select").val();
+        var type = selector.find("#gauci-layer-select").val();
         var objects = canvas.getObjects();
         if (type == "all") {
           objects.forEach((element) => canvas.remove(element));
-          selector.find("#hexa-layers > li").remove();
+          selector.find("#gauci-layers > li").remove();
         } else {
           objects
             .filter((element) => element.objectType == type)
             .forEach((element) => canvas.remove(element));
-          selector.find("#hexa-layers > li.layer-" + type).remove();
+          selector.find("#gauci-layers > li.layer-" + type).remove();
         }
         canvas.requestRenderAll();
-        selector.find("#hexa-layers").sortable("refresh");
+        selector.find("#gauci-layers").sortable("refresh");
         checkLayers();
       }
     });
@@ -3820,33 +3820,33 @@
         zoom = zoom / 100;
         canvas.setZoom(zoom);
       } else {
-        var currentZoom = selector.find("#hexa-img-zoom").val();
+        var currentZoom = selector.find("#gauci-img-zoom").val();
         var requiredRatio = 100;
         var ratio = 1;
         var ratio2 = 0;
         if (
-          zoomWidth < selector.find("#hexa-content").width() &&
-          zoomHeight < selector.find("#hexa-content").height()
+          zoomWidth < selector.find("#gauci-content").width() &&
+          zoomHeight < selector.find("#gauci-content").height()
         ) {
           canvas.setZoom(1);
-          selector.find("#hexa-img-zoom").val(100);
+          selector.find("#gauci-img-zoom").val(100);
         } else {
-          if (zoomWidth > selector.find("#hexa-content").width()) {
-            ratio = (selector.find("#hexa-content").width() - 60) / zoomWidth;
+          if (zoomWidth > selector.find("#gauci-content").width()) {
+            ratio = (selector.find("#gauci-content").width() - 60) / zoomWidth;
             requiredRatio = ratio.toFixed(2) * 100;
             if (currentZoom > requiredRatio) {
               canvas.setZoom(ratio.toFixed(2));
-              selector.find("#hexa-img-zoom").val(ratio.toFixed(2) * 100);
+              selector.find("#gauci-img-zoom").val(ratio.toFixed(2) * 100);
               ratio2 = ratio.toFixed(2);
             }
           }
-          if (zoomHeight > selector.find("#hexa-content").height()) {
-            ratio = selector.find("#hexa-content").height() / zoomHeight;
+          if (zoomHeight > selector.find("#gauci-content").height()) {
+            ratio = selector.find("#gauci-content").height() / zoomHeight;
             requiredRatio = ratio.toFixed(2) * 100;
             if (currentZoom > requiredRatio) {
               if (ratio2 === 0 || ratio2 > ratio.toFixed(2)) {
                 canvas.setZoom(ratio.toFixed(2));
-                selector.find("#hexa-img-zoom").val(ratio.toFixed(2) * 100);
+                selector.find("#gauci-img-zoom").val(ratio.toFixed(2) * 100);
               }
             }
           }
@@ -3855,10 +3855,10 @@
       canvas.setWidth(zoomWidth * canvas.getZoom());
       canvas.setHeight(zoomHeight * canvas.getZoom());
       if (canvas.isDrawingMode === true) {
-        if (selector.find("#hexa-erase-btn").hasClass("active")) {
+        if (selector.find("#gauci-erase-btn").hasClass("active")) {
           selector.find("#eraser-width").trigger("input");
         }
-        if (selector.find("#hexa-draw-btn").hasClass("active")) {
+        if (selector.find("#gauci-draw-btn").hasClass("active")) {
           selector.find("#brush-width").trigger("input");
         }
       }
@@ -3866,15 +3866,15 @@
 
     function centerCanvas() {
       // Apply centering styles to both canvases
-      selector.find("#hexa-canvas-wrap").css({
+      selector.find("#gauci-canvas-wrap").css({
         top: "50%",
         left: "25%",
         transform: "translate(-50%, -50%)",
       });
     }
     function fixZoomOut() {
-      var containerWidth = selector.find("#hexa-content").width();
-      var containerHeight = selector.find("#hexa-content").height();
+      var containerWidth = selector.find("#gauci-content").width();
+      var containerHeight = selector.find("#gauci-content").height();
 
       var zoomWidth = originalHeight;
       var zoomHeight = originalWidth;
@@ -3890,54 +3890,54 @@
       var minScale = Math.min(scaleX, scaleY);
 
       canvas.setZoom(minScale);
-      selector.find("#hexa-img-zoom").val(minScale * 100);
+      selector.find("#gauci-img-zoom").val(minScale * 100);
 
       canvas.setWidth(zoomWidth * canvas.getZoom());
       canvas.setHeight(zoomHeight * canvas.getZoom());
 
       // Additional logic for drawing mode adjustments
       if (canvas.isDrawingMode === true) {
-        if (selector.find("#hexa-erase-btn").hasClass("active")) {
+        if (selector.find("#gauci-erase-btn").hasClass("active")) {
           selector.find("#eraser-width").trigger("input");
         }
-        if (selector.find("#hexa-draw-btn").hasClass("active")) {
+        if (selector.find("#gauci-draw-btn").hasClass("active")) {
           selector.find("#brush-width").trigger("input");
         }
       }
     }
 
     /* Pan */
-    selector.find("#hexa-img-drag").on("click", function () {
+    selector.find("#gauci-img-drag").on("click", function () {
       if ($(this).hasClass("active")) {
         $(this).removeClass("active");
-        selector.find("#hexa-canvas-overlay").hide();
-        selector.find("#hexa-canvas-wrap").draggable("disable");
+        selector.find("#gauci-canvas-overlay").hide();
+        selector.find("#gauci-canvas-wrap").draggable("disable");
       } else {
         $(this).addClass("active");
-        selector.find("#hexa-canvas-overlay").show();
-        selector.find("#hexa-canvas-wrap").draggable("enable");
+        selector.find("#gauci-canvas-overlay").show();
+        selector.find("#gauci-canvas-wrap").draggable("enable");
       }
     });
     /* Zoom */
     selector
-      .find(".hexa-counter input.hexa-form-field")
+      .find(".gauci-counter input.gauci-form-field")
       .on("input", function () {
         var val = parseInt($(this).val());
         adjustZoom(val);
       });
     /* Resize Input Update */
     var setDimentions = function (e) {
-      selector.find("#hexa-resize-width").val(Math.round(e.width));
-      selector.find("#hexa-resize-height").val(Math.round(e.height));
-      selector.find("#hexa-img-width").html(Math.round(e.width));
-      selector.find("#hexa-img-height").html(Math.round(e.height));
-      selector.find("#hexa-crop-width").val(Math.round(e.width / 2));
-      selector.find("#hexa-crop-height").val(Math.round(e.height / 2));
-      selector.find("#hexa-resize-width").data("size", Math.round(e.width));
-      selector.find("#hexa-resize-height").data("size", Math.round(e.height));
+      selector.find("#gauci-resize-width").val(Math.round(e.width));
+      selector.find("#gauci-resize-height").val(Math.round(e.height));
+      selector.find("#gauci-img-width").html(Math.round(e.width));
+      selector.find("#gauci-img-height").html(Math.round(e.height));
+      selector.find("#gauci-crop-width").val(Math.round(e.width / 2));
+      selector.find("#gauci-crop-height").val(Math.round(e.height / 2));
+      selector.find("#gauci-resize-width").data("size", Math.round(e.width));
+      selector.find("#gauci-resize-height").data("size", Math.round(e.height));
       if (mode == "image") {
-        selector.find("#hexa-crop-width").data("max", Math.round(e.width));
-        selector.find("#hexa-crop-height").data("max", Math.round(e.height));
+        selector.find("#gauci-crop-width").data("max", Math.round(e.width));
+        selector.find("#gauci-crop-height").data("max", Math.round(e.height));
       }
     };
     /* CROP */
@@ -3953,7 +3953,7 @@
       });
       var blob = dataURLtoBlob(imgData);
       imgurl = URL.createObjectURL(blob);
-      selector.find("#hexa-canvas-img").attr("src", imgurl);
+      selector.find("#gauci-canvas-img").attr("src", imgurl);
       canvas.backgroundColor = selector.find("#custom-image-background").val();
       objects
         .filter((element) => element.objectType != "BG")
@@ -3964,14 +3964,14 @@
       var objects = canvas.getObjects();
       clipPath.moveTo(9999);
       canvas.setActiveObject(clipPath);
-      selector.find("#hexa-crop-btns").removeClass("disabled");
+      selector.find("#gauci-crop-btns").removeClass("disabled");
       selector
         .find(
-          ".hexa-icon-panel-content ul.hexa-accordion > li, #hexa-icon-menu, #hexa-top-bar, #hexa-right-col"
+          ".gauci-icon-panel-content ul.gauci-accordion > li, #gauci-icon-menu, #gauci-top-bar, #gauci-right-col"
         )
         .css("pointer-events", "none");
       selector
-        .find(".hexa-icon-panel-content ul.hexa-accordion > li.accordion-crop")
+        .find(".gauci-icon-panel-content ul.gauci-accordion > li.accordion-crop")
         .css("pointer-events", "auto");
       objects
         .filter(
@@ -3981,7 +3981,7 @@
         .forEach((element) => element.set("selectable", false));
     }
     /* Crop Style Select */
-    selector.find("#hexa-crop-style").on("change", function () {
+    selector.find("#gauci-crop-style").on("change", function () {
       if ($(this).val() != "") {
         $(this).select2("enable", false);
       }
@@ -4006,8 +4006,8 @@
       // Custom
       else if ($(this).val() == "custom") {
         selector.find(".crop-custom").css("display", "flex");
-        var width = parseInt(selector.find("#hexa-crop-width").val());
-        var height = parseInt(selector.find("#hexa-crop-height").val());
+        var width = parseInt(selector.find("#gauci-crop-width").val());
+        var height = parseInt(selector.find("#gauci-crop-height").val());
         clipPath = new fabric.Rect({
           fill: "rgba(156, 39, 176, 0.3)",
           width: width,
@@ -4122,33 +4122,33 @@
           )
           .forEach((element) => element.set("selectable", true));
         selector.find(".crop-custom").css("display", "none");
-        selector.find("#hexa-crop-btns").addClass("disabled");
+        selector.find("#gauci-crop-btns").addClass("disabled");
         selector
           .find(
-            ".hexa-icon-panel-content ul.hexa-accordion > li, #hexa-icon-menu, #hexa-top-bar, #hexa-right-col"
+            ".gauci-icon-panel-content ul.gauci-accordion > li, #gauci-icon-menu, #gauci-top-bar, #gauci-right-col"
           )
           .css("pointer-events", "auto");
       }
     });
     /* Crop Cancel Button */
-    selector.find("#hexa-crop-cancel").on("click", function () {
-      selector.find("#hexa-crop-btns").addClass("disabled");
-      selector.find("#hexa-crop-style").select2("enable");
-      selector.find("#hexa-crop-style").val("");
-      selector.find("#hexa-crop-style").trigger("change");
+    selector.find("#gauci-crop-cancel").on("click", function () {
+      selector.find("#gauci-crop-btns").addClass("disabled");
+      selector.find("#gauci-crop-style").select2("enable");
+      selector.find("#gauci-crop-style").val("");
+      selector.find("#gauci-crop-style").trigger("change");
       canvas.remove(overlay);
       canvas.remove(clipPath);
     });
     /* Crop Apply Button */
-    selector.find("#hexa-crop-apply").on("click", function () {
-      var answer = window.confirm(hexaParams.question3);
+    selector.find("#gauci-crop-apply").on("click", function () {
+      var answer = window.confirm(gauciParams.question3);
       if (answer) {
-        selector.find("#hexa-crop-btns").addClass("disabled");
-        selector.find("#hexa-crop-style").select2("enable");
-        selector.find("#hexa-crop-style").val("");
-        selector.find("#hexa-crop-style").trigger("change");
+        selector.find("#gauci-crop-btns").addClass("disabled");
+        selector.find("#gauci-crop-style").select2("enable");
+        selector.find("#gauci-crop-style").val("");
+        selector.find("#gauci-crop-style").trigger("change");
         canvas.setZoom(1);
-        selector.find("#hexa-img-zoom").val(100);
+        selector.find("#gauci-img-zoom").val(100);
         var clipPos = clipPath.getBoundingRect();
         canvas.setWidth(clipPos.width - 1);
         canvas.setHeight(clipPos.height - 1);
@@ -4160,7 +4160,7 @@
         canvas.remove(clipPath);
         updateImage();
         // Wait for the placeholder image fully load
-        selector.find("#hexa-canvas-img-wrap").imagesLoaded(function () {
+        selector.find("#gauci-canvas-img-wrap").imagesLoaded(function () {
           originalWidth = canvas.width;
           originalHeight = canvas.height;
           rotate = 0;
@@ -4173,57 +4173,57 @@
           adjustZoom();
           canvas.requestRenderAll();
           setTimeout(function () {
-            canvas.fire("hexa:history", {
+            canvas.fire("gauci:history", {
               type: "BG",
-              text: hexaParams.cropped,
+              text: gauciParams.cropped,
             });
           }, 500);
         });
       }
     });
     /* Crop Width Input */
-    selector.find("#hexa-crop-width").bind("input paste", function () {
-      if (selector.find("#hexa-crop-lock").hasClass("active")) {
+    selector.find("#gauci-crop-width").bind("input paste", function () {
+      if (selector.find("#gauci-crop-lock").hasClass("active")) {
         var width = $(this).data("max");
-        var height = selector.find("#hexa-crop-height").data("max");
+        var height = selector.find("#gauci-crop-height").data("max");
         var ratio = width / height;
-        selector.find("#hexa-crop-height").val(Math.round(this.value / ratio));
+        selector.find("#gauci-crop-height").val(Math.round(this.value / ratio));
       }
       clipPath.set("width", parseInt($(this).val()));
       clipPath.set(
         "height",
-        parseInt(selector.find("#hexa-crop-height").val())
+        parseInt(selector.find("#gauci-crop-height").val())
       );
       canvas.requestRenderAll();
     });
     /* Crop Height Input */
-    selector.find("#hexa-crop-height").bind("input paste", function () {
-      if (selector.find("#hexa-crop-lock").hasClass("active")) {
+    selector.find("#gauci-crop-height").bind("input paste", function () {
+      if (selector.find("#gauci-crop-lock").hasClass("active")) {
         var height = $(this).data("max");
-        var width = selector.find("#hexa-crop-width").data("max");
+        var width = selector.find("#gauci-crop-width").data("max");
         var ratio = height / width;
-        selector.find("#hexa-crop-width").val(Math.round(this.value / ratio));
+        selector.find("#gauci-crop-width").val(Math.round(this.value / ratio));
       }
       clipPath.set("height", parseInt($(this).val()));
-      clipPath.set("width", parseInt(selector.find("#hexa-crop-width").val()));
+      clipPath.set("width", parseInt(selector.find("#gauci-crop-width").val()));
       canvas.requestRenderAll();
     });
     /* Resize Canvas */
     function resizeCanvas() {
-      var inputWidth = parseInt(selector.find("#hexa-resize-width").val());
-      var inputHeight = parseInt(selector.find("#hexa-resize-height").val());
+      var inputWidth = parseInt(selector.find("#gauci-resize-width").val());
+      var inputHeight = parseInt(selector.find("#gauci-resize-height").val());
       originalWidth = inputWidth;
       originalHeight = inputHeight;
       canvas.setZoom(1);
-      selector.find("#hexa-img-zoom").val(100);
+      selector.find("#gauci-img-zoom").val(100);
       canvas.setWidth(inputWidth);
       canvas.setHeight(inputHeight);
       if (rotate == 0 || rotate == 180 || rotate == -180) {
-        scaleX = canvas.width / selector.find("#hexa-canvas-img")[0].width;
-        scaleY = canvas.height / selector.find("#hexa-canvas-img")[0].height;
+        scaleX = canvas.width / selector.find("#gauci-canvas-img")[0].width;
+        scaleY = canvas.height / selector.find("#gauci-canvas-img")[0].height;
       } else {
-        scaleX = canvas.height / selector.find("#hexa-canvas-img")[0].width;
-        scaleY = canvas.width / selector.find("#hexa-canvas-img")[0].height;
+        scaleX = canvas.height / selector.find("#gauci-canvas-img")[0].width;
+        scaleY = canvas.width / selector.find("#gauci-canvas-img")[0].height;
       }
       canvas.backgroundImage.set({
         scaleX: scaleX,
@@ -4244,7 +4244,7 @@
       });
       updateImage();
       // Wait for the placeholder image fully load
-      selector.find("#hexa-canvas-img-wrap").imagesLoaded(function () {
+      selector.find("#gauci-canvas-img-wrap").imagesLoaded(function () {
         canvas.discardActiveObject();
         originalWidth = canvas.width;
         originalHeight = canvas.height;
@@ -4258,38 +4258,38 @@
         adjustZoom();
         canvas.requestRenderAll();
         setTimeout(function () {
-          canvas.fire("hexa:history", {
+          canvas.fire("gauci:history", {
             type: "BG",
-            text: hexaParams.resized,
+            text: gauciParams.resized,
           });
         }, 500);
       });
     }
     /* Resize Canvas Button */
-    selector.find("#hexa-resize-apply").on("click", function () {
-      var answer = window.confirm(hexaParams.question4);
+    selector.find("#gauci-resize-apply").on("click", function () {
+      var answer = window.confirm(gauciParams.question4);
       if (answer) {
         resizeCanvas();
       }
     });
     /* Resize Width Input */
-    selector.find("#hexa-resize-width").bind("input paste", function () {
-      if (selector.find("#hexa-resize-lock").hasClass("active")) {
+    selector.find("#gauci-resize-width").bind("input paste", function () {
+      if (selector.find("#gauci-resize-lock").hasClass("active")) {
         var width = $(this).data("size");
-        var height = selector.find("#hexa-resize-height").data("size");
+        var height = selector.find("#gauci-resize-height").data("size");
         var ratio = width / height;
         selector
-          .find("#hexa-resize-height")
+          .find("#gauci-resize-height")
           .val(Math.round(this.value / ratio));
       }
     });
     /* Resize Height Input */
-    selector.find("#hexa-resize-height").bind("input paste", function () {
-      if (selector.find("#hexa-resize-lock").hasClass("active")) {
+    selector.find("#gauci-resize-height").bind("input paste", function () {
+      if (selector.find("#gauci-resize-lock").hasClass("active")) {
         var height = $(this).data("size");
-        var width = selector.find("#hexa-resize-width").data("size");
+        var width = selector.find("#gauci-resize-width").data("size");
         var ratio = height / width;
-        selector.find("#hexa-resize-width").val(Math.round(this.value / ratio));
+        selector.find("#gauci-resize-width").val(Math.round(this.value / ratio));
       }
     });
     /* Rotate Canvas */
@@ -4416,21 +4416,21 @@
       setDimentions(canvas);
       adjustZoom();
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "BG",
-        text: hexaParams.rotated,
+        text: gauciParams.rotated,
       });
     }
     /* Rotate Right */
-    selector.find("#hexa-rotate-right").on("click", function () {
+    selector.find("#gauci-rotate-right").on("click", function () {
       rotateCanvas("right");
     });
     /* Rotate Left */
-    selector.find("#hexa-rotate-left").on("click", function () {
+    selector.find("#gauci-rotate-left").on("click", function () {
       rotateCanvas("left");
     });
     /* Flip X */
-    selector.find("#hexa-flip-horizontal").on("click", function () {
+    selector.find("#gauci-flip-horizontal").on("click", function () {
       canvas.backgroundImage.toggle("flipX");
       var tempRect = new fabric.Rect({
         radius: 50,
@@ -4461,13 +4461,13 @@
       canvas.remove(tempRect);
       canvas.discardActiveObject();
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "BG",
-        text: hexaParams.flipped,
+        text: gauciParams.flipped,
       });
     });
     /* Flip Y */
-    selector.find("#hexa-flip-vertical").on("click", function () {
+    selector.find("#gauci-flip-vertical").on("click", function () {
       canvas.backgroundImage.toggle("flipY");
       var tempRect = new fabric.Rect({
         radius: 50,
@@ -4498,13 +4498,13 @@
       canvas.remove(tempRect);
       canvas.discardActiveObject();
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "BG",
-        text: hexaParams.flipped,
+        text: gauciParams.flipped,
       });
     });
     /* Brightness Toggle */
-    selector.find("#hexa-brightness").on("change", function () {
+    selector.find("#gauci-brightness").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(
           new fabric.Image.filters.Brightness()
@@ -4534,11 +4534,11 @@
     });
     selector.find("#brightness").on("change", function (e) {
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Contrast Toggle */
-    selector.find("#hexa-contrast").on("change", function () {
+    selector.find("#gauci-contrast").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(
           new fabric.Image.filters.Contrast()
@@ -4568,11 +4568,11 @@
     });
     selector.find("#contrast").on("change", function (e) {
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Saturation Toggle */
-    selector.find("#hexa-saturation").on("change", function () {
+    selector.find("#gauci-saturation").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(
           new fabric.Image.filters.Saturation()
@@ -4602,11 +4602,11 @@
     });
     selector.find("#saturation").on("change", function (e) {
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Hue Toggle */
-    selector.find("#hexa-hue").on("change", function () {
+    selector.find("#gauci-hue").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(
           new fabric.Image.filters.HueRotation()
@@ -4636,12 +4636,12 @@
     });
     selector.find("#hue").on("change", function (e) {
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Filters */
     selector
-      .find("#hexa-filters input[type=checkbox]")
+      .find("#gauci-filters input[type=checkbox]")
       .on("change", function (e) {
         if ($(this).is(":checked")) {
           if ($(this).attr("id") == "grayscale") {
@@ -4825,7 +4825,7 @@
         canvas.backgroundImage.applyFilters();
         canvas.requestRenderAll();
         if (e.originalEvent) {
-          addToHistory(hexaParams.bg + " " + hexaParams.edited);
+          addToHistory(gauciParams.bg + " " + gauciParams.edited);
         }
       });
     /** Images Filters */
@@ -4961,14 +4961,14 @@
     });
 
     selector.find(".grid-container").hide();
-    selector.find("#hexa-image-filter-name").css({
+    selector.find("#gauci-image-filter-name").css({
       cursor: "pointer",
       border: "1px solid #ccc",
       padding: "5px",
       "text-align": "center",
     });
 
-    selector.find("#hexa-image-filter-name").on("click", function () {
+    selector.find("#gauci-image-filter-name").on("click", function () {
       selector.find(".grid-container").toggle();
 
       let arrowIcon = $(this).find(".arrow");
@@ -4991,7 +4991,7 @@
     });
 
     /* Gamma Toggle */
-    selector.find("#hexa-gamma").on("change", function () {
+    selector.find("#gauci-gamma").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(new fabric.Image.filters.Gamma());
       } else {
@@ -5024,7 +5024,7 @@
       canvas.requestRenderAll();
     });
     /* Gamma Settings */
-    selector.find("#hexa-gamma-settings input").on("input", function () {
+    selector.find("#gauci-gamma-settings input").on("input", function () {
       var v1 = parseFloat($("#gamma-red").val());
       var v2 = parseFloat($("#gamma-green").val());
       var v3 = parseFloat($("#gamma-blue").val());
@@ -5035,13 +5035,13 @@
       canvas.backgroundImage.applyFilters();
       canvas.requestRenderAll();
     });
-    selector.find("#hexa-gamma-settings input").on("change", function (e) {
+    selector.find("#gauci-gamma-settings input").on("change", function (e) {
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Blur Toggle */
-    selector.find("#hexa-blur").on("change", function () {
+    selector.find("#gauci-blur").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(new fabric.Image.filters.Blur());
       } else {
@@ -5067,11 +5067,11 @@
       canvas.backgroundImage.applyFilters();
       canvas.requestRenderAll();
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Noise Toggle */
-    selector.find("#hexa-noise").on("change", function () {
+    selector.find("#gauci-noise").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(new fabric.Image.filters.Noise());
       } else {
@@ -5099,11 +5099,11 @@
     });
     selector.find("#noise").on("change", function (e) {
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Pixelate Toggle */
-    selector.find("#hexa-pixelate").on("change", function () {
+    selector.find("#gauci-pixelate").on("change", function () {
       if ($(this).is(":checked")) {
         canvas.backgroundImage.filters.push(
           new fabric.Image.filters.Pixelate()
@@ -5131,11 +5131,11 @@
       canvas.backgroundImage.applyFilters();
       canvas.requestRenderAll();
       if (e.originalEvent) {
-        addToHistory(hexaParams.bg + " " + hexaParams.edited);
+        addToHistory(gauciParams.bg + " " + gauciParams.edited);
       }
     });
     /* Blend Color Toggle */
-    selector.find("#hexa-blend-color").on("change", function () {
+    selector.find("#gauci-blend-color").on("change", function () {
       if ($(this).is(":checked")) {
         var mode = selector.find("#blend-color-mode").val();
         var color = selector.find("#blend-color-color").val();
@@ -5192,7 +5192,7 @@
       canvas.requestRenderAll();
     });
     /* Duotone Toggle */
-    selector.find("#hexa-duotone-color").on("change", function () {
+    selector.find("#gauci-duotone-color").on("change", function () {
       if ($(this).is(":checked")) {
         duotoneFilter = new fabric.Image.filters.Composed({
           subFilters: [
@@ -5240,7 +5240,7 @@
       canvas.requestRenderAll();
     });
     /* Swap Colors Apply */
-    selector.find("#hexa-swap-apply").on("click", function () {
+    selector.find("#gauci-swap-apply").on("click", function () {
       var swapColors = new fabric.Image.filters.SwapColor({
         colorSource: selector.find("#color-source").val(),
         colorDestination: selector.find("#color-destination").val(),
@@ -5249,28 +5249,28 @@
       canvas.backgroundImage.applyFilters();
       canvas.requestRenderAll();
       $(this).prop("disabled", true);
-      selector.find("#hexa-swap-remove").prop("disabled", false);
+      selector.find("#gauci-swap-remove").prop("disabled", false);
     });
     /* Swap Colors Remove */
-    selector.find("#hexa-swap-remove").on("click", function () {
+    selector.find("#gauci-swap-remove").on("click", function () {
       canvas.backgroundImage.filters = canvas.backgroundImage.filters.filter(
         (element) => element.type != "SwapColor"
       );
       canvas.backgroundImage.applyFilters();
       canvas.requestRenderAll();
       $(this).prop("disabled", true);
-      selector.find("#hexa-swap-apply").prop("disabled", false);
+      selector.find("#gauci-swap-apply").prop("disabled", false);
     });
     /* Swap Colors Toggle */
-    selector.find("#hexa-swap-colors").on("change", function () {
+    selector.find("#gauci-swap-colors").on("change", function () {
       if (!$(this).is(":checked")) {
-        selector.find("#hexa-swap-remove").trigger("click");
+        selector.find("#gauci-swap-remove").trigger("click");
       }
     });
     /* Shadow Fields */
     var shadowFields = ["text", "image", "shape", "element"];
     $.each(shadowFields, function (index, value) {
-      selector.find("#hexa-" + value + "-shadow").on("change", function () {
+      selector.find("#gauci-" + value + "-shadow").on("change", function () {
         var shadow = new fabric.Shadow({
           color: selector.find("#" + value + "-shadow-color").val(),
           blur: selector.find("#" + value + "-shadow-blur").val(),
@@ -5308,7 +5308,7 @@
       var i = 0;
       obj.set(
         "gradientFill",
-        selector.find("#hexa-" + value + "-gradient").val()
+        selector.find("#gauci-" + value + "-gradient").val()
       );
       var colorStops = "";
       if (
@@ -5368,7 +5368,7 @@
           },
         ];
       }
-      if (selector.find("#hexa-" + value + "-gradient").val() == "vertical") {
+      if (selector.find("#gauci-" + value + "-gradient").val() == "vertical") {
         selector.find("#" + value + "-gradient-settings").show();
         selector.find("#" + value + "-fill-color").hide();
         obj.set(
@@ -5407,7 +5407,7 @@
           }
         }
       } else if (
-        selector.find("#hexa-" + value + "-gradient").val() == "horizontal"
+        selector.find("#gauci-" + value + "-gradient").val() == "horizontal"
       ) {
         selector.find("#" + value + "-gradient-settings").show();
         selector.find("#" + value + "-fill-color").hide();
@@ -5449,14 +5449,14 @@
       } else {
         selector.find("#" + value + "-gradient-settings").hide();
         selector.find("#" + value + "-fill-color").show();
-        obj.set("fill", selector.find("#hexa-" + value + "-color").val());
+        obj.set("fill", selector.find("#gauci-" + value + "-color").val());
         if (obj.objectType == "element") {
           if (obj._objects) {
             for (i = 0; i < obj._objects.length; i++) {
               if (obj._objects[i].fill != "") {
                 obj._objects[i].set(
                   "fill",
-                  selector.find("#hexa-" + value + "-color").val()
+                  selector.find("#gauci-" + value + "-color").val()
                 );
               }
             }
@@ -5467,7 +5467,7 @@
     }
     var gradientFields = ["text", "shape", "element"];
     $.each(gradientFields, function (index, value) {
-      selector.find("#hexa-" + value + "-gradient").on("change", function () {
+      selector.find("#gauci-" + value + "-gradient").on("change", function () {
         updateGradient(value);
       });
       selector
@@ -5502,8 +5502,8 @@
       return [width, height];
     }
     /* Add Text */
-    selector.find("#hexa-add-text").on("click", function () {
-      var text = new fabric.Textbox(hexaParams.textbox, {
+    selector.find("#gauci-add-text").on("click", function () {
+      var text = new fabric.Textbox(gauciParams.textbox, {
         objectType: "textbox",
         gradientFill: "none",
         fontSize: settings.fontSize,
@@ -5524,21 +5524,21 @@
       });
       canvas.add(text);
       canvas.setActiveObject(text);
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "textbox",
-        text: hexaParams.added,
+        text: gauciParams.added,
       });
     });
     /* Set Text Settings */
     function setTextSettings(text) {
-      selector.find("#hexa-text-input").val(text.text);
-      selector.find("#hexa-font-family").val(text.fontFamily);
-      selector.find("#hexa-font-family").trigger("change");
+      selector.find("#gauci-text-input").val(text.text);
+      selector.find("#gauci-font-family").val(text.fontFamily);
+      selector.find("#gauci-font-family").trigger("change");
       if (text.gradientFill == "none") {
-        selector.find("#hexa-text-gradient").val("none");
-        selector.find("#hexa-text-color").spectrum("set", text.fill);
+        selector.find("#gauci-text-gradient").val("none");
+        selector.find("#gauci-text-color").spectrum("set", text.fill);
       } else if (text.gradientFill == "vertical") {
-        selector.find("#hexa-text-gradient").val("vertical");
+        selector.find("#gauci-text-gradient").val("vertical");
         if (text.fill.colorStops.length == 4) {
           selector
             .find("#text-gradient-color-1")
@@ -5574,7 +5574,7 @@
           selector.find("#text-gradient-color-4").spectrum("set", "");
         }
       } else if (text.gradientFill == "horizontal") {
-        selector.find("#hexa-text-gradient").val("horizontal");
+        selector.find("#gauci-text-gradient").val("horizontal");
         if (text.fill.colorStops.length == 4) {
           selector
             .find("#text-gradient-color-1")
@@ -5610,7 +5610,7 @@
           selector.find("#text-gradient-color-4").spectrum("set", "");
         }
       }
-      selector.find("#hexa-text-gradient").trigger("change");
+      selector.find("#gauci-text-gradient").trigger("change");
       if (text.fontWeight == "bold") {
         selector.find("#format-bold").addClass("active");
       } else {
@@ -5642,24 +5642,24 @@
         selector.find(".format-align").removeClass("active");
         selector.find("#format-align-justify").addClass("active");
       }
-      selector.find("#hexa-font-size").val(text.fontSize);
-      selector.find("#hexa-outline-size").val(text.strokeWidth);
-      selector.find("#hexa-line-height").val(text.lineHeight);
-      selector.find("#hexa-letter-spacing").val(text.charSpacing);
-      selector.find("#hexa-outline-color").spectrum("set", text.stroke);
+      selector.find("#gauci-font-size").val(text.fontSize);
+      selector.find("#gauci-outline-size").val(text.strokeWidth);
+      selector.find("#gauci-line-height").val(text.lineHeight);
+      selector.find("#gauci-letter-spacing").val(text.charSpacing);
+      selector.find("#gauci-outline-color").spectrum("set", text.stroke);
       selector
-        .find("#hexa-text-background")
+        .find("#gauci-text-background")
         .spectrum("set", text.textBackgroundColor);
       if (text.shadow == null) {
-        selector.find("#hexa-text-shadow").prop("checked", false);
+        selector.find("#gauci-text-shadow").prop("checked", false);
       } else {
-        selector.find("#hexa-text-shadow").prop("checked", true);
+        selector.find("#gauci-text-shadow").prop("checked", true);
         selector.find("#text-shadow-color").spectrum("set", text.shadow.color);
         selector.find("#text-shadow-blur").val(text.shadow.blur);
         selector.find("#text-shadow-offset-x").val(text.shadow.offsetX);
         selector.find("#text-shadow-offset-y").val(text.shadow.offsetY);
       }
-      selector.find("#hexa-text-shadow").trigger("change");
+      selector.find("#gauci-text-shadow").trigger("change");
       if (text.flipX == true) {
         selector.find("#text-flip-x").addClass("active");
       } else {
@@ -5693,21 +5693,21 @@
         .html(parseInt(text.angle));
     }
     /* Text Input */
-    selector.find("#hexa-text-input").bind("input paste", function () {
+    selector.find("#gauci-text-input").bind("input paste", function () {
       canvas.getActiveObject().set("text", $(this).val());
       selector
-        .find("#hexa-layers #" + canvas.getActiveObject().id + " .layer-name")
+        .find("#gauci-layers #" + canvas.getActiveObject().id + " .layer-name")
         .html(canvas.getActiveObject().text);
       canvas.requestRenderAll();
     });
-    selector.find("#hexa-text-input").bind("focusout", function () {
-      canvas.fire("hexa:history", {
+    selector.find("#gauci-text-input").bind("focusout", function () {
+      canvas.fire("gauci:history", {
         type: "textbox",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Font Family */
-    selector.find("#hexa-font-family").on("change", function () {
+    selector.find("#gauci-font-family").on("change", function () {
       var font = $(this).val();
       var loadFonts = "yes";
       for (var i = 0; i < webSafeFonts.length; i++) {
@@ -5747,9 +5747,9 @@
           .then(function () {
             canvas.getActiveObject().set("fontFamily", font);
             canvas.requestRenderAll();
-            canvas.fire("hexa:history", {
+            canvas.fire("gauci:history", {
               type: "textbox",
-              text: hexaParams.edited,
+              text: gauciParams.edited,
             });
           })
           .catch(function (e) {
@@ -5763,15 +5763,15 @@
     // Font Preview
     var loadedFonts = [];
     var fontTimeOut = 0;
-    selector.find("#hexa-font-family").on("select2:open", function () {
-      selector.find("#select2-hexa-font-family-results").scroll(function () {
+    selector.find("#gauci-font-family").on("select2:open", function () {
+      selector.find("#select2-gauci-font-family-results").scroll(function () {
         $(this)
           .find("li:last-child")
           .find("ul li")
           .each(function () {
             var item = $(this);
             if (
-              item.is(":in-viewport( 0, #select2-hexa-font-family-results)")
+              item.is(":in-viewport( 0, #select2-gauci-font-family-results)")
             ) {
               if (!loadedFonts.includes(item.attr("id"))) {
                 WebFont.load({
@@ -5806,7 +5806,7 @@
           window.clearTimeout(fontTimeOut);
           fontTimeOut = setTimeout(function () {
             selector
-              .find("#select2-hexa-font-family-results")
+              .find("#select2-gauci-font-family-results")
               .trigger("scroll");
           }, 500);
         }
@@ -5814,17 +5814,17 @@
     });
     /* Text Format Buttons */
     selector
-      .find("#hexa-text-format-btns > .hexa-btn")
+      .find("#gauci-text-format-btns > .gauci-btn")
       .on("click", function () {
         if ($(this).attr("id") == "format-uppercase") {
-          var text = selector.find("#hexa-text-input").val();
+          var text = selector.find("#gauci-text-input").val();
           if (text === text.toUpperCase()) {
             text = text.toLowerCase();
           } else {
             text = text.toUpperCase();
           }
-          selector.find("#hexa-text-input").val(text);
-          selector.find("#hexa-text-input").trigger("input");
+          selector.find("#gauci-text-input").val(text);
+          selector.find("#gauci-text-input").trigger("input");
         }
         if ($(this).hasClass("active")) {
           if ($(this).attr("id") == "format-bold") {
@@ -5867,58 +5867,58 @@
           }
         }
         canvas.requestRenderAll();
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "textbox",
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Text Numeric Fields */
     selector
-      .find("#hexa-text-settings input[type=number]")
+      .find("#gauci-text-settings input[type=number]")
       .bind("input paste keyup keydown", function () {
         var val = $(this).val();
-        if ($(this).attr("id") == "hexa-font-size") {
+        if ($(this).attr("id") == "gauci-font-size") {
           canvas.getActiveObject().set("fontSize", parseInt(val));
-        } else if ($(this).attr("id") == "hexa-outline-size") {
+        } else if ($(this).attr("id") == "gauci-outline-size") {
           canvas.getActiveObject().set("strokeWidth", parseInt(val));
-        } else if ($(this).attr("id") == "hexa-line-height") {
+        } else if ($(this).attr("id") == "gauci-line-height") {
           canvas.getActiveObject().set("lineHeight", parseFloat(val));
-        } else if ($(this).attr("id") == "hexa-letter-spacing") {
+        } else if ($(this).attr("id") == "gauci-letter-spacing") {
           canvas.getActiveObject().set("charSpacing", parseInt(val));
         }
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-text-settings input[type=number]")
+      .find("#gauci-text-settings input[type=number]")
       .bind("input", function () {
         window.clearTimeout(timeOut);
         timeOut = setTimeout(function () {
-          canvas.fire("hexa:history", {
+          canvas.fire("gauci:history", {
             type: "textbox",
-            text: hexaParams.edited,
+            text: gauciParams.edited,
           });
         }, 500);
       });
     /* Text Color Fields */
     selector
-      .find("#hexa-text-settings .hexa-colorpicker")
+      .find("#gauci-text-settings .gauci-colorpicker")
       .bind("change", function () {
         var val = $(this).val();
-        if ($(this).attr("id") == "hexa-text-color") {
+        if ($(this).attr("id") == "gauci-text-color") {
           canvas.getActiveObject().set("fill", val);
-        } else if ($(this).attr("id") == "hexa-outline-color") {
+        } else if ($(this).attr("id") == "gauci-outline-color") {
           canvas.getActiveObject().set("stroke", val);
-        } else if ($(this).attr("id") == "hexa-text-background") {
+        } else if ($(this).attr("id") == "gauci-text-background") {
           canvas.getActiveObject().set("textBackgroundColor", val);
         }
         canvas.requestRenderAll();
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "textbox",
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Text Flip Buttons */
-    selector.find("#hexa-text-flip-btns > .hexa-btn").on("click", function () {
+    selector.find("#gauci-text-flip-btns > .gauci-btn").on("click", function () {
       if ($(this).hasClass("active")) {
         if ($(this).attr("id") == "text-flip-x") {
           canvas.getActiveObject().set("flipX", false);
@@ -5935,14 +5935,14 @@
         $(this).addClass("active");
       }
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "textbox",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Text Skew, Rotate, Opacity */
     selector
-      .find("#hexa-text-settings input[type=range]")
+      .find("#gauci-text-settings input[type=range]")
       .bind("input click", function () {
         var val = $(this).val();
         if ($(this).attr("id") == "text-skew-x") {
@@ -5957,11 +5957,11 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-text-settings input[type=range]")
+      .find("#gauci-text-settings input[type=range]")
       .bind("change", function () {
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "textbox",
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Select2 icon support */
@@ -5997,15 +5997,15 @@
         .find(".slider-label span")
         .html(img.roundedCorders);
       if (img.shadow == null) {
-        selector.find("#hexa-image-shadow").prop("checked", false);
+        selector.find("#gauci-image-shadow").prop("checked", false);
       } else {
-        selector.find("#hexa-image-shadow").prop("checked", true);
+        selector.find("#gauci-image-shadow").prop("checked", true);
         selector.find("#image-shadow-color").spectrum("set", img.shadow.color);
         selector.find("#image-shadow-blur").val(img.shadow.blur);
         selector.find("#image-shadow-offset-x").val(img.shadow.offsetX);
         selector.find("#image-shadow-offset-y").val(img.shadow.offsetY);
       }
-      selector.find("#hexa-image-shadow").trigger("change");
+      selector.find("#gauci-image-shadow").trigger("change");
       selector.find("#img-border-width").val(img.strokeWidth);
       selector.find("#img-border-color").spectrum("set", img.stroke);
       selector.find("#img-opacity").val(img.opacity);
@@ -6038,7 +6038,7 @@
         .html(parseInt(img.angle));
     }
     /* Upload Image */
-    // selector.find("#hexa-img-upload").on("change", function(e) {
+    // selector.find("#gauci-img-upload").on("change", function(e) {
     // 	var reader = new FileReader();
     // 	reader.onload = function(event) {
     // 		var imgObj = new Image();
@@ -6067,9 +6067,9 @@
     // 		});
     // 	};
     // 	reader.readAsDataURL(e.target.files[0]);
-    // 	canvas.fire("hexa:history", {
+    // 	canvas.fire("gauci:history", {
     // 		type: "image",
-    // 		text: hexaParams.added,
+    // 		text: gauciParams.added,
     // 	});
     // });
 
@@ -6371,7 +6371,7 @@
     // 	$("#image29").attr("src", filteredImageUrl9);
     // }
     var filterImageUrl;
-    selector.find("#hexa-img-upload").on("change", function (e) {
+    selector.find("#gauci-img-upload").on("change", function (e) {
       // console.log('uploaded')
       var reader = new FileReader();
       reader.onload = function (event) {
@@ -6408,22 +6408,22 @@
             // filterImageUrl = imgObj;
 
             // Clear the file input value to allow re-uploading the same image
-            selector.find("#hexa-img-upload").val("");
+            selector.find("#gauci-img-upload").val("");
           };
         });
       };
       reader.readAsDataURL(e.target.files[0]);
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "image",
-        text: hexaParams.added,
+        text: gauciParams.added,
       });
     });
     /* Upload Overlay Image */
-    selector.find("#hexa-overlay-img-upload").on("change", function (e) {
+    selector.find("#gauci-overlay-img-upload").on("change", function (e) {
       if ($(this).val() == "") {
         return;
       }
-      selector.find("#hexa-canvas-loader").css("display", "flex");
+      selector.find("#gauci-canvas-loader").css("display", "flex");
       var reader = new FileReader();
       reader.onload = function (event) {
         fabric.Image.fromURL(event.target.result, function (img) {
@@ -6440,30 +6440,30 @@
             erasable: true,
           });
           canvas.setOverlayImage(img, canvas.renderAll.bind(canvas));
-          selector.find("#hexa-overlay-wrap").show();
+          selector.find("#gauci-overlay-wrap").show();
           selector
-            .find("#hexa-overlay-preview")
+            .find("#gauci-overlay-preview")
             .attr("src", event.target.result);
           setTimeout(function () {
-            selector.find("#hexa-canvas-loader").hide();
+            selector.find("#gauci-canvas-loader").hide();
           }, 500);
         });
       };
       reader.readAsDataURL(e.target.files[0]);
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "image",
-        text: hexaParams.added,
+        text: gauciParams.added,
       });
     });
     /* Delete Overlay Image */
-    selector.find("#hexa-overlay-delete").on("click", function () {
+    selector.find("#gauci-overlay-delete").on("click", function () {
       if (
         typeof canvas.overlayImage !== "undefined" &&
         canvas.overlayImage !== null
       ) {
         canvas.overlayImage = null;
-        selector.find("#hexa-overlay-wrap").hide();
-        selector.find("#hexa-overlay-preview").attr("src", "");
+        selector.find("#gauci-overlay-wrap").hide();
+        selector.find("#gauci-overlay-preview").attr("src", "");
         canvas.requestRenderAll();
       }
     });
@@ -6481,7 +6481,7 @@
       // $('.dropdown-options').removeClass('show');
       // });
     }
-    var dropdown = $("#hexa-canvas-shape-container .custom-dropdown");
+    var dropdown = $("#gauci-canvas-shape-container .custom-dropdown");
     var dropdownOptions = dropdown.find(".dropdown-options");
     dropdown.on("click", function (event) {
       toggleDeleteDropdown(event);
@@ -6574,39 +6574,39 @@
 
     /*Toggel Border Tools*/
 
-    selector.find("#hexa-border-tools").on("click", function () {
-      selector.find("#hexa-border-tools-toggle").toggle();
+    selector.find("#gauci-border-tools").on("click", function () {
+      selector.find("#gauci-border-tools-toggle").toggle();
       var arrowIcon = $(this).find(".arrow");
       arrowIcon.toggleClass("arrow-down arrow-up");
       if (arrowIcon.hasClass("arrow-up")) {
         arrowIcon.text("keyboard_arrow_up");
-        $("#hexa-border-tools-wrap").addClass("active");
+        $("#gauci-border-tools-wrap").addClass("active");
       } else {
         arrowIcon.text("keyboard_arrow_down");
-        $("#hexa-border-tools-wrap").removeClass("active");
+        $("#gauci-border-tools-wrap").removeClass("active");
       }
     });
 
     /*Toggel Framing Tools*/
 
-    selector.find("#hexa-framing").on("click", function () {
-      selector.find("#hexa-framing-toggle").toggle();
+    selector.find("#gauci-framing").on("click", function () {
+      selector.find("#gauci-framing-toggle").toggle();
     });
     /** Toggle Farming arrow */
-    $("#hexa-framing").on("click", function () {
+    $("#gauci-framing").on("click", function () {
       var arrowIcon = $(this).find(".arrow");
       arrowIcon.toggleClass("arrow-down arrow-up");
       if (arrowIcon.hasClass("arrow-up")) {
         arrowIcon.text("keyboard_arrow_up");
-        $("#hexa-framing-wrapper").addClass("active");
+        $("#gauci-framing-wrapper").addClass("active");
       } else {
         arrowIcon.text("keyboard_arrow_down");
-        $("#hexa-framing-wrapper").removeClass("active");
+        $("#gauci-framing-wrapper").removeClass("active");
       }
     });
 
     /** Toggle Active container */
-    // $("#hexa-mydiv").click(function() {
+    // $("#gauci-mydiv").click(function() {
     // 	$(this).toggleClass("active");
     //   });
 
@@ -6619,14 +6619,14 @@
     var shape;
     var selectionSvg;
     var isAdded = false;
-    selector.find(".hexa-mask-shape-select-option").on("click", function (e) {
+    selector.find(".gauci-mask-shape-select-option").on("click", function (e) {
       var selected = $(this).data("value");
       isAdded = true;
       // activeMaskButton();
       if (selected == "custom") {
-        selector.find("#hexa-img-radius-settings").removeClass("d-none");
+        selector.find("#gauci-img-radius-settings").removeClass("d-none");
       } else {
-        selector.find("#hexa-img-radius-settings").addClass("d-none");
+        selector.find("#gauci-img-radius-settings").addClass("d-none");
         selector.find("#img-border-radius").val("0");
         selector
           .find("#img-border-radius")
@@ -6896,24 +6896,24 @@
       //   addToHistory(
       //     objectName("image") +
       //     " " +
-      //     hexaParams.mask +
+      //     gauciParams.mask +
       //     " " +
-      //     hexaParams.added
+      //     gauciParams.added
       //   );
       // }, 100);
     });
 
     function onlyDeleteLayerEvent(id) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.remove();
-      selector.find("#hexa-layers").sortable("refresh");
+      selector.find("#gauci-layers").sortable("refresh");
       checkLayers();
     }
 
     function setLayerSort(id, sortIndex) {
-      var item = selector.find("#hexa-layers #" + id);
+      var item = selector.find("#gauci-layers #" + id);
       item.attr("data-sort", sortIndex);
-      selector.find("#hexa-layers").sortable("refresh");
+      selector.find("#gauci-layers").sortable("refresh");
       checkLayers();
     }
 
@@ -7378,7 +7378,7 @@
       .getElementById("edit-masking-button")
       .addEventListener("click", function () {
         unlinkClipPath();
-        selector.find("#hexa-image-settings").show();
+        selector.find("#gauci-image-settings").show();
       });
     function updateReplaceButtonState(e) {
       const activeObject = canvas.getActiveObject();
@@ -7408,7 +7408,7 @@
 
         // Only show the edit button if the done button is NOT visible
         if (!isDoneButtonVisible) {
-          selector.find("#hexa-image-settings").hide();
+          selector.find("#gauci-image-settings").hide();
           document.getElementById("edit-masking-button").style.display =
             "block";
         }
@@ -7498,7 +7498,7 @@
       document.getElementById("image-input").click();
     };
 
-    const unmaskButton = selector.find("#hexa-unmask");
+    const unmaskButton = selector.find("#gauci-unmask");
     unmaskButton.on("click", function () {
       const activeImage = canvas.getActiveObject();
 
@@ -7564,7 +7564,7 @@
     });
 
     var maskButton = selector.find(
-      "#hexa-maskbutton, #hexa-maskbutton-outsied"
+      "#gauci-maskbutton, #gauci-maskbutton-outsied"
     );
     maskButton.css("display", "none");
 
@@ -7572,18 +7572,18 @@
     selector.find("#img-flip-horizontal").on("click", function () {
       canvas.getActiveObject().toggle("flipX");
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "image",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Image Flip Y */
     selector.find("#img-flip-vertical").on("click", function () {
       canvas.getActiveObject().toggle("flipY");
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "image",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Rounded Corners */
@@ -7608,23 +7608,23 @@
       canvas.requestRenderAll();
     });
     selector.find("#img-border-radius").bind("change", function () {
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "image",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Image Border Color */
     selector.find("#img-border-color").bind("change", function () {
       canvas.getActiveObject().set("stroke", $(this).val());
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "image",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Image Border Width */
     selector
-      .find("#hexa-image-settings input[type=number]")
+      .find("#gauci-image-settings input[type=number]")
       .on("input paste", function () {
         var val = parseInt($(this).val());
         if ($(this).attr("id") == "img-border-width") {
@@ -7633,19 +7633,19 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-image-settings input[type=number]")
+      .find("#gauci-image-settings input[type=number]")
       .bind("input", function () {
         window.clearTimeout(timeOut);
         timeOut = setTimeout(function () {
-          canvas.fire("hexa:history", {
+          canvas.fire("gauci:history", {
             type: "image",
-            text: hexaParams.edited,
+            text: gauciParams.edited,
           });
         }, 500);
       });
     /* Image Skew, Rotate, Opacity */
     selector
-      .find("#hexa-image-settings input[type=range]")
+      .find("#gauci-image-settings input[type=range]")
       .bind("input click", function () {
         var val = $(this).val();
         if ($(this).attr("id") == "img-skew-x") {
@@ -7660,21 +7660,21 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-image-settings input[type=range]")
+      .find("#gauci-image-settings input[type=range]")
       .bind("change", function () {
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "image",
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Set Shape Settings */
     function setShapeSettings(shape) {
       selector.find("#shape-outline-width").val(shape.strokeWidth);
       if (shape.gradientFill == "none") {
-        selector.find("#hexa-shape-gradient").val("none");
-        selector.find("#hexa-shape-color").spectrum("set", shape.fill);
+        selector.find("#gauci-shape-gradient").val("none");
+        selector.find("#gauci-shape-color").spectrum("set", shape.fill);
       } else if (shape.gradientFill == "vertical") {
-        selector.find("#hexa-shape-gradient").val("vertical");
+        selector.find("#gauci-shape-gradient").val("vertical");
         if (shape.fill.colorStops.length == 4) {
           selector
             .find("#shape-gradient-color-1")
@@ -7710,7 +7710,7 @@
           selector.find("#shape-gradient-color-4").spectrum("set", "");
         }
       } else if (shape.gradientFill == "horizontal") {
-        selector.find("#hexa-shape-gradient").val("horizontal");
+        selector.find("#gauci-shape-gradient").val("horizontal");
         if (shape.fill.colorStops.length == 4) {
           selector
             .find("#shape-gradient-color-1")
@@ -7746,12 +7746,12 @@
           selector.find("#shape-gradient-color-4").spectrum("set", "");
         }
       }
-      selector.find("#hexa-shape-gradient").trigger("change");
+      selector.find("#gauci-shape-gradient").trigger("change");
       selector.find("#shape-outline-color").spectrum("set", shape.stroke);
       if (shape.shadow == null) {
-        selector.find("#hexa-shape-shadow").prop("checked", false);
+        selector.find("#gauci-shape-shadow").prop("checked", false);
       } else {
-        selector.find("#hexa-shape-shadow").prop("checked", true);
+        selector.find("#gauci-shape-shadow").prop("checked", true);
         selector
           .find("#shape-shadow-color")
           .spectrum("set", shape.shadow.color);
@@ -7759,7 +7759,7 @@
         selector.find("#shape-shadow-offset-x").val(shape.shadow.offsetX);
         selector.find("#shape-shadow-offset-y").val(shape.shadow.offsetY);
       }
-      selector.find("#hexa-shape-shadow").trigger("change");
+      selector.find("#gauci-shape-shadow").trigger("change");
       selector.find("#shape-opacity").val(shape.opacity);
       selector
         .find("#shape-opacity")
@@ -7792,16 +7792,16 @@
       selector.find("#shape-custom-height").val("");
     }
     /* Select Shape */
-    selector.find("#hexa-shape-select").on("change", function () {
+    selector.find("#gauci-shape-select").on("change", function () {
       var val = $(this).val();
       if (val == "none" || val == "custom") {
-        selector.find("#hexa-shape-add").prop("disabled", true);
+        selector.find("#gauci-shape-add").prop("disabled", true);
       } else {
-        selector.find("#hexa-shape-add").prop("disabled", false);
+        selector.find("#gauci-shape-add").prop("disabled", false);
       }
     });
     /* Add Shape */
-    selector.find(".hexa-option").on("click", function () {
+    selector.find(".gauci-option").on("click", function () {
       var val = $(this).data("value");
       var shape = "";
       var polygon = "";
@@ -8131,30 +8131,30 @@
       }
       canvas.setActiveObject(shape);
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: val,
-        text: hexaParams.added,
+        text: gauciParams.added,
       });
     });
     /* Shape Color Fields */
     selector
-      .find("#hexa-shape-settings .hexa-colorpicker")
+      .find("#gauci-shape-settings .gauci-colorpicker")
       .bind("change", function () {
         var val = $(this).val();
-        if ($(this).attr("id") == "hexa-shape-color") {
+        if ($(this).attr("id") == "gauci-shape-color") {
           canvas.getActiveObject().set("fill", val);
         } else if ($(this).attr("id") == "shape-outline-color") {
           canvas.getActiveObject().set("stroke", val);
         }
         canvas.requestRenderAll();
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: canvas.getActiveObject().objectType,
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Shape Skew, Rotate, Opacity */
     selector
-      .find("#hexa-shape-settings input[type=range]")
+      .find("#gauci-shape-settings input[type=range]")
       .bind("input click", function () {
         var val = $(this).val();
         if ($(this).attr("id") == "shape-skew-x") {
@@ -8169,16 +8169,16 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-shape-settings input[type=range]")
+      .find("#gauci-shape-settings input[type=range]")
       .bind("change", function () {
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: canvas.getActiveObject().objectType,
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Shape Numeric Fields */
     selector
-      .find("#hexa-shape-settings input[type=number]")
+      .find("#gauci-shape-settings input[type=number]")
       .bind("input paste", function () {
         var val = parseInt($(this).val());
         if ($(this).attr("id") == "shape-outline-width") {
@@ -8193,22 +8193,22 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-shape-settings input[type=number]")
+      .find("#gauci-shape-settings input[type=number]")
       .bind("input", function () {
         window.clearTimeout(timeOut);
         timeOut = setTimeout(function () {
-          canvas.fire("hexa:history", {
+          canvas.fire("gauci:history", {
             type: canvas.getActiveObject().objectType,
-            text: hexaParams.edited,
+            text: gauciParams.edited,
           });
         }, 500);
       });
     /* Shape Aspect Ratio Width Input */
     selector.find("#shape-custom-width").bind("input paste", function () {
-      if (selector.find("#hexa-shape-ratio-lock").hasClass("active")) {
+      if (selector.find("#gauci-shape-ratio-lock").hasClass("active")) {
         var width = parseInt($(this).val());
-        var ratioW = parseInt(selector.find("#hexa-shape-ratio-w").val());
-        var ratioH = parseInt(selector.find("#hexa-shape-ratio-h").val());
+        var ratioW = parseInt(selector.find("#gauci-shape-ratio-w").val());
+        var ratioH = parseInt(selector.find("#gauci-shape-ratio-h").val());
         var height = (width * ratioH) / ratioW;
         selector.find("#shape-custom-height").val(Math.round(height));
         canvas.getActiveObject().set("height", height);
@@ -8217,10 +8217,10 @@
     });
     /* Shape Aspect Ratio Height Input */
     selector.find("#shape-custom-height").bind("input paste", function () {
-      if (selector.find("#hexa-shape-ratio-lock").hasClass("active")) {
+      if (selector.find("#gauci-shape-ratio-lock").hasClass("active")) {
         var height = $(this).val();
-        var ratioW = parseInt(selector.find("#hexa-shape-ratio-w").val());
-        var ratioH = parseInt(selector.find("#hexa-shape-ratio-h").val());
+        var ratioW = parseInt(selector.find("#gauci-shape-ratio-w").val());
+        var ratioH = parseInt(selector.find("#gauci-shape-ratio-h").val());
         var width = (height * ratioW) / ratioH;
         selector.find("#shape-custom-width").val(Math.round(width));
         canvas.getActiveObject().set("width", width);
@@ -8231,46 +8231,46 @@
     /* Filter frames */
     var filterframes = function (searchTerm) {
       selector
-        .find("#hexa-frames-wrap li")
+        .find("#gauci-frames-wrap li")
         .hide()
         .filter('[data-keyword*="' + searchTerm + '"]')
         .show();
     };
     /* Search frame Input */
-    selector.find("#hexa-frame-search").on("keyup input", function () {
-      selector.find("#hexa-noframes").hide();
+    selector.find("#gauci-frame-search").on("keyup input", function () {
+      selector.find("#gauci-noframes").hide();
       var searchTerm = $(this).val().toLowerCase().replace(/\s/g, " ");
       if (searchTerm == "" || searchTerm.length < 1) {
-        selector.find("#hexa-frames-wrap li").show();
-        selector.find("#hexa-frame-search-icon").html("search");
-        selector.find("#hexa-frame-search-icon").removeClass("cancel");
+        selector.find("#gauci-frames-wrap li").show();
+        selector.find("#gauci-frame-search-icon").html("search");
+        selector.find("#gauci-frame-search-icon").removeClass("cancel");
       } else {
-        selector.find("#hexa-frame-search-icon").html("clear");
-        selector.find("#hexa-frame-search-icon").addClass("cancel");
+        selector.find("#gauci-frame-search-icon").html("clear");
+        selector.find("#gauci-frame-search-icon").addClass("cancel");
         filterframes(searchTerm);
-        if (selector.find("#hexa-frames-wrap li:visible").length === 0) {
-          selector.find("#hexa-noframes").show();
+        if (selector.find("#gauci-frames-wrap li:visible").length === 0) {
+          selector.find("#gauci-noframes").show();
         }
       }
     });
     /* Search frame Icon */
-    selector.find("#hexa-frame-search-icon").on("click", function () {
+    selector.find("#gauci-frame-search-icon").on("click", function () {
       if ($(this).hasClass("cancel")) {
         $(this).removeClass("cancel");
         $(this).html("search");
-        selector.find("#hexa-frame-search").val("");
-        selector.find("#hexa-frames-wrap li").show();
-        selector.find("#hexa-noframes").hide();
+        selector.find("#gauci-frame-search").val("");
+        selector.find("#gauci-frames-wrap li").show();
+        selector.find("#gauci-noframes").hide();
       }
     });
     /* Add frame */
     selector
-      .find(".hexa-frames-grid")
-      .on("click", ".hexa-frame img", function () {
-        selector.find("#hexa-canvas-loader").css("display", "flex");
+      .find(".gauci-frames-grid")
+      .on("click", ".gauci-frame img", function () {
+        selector.find("#gauci-canvas-loader").css("display", "flex");
         var frame = $(this).parent().parent();
         var svgUrl = frame.data("elsource");
-        selector.find(".hexa-frames-grid .hexa-frame").removeClass("active");
+        selector.find(".gauci-frames-grid .gauci-frame").removeClass("active");
         frame.addClass("active");
         fabric.loadSVGFromURL(
           svgUrl,
@@ -8288,20 +8288,20 @@
             canvas.add(svg);
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
-            selector.find("#hexa-canvas-loader").hide();
+            selector.find("#gauci-canvas-loader").hide();
           },
           function () {},
           {
             crossOrigin: "anonymous",
           }
         );
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "frame",
-          text: hexaParams.added,
+          text: gauciParams.added,
         });
       });
     /* Frame color */
-    selector.find("#hexa-frame-color").bind("change", function () {
+    selector.find("#gauci-frame-color").bind("change", function () {
       var val = $(this).val();
       var objects = canvas
         .getObjects()
@@ -8321,9 +8321,9 @@
         }
       });
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "frame",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Rotate Frame */
@@ -8381,21 +8381,21 @@
         svg.set("angle", svgRotate);
       });
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "frame",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     }
     /* Frame Rotate Right */
-    selector.find("#hexa-rotate-right-frame").on("click", function () {
+    selector.find("#gauci-rotate-right-frame").on("click", function () {
       rotateFrame("right");
     });
     /* Frame Rotate Left */
-    selector.find("#hexa-rotate-left-frame").on("click", function () {
+    selector.find("#gauci-rotate-left-frame").on("click", function () {
       rotateFrame("left");
     });
     /* Frame Flip X */
-    selector.find("#hexa-flip-horizontal-frame").on("click", function () {
+    selector.find("#gauci-flip-horizontal-frame").on("click", function () {
       var objects = canvas
         .getObjects()
         .filter((element) => element.objectType == "frame");
@@ -8403,13 +8403,13 @@
         value.toggle("flipX");
       });
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "frame",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Frame Flip Y */
-    selector.find("#hexa-flip-vertical-frame").on("click", function () {
+    selector.find("#gauci-flip-vertical-frame").on("click", function () {
       var objects = canvas
         .getObjects()
         .filter((element) => element.objectType == "frame");
@@ -8417,64 +8417,64 @@
         value.toggle("flipY");
       });
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "frame",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* ELEMENTS */
     /* Filter elements */
     var filterElements = function (searchTerm) {
       selector
-        .find("#hexa-elements-wrap li")
+        .find("#gauci-elements-wrap li")
         .hide()
         .filter('[data-keyword*="' + searchTerm + '"]')
         .show();
     };
     /* Search Element Input */
-    selector.find("#hexa-element-search").on("keyup input", function () {
-      selector.find("#hexa-noelements").hide();
+    selector.find("#gauci-element-search").on("keyup input", function () {
+      selector.find("#gauci-noelements").hide();
       var searchTerm = $(this).val().toLowerCase().replace(/\s/g, " ");
       if (searchTerm == "" || searchTerm.length < 1) {
-        selector.find("#hexa-elements-wrap li").show();
-        selector.find("#hexa-element-search-icon").html("search");
-        selector.find("#hexa-element-search-icon").removeClass("cancel");
+        selector.find("#gauci-elements-wrap li").show();
+        selector.find("#gauci-element-search-icon").html("search");
+        selector.find("#gauci-element-search-icon").removeClass("cancel");
       } else {
-        selector.find("#hexa-element-search-icon").html("clear");
-        selector.find("#hexa-element-search-icon").addClass("cancel");
+        selector.find("#gauci-element-search-icon").html("clear");
+        selector.find("#gauci-element-search-icon").addClass("cancel");
         filterElements(searchTerm);
-        if (selector.find("#hexa-elements-wrap li:visible").length === 0) {
-          selector.find("#hexa-noelements").show();
+        if (selector.find("#gauci-elements-wrap li:visible").length === 0) {
+          selector.find("#gauci-noelements").show();
         }
       }
     });
     /* Search Element Icon */
-    selector.find("#hexa-element-search-icon").on("click", function () {
+    selector.find("#gauci-element-search-icon").on("click", function () {
       if ($(this).hasClass("cancel")) {
         $(this).removeClass("cancel");
         $(this).html("search");
-        selector.find("#hexa-element-search").val("");
-        selector.find("#hexa-elements-wrap li").show();
-        selector.find("#hexa-noelements").hide();
+        selector.find("#gauci-element-search").val("");
+        selector.find("#gauci-elements-wrap li").show();
+        selector.find("#gauci-noelements").hide();
       }
     });
     /* Add Element */
     selector
-      .find(".hexa-elements-grid")
-      .on("click", ".hexa-element > *:first-child", function () {
+      .find(".gauci-elements-grid")
+      .on("click", ".gauci-element > *:first-child", function () {
         var element = $(this).parent();
         var svgUrl = element.data("elsource");
-        if (element.parent().attr("id") == "hexa-icons-grid") {
-          var iconStyle = selector.find("#hexa-icon-style").val();
+        if (element.parent().attr("id") == "gauci-icons-grid") {
+          var iconStyle = selector.find("#gauci-icon-style").val();
           svgUrl = element.data("elsource") + "/" + iconStyle + "/24px.svg";
           console.log(svgUrl);
         }
         var loader = element.data("loader");
         if (loader == "yes") {
-          selector.find("#hexa-canvas-loader").css("display", "flex");
+          selector.find("#gauci-canvas-loader").css("display", "flex");
         }
         selector
-          .find(".hexa-elements-grid .hexa-element")
+          .find(".gauci-elements-grid .gauci-element")
           .removeClass("active");
         element.addClass("active");
         fabric.loadSVGFromURL(
@@ -8495,7 +8495,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
             if (loader == "yes") {
-              selector.find("#hexa-canvas-loader").hide();
+              selector.find("#gauci-canvas-loader").hide();
             }
           },
           function () {},
@@ -8503,18 +8503,18 @@
             crossOrigin: "anonymous",
           }
         );
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "element",
-          text: hexaParams.added,
+          text: gauciParams.added,
         });
       });
     /* Set Element Settings */
     function setElementSettings(obj) {
       if (obj.gradientFill == "none") {
-        selector.find("#hexa-element-gradient").val("none");
-        selector.find("#hexa-element-color").spectrum("set", obj.fill);
+        selector.find("#gauci-element-gradient").val("none");
+        selector.find("#gauci-element-color").spectrum("set", obj.fill);
       } else if (obj.gradientFill == "vertical") {
-        selector.find("#hexa-element-gradient").val("vertical");
+        selector.find("#gauci-element-gradient").val("vertical");
         if (obj.fill.colorStops.length == 4) {
           selector
             .find("#element-gradient-color-1")
@@ -8550,7 +8550,7 @@
           selector.find("#element-gradient-color-4").spectrum("set", "");
         }
       } else if (obj.gradientFill == "horizontal") {
-        selector.find("#hexa-element-gradient").val("horizontal");
+        selector.find("#gauci-element-gradient").val("horizontal");
         if (obj.fill.colorStops.length == 4) {
           selector
             .find("#element-gradient-color-1")
@@ -8586,7 +8586,7 @@
           selector.find("#element-gradient-color-4").spectrum("set", "");
         }
       }
-      selector.find("#hexa-element-gradient").trigger("change");
+      selector.find("#gauci-element-gradient").trigger("change");
       selector.find("#element-opacity").val(obj.opacity);
       selector
         .find("#element-opacity")
@@ -8616,9 +8616,9 @@
         .find(".slider-label span")
         .html(parseInt(obj.angle));
       if (obj.shadow == null) {
-        selector.find("#hexa-element-shadow").prop("checked", false);
+        selector.find("#gauci-element-shadow").prop("checked", false);
       } else {
-        selector.find("#hexa-element-shadow").prop("checked", true);
+        selector.find("#gauci-element-shadow").prop("checked", true);
         selector
           .find("#element-shadow-color")
           .spectrum("set", obj.shadow.color);
@@ -8626,10 +8626,10 @@
         selector.find("#element-shadow-offset-x").val(obj.shadow.offsetX);
         selector.find("#element-shadow-offset-y").val(obj.shadow.offsetY);
       }
-      selector.find("#hexa-element-shadow").trigger("change");
+      selector.find("#gauci-element-shadow").trigger("change");
     }
     /* Upload Custom Element */
-    selector.find("#hexa-element-upload").on("change", function (e) {
+    selector.find("#gauci-element-upload").on("change", function (e) {
       var reader = new FileReader();
       var svgImg = "";
       reader.onload = function (ev) {
@@ -8656,13 +8656,13 @@
         );
       };
       reader.readAsDataURL(this.files[0]);
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "element",
-        text: hexaParams.added,
+        text: gauciParams.added,
       });
     });
     /* Custom element color */
-    selector.find("#hexa-element-color").bind("change", function () {
+    selector.find("#gauci-element-color").bind("change", function () {
       var val = $(this).val();
       var obj = canvas.getActiveObject();
       if (obj.fill != "") {
@@ -8678,32 +8678,32 @@
         }
       }
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "element",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Custom Element Flip X */
     selector.find("#element-flip-horizontal").on("click", function () {
       canvas.getActiveObject().toggle("flipX");
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "element",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Custom Element Flip Y */
     selector.find("#element-flip-vertical").on("click", function () {
       canvas.getActiveObject().toggle("flipY");
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "element",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Custom Element Skew, Rotate, Opacity */
     selector
-      .find("#hexa-custom-element-options input[type=range]")
+      .find("#gauci-custom-element-options input[type=range]")
       .bind("input click", function () {
         var val = $(this).val();
         if ($(this).attr("id") == "element-skew-x") {
@@ -8718,11 +8718,11 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-custom-element-options input[type=range]")
+      .find("#gauci-custom-element-options input[type=range]")
       .bind("change", function () {
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "element",
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* Set custom SVG Settings */
@@ -8760,23 +8760,23 @@
     selector.find("#customsvg-flip-horizontal").on("click", function () {
       canvas.getActiveObject().toggle("flipX");
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "customSVG",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Custom Element Flip Y */
     selector.find("#customsvg-flip-vertical").on("click", function () {
       canvas.getActiveObject().toggle("flipY");
       canvas.requestRenderAll();
-      canvas.fire("hexa:history", {
+      canvas.fire("gauci:history", {
         type: "customSVG",
-        text: hexaParams.edited,
+        text: gauciParams.edited,
       });
     });
     /* Custom Element Skew, Rotate, Opacity */
     selector
-      .find("#hexa-custom-svg-options input[type=range]")
+      .find("#gauci-custom-svg-options input[type=range]")
       .bind("input click", function () {
         var val = $(this).val();
         if ($(this).attr("id") == "customsvg-skew-x") {
@@ -8791,67 +8791,67 @@
         canvas.requestRenderAll();
       });
     selector
-      .find("#hexa-custom-svg-options input[type=range]")
+      .find("#gauci-custom-svg-options input[type=range]")
       .bind("change", function () {
-        canvas.fire("hexa:history", {
+        canvas.fire("gauci:history", {
           type: "customSVG",
-          text: hexaParams.edited,
+          text: gauciParams.edited,
         });
       });
     /* ICON LIBRARY */
     /* Filter icons */
     var filterIcons = function (searchTerm) {
       selector
-        .find("#hexa-icons-grid .hexa-element")
+        .find("#gauci-icons-grid .gauci-element")
         .css("display", "none")
         .filter('[title*="' + searchTerm + '"]')
         .css("display", "flex");
     };
     /* Search Icon Input */
-    selector.find("#hexa-icon-search").on("keyup input", function () {
-      selector.find("#hexa-noicons").hide();
+    selector.find("#gauci-icon-search").on("keyup input", function () {
+      selector.find("#gauci-noicons").hide();
       var searchTerm = $(this).val().toLowerCase().replace(/\s/g, " ");
       if (searchTerm == "" || searchTerm.length < 1) {
-        selector.find("#hexa-icons-grid .hexa-element").css("display", "flex");
-        selector.find("#hexa-icon-search-icon").html("search");
-        selector.find("#hexa-icon-search-icon").removeClass("cancel");
+        selector.find("#gauci-icons-grid .gauci-element").css("display", "flex");
+        selector.find("#gauci-icon-search-icon").html("search");
+        selector.find("#gauci-icon-search-icon").removeClass("cancel");
       } else {
-        selector.find("#hexa-icon-search-icon").html("clear");
-        selector.find("#hexa-icon-search-icon").addClass("cancel");
+        selector.find("#gauci-icon-search-icon").html("clear");
+        selector.find("#gauci-icon-search-icon").addClass("cancel");
         filterIcons(searchTerm);
         if (
-          selector.find("#hexa-icons-grid .hexa-element:visible").length === 0
+          selector.find("#gauci-icons-grid .gauci-element:visible").length === 0
         ) {
-          selector.find("#hexa-noicons").show();
+          selector.find("#gauci-noicons").show();
         }
       }
     });
     /* Search Icon */
-    selector.find("#hexa-icon-search-icon").on("click", function () {
+    selector.find("#gauci-icon-search-icon").on("click", function () {
       if ($(this).hasClass("cancel")) {
         $(this).removeClass("cancel");
         $(this).html("search");
-        selector.find("#hexa-icon-search").val("");
-        selector.find("#hexa-icons-grid .hexa-element").css("display", "flex");
-        selector.find("#hexa-noicons").hide();
+        selector.find("#gauci-icon-search").val("");
+        selector.find("#gauci-icons-grid .gauci-element").css("display", "flex");
+        selector.find("#gauci-noicons").hide();
       }
     });
     /* QR CODE */
-    selector.find("#hexa-generate-qr-code").on("click", function () {
+    selector.find("#gauci-generate-qr-code").on("click", function () {
       var qrcode = kjua({
-        text: selector.find("#hexa-qrcode-text").val(),
+        text: selector.find("#gauci-qrcode-text").val(),
         render: "svg",
         size: 300,
-        fill: selector.find("#hexa-qrcode-fill").val(),
-        back: selector.find("#hexa-qrcode-back").val(),
-        rounded: selector.find("#hexa-qrcode-rounded").val(),
+        fill: selector.find("#gauci-qrcode-fill").val(),
+        back: selector.find("#gauci-qrcode-back").val(),
+        rounded: selector.find("#gauci-qrcode-rounded").val(),
         mode: "label", // modes: 'plain', 'label' or 'image'
-        label: selector.find("#hexa-qrcode-label").val(),
+        label: selector.find("#gauci-qrcode-label").val(),
         fontname: "sans",
-        fontcolor: selector.find("#hexa-qrcode-label-color").val(),
-        mSize: selector.find("#hexa-qrcode-label-size").val(),
-        mPosX: selector.find("#hexa-qrcode-label-position-x").val(),
-        mPosY: selector.find("#hexa-qrcode-label-position-y").val(),
+        fontcolor: selector.find("#gauci-qrcode-label-color").val(),
+        mSize: selector.find("#gauci-qrcode-label-size").val(),
+        mPosX: selector.find("#gauci-qrcode-label-position-x").val(),
+        mPosY: selector.find("#gauci-qrcode-label-position-y").val(),
       });
       var top = getScaledSize()[1] / 2;
       var left = getScaledSize()[0] / 2;
@@ -8903,38 +8903,38 @@
     /* QR CODE Preview */
     function qrcodePreview() {
       var qrcode = kjua({
-        text: selector.find("#hexa-qrcode-text").val(),
+        text: selector.find("#gauci-qrcode-text").val(),
         render: "svg",
         size: 300,
-        fill: selector.find("#hexa-qrcode-fill").val(),
-        back: selector.find("#hexa-qrcode-back").val(),
-        rounded: selector.find("#hexa-qrcode-rounded").val(),
+        fill: selector.find("#gauci-qrcode-fill").val(),
+        back: selector.find("#gauci-qrcode-back").val(),
+        rounded: selector.find("#gauci-qrcode-rounded").val(),
         mode: "label", // modes: 'plain', 'label' or 'image'
-        label: selector.find("#hexa-qrcode-label").val(),
+        label: selector.find("#gauci-qrcode-label").val(),
         fontname: "sans",
-        fontcolor: selector.find("#hexa-qrcode-label-color").val(),
-        mSize: selector.find("#hexa-qrcode-label-size").val(),
-        mPosX: selector.find("#hexa-qrcode-label-position-x").val(),
-        mPosY: selector.find("#hexa-qrcode-label-position-y").val(),
+        fontcolor: selector.find("#gauci-qrcode-label-color").val(),
+        mSize: selector.find("#gauci-qrcode-label-size").val(),
+        mPosX: selector.find("#gauci-qrcode-label-position-x").val(),
+        mPosY: selector.find("#gauci-qrcode-label-position-y").val(),
       });
       return qrcode;
     }
     selector.find("#qrcode-preview").html(qrcodePreview());
     /* Update Preview */
     selector
-      .find('#hexa-qrcode-settings input[type="text"]')
+      .find('#gauci-qrcode-settings input[type="text"]')
       .on("input", function () {
         var qrcode = qrcodePreview();
         selector.find("#qrcode-preview").html(qrcode);
       });
     selector
-      .find("#hexa-qrcode-settings .hexa-colorpicker")
+      .find("#gauci-qrcode-settings .gauci-colorpicker")
       .bind("change", function () {
         var qrcode = qrcodePreview();
         selector.find("#qrcode-preview").html(qrcode);
       });
     selector
-      .find("#hexa-qrcode-settings input[type=range]")
+      .find("#gauci-qrcode-settings input[type=range]")
       .bind("input click", function () {
         var qrcode = qrcodePreview();
         selector.find("#qrcode-preview").html(qrcode);
@@ -8943,7 +8943,7 @@
     /* Draw Cursor */
     function drawCursor(brushSize, brushColor) {
       $("#tm-cursor-1").remove();
-      selector.find("#hexa-canvas-wrap").tmpointer({
+      selector.find("#gauci-canvas-wrap").tmpointer({
         id: 1,
         native_cursor: "enable",
         cursorSize: brushSize,
@@ -8951,47 +8951,47 @@
       });
     }
     // Draw Mode Button
-    selector.find("#hexa-draw-btn").on("click", function () {
+    selector.find("#gauci-draw-btn").on("click", function () {
       if ($(this).hasClass("active")) {
-        selector.find("#hexa-draw-undo").prop("disabled", true);
-        selector.find("#hexa-draw-undo").removeClass("active");
+        selector.find("#gauci-draw-undo").prop("disabled", true);
+        selector.find("#gauci-draw-undo").removeClass("active");
         $("#tm-cursor-1").remove();
-        selector.find("#hexa-draw-settings").hide();
+        selector.find("#gauci-draw-settings").hide();
         selector
           .find(
-            "#hexa-top-bar, #hexa-right-col, #hexa-icon-menu, #hexa-toggle-left, #hexa-toggle-right"
+            "#gauci-top-bar, #gauci-right-col, #gauci-icon-menu, #gauci-toggle-left, #gauci-toggle-right"
           )
           .css("pointer-events", "auto");
         $(this).removeClass("active");
         canvas.isDrawingMode = false;
         $(this).html(
-          '<span class="material-icons">edit</span>' + hexaParams.startDrawing
+          '<span class="material-icons">edit</span>' + gauciParams.startDrawing
         );
       } else {
-        selector.find("#hexa-draw-undo").prop("disabled", false);
-        selector.find("#hexa-draw-settings").show();
+        selector.find("#gauci-draw-undo").prop("disabled", false);
+        selector.find("#gauci-draw-settings").show();
         selector
           .find(
-            "#hexa-top-bar, #hexa-right-col, #hexa-icon-menu, #hexa-toggle-left, #hexa-toggle-right"
+            "#gauci-top-bar, #gauci-right-col, #gauci-icon-menu, #gauci-toggle-left, #gauci-toggle-right"
           )
           .css("pointer-events", "none");
         $(this).addClass("active");
-        selector.find("#hexa-brush-select").trigger("change");
+        selector.find("#gauci-brush-select").trigger("change");
         canvas.isDrawingMode = true;
         $(this).html(
-          '<span class="material-icons">close</span>' + hexaParams.stopDrawing
+          '<span class="material-icons">close</span>' + gauciParams.stopDrawing
         );
       }
     });
     // Brush Type Select
-    selector.find("#hexa-brush-select").on("change", function () {
+    selector.find("#gauci-brush-select").on("change", function () {
       var val = $(this).val();
       if (val == "erase") {
-        $("#hexa-brush-tip").hide();
-        $("#hexa-eraser-tip").show();
+        $("#gauci-brush-tip").hide();
+        $("#gauci-eraser-tip").show();
       } else {
-        $("#hexa-brush-tip").show();
-        $("#hexa-eraser-tip").hide();
+        $("#gauci-brush-tip").show();
+        $("#gauci-eraser-tip").hide();
       }
       if (val == "pencil") {
         var pencilBrush = new fabric.PencilBrush(canvas);
@@ -9075,29 +9075,29 @@
         brush.color = "#E91E63";
       } else {
         canvas.freeDrawingBrush.inverted = false;
-        selector.find("#hexa-draw-undo").removeClass("active");
+        selector.find("#gauci-draw-undo").removeClass("active");
         selector.find("#not-erase-brush").show();
         brush.color = selector.find("#brush-color").val();
       }
-      if (selector.find("#hexa-brush-shadow").is(":checked")) {
+      if (selector.find("#gauci-brush-shadow").is(":checked")) {
         brush.shadow = brushShadow;
       } else {
         brush.shadow = null;
       }
       drawCursor(brush.width * canvas.getZoom(), brush.color);
       if (val == "hline" || val == "vline" || val == "square") {
-        selector.find("#hexa-brush-pattern-width").css("display", "flex");
+        selector.find("#gauci-brush-pattern-width").css("display", "flex");
       } else {
-        selector.find("#hexa-brush-pattern-width").css("display", "none");
+        selector.find("#gauci-brush-pattern-width").css("display", "none");
       }
       if (val == "square") {
-        selector.find("#hexa-brush-pattern-distance").css("display", "flex");
+        selector.find("#gauci-brush-pattern-distance").css("display", "flex");
       } else {
-        selector.find("#hexa-brush-pattern-distance").css("display", "none");
+        selector.find("#gauci-brush-pattern-distance").css("display", "none");
       }
     });
     /* Draw Shadow */
-    selector.find("#hexa-brush-shadow").on("change", function () {
+    selector.find("#gauci-brush-shadow").on("change", function () {
       brushShadow = new fabric.Shadow({
         color: selector.find("#brush-shadow-color").val(),
         blur: selector.find("#brush-shadow-width").val(),
@@ -9112,7 +9112,7 @@
     });
     /* Draw Numeric Fields */
     selector
-      .find("#hexa-draw-settings input[type=number]")
+      .find("#gauci-draw-settings input[type=number]")
       .bind("input paste keyup keydown", function () {
         if ($(this).attr("id") == "brush-width") {
           brush.width = parseInt($(this).val());
@@ -9124,26 +9124,26 @@
         } else if ($(this).attr("id") == "brush-shadow-width") {
           brushShadow.blur = parseInt($(this).val());
         } else if ($(this).attr("id") == "brush-pattern-width") {
-          selector.find("#hexa-brush-select").trigger("change");
+          selector.find("#gauci-brush-select").trigger("change");
         } else if ($(this).attr("id") == "brush-pattern-distance") {
-          selector.find("#hexa-brush-select").trigger("change");
+          selector.find("#gauci-brush-select").trigger("change");
         }
       });
     /* Draw Color Fields */
     selector
-      .find("#hexa-draw-settings .hexa-colorpicker")
+      .find("#gauci-draw-settings .gauci-colorpicker")
       .bind("change", function () {
         if ($(this).attr("id") == "brush-color") {
           brush.color = $(this).val();
           drawCursor(brush.width * canvas.getZoom(), brush.color);
-          selector.find("#hexa-brush-select").trigger("change");
+          selector.find("#gauci-brush-select").trigger("change");
         } else if ($(this).attr("id") == "brush-shadow-color") {
           brushShadow.color = $(this).val();
         }
       });
     /* Undo Draw */
-    selector.find("#hexa-draw-undo").on("click", function () {
-      if (selector.find("#hexa-brush-select").val() == "erase") {
+    selector.find("#gauci-draw-undo").on("click", function () {
+      if (selector.find("#gauci-brush-select").val() == "erase") {
         if (canvas.backgroundImage) {
           if ($(this).hasClass("active")) {
             $(this).removeClass("active");
@@ -9198,7 +9198,7 @@
     selector.find("#custom-theme").on("change", function () {
       var val = $(this).val();
       var link = settings.baseURL + "css/" + val + ".css";
-      $("#hexa-theme-link").attr("href", link);
+      $("#gauci-theme-link").attr("href", link);
     });
     // Font Size
     selector.find("#custom-font-size").on("input", function () {
@@ -9208,13 +9208,13 @@
     selector.find("#custom-background").on("change", function () {
       var val = $(this).val();
       if (val != "") {
-        selector.find("#hexa-content").css("background-color", val);
+        selector.find("#gauci-content").css("background-color", val);
       }
     });
     // Image Background
     selector.find("#custom-image-background").on("change", function () {
       var val = $(this).val();
-      selector.find("#hexa-canvas-color").spectrum("set", val);
+      selector.find("#gauci-canvas-color").spectrum("set", val);
       if (val == "") {
         canvas.backgroundColor = "transparent";
         canvas.requestRenderAll();
@@ -9250,8 +9250,8 @@
         .find(".td-interactive-btn-container-main-contianer")
         .removeClass("interactive-btn-alignment");
       selector.find(".web-thr-d-main-container").removeClass("display-unity");
-      selector.find("#hexa-canvas").removeClass("hide-canvas");
-      selector.find("#hexa").removeClass("hide-canva");
+      selector.find("#gauci-canvas").removeClass("hide-canvas");
+      selector.find("#gauci").removeClass("hide-canva");
     });
     selector.find(".thr-d").on("click", function () {
       selector.find(".thr-d").addClass("active");
@@ -9260,8 +9260,8 @@
         .find(".td-interactive-btn-container-main-contianer")
         .addClass("interactive-btn-alignment");
       selector.find(".web-thr-d-main-container").addClass("display-unity");
-      selector.find("#hexa-canvas").addClass("hide-canvas");
-      selector.find("#hexa").addClass("hide-canva");
+      selector.find("#gauci-canvas").addClass("hide-canvas");
+      selector.find("#gauci").addClass("hide-canva");
       canvas.renderAll();
       // updateCanvasState()
       var name = "tester";
@@ -9271,7 +9271,7 @@
       var link = document.createElement("a");
       add_watermark();
       canvas.setZoom(1);
-      selector.find("#hexa-img-zoom").val(100);
+      selector.find("#gauci-img-zoom").val(100);
       var zoomWidth = originalHeight;
       var zoomHeight = originalWidth;
       if (rotate == 0 || rotate == 180 || rotate == -180) {
@@ -9303,7 +9303,7 @@
       if (format != "webp") {
         imgData = changeDpiDataUrl(
           imgData,
-          selector.find("#hexa-download-img-dpi").val()
+          selector.find("#gauci-download-img-dpi").val()
         );
       }
       blob = dataURLtoBlob(imgData);
@@ -9386,20 +9386,20 @@
 
     $(document).on("keydown", function (event) {
       if (event.key === "Escape") {
-        $(".hexa-modal:visible").hide();
+        $(".gauci-modal:visible").hide();
       }
     });
 
     // $(document).on('keydown', function(event) {
     //     if (event.key === 'Escape') {
-    //         var targetModal = selector.find('.hexa-modal:visible');
+    //         var targetModal = selector.find('.gauci-modal:visible');
     //         if (targetModal.length) {
     //             targetModal.hide();
     //         }
     //     }
     // });
 
-    // selector.find(".hexa-modal-close").on("click", function (e) {
+    // selector.find(".gauci-modal-close").on("click", function (e) {
     //     e.preventDefault();
     //     var target = $(this).data("target");
     //     selector.find(target).hide();
