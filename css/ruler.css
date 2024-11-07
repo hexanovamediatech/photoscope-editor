@@ -177,7 +177,7 @@
     left: -23px
 }
 
-#hexa-ruler-icon {
+#gauci-ruler-icon {
     position: absolute;
     top: 0;
     left: 0;
@@ -189,7 +189,7 @@
     align-items: center;
 }
 
-#hexa-ruler-icon.closed {
+#gauci-ruler-icon.closed {
     border-right-color: transparent !important;
     border-bottom-color: transparent !important;
 }

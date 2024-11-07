@@ -354,19 +354,19 @@ var RulersGuides = function (evt, dragdrop, container) {
         },
         toggleRulers = function () {
             rulerStatus = 1 - rulerStatus;
-            var zoomIn = document.getElementById('hexa-img-zoom-in');
-            var zoomOut = document.getElementById('hexa-img-zoom-out');
+            var zoomIn = document.getElementById('gauci-img-zoom-in');
+            var zoomOut = document.getElementById('gauci-img-zoom-out');
 
             if (rulerStatus === 1) {
                 zoomOut.click();
                 vRuler.style.display = 'block';
                 hRuler.style.display = 'block';
                 wrapper.style.display = 'block';
-                document.getElementById('hexa-ruler-icon').classList.remove("closed");
+                document.getElementById('gauci-ruler-icon').classList.remove("closed");
                 removeInboundGuides();
             } else {
                 zoomIn.click();
-                document.getElementById('hexa-ruler-icon').classList.add("closed");
+                document.getElementById('gauci-ruler-icon').classList.add("closed");
                 vRuler.style.display = 'none';
                 hRuler.style.display = 'none';
             }
@@ -444,13 +444,13 @@ var RulersGuides = function (evt, dragdrop, container) {
                 status   = 0,
                 toggles = {},
                 menuItemsList  = [{
-                    'text': hexaParams.hideRulers,
+                    'text': gauciParams.hideRulers,
                     'alias': 'rulers'
                 }, {
-                    'text': hexaParams.hideGuides,
+                    'text': gauciParams.hideGuides,
                     'alias': 'guides'
                 }, {
-                    'text': hexaParams.clearAllGuides,
+                    'text': gauciParams.clearAllGuides,
                     'alias': 'clear'
                 }],
                 i = 0;
@@ -505,7 +505,7 @@ var RulersGuides = function (evt, dragdrop, container) {
                 });
 
                 evt.attach('mousedown', toggles.clear.obj, function () {
-                    toggles.guides.txt.nodeValue = hexaParams.hideGuides;
+                    toggles.guides.txt.nodeValue = gauciParams.hideGuides;
                     guideStatus = 1;
                     deleteGuides();
                     menu.close();
@@ -513,21 +513,21 @@ var RulersGuides = function (evt, dragdrop, container) {
 
                 menuList.appendChild(menuItems);
 
-                document.getElementById('hexa-ruler-icon').appendChild(menuBtn);
-                document.getElementById('hexa-ruler-icon').appendChild(menuList);
+                document.getElementById('gauci-ruler-icon').appendChild(menuBtn);
+                document.getElementById('gauci-ruler-icon').appendChild(menuList);
 
                 evt.attach('mousedown', menuBtn, function () {
                     toggles.rulers.txt.nodeValue = (rulerStatus === 1)
-                        ? hexaParams.hideRulers
-                        : hexaParams.showRulers;
+                        ? gauciParams.hideRulers
+                        : gauciParams.showRulers;
 
                     if (guidesCnt > 0) {
                         toggles.guides.obj.className = '';
                         toggles.clear.obj.className = '';
 
                         toggles.guides.txt.nodeValue = (guideStatus === 1)
-                            ? hexaParams.hideGuides
-                            : hexaParams.showGuides;
+                            ? gauciParams.hideGuides
+                            : gauciParams.showGuides;
                     } else {
                         toggles.guides.obj.className = 'disabled';
                         toggles.clear.obj.className = 'disabled';

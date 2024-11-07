@@ -6359,10 +6359,10 @@ fabric.ElementsParser = function(elements, callback, options, reviver, parsingOp
     },
 
     /**
-     * Returns color representation in HEXA format
+     * Returns color representation in gauci format
      * @return {String} ex: FF5555CC
      */
-    toHexa: function() {
+    togauci: function() {
       var source = this.getSource(), a;
 
       a = Math.round(source[3] * 255);
