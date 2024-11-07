@@ -13,6 +13,8 @@
   $.fn.gauci = function (options) {
     var selector = $(this);
     var windowWidth = document.body.clientWidth;
+    const baseUrl = CONFIG.BASE_URL;
+    const adminUrl = CONFIG.ADMIN_URL;
     // Default settings
     var settings = $.extend(
       {
@@ -1056,7 +1058,7 @@
 
       // First, check if the user is logged in and email is verified
       $.ajax({
-        url: "https://backend.toddlerneeds.com/api/v1/protected-route",
+        url: `${baseUrl}/api/v1/protected-route`,
         type: "GET",
         xhrFields: {
           withCredentials: true, // Include credentials for backend token validation
@@ -1175,7 +1177,9 @@
         input.val("");
         selector.find("#gauci-templates-grid .grid-item").show();
         if (selector.find("#gauci-templates-grid-pagination").length) {
-          selector.find("#gauci-templates-grid-pagination").pagination("redraw");
+          selector
+            .find("#gauci-templates-grid-pagination")
+            .pagination("redraw");
           selector
             .find("#gauci-templates-grid-pagination")
             .pagination("selectPage", 1);
@@ -1352,7 +1356,7 @@
           formData.append("files", imageBlob, imageFileName);
           console.log(formData);
           $.ajax({
-            url: "https://backend.toddlerneeds.com/api/v1/user/media/upload",
+            url: `${baseUrl}/api/v1/user/media/upload`,
             type: "POST",
             data: formData,
             processData: false,
@@ -1441,7 +1445,7 @@
       console.log(data);
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/user/file-data/upload",
+          url: `${baseUrl}/api/v1/user/file-data/upload`,
           type: "POST",
           contentType: "application/json",
           data: JSON.stringify(data),
@@ -1465,7 +1469,7 @@
     function deleteTemplate(key) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: `https://backend.toddlerneeds.com/api/v1/user/delete/${key}`,
+          url: `${baseUrl}/api/v1/user/delete/${key}`,
           type: "DELETE",
           success: function (response) {
             resolve(response);
@@ -1564,7 +1568,7 @@
     function getUserEmail() {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/user/profile",
+          url: `${baseUrl}/api/v1/user/profile`,
           type: "GET",
           contentType: "application/json",
           xhrFields: {
@@ -1590,7 +1594,7 @@
     function getAllSavedData(userEmail) {
       return new Promise((resolve, reject) => {
         $.ajax({
-          url: "https://backend.toddlerneeds.com/api/v1/user/get/all/templates",
+          url: `${baseUrl}/api/v1/user/get/all/templates`,
           type: "GET",
           contentType: "application/json",
           success: function (response) {
@@ -1985,7 +1989,9 @@
         if (searchTerm == "" || searchTerm.length < 1) {
           selector.find("#gauci-my-templates li").show();
           if (selector.find("#gauci-my-templates-pagination").length) {
-            selector.find("#gauci-my-templates-pagination").pagination("redraw");
+            selector
+              .find("#gauci-my-templates-pagination")
+              .pagination("redraw");
             selector
               .find("#gauci-my-templates-pagination")
               .pagination("selectPage", 1);
@@ -2413,7 +2419,9 @@
           }
         } else {
           if (selector.find("#gauci-library-all-pagination").length) {
-            selector.find("#gauci-library-all-pagination").pagination("destroy");
+            selector
+              .find("#gauci-library-all-pagination")
+              .pagination("destroy");
           }
           selector
             .find("#gauci-library-all .gauci-masonry-item")
@@ -2526,30 +2534,34 @@
     /* Select SVG */
     selector
       .find(".svg-library-grid")
-      .on("click", ">.gauci-masonry-item>.gauci-masonry-item-inner", function () {
-        var fullSVG = $(this).find("img").data("full");
-        fabric.loadSVGFromURL(
-          fullSVG,
-          function (objects, options) {
-            var svg = fabric.util.groupSVGElements(objects, options);
-            svg.set("originX", "center");
-            svg.set("originY", "center");
-            svg.set("left", getScaledSize()[0] / 2);
-            svg.set("top", getScaledSize()[1] / 2);
-            svg.set("objectType", "customSVG");
-            svg.scaleToWidth(getScaledSize()[0] / 2);
-            svg.scaleToHeight(getScaledSize()[1] / 2);
-            canvas.add(svg);
-            canvas.setActiveObject(svg);
-            canvas.requestRenderAll();
-          },
-          function () {},
-          {
-            crossOrigin: "anonymous",
-          }
-        );
-        selector.find("#modal-svg-library").hide();
-      });
+      .on(
+        "click",
+        ">.gauci-masonry-item>.gauci-masonry-item-inner",
+        function () {
+          var fullSVG = $(this).find("img").data("full");
+          fabric.loadSVGFromURL(
+            fullSVG,
+            function (objects, options) {
+              var svg = fabric.util.groupSVGElements(objects, options);
+              svg.set("originX", "center");
+              svg.set("originY", "center");
+              svg.set("left", getScaledSize()[0] / 2);
+              svg.set("top", getScaledSize()[1] / 2);
+              svg.set("objectType", "customSVG");
+              svg.scaleToWidth(getScaledSize()[0] / 2);
+              svg.scaleToHeight(getScaledSize()[1] / 2);
+              canvas.add(svg);
+              canvas.setActiveObject(svg);
+              canvas.requestRenderAll();
+            },
+            function () {},
+            {
+              crossOrigin: "anonymous",
+            }
+          );
+          selector.find("#modal-svg-library").hide();
+        }
+      );
     /* Search My SVGs */
     selector.find("#gauci-svg-library-my-search").on("click", function () {
       var input = $(this).parent().find("input");
@@ -2565,7 +2577,9 @@
         input.val("");
         selector.find("#gauci-svg-library-my .gauci-masonry-item").show();
         if (selector.find("#gauci-svg-library-my-pagination").length) {
-          selector.find("#gauci-svg-library-my-pagination").pagination("redraw");
+          selector
+            .find("#gauci-svg-library-my-pagination")
+            .pagination("redraw");
           selector
             .find("#gauci-svg-library-my-pagination")
             .pagination("selectPage", 1);
@@ -3971,7 +3985,9 @@
         )
         .css("pointer-events", "none");
       selector
-        .find(".gauci-icon-panel-content ul.gauci-accordion > li.accordion-crop")
+        .find(
+          ".gauci-icon-panel-content ul.gauci-accordion > li.accordion-crop"
+        )
         .css("pointer-events", "auto");
       objects
         .filter(
@@ -4289,7 +4305,9 @@
         var height = $(this).data("size");
         var width = selector.find("#gauci-resize-width").data("size");
         var ratio = height / width;
-        selector.find("#gauci-resize-width").val(Math.round(this.value / ratio));
+        selector
+          .find("#gauci-resize-width")
+          .val(Math.round(this.value / ratio));
       }
     });
     /* Rotate Canvas */
@@ -5918,28 +5936,30 @@
         });
       });
     /* Text Flip Buttons */
-    selector.find("#gauci-text-flip-btns > .gauci-btn").on("click", function () {
-      if ($(this).hasClass("active")) {
-        if ($(this).attr("id") == "text-flip-x") {
-          canvas.getActiveObject().set("flipX", false);
-        } else if ($(this).attr("id") == "text-flip-y") {
-          canvas.getActiveObject().set("flipY", false);
+    selector
+      .find("#gauci-text-flip-btns > .gauci-btn")
+      .on("click", function () {
+        if ($(this).hasClass("active")) {
+          if ($(this).attr("id") == "text-flip-x") {
+            canvas.getActiveObject().set("flipX", false);
+          } else if ($(this).attr("id") == "text-flip-y") {
+            canvas.getActiveObject().set("flipY", false);
+          }
+          $(this).removeClass("active");
+        } else {
+          if ($(this).attr("id") == "text-flip-x") {
+            canvas.getActiveObject().set("flipX", true);
+          } else if ($(this).attr("id") == "text-flip-y") {
+            canvas.getActiveObject().set("flipY", true);
+          }
+          $(this).addClass("active");
         }
-        $(this).removeClass("active");
-      } else {
-        if ($(this).attr("id") == "text-flip-x") {
-          canvas.getActiveObject().set("flipX", true);
-        } else if ($(this).attr("id") == "text-flip-y") {
-          canvas.getActiveObject().set("flipY", true);
-        }
-        $(this).addClass("active");
-      }
-      canvas.requestRenderAll();
-      canvas.fire("gauci:history", {
-        type: "textbox",
-        text: gauciParams.edited,
+        canvas.requestRenderAll();
+        canvas.fire("gauci:history", {
+          type: "textbox",
+          text: gauciParams.edited,
+        });
       });
-    });
     /* Text Skew, Rotate, Opacity */
     selector
       .find("#gauci-text-settings input[type=range]")
@@ -6509,9 +6529,7 @@
     // Fetch image data from the API
     async function fetchImageData() {
       try {
-        const response = await fetch(
-          "https://backend.toddlerneeds.com/api/v1/product/all"
-        );
+        const response = await fetch(`${baseUrl}/api/v1/product/all`);
         const data = await response.json();
 
         // Get the 'name' query parameter from the URL
@@ -8812,7 +8830,9 @@
       selector.find("#gauci-noicons").hide();
       var searchTerm = $(this).val().toLowerCase().replace(/\s/g, " ");
       if (searchTerm == "" || searchTerm.length < 1) {
-        selector.find("#gauci-icons-grid .gauci-element").css("display", "flex");
+        selector
+          .find("#gauci-icons-grid .gauci-element")
+          .css("display", "flex");
         selector.find("#gauci-icon-search-icon").html("search");
         selector.find("#gauci-icon-search-icon").removeClass("cancel");
       } else {
@@ -8832,7 +8852,9 @@
         $(this).removeClass("cancel");
         $(this).html("search");
         selector.find("#gauci-icon-search").val("");
-        selector.find("#gauci-icons-grid .gauci-element").css("display", "flex");
+        selector
+          .find("#gauci-icons-grid .gauci-element")
+          .css("display", "flex");
         selector.find("#gauci-noicons").hide();
       }
     });
@@ -9357,7 +9379,7 @@
 
       // Fetch the template data using jQuery's AJAX
       $.ajax({
-        url: `https://backend.toddlerneeds.com/api/v1/user/template/${id}`,
+        url: `${baseUrl}/api/v1/user/template/${id}`,
         method: "GET",
         xhrFields: {
           withCredentials: true, // to include credentials (cookies)
@@ -9410,38 +9432,37 @@
   };
 })(jQuery);
 
+const base_URL = CONFIG.BASE_URL;
+const admin_URL = CONFIG.ADMIN_URL;
+
 document.addEventListener("DOMContentLoaded", function () {
   const authContainer = document.querySelector(".auth-container");
   let isDropdownOpen = false;
 
-    // Function to check the jwtToken in localStorage and show appropriate UI
-    function checkAuthToken() {
-        if (localStorage.getItem("jwtToken")) {
-          fetchUserRole(); // If token exists, fetch user role and show logged-in UI
-        } else {
-          showLoggedOutUI(); // If no token, show logged-out UI immediately
-        }
-      }
+  // Function to check the jwtToken in localStorage and show appropriate UI
+  function checkAuthToken() {
+    if (localStorage.getItem("jwtToken")) {
+      fetchUserRole(); // If token exists, fetch user role and show logged-in UI
+    } else {
+      showLoggedOutUI(); // If no token, show logged-out UI immediately
+    }
+  }
 
-      // Check authentication status immediately when the page loads
-      checkAuthToken();
+  // Check authentication status immediately when the page loads
+  checkAuthToken();
 
-      // Listen for changes to localStorage (this works across different tabs)
-      window.addEventListener("storage", function (event) {
-        if (event.key === "jwtToken") {
-          checkAuthToken(); // Re-check token when it is changed or removed
-        }
-      });
-
+  // Listen for changes to localStorage (this works across different tabs)
+  window.addEventListener("storage", function (event) {
+    if (event.key === "jwtToken") {
+      checkAuthToken(); // Re-check token when it is changed or removed
+    }
+  });
 
   async function fetchUserRole() {
     try {
-      const response = await fetch(
-        "https://backend.toddlerneeds.com/api/v1/protected-route",
-        {
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${base_URL}/api/v1/protected-route`, {
+        credentials: "include",
+      });
       const data = await response.json();
       console.log("this is the data of protected route we got", data);
       localStorage.setItem("email", data.email);
@@ -9548,11 +9569,11 @@ document.addEventListener("DOMContentLoaded", function () {
       document
         .getElementById("adminDashboard")
         .addEventListener("click", function () {
-          window.open("http://54.152.205.55:4000/admin-dashboard", "_blank");
+          window.open(`${admin_URL}/admin-dashboard`, "_blank");
         });
     } else {
       document.getElementById("profile").addEventListener("click", function () {
-        window.open("http://54.152.205.55:4000/profile", "_blank");
+        window.open(`${admin_URL}/profile`, "_blank");
       });
     }
 
@@ -9688,14 +9709,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Add the Google Sign-In functionality
     document.getElementById("googleLoginBtn").addEventListener("click", () => {
-      window.location.href =
-        "https://backend.toddlerneeds.com/api/v1/auth/google";
+      window.location.href = `${base_URL}/api/v1/auth/google`;
     });
 
     document
       .getElementById("forgotPass-cont")
       .addEventListener("click", function () {
-        window.location.href = "http://54.152.205.55:4000/reset-password";
+        window.location.href = `${admin_URL}/reset-password`;
       });
   }
 
@@ -9711,21 +9731,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const origin = parseUrl.hostname;
 
     try {
-      const response = await fetch(
-        "https://backend.toddlerneeds.com/api/v1/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            username,
-            password,
-            origin,
-          }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${base_URL}/api/v1/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          username,
+          password,
+          origin,
+        }),
+        credentials: "include",
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -9733,11 +9750,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const token = response.headers.get("authorization");
         if (token) {
           localStorage.setItem("jwtToken", token);
-        //   console.log("Login successful!");
+          //   console.log("Login successful!");
           closeLoginPopup();
           await fetchUserRole();
           const profileResponse = await fetch(
-            "https://backend.toddlerneeds.com/api/v1/user/profile",
+            `${base_URL}/api/v1/user/profile`,
             {
               method: "GET",
               headers: {
@@ -9941,8 +9958,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
     document.getElementById("googleSignupBtn").addEventListener("click", () => {
-      window.location.href =
-        "https://backend.toddlerneeds.com/api/v1/auth/google";
+      window.location.href = `${base_URL}/api/v1/auth/google`;
     });
   }
 
@@ -9975,7 +9991,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (!usernamePattern.test(username)) {
-      toastr.warning("Username must be alphanumeric and between 4-20 characters.");
+      toastr.warning(
+        "Username must be alphanumeric and between 4-20 characters."
+      );
       return;
     }
 
@@ -9985,23 +10003,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     try {
-      const response = await fetch(
-        "https://backend.toddlerneeds.com/api/v1/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Send as JSON
-          },
-          body: JSON.stringify({
-            firstname,
-            lastname,
-            email,
-            username,
-            password,
-          }),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${base_URL}/api/v1/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Send as JSON
+        },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          email,
+          username,
+          password,
+        }),
+        credentials: "include",
+      });
 
       if (response) {
         // If signup is successful
@@ -10020,7 +10035,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const errorMessage =
           responseData?.error || "Signup failed. Please try again.";
         signupErrorElement.style.display = "flex";
-        signupErrorElement.querySelector(".error-text").textContent = errorMessage;
+        signupErrorElement.querySelector(".error-text").textContent =
+          errorMessage;
       }
     } catch (error) {
       // For network errors or exceptions
@@ -10028,7 +10044,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const errorMessage =
         error.message || "An unexpected error occurred. Please try again.";
       signupErrorElement.style.display = "flex";
-      signupErrorElement.querySelector(".error-text").textContent = errorMessage;
+      signupErrorElement.querySelector(".error-text").textContent =
+        errorMessage;
     }
   }
 
@@ -10042,7 +10059,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to handle logout action
   function handleLogout() {
-    fetch("https://backend.toddlerneeds.com/api/v1/logout", {
+    fetch(`${base_URL}/api/v1/logout`, {
       method: "POST",
       credentials: "include",
     })
