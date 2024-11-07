@@ -15,6 +15,8 @@ let modelSource = null;
 let templateId = null;
 let selectedMesh = null;
 let isPublic;
+const adminUrl = CONFIG.ADMIN_URL;
+const baseUrl = CONFIG.BASE_URL;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -26,9 +28,7 @@ document.addEventListener("variableReady", function (e) {
 
 async function fetchModelData() {
   try {
-    const response = await fetch(
-      "https://backend.toddlerneeds.com/api/v1/product/all"
-    );
+    const response = await fetch(`${baseUrl}/api/v1/product/all`);
     const data = await response.json();
 
     // Extract the model source (GLB path) based on the name parameter from the URL
@@ -160,15 +160,14 @@ function initPersonalise() {
     loadedModel.position.z -= center.z;
     if (modelName === "model-1") {
       loadedModel.position.y -= size.y * 1.8; // Larger adjustment for 'model-1'
-    }else if(modelName === 'p5-type1'){
+    } else if (modelName === "p5-type1") {
       loadedModel.position.y -= size.y * 3;
-    }else if(modelName === 'model-2'){
+    } else if (modelName === "model-2") {
       // loadedModel.position.x -= size.y / 2 ;
-      loadedModel.position.x = -0.03 ; 
+      loadedModel.position.x = -0.03;
       loadedModel.position.y = 0;
       loadedModel.position.z = 0;
-    }
-    else{
+    } else {
       loadedModel.position.y -= center.y;
     }
     // Fine-tune Y-axis to center vertically (slight downward adjustment)
@@ -321,6 +320,18 @@ async function initialize3DViewer() {
     console.error("Failed to initialize 3D viewer:", error);
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const logoLink = document.getElementById("logoLink");
+  if (logoLink) {
+    logoLink.href = adminUrl;
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const logoLink = document.getElementById("logoLink2");
+  if (logoLink) {
+    logoLink.href = adminUrl;
+  }
+});
 document
   .getElementById("personaliseOpenPopupBtn")
   .addEventListener("click", async () => {
@@ -1071,9 +1082,7 @@ initialize3DViewer();
   showSkeletonLoader();
 
   try {
-    const response = await fetch(
-      "https://backend.toddlerneeds.com/api/v1/user/get/all/templates"
-    );
+    const response = await fetch(`${baseUrl}/api/v1/user/get/all/templates`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -1115,7 +1124,7 @@ initialize3DViewer();
 
       // Fetch favorites to compare with
       const favoriteResponse = await fetch(
-        "https://backend.toddlerneeds.com/api/v1/user/favorite/templates",
+        `${baseUrl}/api/v1/user/favorite/templates`,
         {
           method: "GET",
           credentials: "include",
@@ -1356,13 +1365,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function handleSaveClick() {
   try {
-    const response = await fetch(
-      "https://backend.toddlerneeds.com/api/v1/protected-route",
-      {
-        method: "GET",
-        credentials: "include", // Include credentials for backend token validation
-      }
-    );
+    const response = await fetch(`${baseUrl}/api/v1/protected-route`, {
+      method: "GET",
+      credentials: "include", // Include credentials for backend token validation
+    });
 
     if (!response.ok) {
       throw new Error("User is not logged in.");
@@ -1548,11 +1554,7 @@ function saveTemplate() {
     });
 
     var xhr = new XMLHttpRequest();
-    xhr.open(
-      "POST",
-      "https://backend.toddlerneeds.com/api/v1/user/media/upload",
-      true
-    );
+    xhr.open("POST", `${baseUrl}/api/v1/user/media/upload`, true);
 
     xhr.onload = function () {
       if (xhr.status === 200) {
@@ -1642,19 +1644,16 @@ function saveTemplate() {
 
 async function uploadData(data) {
   try {
-    const response = await fetch(
-      "https://backend.toddlerneeds.com/api/v1/user/file-data/upload",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Include credentials for cross-origin requests
-          // Authorization: "Bearer <Your-Token>", // Use if needed for authentication, else remove
-        },
-        body: JSON.stringify(data),
-        credentials: "include", // Equivalent to `xhrFields: { withCredentials: true }`
-      }
-    );
+    const response = await fetch(`${baseUrl}/api/v1/user/file-data/upload`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Include credentials for cross-origin requests
+        // Authorization: "Bearer <Your-Token>", // Use if needed for authentication, else remove
+      },
+      body: JSON.stringify(data),
+      credentials: "include", // Equivalent to `xhrFields: { withCredentials: true }`
+    });
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -1713,7 +1712,7 @@ function dataURLtoBlob(dataurl) {
 async function handleFavTempllate(templateKey) {
   try {
     const response = await fetch(
-      "https://backend.toddlerneeds.com/api/v1/user/template/togglefavorite",
+      `${baseUrl}/api/v1/user/template/togglefavorite`,
       {
         method: "POST",
         headers: {
