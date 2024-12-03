@@ -14,6 +14,7 @@ let fabricImageConverted = null;
 let modelSource = null;
 let templateId = null;
 let selectedMesh = null;
+let linkedMeshImageData = null;
 let isPublic;
 const adminUrl = CONFIG.ADMIN_URL;
 const baseUrl = CONFIG.BASE_URL;
@@ -26,13 +27,44 @@ document.addEventListener("variableReady", function (e) {
   }
 });
 
+// async function fetchModelData() {
+//   try {
+//     const response = await fetch(`${baseUrl}/api/v1/product/all`);
+//     const data = await response.json();
+
+//     // Extract the model source (GLB path) based on the name parameter from the URL
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const productId = urlParams.get("id");
+//     const modelName = urlParams.get("name");
+//     const productNameTag = document.querySelector(
+//       ".personalise-product-name-text"
+//     );
+//     if (productNameTag) {
+//       productNameTag.textContent = modelName; // Update the product name
+//     }
+//     const product = data.products.find((item) => item.name === modelName);
+//     console.log(product, "Product here");
+//     if (product && product.modelsUrl) {
+//       modelSource = product.modelsUrl; // Set the model URL
+//       window.layoutSource = product.imageUrl;
+//       selectedMesh = product.specificMesh;
+//     } else {
+//       console.error("Model not found for the specified name.");
+//     }
+//   } catch (error) {
+//     console.error("Error fetching model data:", error);
+//   }
+// }
 async function fetchModelData() {
   try {
-    const response = await fetch(`${baseUrl}/api/v1/product/all`);
-    const data = await response.json();
-
-    // Extract the model source (GLB path) based on the name parameter from the URL
     const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get("id");
+    const response = await fetch(`${baseUrl}/api/v1/product/get/${productId}`);
+    const data = await response.json();
+    console.log(data);
+    const product = data.product;
+    // Extract the model source (GLB path) based on the name parameter from the URL
+
     const modelName = urlParams.get("name");
     const productNameTag = document.querySelector(
       ".personalise-product-name-text"
@@ -40,11 +72,15 @@ async function fetchModelData() {
     if (productNameTag) {
       productNameTag.textContent = modelName; // Update the product name
     }
-    const product = data.products.find((item) => item.name === modelName);
-    if (product && product.modelsUrl) {
-      modelSource = product.modelsUrl; // Set the model URL
-      window.layoutSource = product.imageUrl;
-      selectedMesh = product.specificMesh;
+    // const product = data.products.find((item) => item.name === modelName);
+    // console.log(product, "Product here");
+    console.log(product.modelUrl, "Model Url");
+    if (product && product.modelUrl) {
+      modelSource = product.modelUrl; // Set the model URL
+      linkedMeshImageData = product.linkedMeshImageData[0];
+      console.log(linkedMeshImageData);
+      window.layoutSource = linkedMeshImageData.layoutUrl;
+      selectedMesh = linkedMeshImageData.meshName;
     } else {
       console.error("Model not found for the specified name.");
     }
@@ -53,54 +89,6 @@ async function fetchModelData() {
   }
 }
 
-// function initPersonalise() {
-//   const loader = document.getElementById("mini-editor-loader-cont");
-
-//   const mainContainer = document.getElementById("personalise-3d-container");
-//   mainContainer.style.backgroundColor = "#f0f0f0";
-
-//   camera = new THREE.PerspectiveCamera(
-//     45,
-//     window.innerWidth / window.innerHeight,
-//     0.1,
-//     20
-//   );
-//   camera.position.set(0, 0.08, 0.5);
-
-//   scene = new THREE.Scene();
-
-//   // Load the GLB model dynamically based on the 'name' parameter
-//   new GLTFLoader().load(modelSource, function (gltf) {
-//     const loadedModel = gltf.scene;
-
-//     loadedModel.position.set(0, -0.11, 0);
-//     scene.add(gltf.scene);
-//     loader.classList.remove("display-block-prop");
-//     loader.classList.add("display-none-prop");
-//   });
-
-//   renderer = new THREE.WebGLRenderer({ antialias: true });
-//   renderer.setPixelRatio(window.devicePixelRatio);
-//   renderer.setSize(window.innerWidth, window.innerHeight);
-//   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-//   renderer.toneMappingExposure = 0.5;
-//   mainContainer.appendChild(renderer.domElement);
-
-//   const environment = new RoomEnvironment(renderer);
-//   const pmremGenerator = new THREE.PMREMGenerator(renderer);
-
-//   scene.background = new THREE.Color(0x818181);
-//   scene.environment = pmremGenerator.fromScene(environment).texture;
-
-//   controls = new OrbitControls(camera, renderer.domElement);
-//   controls.enableDamping = true;
-//   controls.minDistance = 0.35;
-//   controls.maxDistance = 0.7;
-//   controls.target.set(0, 0, 0);
-//   controls.update();
-
-//   window.addEventListener("resize", onWindowResizePersonalise);
-// }
 function showLoader() {
   const mainContainer = document.getElementById("personalise-3d-container");
   // Create the loader
@@ -149,34 +137,7 @@ function initPersonalise() {
   // Load the GLB model dynamically based on the 'name' parameter
   new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
-
-    // Calculate the bounding box of the loaded model
-    const boundingBox = new THREE.Box3().setFromObject(loadedModel);
-    const center = boundingBox.getCenter(new THREE.Vector3());
-    const size = boundingBox.getSize(new THREE.Vector3());
-
-    // Reposition the model to center it
-    loadedModel.position.x -= center.x;
-    loadedModel.position.z -= center.z;
-    if (modelName === "model-1") {
-      loadedModel.position.y -= size.y * 1.8; // Larger adjustment for 'model-1'
-    } else if (modelName === "p5-type1") {
-      loadedModel.position.y -= size.y * 3;
-    } else if (modelName === "model-2") {
-      // loadedModel.position.x -= size.y / 2 ;
-      loadedModel.position.x = -0.03;
-      loadedModel.position.y = 0;
-      loadedModel.position.z = 0;
-    } else {
-      loadedModel.position.y -= center.y;
-    }
-    // Fine-tune Y-axis to center vertically (slight downward adjustment)
-    loadedModel.position.y -= size.y * 0.2;
-
-    // Optionally scale the model to fit within the camera's view
-    const maxSize = Math.max(size.x, size.y, size.z);
-    const scaleFactor = 0.35 / maxSize; // Adjust based on your camera setup
-    loadedModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    centerModel(loadedModel, camera);
 
     // Add the centered model to the scene
     scene.add(loadedModel);
@@ -200,13 +161,46 @@ function initPersonalise() {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.minDistance = 0.35;
-  controls.maxDistance = 0.7;
+  controls.minDistance = 1;
+  controls.maxDistance = 2;
   controls.target.set(0, 0, 0); // Ensure controls target the center of the scene
   controls.update();
   onWindowResizePersonalise();
   window.addEventListener("resize", onWindowResizePersonalise);
 }
+
+function centerModel(model, camera) {
+  // Calculate the bounding box of the model
+  const box = new THREE.Box3().setFromObject(model);
+
+  // Get the size and center of the box
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+
+  // Calculate scaling factor to fit the model within the desired size
+  const targetSize = 1; // Adjust this value if needed
+  const maxSize = Math.max(size.x, size.y, size.z);
+  const scaleFactor = targetSize / maxSize;
+
+  // Apply scaling to the model
+  model.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+  // Center the model by adjusting its position
+  model.position.set(
+    -center.x * scaleFactor,
+    -center.y * scaleFactor,
+    -center.z * scaleFactor
+  );
+
+  // Adjust camera to look at the center of the model
+  camera.position.set(
+    0,
+    Math.max(size.y * scaleFactor, 1.5),
+    size.z * scaleFactor * 2
+  );
+  camera.lookAt(center);
+}
+
 // function onWindowResizePersonalise() {
 //   const mainContainer = document.getElementById("personalise-3d-container");
 //   const containerWidth = mainContainer.offsetWidth;
