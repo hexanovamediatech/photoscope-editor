@@ -6525,22 +6525,31 @@
 
     var preservedImage;
     var layoutSource = null; // Renamed from imgUrl
+    let linkedMeshImageData = null;
 
     // Fetch image data from the API
     async function fetchImageData() {
       try {
-        const response = await fetch(`${baseUrl}/api/v1/product/all`);
-        const data = await response.json();
-
-        // Get the 'name' query parameter from the URL
+        // const response = await fetch(`${baseUrl}/api/v1/product/all`);
+        // const data = await response.json();
         const urlParams = new URLSearchParams(window.location.search);
-        const name = urlParams.get("name");
-        console.log("name from query param is", name);
+        const productId = urlParams.get("id");
+        const response = await fetch(
+          `${baseUrl}/api/v1/product/get/${productId}`
+        );
+        const data = await response.json();
+        console.log(data);
+        const product = data.product;
+        // Get the 'name' query parameter from the URL
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const name = urlParams.get("name");
+        // console.log("name from query param is", name);
 
         // Find the image URL based on the product name
-        const product = data.products.find((item) => item.name === name);
-        if (product && product.imageUrl) {
-          layoutSource = product.imageUrl; // Set the image URL dynamically
+        // const product = data.products.find((item) => item.name === name);
+        if (product && product.modelUrl) {
+          linkedMeshImageData = product.linkedMeshImageData[0];
+          layoutSource = linkedMeshImageData.layoutUrl; // Set the image URL dynamically
           console.log("Image URL from API: ", layoutSource);
         } else {
           console.error("Image not found for the specified name.");
