@@ -137,8 +137,21 @@ function initPersonalise() {
   // Load the GLB model dynamically based on the 'name' parameter
   new GLTFLoader().load(modelSource, function (gltf) {
     const loadedModel = gltf.scene;
-    centerModel(loadedModel, camera);
 
+    loadedModel.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          // If the mesh has multiple materials
+          child.material.forEach((material) => {
+            material.side = THREE.DoubleSide;
+          });
+        } else {
+          // For single material
+          child.material.side = THREE.DoubleSide;
+        }
+      }
+    });
+    centerModel(loadedModel, camera);
     // Add the centered model to the scene
     scene.add(loadedModel);
     // loader.style.display = "none";
