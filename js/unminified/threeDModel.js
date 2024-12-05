@@ -102,7 +102,19 @@ function init() {
     const loadedModel = gltf.scene;
     console.log("Loaded model:", loadedModel);
     centerModel(loadedModel, camera);
-
+    loadedModel.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          // If the mesh has multiple materials
+          child.material.forEach((material) => {
+            material.side = THREE.DoubleSide;
+          });
+        } else {
+          // For single material
+          child.material.side = THREE.DoubleSide;
+        }
+      }
+    });
     // Find the specific mesh
     const specificMesh = loadedModel.getObjectByName(selectedMesh);
     if (specificMesh) {
@@ -118,6 +130,7 @@ function init() {
               metalness: 1,
               opacity: 1,
               bumpScale: 0.5,
+              side: THREE.DoubleSide,
             });
             specificMesh.material = material;
 
@@ -258,6 +271,7 @@ function changeTexture(newUrl) {
               metalness: 1,
               opacity: 1,
               bumpScale: 0.5,
+              side: THREE.DoubleSide,
             });
             specificMesh.material = material;
 
