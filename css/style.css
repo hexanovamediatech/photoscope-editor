@@ -4224,3 +4224,163 @@ h3.login-img-head-container {
 
 @media (min-width: 1920px) {
 }
+
+@media (max-width: 1024px) {
+  #gauci-right-col {
+    display: none;
+  }
+  .gauci-content-bar {
+    right: 570px;
+  }
+  #webg-buttons-container {
+    right: 20px;
+  }
+  .login-img-main-container {
+    display: none;
+  }
+  .gauci-logo-mini-cont {
+    padding: 10px 20px !important;
+  }
+  .login-content-container {
+    width: 100%;
+  }
+  .loginFormContainer {
+    flex-direction: column;
+  }
+  .login-popup-content {
+    width: 90vw;
+  }
+  .profile-data-cont-text {
+    display: none;
+  }
+  .main-cont-profile-data {
+    gap: 10px;
+  }
+  .gauci-canvas-footer-main-container {
+    right: 0px;
+  }
+
+  .personalise-page-content-box {
+    padding: 20px !important;
+    flex-direction: column;
+  }
+  .personalise-template-list-cont {
+    width: 100% !important;
+  }
+  .personalise-template-list-main-box {
+    display: flex !important;
+    flex-wrap: nowrap; /* Prevents wrapping to a new line */
+    gap: 15px; /* Adds space between the items */
+    overflow-x: auto; /* Enables horizontal scrolling */
+    scroll-behavior: smooth; /* Optional: for smooth scrolling effect */
+    /* background: #f1f1f1; */ /* Uncomment if needed */
+  }
+
+  .personalise-3d-view-cont {
+    height: calc(100% - 510px);
+  }
+
+  .personalise-button-main-cont {
+    width: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+  }
+  .personalise-main-btn-cont {
+    margin-top: 0px !important;
+  }
+  #personaliseImageDummyCont {
+    margin-top: 20px;
+  }
+  .popup-container {
+    margin: 0 !important;
+  }
+  .personalise-template-list-cont {
+    /* height: 100%; */
+  }
+
+  #personaliseImageDummyCont {
+    /* height: 100%; */
+  }
+  .personalise-btn-mini {
+    width: 100% !important;
+    font-size: 14px !important;
+    /* padding: 0px 20px; */
+  }
+  #personaliseImageUploadPopup {
+    position: absolute;
+    width: 90% !important;
+    height: 95%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #mobil-cross-btn {
+    display: block !important;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #ff5f5f;
+    font-size: 20px;
+    /* border: 1px solid red; */
+  }
+
+  .personalise-main-btn-cont {
+    width: 100%;
+  }
+  .mini-dummy-img-container {
+    width: 300px !important;
+    height: 300px !important;
+  }
+  .dummyImageCoverFit {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+    border-radius: 10px;
+  }
+  .popup-container {
+    margin: 20px 10px 20px 20px !important;
+  }
+}
+#mobil-cross-btn {
+  display: none;
+}
+/* @media (min-width: 500px) and (max-width: 1024px) {
+
+  .personalise-page-content-box {
+    padding: 20px !important;
+  }
+  .gauci-logo-mini-cont {
+    padding: 10px 20px !important;
+  }
+  .personalise-template-list-main-box {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+  .template-image-cont {
+    width: 100% !important;
+  }
+  .personalise-button-main-cont {
+    width: 25% !important;
+  }
+  .personalise-btn-mini {
+    width: 100% !important;
+  }
+} */
+@media (max-width: 500px) {
+  .mini-dummy-img-container {
+    width: 160px !important;
+    height: 160px !important;
+  }
+  .personalise-3d-view-cont {
+    height: calc(100% - 350px);
+  }
+  .popup-container {
+    margin: 10px 0 10px 10px !important;
+  }
+  .gauci-content-bar {
+    right: 200px;
+  }
+}
+@media (max-width: 1020px) {
+}
