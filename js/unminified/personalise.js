@@ -574,6 +574,14 @@ function loadJSONToCanvas(jsonData) {
     const miniEditorPopupImage = document.getElementById(
       "min-editor-popup-image"
     );
+    const miniEditordummyImage = document.getElementById(
+      "min-editor-dummy-image"
+    );
+    if (window.innerWidth < 1024) {
+      miniEditordummyImage.src = clipmaskImage.src;
+      miniEditordummyImage.style.width = "100%";
+      miniEditordummyImage.classList.add("dummyImageCoverFit");
+    }
 
     // const dummyImage = document.getElementById("min-editor-dummy-image");
 
@@ -790,10 +798,6 @@ function setNewImageSrc(imageSrc) {
 // Assuming the user selects an image via an input field
 function handleImageUploadAlternate(event) {
   if (activeItem) {
-    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    // // miniEditorAdjust.style.display = "none";
-    // miniEditorAdjust.classList.add("display-none-prop");
-    // miniEditorAdjust.classList.remove("display-block-prop");
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
     openModalBtn.style.visibility = "visible";
     const file = event.target.files[0];
@@ -821,114 +825,13 @@ document
   .addEventListener("change", handleImageUploadAlternate);
 // Replace image event listener
 
-// document
-//   .getElementById("personaliseClosePopupBtn")
-//   .addEventListener("click", () => {
-//     // Hide the popup
-//     document.getElementById("personaliseImageUploadPopup").style.display =
-//       "none";
-
-//     // Clear the file input field
-//     const textInput1 = document.getElementById("text-1");
-//     const textInput2 = document.getElementById("text-2");
-//   });
-// document.getElementById("miniE-text-done-Btn").addEventListener("click", () => {
-//   if (activeItem) {
-//     const miniEditorCont = document.getElementById("mini-editor-Cont");
-//     miniEditorImgContainerId.style.display = "flex";
-//     const miniEditorImgContainerId = document.getElementById(
-//       "mini-editor-img-container-id"
-//     );
-//     miniEditorCont.classList.add("display-none-prop");
-//     miniEditorCont.classList.remove("display-block-prop");
-//     if (newFabricCanvas) {
-//       newFabricCanvas.forEachObject((obj) => {
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-//       newFabricCanvas.renderAll();
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       window.editedCanvasJson = savedCanvasJSON;
-//       console.log(window.editedCanvasJson);
-
-//       const allObjects = newFabricCanvas.getObjects();
-
-//       // Save the first object (assuming it's the background image)
-//       const firstObject = allObjects[0];
-
-//       // Remove the first object from the canvas
-//       newFabricCanvas.remove(firstObject);
-
-//       // Render the canvas without the first object
-//       newFabricCanvas.renderAll();
-//       const originalWidth = newFabricCanvas.width;
-//       const originalHeight = newFabricCanvas.height;
-
-//       // Set the canvas dimensions to 1080x1080 for the export
-//       newFabricCanvas.setDimensions({
-//         width: 1080,
-//         height: 1080,
-//       });
-//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
-
-//       // Convert the remaining objects on the canvas to an image
-//       const format = "jpeg";
-//       const quality = 1;
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       newFabricCanvas.setDimensions({
-//         width: originalWidth,
-//         height: originalHeight,
-//       });
-//       newFabricCanvas.setZoom(1);
-//       fabricImageConverted = imgData;
-//       changeTexture(fabricImageConverted);
-
-//       // Add the first object back to its original position
-//       newFabricCanvas.insertAt(firstObject, 0);
-
-//       // Render the canvas to show all objects again
-//       newFabricCanvas.renderAll();
-//     }
-//   }
-//   // Clear the file input field
-// });
-
 // Event listener for the "Adjust" button click
 
 document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
-    // Display Canvas in popup
-    // const miniEditorImgContainerId = document.getElementById(
-    //   "mini-editor-img-container-id"
-    // );
-    // const miniEditorCont = document.getElementById("mini-editor-Cont");
-    // miniEditorCont.classList.remove("display-none-prop");
-    // miniEditorCont.classList.add("display-block-prop");
-    // miniEditorImgContainerId.style.display = "none";
-    // Display Done Button
-    // const miniEditorDone = document.getElementById("miniE-done-Btn");
-    // miniEditorDone.classList.remove("display-none-prop");
-    // miniEditorDone.classList.add("display-block-prop");
     const popupMiniCanvas = document.getElementById("popup-mini-canvas");
     popupMiniCanvas.style.display = "flex";
-    // // // Hide Adjust Button
-    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    // miniEditorAdjust.classList.add("display-none-prop");
-    // miniEditorAdjust.classList.remove("display-block-prop");
 
     if (newFabricCanvas) {
       // Set properties for the first object in the canvas
@@ -1031,27 +934,11 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
     }
 
     // Hide Done Button
-    // const miniEditorDone = document.getElementById("miniE-done-Btn");
-    // miniEditorDone.classList.add("display-none-prop");
-    // miniEditorDone.classList.remove("display-block-prop");
-
-    //Display Adjust Button
-
-    // const miniEditorAdjust = document.getElementById("miniE-adjust-Btn");
-    // miniEditorAdjust.classList.remove("display-none-prop");
-    // miniEditorAdjust.classList.add("display-block-prop");
 
     const popupMiniCanvas = document.getElementById("popup-mini-canvas");
     popupMiniCanvas.style.display = "none";
 
     // Hide Canvas in popup
-    // const miniEditorCont = document.getElementById("mini-editor-Cont");
-    // miniEditorCont.classList.add("display-none-prop");
-    // miniEditorCont.classList.remove("display-block-prop");
-    // const miniEditorImgContainerId = document.getElementById(
-    //   "mini-editor-img-container-id"
-    // );
-    // miniEditorImgContainerId.style.display = "flex";
   }
 });
 
@@ -1291,10 +1178,24 @@ initialize3DViewer();
             // miniEditorCont.classList.add("display-none-prop");
             // miniEditorCont.classList.remove("display-block-prop");
 
+            // const dummyCont = document.getElementById(
+            //   "personaliseImageDummyCont"
+            // );
+            // dummyCont.style.display = "block";
             const dummyCont = document.getElementById(
               "personaliseImageDummyCont"
             );
-            dummyCont.style.display = "block";
+
+            function updateDisplayStyle() {
+              if (window.innerWidth < 1024) {
+                dummyCont.style.display = "flex";
+              } else {
+                dummyCont.style.display = "block";
+              }
+            }
+
+            // Initial check
+            updateDisplayStyle();
             const realEditCont = document.getElementById(
               "personaliseImageUploadPopup"
             );
@@ -1317,6 +1218,26 @@ initialize3DViewer();
     hideSkeletonLoader();
   }
 })();
+
+document.getElementById("mobil-cross-btn").addEventListener("click", () => {
+  const popupMiniCanvas = document.getElementById(
+    "personaliseImageUploadPopup"
+  );
+
+  popupMiniCanvas.style.display = "none";
+  const dummyCont = document.getElementById("personaliseImageDummyCont");
+
+  function updateDisplayStyle() {
+    if (window.innerWidth < 1024) {
+      dummyCont.style.display = "flex";
+    } else {
+      dummyCont.style.display = "block";
+    }
+  }
+
+  // Initial check
+  updateDisplayStyle();
+});
 
 function openModal() {
   const modal = document.getElementById("mini-editor-save-modal-cont");
