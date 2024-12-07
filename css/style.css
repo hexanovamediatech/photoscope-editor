@@ -3854,7 +3854,7 @@ ul.gauci-elements-accor-shapes-container.gauci-accordion > li > a svg path {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 75vh;
+  height: 85vh;
   overflow-y: auto;
   width: 65vw;
   border-radius: 20px;
@@ -4227,10 +4227,17 @@ h3.login-img-head-container {
 
 @media (max-width: 1024px) {
   #gauci-right-col {
-    display: none;
+    display: block;
   }
   .gauci-content-bar {
-    right: 570px;
+    right: 550px !important;
+    background: none !important;
+    bottom: 0px;
+    border-radius: 40px !important;
+    padding-left: 15px;
+    border-right: 15px !important;
+    border-bottom: 15px !important;
+    padding-left: 0px !important;
   }
   #webg-buttons-container {
     right: 20px;
@@ -4342,7 +4349,14 @@ h3.login-img-head-container {
   .popup-container {
     margin: 20px 10px 20px 20px !important;
   }
+  /* .login-popup-content {
+    height: 95vh;
+  } */
+  /* .login-content-inner-container {
+    margin: 0px;
+  } */
 }
+
 #mobil-cross-btn {
   display: none;
 }
@@ -4379,7 +4393,26 @@ h3.login-img-head-container {
     margin: 10px 0 10px 10px !important;
   }
   .gauci-content-bar {
-    right: 200px;
+    right: 165px !important;
+    background: none !important;
+    bottom: 0px;
+    border-radius: 40px !important;
+    padding-left: 15px;
+    border-right: 15px !important;
+    border-bottom: 15px !important;
+    padding-left: 0px !important;
+  }
+  .gauci-canvas-footer-main-container {
+    right: -20px !important;
+  }
+  .sign-in-up-main-cont {
+    margin-top: 10px;
+  }
+  .loginFormContainer {
+    gap: 0px;
+  }
+  .login-input-form-container input {
+    margin-bottom: 5px;
   }
 }
 @media (max-width: 1020px) {

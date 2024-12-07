@@ -9759,6 +9759,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const token = response.headers.get("authorization");
         if (token) {
           localStorage.setItem("jwtToken", token);
+          localStorage.setItem("isLoggedIn", true);
           //   console.log("Login successful!");
           closeLoginPopup();
           await fetchUserRole();
@@ -9862,7 +9863,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <span class="close-button" id="closeSignupPopup">&times;</span>
               <div class="login-content-inner-container">
 
-                <div id="signupError" class="error-message" style="display: none;">
+                <div id="signupErrortwo" class="error-message" style="display: none;">
                 <span class="error-icon">&#x26A0;</span>
                 <span class="error-text"></span>
                 </div>
@@ -9979,7 +9980,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const email = document.getElementById("email").value;
     const username = document.getElementById("username").value;
     const password = document.getElementById("signupPassword").value;
-    const signupErrorElement = document.getElementById("signupError");
+    const signupErrorElement = document.getElementById("signupErrortwo");
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernamePattern = /^[a-zA-Z0-9]{4,20}$/;
@@ -10027,22 +10028,27 @@ document.addEventListener("DOMContentLoaded", function () {
         credentials: "include",
       });
 
-      if (response) {
+      if (response.ok) {
         // If signup is successful
         console.log("Signup successful!");
+        console.log(response);
         const token = response.headers.get("authorization");
         if (token) {
           closeSignupPopup();
           localStorage.setItem("email", email);
           localStorage.setItem("username", username);
           localStorage.setItem("fname", firstname);
+          localStorage.setItem("jwtToken", token);
+          localStorage.setItem("isLoggedIn", true);
 
           await fetchUserRole();
         }
       } else {
         // If signup fails (HTTP error status)
+        const errorResponse = await response.json();
+        console.log(errorResponse);
         const errorMessage =
-          responseData?.error || "Signup failed. Please try again.";
+          errorResponse?.error || "Signup failed. Please try again.";
         signupErrorElement.style.display = "flex";
         signupErrorElement.querySelector(".error-text").textContent =
           errorMessage;
@@ -10076,6 +10082,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response) {
           console.log("Logout successful");
           localStorage.removeItem("jwtToken");
+          // localStorage.removeItem("isLoggedIn");
+          localStorage.setItem("isLoggedIn", false);
           //   window.location.reload();
           // const isAdmin = data.role === "admin";
           showLoggedOutUI();
