@@ -4349,12 +4349,12 @@ h3.login-img-head-container {
   .popup-container {
     margin: 20px 10px 20px 20px !important;
   }
-  /* .login-popup-content {
-    height: 95vh;
-  } */
-  /* .login-content-inner-container {
-    margin: 0px;
-  } */
+  .personalise-template-list-main-box {
+    padding: 10px !important;
+  }
+  #personaliseImageDummyCont {
+    margin-top: 0px;
+  }
 }
 
 #mobil-cross-btn {

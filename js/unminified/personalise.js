@@ -69,6 +69,10 @@ async function fetchModelData() {
     const productNameTag = document.querySelector(
       ".personalise-product-name-text"
     );
+
+    const productDescription = document.querySelector(
+      ".personalise-product-desc-text"
+    );
     if (productNameTag) {
       productNameTag.textContent = modelName; // Update the product name
     }
@@ -81,6 +85,7 @@ async function fetchModelData() {
       console.log(linkedMeshImageData);
       window.layoutSource = linkedMeshImageData.layoutUrl;
       selectedMesh = linkedMeshImageData.meshName;
+      productDescription.textContent = product.description;
     } else {
       console.error("Model not found for the specified name.");
     }
@@ -996,7 +1001,7 @@ initialize3DViewer();
         for (let i = 0; i < dummyTemplateCount; i++) {
           const dummyTemplate = {
             name: `Template ${i + 1}`,
-            imageUrl: "../../assets/custom/temp_img.png",
+            imageUrl: "../../assets/custom/temp-img-2.jpg",
             key: `dummy-template-${i + 1}`,
             isPublic: true,
             src: "path/to/dummy/template.json",
@@ -1134,6 +1139,13 @@ initialize3DViewer();
               });
             }
           });
+        }
+        if (item.isDummy) {
+          const overlay = document.createElement("img");
+          overlay.classList.add("template-overlay-icon");
+          overlay.id = "templateOverLay";
+          overlay.src = "../../assets/custom/overlay-temp.png";
+          mainDiv.appendChild(overlay);
         }
 
         mainDiv.addEventListener("click", async () => {
