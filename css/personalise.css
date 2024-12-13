@@ -43,6 +43,7 @@
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   background: #f1f1f1;
+  border-radius: 8px;
 }
 .personalise-template-list-cont::-webkit-scrollbar {
   display: none; /* Chrome, Safari, and Opera */
@@ -52,6 +53,8 @@
   grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
   gap: 15px; /* Optional: Adds space between the grid items */
   /* background: #f1f1f1; */
+  padding: 20px;
+  border-radius: 10px;
 }
 .personalise-3d-view-cont {
   width: 100%;
@@ -70,7 +73,8 @@
 }
 .personalise-product-desc-cont {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  /* align-items: center; */
   justify-content: center;
 }
 .personalise-product-desc-cont p {
@@ -101,7 +105,7 @@
 .template-image-cont {
   position: relative;
   /* width: 100%; */
-  width: 102px;
+  width: 92px;
   height: 102px;
   height: auto;
   overflow: hidden;
@@ -152,7 +156,7 @@
 .mini-edit-3d-cont {
   border-radius: 8px;
   width: 100%;
-  height: calc(100% - 40px);
+  height: calc(100% - 68px);
   position: relative;
   /* border: 1px solid red; */
   /* height: 70%; */
@@ -611,6 +615,14 @@
   height: 20px !important;
 }
 
+.template-overlay-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 40px !important;
+  /* height: 20px !important; */
+}
+
 /* The Modal (background) */
 .mini-editor-modal-box {
   display: none;
@@ -693,7 +705,7 @@
 }
 
 p.personalise-product-desc-text {
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 
 .mini-editor-popup-image {
@@ -980,8 +992,8 @@ button#personaliseAdjustBtn img {
     width: calc(100% - 500px);
   }
   .template-image-cont {
-    width: 112px;
-    height: 112px;
+    width: 92px;
+    height: 92px;
     border-radius: 8px;
   }
 
@@ -1023,7 +1035,9 @@ button#personaliseAdjustBtn img {
     right: 10px;
     bottom: 10px;
   }
-
+  .template-overlay-icon {
+    width: 45px !important;
+  }
   .personalise-main-btn-cont {
     margin-top: 20px;
   }
@@ -1060,13 +1074,13 @@ button#personaliseAdjustBtn img {
     width: calc(100% - 600px);
   }
   .template-image-cont {
-    width: 146px;
-    height: 146px;
+    width: 126px;
+    height: 126px;
     border-radius: 8px;
   }
   .skeleton-box {
-    width: 146px;
-    height: 146px;
+    width: 126px;
+    height: 126px;
   }
   .personalise-btn-mini {
     width: 250px;
@@ -1099,6 +1113,9 @@ button#personaliseAdjustBtn img {
   .template-fav-icon {
     right: 25px;
     /* bottom: 20px; */
+  }
+  .template-overlay-icon {
+    width: 70px !important;
   }
   .personalise-main-btn-cont {
     margin-top: 40px;
@@ -1138,13 +1155,13 @@ button#personaliseAdjustBtn img {
     width: calc(100% - 700px);
   }
   .template-image-cont {
-    width: 163px;
-    height: 163px;
+    width: 143px;
+    height: 143px;
     border-radius: 8px;
   }
   .skeleton-box {
-    width: 163px;
-    height: 163px;
+    width: 143px;
+    height: 143px;
   }
   .gauci-logo-mini-cont {
     padding: 10px 100px;
@@ -1164,6 +1181,10 @@ button#personaliseAdjustBtn img {
   .template-fav-icon {
     right: 15px;
     /* bottom: 20px; */
+  }
+
+  .template-overlay-icon {
+    width: 80px !important;
   }
   .personalise-input-buttom-cont {
     max-height: 650px !important;
@@ -1272,4 +1293,45 @@ div#personaliseDoneBtn img {
 }
 #personaliseAdjustBtn {
   cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .template-name-tag {
+    font-size: 10px;
+  }
+  .personalise-main-btn-cont {
+    margin-right: 10px;
+  }
+  .personalise-product-name-text {
+    font-size: 24px !important;
+  }
+
+  .personalise-page-content-box {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .popup-mini-canvas-content {
+    width: 320px;
+    height: 570px;
+    padding: 15px;
+  }
+  #personaliseCanvasWrap {
+    width: 100%;
+    overflow-x: scroll; /* Enable vertical scrolling */
+    /* scrollbar-gutter: stable; */
+    height: 470px;
+  }
+  .overlay-content-each-box img {
+    width: 20px;
+    height: 20px;
+  }
+  .overlay-content-each-box p {
+    font-size: 10px;
+  }
+  .close-button-mini-canvas {
+    right: 5px;
+    top: -5px;
+  }
 }
