@@ -4387,7 +4387,8 @@ h3.login-img-head-container {
     height: 160px !important;
   }
   .personalise-3d-view-cont {
-    height: calc(100% - 350px);
+    height: calc(100% - 370px);
+    gap: 10px !important;
   }
   .popup-container {
     margin: 10px 0 10px 10px !important;
@@ -4413,6 +4414,43 @@ h3.login-img-head-container {
   }
   .login-input-form-container input {
     margin-bottom: 5px;
+  }
+  .input-field {
+    padding: 10px;
+    font-size: 12px;
+  }
+  .toggle-password {
+    top: 56%;
+  }
+  .google-login-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin: 10px 0;
+  }
+  .sign-up-signin-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+  .sign-up-main-text {
+    font-size: 12px;
+  }
+  .login-input-form-container label {
+    font-size: 14px;
+  }
+  .login-content-inner-container h3 {
+    font-size: 24px;
+  }
+  .mini-edit-3d-cont {
+    height: calc(100% - 58px) !important;
+  }
+  .google-login-button img {
+    width: 15px;
+  }
+
+  .mini-editor-modal-content {
+    width: 330px !important;
+    padding: 10px !important;
+    margin: 25% auto !important;
   }
 }
 @media (max-width: 1020px) {
