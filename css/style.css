@@ -4446,6 +4446,12 @@ h3.login-img-head-container {
   .google-login-button img {
     width: 15px;
   }
+
+  .mini-editor-modal-content {
+    width: 330px !important;
+    padding: 10px !important;
+    margin: 25% auto !important;
+  }
 }
 @media (max-width: 1020px) {
 }
