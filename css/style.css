@@ -272,7 +272,8 @@ textarea {
   position: relative;
   height: 100vh;
   margin: 0;
-  padding: 80px 200px 80px 415px;
+  /* padding: 80px 200px 80px 415px; */
+  padding: 70px 200px 80px 415px;
 }
 
 body.panel-closed #gauci-body {
@@ -2803,7 +2804,8 @@ ul.gauci-accordion > li > a > .data-count {
 .td-interactive-btn-container-main-contianer {
   position: fixed;
   right: 210px;
-  top: 95px;
+  top: 85px;
+  /* top: 145px; */
   z-index: 50;
 }
 

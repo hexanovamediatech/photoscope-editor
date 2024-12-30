@@ -3512,6 +3512,7 @@
         axis: "y",
         update: function (e, ui) {
           var objects = canvas.getObjects();
+          console.log(objects, "Objects data");
           $("#gauci-layers li").each(function (index, value) {
             $(this).attr("data-sort", index + 1);
             objects
@@ -5510,15 +5511,30 @@
         });
     });
     /* Get Scaled Size */
+    // function getScaledSize() {
+    //   var width = canvas.backgroundImage.getScaledHeight();
+    //   var height = canvas.backgroundImage.getScaledWidth();
+    //   if (rotate == 0 || rotate == 180 || rotate == -180) {
+    //     width = canvas.backgroundImage.getScaledWidth();
+    //     height = canvas.backgroundImage.getScaledHeight();
+    //   }
+    //   return [width, height];
+    // }
     function getScaledSize() {
-      var width = canvas.backgroundImage.getScaledHeight();
-      var height = canvas.backgroundImage.getScaledWidth();
-      if (rotate == 0 || rotate == 180 || rotate == -180) {
+      if (!canvas.backgroundImage) {
+        console.error("No background image found.");
+        return [2048, 2048]; // Return default values to avoid further errors
+      }
+
+      let width = canvas.backgroundImage.getScaledHeight();
+      let height = canvas.backgroundImage.getScaledWidth();
+      if (rotate === 0 || rotate === 180 || rotate === -180) {
         width = canvas.backgroundImage.getScaledWidth();
         height = canvas.backgroundImage.getScaledHeight();
       }
       return [width, height];
     }
+
     /* Add Text */
     selector.find("#gauci-add-text").on("click", function () {
       var text = new fabric.Textbox(gauciParams.textbox, {
@@ -6516,22 +6532,249 @@
     });
     /** Adding layout */
 
-    $(document).ready(function () {
-      setTimeout(function () {
-        AddingImage();
-        console.log("image is adding");
-      }, 400);
-    });
+    // $(document).ready(function () {
+    //   setTimeout(function () {
+    //     AddingImage();
+    //     console.log("image is adding");
+    //   }, 400);
+    // });
 
-    var preservedImage;
-    var layoutSource = null; // Renamed from imgUrl
-    let linkedMeshImageData = null;
+    // var preservedImage;
+    // var layoutSource = null; // Renamed from imgUrl
 
-    // Fetch image data from the API
+    // // Fetch image data from the API
+    // async function fetchImageData() {
+    //   try {
+    //     // const response = await fetch(`${baseUrl}/api/v1/product/all`);
+    //     // const data = await response.json();
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const productId = urlParams.get("id");
+    //     const response = await fetch(
+    //       `${baseUrl}/api/v1/product/get/${productId}`
+    //     );
+    //     const data = await response.json();
+    //     console.log(data);
+    //     const product = data.product;
+
+    //     if (product && product.linkedMeshImageData) {
+    //       const linkedMeshImageData = product.linkedMeshImageData;
+
+    //       // Get the tab container
+    //       const tabContainer = document.querySelector(".gauci-tab-cont");
+
+    //       // Clear any existing tabs (optional, if necessary)
+    //       tabContainer.innerHTML = "";
+
+    //       // Loop through the array to create tabs
+    //       linkedMeshImageData.forEach((meshData, index) => {
+    //         const tabDiv = document.createElement("div");
+    //         const tabContent = document.createElement("div");
+
+    //         tabContent.classList.add("gauci-open-page");
+    //         tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+
+    //         tabDiv.appendChild(tabContent);
+
+    //         // Set the first tab as active by default
+    //         if (index === 0) {
+    //           tabDiv.classList.add("active");
+    //           layoutSource = meshData.layoutUrl; // Set the initial layoutSource
+    //           console.log("Initial layoutSource:", layoutSource);
+    //         }
+
+    //         // Add click event listener for each tab
+    //         tabDiv.addEventListener("click", () => {
+    //           // Remove "active" class from all tabs
+    //           const allTabs = tabContainer.querySelectorAll("div");
+    //           allTabs.forEach((t) => t.classList.remove("active"));
+
+    //           // Add "active" class to the clicked tab
+    //           tabDiv.classList.add("active");
+
+    //           // Update layoutSource dynamically
+    //           layoutSource = meshData.layoutUrl;
+    //           console.log("Updated layoutSource:", layoutSource);
+    //         });
+
+    //         tabContainer.appendChild(tabDiv);
+    //       });
+
+    //       console.log("Tabs created successfully.");
+    //     } else {
+    //       console.error("No linkedMeshImageData found in the product.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching image data:", error);
+    //   }
+    // }
+
+    // async function AddingImage() {
+    //   console.log("adding image");
+
+    //   // Fetch image data first
+    //   await fetchImageData();
+
+    //   // Proceed only if layoutSource is available
+    //   if (layoutSource) {
+    //     console.log("png image filepath ", layoutSource);
+
+    //     // Delay the execution by 2 seconds (2000 milliseconds)
+    //     setTimeout(() => {
+    //       fabric.Image.fromURL(layoutSource, function (img) {
+    //         img.set({
+    //           selectable: false,
+    //           evented: false,
+    //           hasControls: false,
+    //           customId: "layoutImage",
+    //           isPreservedObject: true,
+    //         });
+
+    //         // Apply specific scaling if name is 'p3-type1'
+    //         const urlParams = new URLSearchParams(window.location.search);
+    //         const name = urlParams.get("name");
+    //         if (name === "p3-type1") {
+    //           img.scaleX = 2;
+    //           img.scaleY = 2;
+    //         }
+
+    //         preservedImage = img;
+    //         canvas.add(img);
+    //         canvas.renderAll();
+    //         onlyDeleteLayerEvent(img.id);
+    //       });
+    //     }, 1000); // 2 seconds delay
+    //   } else {
+    //     console.error("No layout source found. Image loading skipped.");
+    //   }
+    // }
+    // var preservedImage = null; // Declare preservedImage at the top
+    // var layoutSource = null; // Renamed from imgUrl
+    // async function fetchImageData() {
+    //   try {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const productId = urlParams.get("id");
+    //     const response = await fetch(
+    //       `${baseUrl}/api/v1/product/get/${productId}`
+    //     );
+    //     const data = await response.json();
+    //     console.log(data);
+    //     const product = data.product;
+
+    //     if (product && product.linkedMeshImageData) {
+    //       const linkedMeshImageData = product.linkedMeshImageData;
+
+    //       // Get the tab container
+    //       const tabContainer = document.querySelector(".gauci-tab-cont");
+
+    //       // Clear any existing tabs (optional, if necessary)
+    //       tabContainer.innerHTML = "";
+
+    //       // Loop through the array to create tabs
+    //       linkedMeshImageData.forEach((meshData, index) => {
+    //         const tabDiv = document.createElement("div");
+    //         const tabContent = document.createElement("div");
+
+    //         tabContent.classList.add("gauci-open-page");
+    //         tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+
+    //         tabDiv.appendChild(tabContent);
+
+    //         // Set the first tab as active by default
+    //         if (index === 0) {
+    //           tabDiv.classList.add("active");
+    //           layoutSource = meshData.layoutUrl; // Set the initial layoutSource
+    //           console.log("Initial layoutSource:", layoutSource);
+    //           AddingImage(); // Add the first image by default
+    //         }
+
+    //         // Add click event listener for each tab
+    //         tabDiv.addEventListener("click", () => {
+    //           // Remove "active" class from all tabs
+    //           const allTabs = tabContainer.querySelectorAll("div");
+    //           allTabs.forEach((t) => t.classList.remove("active"));
+
+    //           // Add "active" class to the clicked tab
+    //           tabDiv.classList.add("active");
+
+    //           // Update layoutSource dynamically
+    //           layoutSource = meshData.layoutUrl;
+    //           // console.log("Updated layoutSource:", layoutSource);
+
+    //           // Re-add the updated image
+    //           AddingImage();
+    //         });
+
+    //         tabContainer.appendChild(tabDiv);
+    //       });
+
+    //       console.log("Tabs created successfully.");
+    //     } else {
+    //       console.error("No linkedMeshImageData found in the product.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching image data:", error);
+    //   }
+    // }
+
+    // async function AddingImage() {
+    //   // console.log("Adding image");
+
+    //   // Ensure layoutSource is available
+    //   if (layoutSource) {
+    //     // console.log("PNG image filepath:", layoutSource);
+
+    //     // Remove the previous image from the canvas
+    //     if (preservedImage) {
+    //       canvas.remove(preservedImage);
+    //     }
+
+    //     // Delay the execution to allow layoutSource to be fully updated
+    //     setTimeout(() => {
+    //       fabric.Image.fromURL(layoutSource, function (img) {
+    //         img.set({
+    //           selectable: false,
+    //           evented: false,
+    //           hasControls: false,
+    //           customId: "layoutImage",
+    //           isPreservedObject: true,
+    //         });
+
+    //         // Apply specific scaling if name is 'p3-type1'
+    //         const urlParams = new URLSearchParams(window.location.search);
+    //         const name = urlParams.get("name");
+    //         if (name === "p3-type1") {
+    //           img.scaleX = 2;
+    //           img.scaleY = 2;
+    //         }
+
+    //         preservedImage = img;
+    //         canvas.add(img);
+    //         canvas.renderAll();
+    //         onlyDeleteLayerEvent(img.id);
+    //       });
+    //     }, 100); // Optional delay for smoother user experience
+    //   } else {
+    //     console.error("No layout source found. Image loading skipped.");
+    //   }
+    // }
+
+    // // On document ready, fetch image data
+    // $(document).ready(function () {
+    //   setTimeout(function () {
+    //     fetchImageData();
+    //     console.log("Fetching image data and setting tabs.");
+    //   }, 400);
+    // });
+
+    const tabCanvasStates = {}; // To store canvas JSON state for each tab
+    let activeTabId = null; // To track the currently active tab
+    let preservedImage = null; // To manage the layout image
+    let layoutSource = null; // URL of the current layout image
+    let allCanvasTabState = {};
+
+    // Function to fetch image data and set up tabs
     async function fetchImageData() {
       try {
-        // const response = await fetch(`${baseUrl}/api/v1/product/all`);
-        // const data = await response.json();
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get("id");
         const response = await fetch(
@@ -6539,37 +6782,84 @@
         );
         const data = await response.json();
         console.log(data);
-        const product = data.product;
-        // Get the 'name' query parameter from the URL
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const name = urlParams.get("name");
-        // console.log("name from query param is", name);
 
-        // Find the image URL based on the product name
-        // const product = data.products.find((item) => item.name === name);
-        if (product && product.modelUrl) {
-          linkedMeshImageData = product.linkedMeshImageData[0];
-          layoutSource = linkedMeshImageData.layoutUrl; // Set the image URL dynamically
-          console.log("Image URL from API: ", layoutSource);
+        const product = data.product;
+
+        if (product && product.linkedMeshImageData) {
+          const linkedMeshImageData = product.linkedMeshImageData;
+
+          // Get the tab container
+          const tabContainer = document.querySelector(".gauci-tab-cont");
+
+          // Clear any existing tabs (optional, if necessary)
+          tabContainer.innerHTML = "";
+
+          // Loop through the array to create tabs
+          linkedMeshImageData.forEach((meshData, index) => {
+            const tabDiv = document.createElement("div");
+            const tabContent = document.createElement("div");
+
+            tabContent.classList.add("gauci-open-page");
+            tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+            tabDiv.appendChild(tabContent);
+
+            // Generate a unique ID for the tab
+            const tabId = meshData.meshName || `tab-${index}`;
+
+            // Initialize the state for each tab
+            if (index === 0) {
+              // Set the first tab as active
+              tabDiv.classList.add("active");
+              activeTabId = tabId;
+              tabCanvasStates[tabId] = null; // Initialize with an empty state
+              layoutSource = meshData.layoutUrl; // Set the initial layoutSource
+              AddingImage(); // Add the first image by default
+            }
+
+            // Add click event listener for each tab
+            tabDiv.addEventListener("click", () => {
+              const previousTabId = activeTabId;
+
+              // Save the current tab's canvas state
+              saveCanvasState(previousTabId);
+
+              // Switch to the new tab
+              activeTabId = tabId;
+
+              // Clear the existing canvas
+              canvas.clear();
+
+              // Load the new tab's canvas state
+              loadCanvasState(tabId);
+
+              // Update layoutSource dynamically for the new tab
+              layoutSource = meshData.layoutUrl;
+
+              // Update the tab's "active" class
+              const allTabs = tabContainer.querySelectorAll("div");
+              allTabs.forEach((t) => t.classList.remove("active"));
+              tabDiv.classList.add("active");
+            });
+
+            tabContainer.appendChild(tabDiv);
+          });
+
+          console.log("Tabs created successfully.");
         } else {
-          console.error("Image not found for the specified name.");
+          console.error("No linkedMeshImageData found in the product.");
         }
       } catch (error) {
         console.error("Error fetching image data:", error);
       }
     }
 
+    // Function to add the layout image to the canvas
     async function AddingImage() {
-      console.log("adding image");
-
-      // Fetch image data first
-      await fetchImageData();
-
-      // Proceed only if layoutSource is available
       if (layoutSource) {
-        console.log("png image filepath ", layoutSource);
+        if (preservedImage) {
+          canvas.remove(preservedImage);
+        }
 
-        // Delay the execution by 2 seconds (2000 milliseconds)
         setTimeout(() => {
           fabric.Image.fromURL(layoutSource, function (img) {
             img.set({
@@ -6580,7 +6870,7 @@
               isPreservedObject: true,
             });
 
-            // Apply specific scaling if name is 'p3-type1'
+            // Apply specific scaling if necessary
             const urlParams = new URLSearchParams(window.location.search);
             const name = urlParams.get("name");
             if (name === "p3-type1") {
@@ -6591,13 +6881,76 @@
             preservedImage = img;
             canvas.add(img);
             canvas.renderAll();
-            onlyDeleteLayerEvent(img.id);
           });
-        }, 1000); // 2 seconds delay
+        }, 100); // Optional delay for smoother user experience
       } else {
         console.error("No layout source found. Image loading skipped.");
       }
     }
+
+    // Save the canvas state for a given tab
+    function saveCanvasState(tabId) {
+      if (tabId !== null && canvas) {
+        const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+        tabCanvasStates[tabId] = state; // Store the state
+        allCanvasTabState = tabCanvasStates;
+        console.log(allCanvasTabState);
+        console.log(`Saved canvas state for Tab ${tabId}`);
+      }
+    }
+
+    function loadCanvasState(tabId) {
+      if (tabCanvasStates[tabId]) {
+        canvas.loadFromJSON(tabCanvasStates[tabId], () => {
+          // Render all objects on the canvas
+          canvas.renderAll();
+          console.log(canvas.toJSON());
+          const allObjects = canvas.getObjects();
+          console.log(allObjects, "All Canvas Objects");
+          // Ensure the background image has the desired properties after loading
+          if (canvas) {
+            const objects = canvas.getObjects();
+            // console.log(objects);
+            const targetObject = objects.find(
+              (obj) => obj.type === "image" && obj.src.startsWith("http")
+            );
+            console.log(targetObject);
+            if (targetObject) {
+              // Set properties for the found object
+              targetObject.set({
+                selectable: false,
+                evented: false,
+                hasControls: false,
+              });
+            }
+            const targetMaskObject = objects.find(
+              (obj) => obj.type === "image" && !obj.src.startsWith("http")
+            );
+            storedActiveObject = targetMaskObject;
+            storedClipPath = targetMaskObject.clipPath;
+            syncClipPathWithImage(targetMaskObject.clipPath, targetMaskObject);
+            handleMaskingDone();
+
+            canvas.renderAll();
+          }
+
+          console.log(`Loaded canvas state for Tab ${tabId}`);
+          console.log(activeTabId);
+          console.log(tabCanvasStates);
+        });
+      } else {
+        AddingImage(); // Load the default layout image for the tab
+        console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
+      }
+    }
+
+    // On document ready, fetch image data
+    $(document).ready(function () {
+      setTimeout(function () {
+        fetchImageData();
+        console.log("Fetching image data and setting tabs.");
+      }, 400);
+    });
 
     /*Toggel Border Tools*/
 
@@ -7245,6 +7598,7 @@
     let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
+      console.log(activeObject, "Active object of mask");
       clipPath.set({
         originX: activeObject.originX,
         originY: activeObject.originY,
@@ -7256,45 +7610,46 @@
       canvas.renderAll();
     }
 
+    function handleMaskingDone() {
+      canvas.remove(shell);
+      onlyDeleteLayerEvent(shell.id);
+
+      canvas.requestRenderAll();
+      console.log("value is ", clipPathOffset.top, clipPathOffset.left);
+
+      if (storedActiveObject && storedClipPath) {
+        relativeTop = storedClipPath.top - storedActiveObject.top;
+        relativeLeft = storedClipPath.left - storedActiveObject.left;
+
+        // Attach the event handlers to start syncing the clipPath with the image
+        storedActiveObject.on("moving", () =>
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
+        );
+        storedActiveObject.on("rotating", () =>
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
+        );
+        storedActiveObject.on("scaling", () =>
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
+        );
+
+        // Optionally, hide the "done" button after syncing starts
+        document.getElementById("done-masking-img").style.display = "none";
+        document.getElementById("replace-image-btn").style.display = "none";
+        // document.getElementById("edit-masking-button").style.display =
+        //   "block";
+        canvas.on("selection:cleared", function () {
+          document.getElementById("edit-masking-button").style.display = "none";
+        });
+      } else {
+        alert(
+          "No active object found for syncing. Please add a clip mask first."
+        );
+      }
+    }
+
     document
       .getElementById("done-masking-img")
-      .addEventListener("click", function () {
-        canvas.remove(shell);
-        onlyDeleteLayerEvent(shell.id);
-
-        canvas.requestRenderAll();
-        console.log("value is ", clipPathOffset.top, clipPathOffset.left);
-
-        if (storedActiveObject && storedClipPath) {
-          relativeTop = storedClipPath.top - storedActiveObject.top;
-          relativeLeft = storedClipPath.left - storedActiveObject.left;
-
-          // Attach the event handlers to start syncing the clipPath with the image
-          storedActiveObject.on("moving", () =>
-            syncClipPathWithImage(storedClipPath, storedActiveObject)
-          );
-          storedActiveObject.on("rotating", () =>
-            syncClipPathWithImage(storedClipPath, storedActiveObject)
-          );
-          storedActiveObject.on("scaling", () =>
-            syncClipPathWithImage(storedClipPath, storedActiveObject)
-          );
-
-          // Optionally, hide the "done" button after syncing starts
-          document.getElementById("done-masking-img").style.display = "none";
-          document.getElementById("replace-image-btn").style.display = "none";
-          // document.getElementById("edit-masking-button").style.display =
-          //   "block";
-          canvas.on("selection:cleared", function () {
-            document.getElementById("edit-masking-button").style.display =
-              "none";
-          });
-        } else {
-          alert(
-            "No active object found for syncing. Please add a clip mask first."
-          );
-        }
-      });
+      .addEventListener("click", handleMaskingDone);
 
     function applyTemplateClipMask(clipmaskObject) {
       //   console.log('Attempting to remove the object:', clipObject);
