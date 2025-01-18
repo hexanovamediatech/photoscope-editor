@@ -3279,12 +3279,138 @@
         }
       }
     });
+    // canvas.on("object:added", function (e) {
+    //   console.log(canvas.getObjects());
+    //   var obj = e.target;
+    //   console.log(obj, "Layers checking");
+    //   if (
+    //     obj.objectType != "clipPath" &&
+    //     obj.objectType != "drawing" &&
+    //     obj.objectType != "watermark"
+    //   ) {
+    //     if (canvas.isDrawingMode === true) {
+    //       obj.set("objectType", "drawing");
+    //       obj.set("selectable", false);
+    //       obj.set("lockMovementX", true);
+    //       obj.set("lockMovementY", true);
+    //       obj.set("lockRotation", true);
+    //     } else {
+    //       var order = canvas.getObjects().indexOf(obj);
+    //       var output = "";
+    //       var layerName = "Object";
+    //       var layerIcon = "category";
+    //       var visibility = "layer-visible";
+    //       var visibilityTag = "visibility";
+    //       var lock = "layer-unlocked";
+    //       var lockTag = "lock_open";
+    //       if (obj.visible == false) {
+    //         visibility = "layer-hidden";
+    //         visibilityTag = "visibility_off";
+    //       }
+    //       if (obj.selectable == false) {
+    //         lock = "layer-locked";
+    //         lockTag = "lock";
+    //       }
+    //       obj.set("id", new Date().getTime());
+    //       selector.find("#gauci-layers > li").removeClass("active");
+    //       if (obj.objectType == "textbox") {
+    //         layerName = obj.text;
+    //         layerIcon = "title";
+    //       } else if (obj.objectType == "drawing") {
+    //         layerName = gauciParams.freeDrawing;
+    //         layerIcon = "brush";
+    //       } else if (obj.objectType == "frame") {
+    //         layerName = gauciParams.frame;
+    //         layerIcon = "wallpaper";
+    //       } else if (obj.objectType == "image") {
+    //         layerName = gauciParams.image;
+    //         layerIcon = "image";
+    //       } else if (obj.objectType == "circle") {
+    //         layerName = gauciParams.circle;
+    //       } else if (obj.objectType == "square") {
+    //         layerName = gauciParams.square;
+    //       } else if (obj.objectType == "rectangle") {
+    //         layerName = gauciParams.rectangle;
+    //       } else if (obj.objectType == "triangle") {
+    //         layerName = gauciParams.triangle;
+    //       } else if (obj.objectType == "ellipse") {
+    //         layerName = gauciParams.ellipse;
+    //       } else if (obj.objectType == "trapezoid") {
+    //         layerName = gauciParams.trapezoid;
+    //       } else if (obj.objectType == "pentagon") {
+    //         layerName = gauciParams.pentagon;
+    //       } else if (obj.objectType == "octagon") {
+    //         layerName = gauciParams.octagon;
+    //       } else if (obj.objectType == "emerald") {
+    //         layerName = gauciParams.emerald;
+    //       } else if (obj.objectType == "star") {
+    //         layerName = gauciParams.star;
+    //       } else if (obj.objectType == "element") {
+    //         layerName = gauciParams.element;
+    //         layerIcon = "star";
+    //       } else if (obj.objectType == "customSVG") {
+    //         layerName = gauciParams.customSvg;
+    //       } else if (obj.objectType == "qrCode") {
+    //         layerName = gauciParams.qrCode;
+    //         layerIcon = "qr_code";
+    //       }
+    //       if ("layerName" in obj) {
+    //         layerName = obj.layerName;
+    //       }
+    //       output =
+    //         '<li id="' +
+    //         obj.id +
+    //         '" data-type="' +
+    //         obj.objectType +
+    //         '" class="layer-' +
+    //         obj.objectType +
+    //         ' active" data-sort="' +
+    //         order +
+    //         '"><span class="material-icons">' +
+    //         layerIcon +
+    //         '</span><input class="layer-name" autocomplete="off" value="' +
+    //         layerName +
+    //         '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
+    //         lock +
+    //         '" title="' +
+    //         gauciParams.lockunlock +
+    //         '">' +
+    //         lockTag +
+    //         '</a><a class="material-icons text-success duplicate-layer" title="' +
+    //         gauciParams.duplicate +
+    //         '">content_copy</a><a class="material-icons layer-visibility ' +
+    //         visibility +
+    //         '" title="' +
+    //         gauciParams.showhide +
+    //         '">' +
+    //         visibilityTag +
+    //         '</a><a class="material-icons text-danger delete-layer" title="' +
+    //         gauciParams.delete +
+    //         '">clear</a></div></li>';
+    //       selector.find("#gauci-layers").prepend(output);
+
+    //       deleteLayerEvent(obj.id);
+    //       cloneLayerEvent(obj.id);
+    //       visibilityLayerEvent(obj.id);
+    //       lockLayerEvent(obj.id);
+    //       clickLayerEvent(obj.id);
+    //       layerNameEvent(obj.id);
+    //       selector.find("#gauci-layers").sortable("refresh");
+    //       checkLayers();
+    //       addDeleteIcon(obj);
+    //       addCloneIcon(obj);
+    //     }
+    //   }
+    // });
     canvas.on("object:added", function (e) {
-      var obj = e.target;
+      console.log(canvas.getObjects());
+      const obj = e.target;
+      // console.log(obj, "Layers checking");
+
       if (
-        obj.objectType != "clipPath" &&
-        obj.objectType != "drawing" &&
-        obj.objectType != "watermark"
+        obj.objectType !== "clipPath" &&
+        obj.objectType !== "drawing" &&
+        obj.objectType !== "watermark"
       ) {
         if (canvas.isDrawingMode === true) {
           obj.set("objectType", "drawing");
@@ -3292,113 +3418,146 @@
           obj.set("lockMovementX", true);
           obj.set("lockMovementY", true);
           obj.set("lockRotation", true);
+          console.log("object is not active");
         } else {
-          var order = canvas.getObjects().indexOf(obj);
-          var output = "";
-          var layerName = "Object";
-          var layerIcon = "category";
-          var visibility = "layer-visible";
-          var visibilityTag = "visibility";
-          var lock = "layer-unlocked";
-          var lockTag = "lock_open";
-          if (obj.visible == false) {
-            visibility = "layer-hidden";
-            visibilityTag = "visibility_off";
-          }
-          if (obj.selectable == false) {
-            lock = "layer-locked";
-            lockTag = "lock";
-          }
-          obj.set("id", new Date().getTime());
-          selector.find("#gauci-layers > li").removeClass("active");
-          if (obj.objectType == "textbox") {
-            layerName = obj.text;
-            layerIcon = "title";
-          } else if (obj.objectType == "drawing") {
-            layerName = gauciParams.freeDrawing;
-            layerIcon = "brush";
-          } else if (obj.objectType == "frame") {
-            layerName = gauciParams.frame;
-            layerIcon = "wallpaper";
-          } else if (obj.objectType == "image") {
-            layerName = gauciParams.image;
-            layerIcon = "image";
-          } else if (obj.objectType == "circle") {
-            layerName = gauciParams.circle;
-          } else if (obj.objectType == "square") {
-            layerName = gauciParams.square;
-          } else if (obj.objectType == "rectangle") {
-            layerName = gauciParams.rectangle;
-          } else if (obj.objectType == "triangle") {
-            layerName = gauciParams.triangle;
-          } else if (obj.objectType == "ellipse") {
-            layerName = gauciParams.ellipse;
-          } else if (obj.objectType == "trapezoid") {
-            layerName = gauciParams.trapezoid;
-          } else if (obj.objectType == "pentagon") {
-            layerName = gauciParams.pentagon;
-          } else if (obj.objectType == "octagon") {
-            layerName = gauciParams.octagon;
-          } else if (obj.objectType == "emerald") {
-            layerName = gauciParams.emerald;
-          } else if (obj.objectType == "star") {
-            layerName = gauciParams.star;
-          } else if (obj.objectType == "element") {
-            layerName = gauciParams.element;
-            layerIcon = "star";
-          } else if (obj.objectType == "customSVG") {
-            layerName = gauciParams.customSvg;
-          } else if (obj.objectType == "qrCode") {
-            layerName = gauciParams.qrCode;
-            layerIcon = "qr_code";
-          }
-          if ("layerName" in obj) {
-            layerName = obj.layerName;
-          }
-          output =
-            '<li id="' +
-            obj.id +
-            '" data-type="' +
-            obj.objectType +
-            '" class="layer-' +
-            obj.objectType +
-            ' active" data-sort="' +
-            order +
-            '"><span class="material-icons">' +
-            layerIcon +
-            '</span><input class="layer-name" autocomplete="off" value="' +
-            layerName +
-            '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
-            lock +
-            '" title="' +
-            gauciParams.lockunlock +
-            '">' +
-            lockTag +
-            '</a><a class="material-icons text-success duplicate-layer" title="' +
-            gauciParams.duplicate +
-            '">content_copy</a><a class="material-icons layer-visibility ' +
-            visibility +
-            '" title="' +
-            gauciParams.showhide +
-            '">' +
-            visibilityTag +
-            '</a><a class="material-icons text-danger delete-layer" title="' +
-            gauciParams.delete +
-            '">clear</a></div></li>';
-          selector.find("#gauci-layers").prepend(output);
-          deleteLayerEvent(obj.id);
-          cloneLayerEvent(obj.id);
-          visibilityLayerEvent(obj.id);
-          lockLayerEvent(obj.id);
-          clickLayerEvent(obj.id);
-          layerNameEvent(obj.id);
+          // Clear previous layers before adding new ones
+          selector.find("#gauci-layers").empty();
+          console.log(canvas.getObjects());
+          canvas.getObjects().forEach((canvasObj, index) => {
+            console.log("object goes here");
+            console.log(canvasObj);
+            let output = "";
+            let layerName = "Object";
+            let layerIcon = "category";
+            let visibility = "layer-visible";
+            let visibilityTag = "visibility";
+            let lock = "layer-unlocked";
+            let lockTag = "lock_open";
+
+            if (canvasObj.visible === false) {
+              visibility = "layer-hidden";
+              visibilityTag = "visibility_off";
+            }
+            if (canvasObj.selectable === false) {
+              lock = "layer-locked";
+              lockTag = "lock";
+            }
+
+            canvasObj.set("id", new Date().getTime() + index); // Ensure unique ID
+
+            if (canvasObj.objectType === "textbox") {
+              console.log("text goes here");
+              layerName = canvasObj.text;
+              layerIcon = "title";
+            } else if (canvasObj.objectType === "drawing") {
+              layerName = gauciParams.freeDrawing;
+              layerIcon = "brush";
+            } else if (canvasObj.objectType === "frame") {
+              layerName = gauciParams.frame;
+              layerIcon = "wallpaper";
+            } else if (canvasObj.objectType === "image") {
+              layerName = gauciParams.image;
+              layerIcon = "image";
+            } else if (canvasObj.objectType === "circle") {
+              layerName = gauciParams.circle;
+            } else if (canvasObj.objectType === "square") {
+              layerName = gauciParams.square;
+            } else if (canvasObj.objectType === "rectangle") {
+              layerName = gauciParams.rectangle;
+            } else if (canvasObj.objectType === "triangle") {
+              layerName = gauciParams.triangle;
+            } else if (canvasObj.objectType === "ellipse") {
+              layerName = gauciParams.ellipse;
+            } else if (canvasObj.objectType === "trapezoid") {
+              layerName = gauciParams.trapezoid;
+            } else if (canvasObj.objectType === "pentagon") {
+              layerName = gauciParams.pentagon;
+            } else if (canvasObj.objectType === "octagon") {
+              layerName = gauciParams.octagon;
+            } else if (canvasObj.objectType === "emerald") {
+              layerName = gauciParams.emerald;
+            } else if (canvasObj.objectType === "star") {
+              layerName = gauciParams.star;
+            } else if (canvasObj.objectType === "element") {
+              layerName = gauciParams.element;
+              layerIcon = "star";
+            } else if (canvasObj.objectType === "customSVG") {
+              layerName = gauciParams.customSvg;
+            } else if (canvasObj.objectType === "qrCode") {
+              layerName = gauciParams.qrCode;
+              layerIcon = "qr_code";
+            }
+            // if (canvasObj.type === "textbox") {
+            //   layerName = canvasObj.text;
+            //   layerIcon = "title";
+            // } else if (canvasObj.type === "rect") {
+            //   layerName = gauciParams.rectangle;
+            // } else if (canvasObj.type === "circle") {
+            //   layerName = gauciParams.circle;
+            // } else if (canvasObj.type === "triangle") {
+            //   layerName = gauciParams.triangle;
+            // } else if (canvasObj.type === "path") {
+            //   layerName = gauciParams.element;
+            //   layerIcon = "star";
+            // } else if (canvasObj.type === "group") {
+            //   layerName = gauciParams.element;
+            //   layerIcon = "star";
+            // } else if (canvasObj.type === "image") {
+            //   layerName = gauciParams.image;
+            //   layerIcon = "image";
+            // }
+
+            if ("layerName" in canvasObj) {
+              layerName = canvasObj.layerName;
+            }
+
+            output =
+              '<li id="' +
+              canvasObj.id +
+              '" data-type="' +
+              canvasObj.objectType +
+              '" class="layer-' +
+              canvasObj.objectType +
+              ' active" data-sort="' +
+              index +
+              '"><span class="material-icons">' +
+              layerIcon +
+              '</span><input class="layer-name" autocomplete="off" value="' +
+              layerName +
+              '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
+              lock +
+              '" title="' +
+              gauciParams.lockunlock +
+              '">' +
+              lockTag +
+              '</a><a class="material-icons text-success duplicate-layer" title="' +
+              gauciParams.duplicate +
+              '">content_copy</a><a class="material-icons layer-visibility ' +
+              visibility +
+              '" title="' +
+              gauciParams.showhide +
+              '">' +
+              visibilityTag +
+              '</a><a class="material-icons text-danger delete-layer" title="' +
+              gauciParams.delete +
+              '">clear</a></div></li>';
+
+            selector.find("#gauci-layers").prepend(output);
+
+            deleteLayerEvent(canvasObj.id);
+            cloneLayerEvent(canvasObj.id);
+            visibilityLayerEvent(canvasObj.id);
+            lockLayerEvent(canvasObj.id);
+            clickLayerEvent(canvasObj.id);
+            layerNameEvent(canvasObj.id);
+          });
+
           selector.find("#gauci-layers").sortable("refresh");
           checkLayers();
-          addDeleteIcon(obj);
-          addCloneIcon(obj);
         }
       }
     });
+
     canvas.on("object:modified", function (e) {
       var obj = e.target;
       if (obj.objectType == "textbox" && obj.id) {
@@ -6926,10 +7085,15 @@
             const targetMaskObject = objects.find(
               (obj) => obj.type === "image" && !obj.src.startsWith("http")
             );
-            storedActiveObject = targetMaskObject;
-            storedClipPath = targetMaskObject.clipPath;
-            syncClipPathWithImage(targetMaskObject.clipPath, targetMaskObject);
-            handleMaskingDone();
+            if (targetMaskObject) {
+              storedActiveObject = targetMaskObject;
+              storedClipPath = targetMaskObject.clipPath;
+              syncClipPathWithImage(
+                targetMaskObject.clipPath,
+                targetMaskObject
+              );
+              handleMaskingDone();
+            }
 
             canvas.renderAll();
           }
@@ -9639,7 +9803,80 @@
       selector.find("#gauci-canvas").removeClass("hide-canvas");
       selector.find("#gauci").removeClass("hide-canva");
     });
+    // selector.find(".thr-d").on("click", function () {
+    //   selector.find(".thr-d").addClass("active");
+    //   selector.find(".two-d").removeClass("active");
+    //   selector
+    //     .find(".td-interactive-btn-container-main-contianer")
+    //     .addClass("interactive-btn-alignment");
+    //   selector.find(".web-thr-d-main-container").addClass("display-unity");
+    //   selector.find("#gauci-canvas").addClass("hide-canvas");
+    //   selector.find("#gauci").addClass("hide-canva");
+    //   canvas.renderAll();
+    //   // updateCanvasState()
+    //   var name = "tester";
+    //   var quality = 1;
+    //   var format = "jpeg";
+    //   var objurl = "";
+    //   var link = document.createElement("a");
+    //   add_watermark();
+    //   canvas.setZoom(1);
+    //   selector.find("#gauci-img-zoom").val(100);
+    //   var zoomWidth = originalHeight;
+    //   var zoomHeight = originalWidth;
+    //   if (rotate == 0 || rotate == 180 || rotate == -180) {
+    //     zoomWidth = originalWidth;
+    //     zoomHeight = originalHeight;
+    //   }
+    //   canvas.setWidth(zoomWidth);
+    //   canvas.setHeight(zoomHeight);
+    //   var blob = "";
+
+    //   canvas.getObjects().forEach(function (obj) {
+    //     console.log("object:", obj);
+    //     if (obj.customId === "layoutImage") {
+    //       obj.visible = false;
+    //     }
+    //   });
+    //   var imgData = canvas.toDataURL({
+    //     format: format,
+    //     quality: quality,
+    //     enableRetinaScaling: false,
+    //   });
+    //   canvas.getObjects().forEach(function (obj) {
+    //     if (obj.customId === "layoutImage") {
+    //       obj.visible = true;
+    //     }
+    //   });
+    //   console.log(imgData);
+    //   // window.canvasFinalImage=imgData
+    //   if (format != "webp") {
+    //     imgData = changeDpiDataUrl(
+    //       imgData,
+    //       selector.find("#gauci-download-img-dpi").val()
+    //     );
+    //   }
+    //   blob = dataURLtoBlob(imgData);
+    //   objurl = URL.createObjectURL(blob);
+    //   console.log("object url", objurl);
+    //   if (objurl) {
+    //     var event = new CustomEvent("variableReady", {
+    //       detail: {
+    //         data: objurl,
+    //       },
+    //     });
+    //     document.dispatchEvent(event);
+    //   }
+    //   link.download = name + "." + format;
+    //   link.href = objurl;
+    //   // link.click();
+    //   remove_watermark();
+    //   adjustZoom();
+    //   canvas.requestRenderAll();
+    // });
+    const meshImageDataArray = [];
     selector.find(".thr-d").on("click", function () {
+      // Update classes based on user interaction
       selector.find(".thr-d").addClass("active");
       selector.find(".two-d").removeClass("active");
       selector
@@ -9648,68 +9885,97 @@
       selector.find(".web-thr-d-main-container").addClass("display-unity");
       selector.find("#gauci-canvas").addClass("hide-canvas");
       selector.find("#gauci").addClass("hide-canva");
-      canvas.renderAll();
-      // updateCanvasState()
-      var name = "tester";
-      var quality = 1;
-      var format = "jpeg";
-      var objurl = "";
-      var link = document.createElement("a");
-      add_watermark();
-      canvas.setZoom(1);
-      selector.find("#gauci-img-zoom").val(100);
-      var zoomWidth = originalHeight;
-      var zoomHeight = originalWidth;
-      if (rotate == 0 || rotate == 180 || rotate == -180) {
-        zoomWidth = originalWidth;
-        zoomHeight = originalHeight;
-      }
-      canvas.setWidth(zoomWidth);
-      canvas.setHeight(zoomHeight);
-      var blob = "";
-
-      canvas.getObjects().forEach(function (obj) {
-        console.log("object:", obj);
-        if (obj.customId === "layoutImage") {
-          obj.visible = false;
-        }
-      });
-      var imgData = canvas.toDataURL({
-        format: format,
-        quality: quality,
-        enableRetinaScaling: false,
-      });
-      canvas.getObjects().forEach(function (obj) {
-        if (obj.customId === "layoutImage") {
-          obj.visible = true;
-        }
-      });
-      console.log(imgData);
-      // window.canvasFinalImage=imgData
-      if (format != "webp") {
-        imgData = changeDpiDataUrl(
-          imgData,
-          selector.find("#gauci-download-img-dpi").val()
-        );
-      }
-      blob = dataURLtoBlob(imgData);
-      objurl = URL.createObjectURL(blob);
-      console.log("object url", objurl);
-      if (objurl) {
-        var event = new CustomEvent("variableReady", {
-          detail: {
-            data: objurl,
-          },
-        });
-        document.dispatchEvent(event);
-      }
-      link.download = name + "." + format;
-      link.href = objurl;
-      // link.click();
-      remove_watermark();
-      adjustZoom();
-      canvas.requestRenderAll();
+      saveCanvasState(activeTabId);
+      generateImagesFromCanvasStates();
+      // if (meshImageDataArray) {
+      //   var event = new CustomEvent("variableReady", {
+      //     detail: {
+      //       data: meshImageDataArray,
+      //     },
+      //   });
+      //   document.dispatchEvent(event);
+      // }
+      // if (meshImageDataArray) {
+      //   console.lof(meshImageDataArray, "Mesh image data array ");
+      //   // window.sharedData = window.sharedData || {};
+      //   window.meshImageDataArray = meshImageDataArray;
+      //   console.log(
+      //     "meshImageDataArray saved to global sharedData:",
+      //     meshImageDataArray
+      //   );
+      // }
+      const event = new CustomEvent("thrDClicked");
+      document.dispatchEvent(event);
     });
+
+    // Image generation function
+    function generateImagesFromCanvasStates() {
+      // Array to store image data for each tab
+      meshImageDataArray.length = 0;
+      Object.keys(tabCanvasStates).forEach((tabId) => {
+        // Create a temporary canvas with a width and height of 2048
+        const tempCanvas = new fabric.Canvas(null, {
+          width: 2048,
+          height: 2048,
+        });
+
+        // Load the JSON state into the temporary canvas
+        tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
+          const objects = tempCanvas.getObjects(); // Get all objects in the canvas
+          console.log(objects);
+          const corsImages = []; // Store references to CORS images
+
+          // Identify and hide CORS images
+          objects.forEach((obj) => {
+            if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+              corsImages.push(obj); // Keep a reference to this object
+              obj.visible = false; // Hide the object
+            }
+          });
+
+          tempCanvas.renderAll(); // Render the canvas without CORS images
+
+          // Generate the base64 image
+          try {
+            const base64Image = tempCanvas.toDataURL({
+              format: "png",
+              quality: 1.0,
+            });
+            console.log(base64Image);
+
+            // Push the data into the array
+            meshImageDataArray.push({
+              meshName: tabId,
+              meshImageData: base64Image,
+            });
+          } catch (error) {
+            console.error(`Error generating image for Tab ID ${tabId}:`, error);
+          }
+
+          // Restore visibility of CORS images
+          corsImages.forEach((obj) => {
+            obj.visible = true;
+          });
+
+          tempCanvas.renderAll(); // Re-render the canvas with all objects
+
+          // Clean up the temporary canvas
+          tempCanvas.clear();
+          tempCanvas.dispose();
+
+          if (
+            meshImageDataArray.length === Object.keys(tabCanvasStates).length
+          ) {
+            // console.log("Generated Images Array:", meshImageDataArray);
+            window.meshImageDataArray = meshImageDataArray;
+            console.log(
+              window.meshImageDataArray,
+              "Window data from gauci file"
+            );
+          }
+        });
+      });
+    }
 
     function loadTemplateFromUrl() {
       var params = new URLSearchParams(window.location.search);
