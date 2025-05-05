@@ -3279,12 +3279,138 @@
         }
       }
     });
+    // canvas.on("object:added", function (e) {
+    //   console.log(canvas.getObjects());
+    //   var obj = e.target;
+    //   console.log(obj, "Layers checking");
+    //   if (
+    //     obj.objectType != "clipPath" &&
+    //     obj.objectType != "drawing" &&
+    //     obj.objectType != "watermark"
+    //   ) {
+    //     if (canvas.isDrawingMode === true) {
+    //       obj.set("objectType", "drawing");
+    //       obj.set("selectable", false);
+    //       obj.set("lockMovementX", true);
+    //       obj.set("lockMovementY", true);
+    //       obj.set("lockRotation", true);
+    //     } else {
+    //       var order = canvas.getObjects().indexOf(obj);
+    //       var output = "";
+    //       var layerName = "Object";
+    //       var layerIcon = "category";
+    //       var visibility = "layer-visible";
+    //       var visibilityTag = "visibility";
+    //       var lock = "layer-unlocked";
+    //       var lockTag = "lock_open";
+    //       if (obj.visible == false) {
+    //         visibility = "layer-hidden";
+    //         visibilityTag = "visibility_off";
+    //       }
+    //       if (obj.selectable == false) {
+    //         lock = "layer-locked";
+    //         lockTag = "lock";
+    //       }
+    //       obj.set("id", new Date().getTime());
+    //       selector.find("#gauci-layers > li").removeClass("active");
+    //       if (obj.objectType == "textbox") {
+    //         layerName = obj.text;
+    //         layerIcon = "title";
+    //       } else if (obj.objectType == "drawing") {
+    //         layerName = gauciParams.freeDrawing;
+    //         layerIcon = "brush";
+    //       } else if (obj.objectType == "frame") {
+    //         layerName = gauciParams.frame;
+    //         layerIcon = "wallpaper";
+    //       } else if (obj.objectType == "image") {
+    //         layerName = gauciParams.image;
+    //         layerIcon = "image";
+    //       } else if (obj.objectType == "circle") {
+    //         layerName = gauciParams.circle;
+    //       } else if (obj.objectType == "square") {
+    //         layerName = gauciParams.square;
+    //       } else if (obj.objectType == "rectangle") {
+    //         layerName = gauciParams.rectangle;
+    //       } else if (obj.objectType == "triangle") {
+    //         layerName = gauciParams.triangle;
+    //       } else if (obj.objectType == "ellipse") {
+    //         layerName = gauciParams.ellipse;
+    //       } else if (obj.objectType == "trapezoid") {
+    //         layerName = gauciParams.trapezoid;
+    //       } else if (obj.objectType == "pentagon") {
+    //         layerName = gauciParams.pentagon;
+    //       } else if (obj.objectType == "octagon") {
+    //         layerName = gauciParams.octagon;
+    //       } else if (obj.objectType == "emerald") {
+    //         layerName = gauciParams.emerald;
+    //       } else if (obj.objectType == "star") {
+    //         layerName = gauciParams.star;
+    //       } else if (obj.objectType == "element") {
+    //         layerName = gauciParams.element;
+    //         layerIcon = "star";
+    //       } else if (obj.objectType == "customSVG") {
+    //         layerName = gauciParams.customSvg;
+    //       } else if (obj.objectType == "qrCode") {
+    //         layerName = gauciParams.qrCode;
+    //         layerIcon = "qr_code";
+    //       }
+    //       if ("layerName" in obj) {
+    //         layerName = obj.layerName;
+    //       }
+    //       output =
+    //         '<li id="' +
+    //         obj.id +
+    //         '" data-type="' +
+    //         obj.objectType +
+    //         '" class="layer-' +
+    //         obj.objectType +
+    //         ' active" data-sort="' +
+    //         order +
+    //         '"><span class="material-icons">' +
+    //         layerIcon +
+    //         '</span><input class="layer-name" autocomplete="off" value="' +
+    //         layerName +
+    //         '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
+    //         lock +
+    //         '" title="' +
+    //         gauciParams.lockunlock +
+    //         '">' +
+    //         lockTag +
+    //         '</a><a class="material-icons text-success duplicate-layer" title="' +
+    //         gauciParams.duplicate +
+    //         '">content_copy</a><a class="material-icons layer-visibility ' +
+    //         visibility +
+    //         '" title="' +
+    //         gauciParams.showhide +
+    //         '">' +
+    //         visibilityTag +
+    //         '</a><a class="material-icons text-danger delete-layer" title="' +
+    //         gauciParams.delete +
+    //         '">clear</a></div></li>';
+    //       selector.find("#gauci-layers").prepend(output);
+
+    //       deleteLayerEvent(obj.id);
+    //       cloneLayerEvent(obj.id);
+    //       visibilityLayerEvent(obj.id);
+    //       lockLayerEvent(obj.id);
+    //       clickLayerEvent(obj.id);
+    //       layerNameEvent(obj.id);
+    //       selector.find("#gauci-layers").sortable("refresh");
+    //       checkLayers();
+    //       addDeleteIcon(obj);
+    //       addCloneIcon(obj);
+    //     }
+    //   }
+    // });
     canvas.on("object:added", function (e) {
-      var obj = e.target;
+      console.log(canvas.getObjects());
+      const obj = e.target;
+      // console.log(obj, "Layers checking");
+
       if (
-        obj.objectType != "clipPath" &&
-        obj.objectType != "drawing" &&
-        obj.objectType != "watermark"
+        obj.objectType !== "clipPath" &&
+        obj.objectType !== "drawing" &&
+        obj.objectType !== "watermark"
       ) {
         if (canvas.isDrawingMode === true) {
           obj.set("objectType", "drawing");
@@ -3292,113 +3418,146 @@
           obj.set("lockMovementX", true);
           obj.set("lockMovementY", true);
           obj.set("lockRotation", true);
+          console.log("object is not active");
         } else {
-          var order = canvas.getObjects().indexOf(obj);
-          var output = "";
-          var layerName = "Object";
-          var layerIcon = "category";
-          var visibility = "layer-visible";
-          var visibilityTag = "visibility";
-          var lock = "layer-unlocked";
-          var lockTag = "lock_open";
-          if (obj.visible == false) {
-            visibility = "layer-hidden";
-            visibilityTag = "visibility_off";
-          }
-          if (obj.selectable == false) {
-            lock = "layer-locked";
-            lockTag = "lock";
-          }
-          obj.set("id", new Date().getTime());
-          selector.find("#gauci-layers > li").removeClass("active");
-          if (obj.objectType == "textbox") {
-            layerName = obj.text;
-            layerIcon = "title";
-          } else if (obj.objectType == "drawing") {
-            layerName = gauciParams.freeDrawing;
-            layerIcon = "brush";
-          } else if (obj.objectType == "frame") {
-            layerName = gauciParams.frame;
-            layerIcon = "wallpaper";
-          } else if (obj.objectType == "image") {
-            layerName = gauciParams.image;
-            layerIcon = "image";
-          } else if (obj.objectType == "circle") {
-            layerName = gauciParams.circle;
-          } else if (obj.objectType == "square") {
-            layerName = gauciParams.square;
-          } else if (obj.objectType == "rectangle") {
-            layerName = gauciParams.rectangle;
-          } else if (obj.objectType == "triangle") {
-            layerName = gauciParams.triangle;
-          } else if (obj.objectType == "ellipse") {
-            layerName = gauciParams.ellipse;
-          } else if (obj.objectType == "trapezoid") {
-            layerName = gauciParams.trapezoid;
-          } else if (obj.objectType == "pentagon") {
-            layerName = gauciParams.pentagon;
-          } else if (obj.objectType == "octagon") {
-            layerName = gauciParams.octagon;
-          } else if (obj.objectType == "emerald") {
-            layerName = gauciParams.emerald;
-          } else if (obj.objectType == "star") {
-            layerName = gauciParams.star;
-          } else if (obj.objectType == "element") {
-            layerName = gauciParams.element;
-            layerIcon = "star";
-          } else if (obj.objectType == "customSVG") {
-            layerName = gauciParams.customSvg;
-          } else if (obj.objectType == "qrCode") {
-            layerName = gauciParams.qrCode;
-            layerIcon = "qr_code";
-          }
-          if ("layerName" in obj) {
-            layerName = obj.layerName;
-          }
-          output =
-            '<li id="' +
-            obj.id +
-            '" data-type="' +
-            obj.objectType +
-            '" class="layer-' +
-            obj.objectType +
-            ' active" data-sort="' +
-            order +
-            '"><span class="material-icons">' +
-            layerIcon +
-            '</span><input class="layer-name" autocomplete="off" value="' +
-            layerName +
-            '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
-            lock +
-            '" title="' +
-            gauciParams.lockunlock +
-            '">' +
-            lockTag +
-            '</a><a class="material-icons text-success duplicate-layer" title="' +
-            gauciParams.duplicate +
-            '">content_copy</a><a class="material-icons layer-visibility ' +
-            visibility +
-            '" title="' +
-            gauciParams.showhide +
-            '">' +
-            visibilityTag +
-            '</a><a class="material-icons text-danger delete-layer" title="' +
-            gauciParams.delete +
-            '">clear</a></div></li>';
-          selector.find("#gauci-layers").prepend(output);
-          deleteLayerEvent(obj.id);
-          cloneLayerEvent(obj.id);
-          visibilityLayerEvent(obj.id);
-          lockLayerEvent(obj.id);
-          clickLayerEvent(obj.id);
-          layerNameEvent(obj.id);
+          // Clear previous layers before adding new ones
+          selector.find("#gauci-layers").empty();
+          console.log(canvas.getObjects());
+          canvas.getObjects().forEach((canvasObj, index) => {
+            console.log("object goes here");
+            console.log(canvasObj);
+            let output = "";
+            let layerName = "Object";
+            let layerIcon = "category";
+            let visibility = "layer-visible";
+            let visibilityTag = "visibility";
+            let lock = "layer-unlocked";
+            let lockTag = "lock_open";
+
+            if (canvasObj.visible === false) {
+              visibility = "layer-hidden";
+              visibilityTag = "visibility_off";
+            }
+            if (canvasObj.selectable === false) {
+              lock = "layer-locked";
+              lockTag = "lock";
+            }
+
+            canvasObj.set("id", new Date().getTime() + index); // Ensure unique ID
+
+            if (canvasObj.objectType === "textbox") {
+              console.log("text goes here");
+              layerName = canvasObj.text;
+              layerIcon = "title";
+            } else if (canvasObj.objectType === "drawing") {
+              layerName = gauciParams.freeDrawing;
+              layerIcon = "brush";
+            } else if (canvasObj.objectType === "frame") {
+              layerName = gauciParams.frame;
+              layerIcon = "wallpaper";
+            } else if (canvasObj.objectType === "image") {
+              layerName = gauciParams.image;
+              layerIcon = "image";
+            } else if (canvasObj.objectType === "circle") {
+              layerName = gauciParams.circle;
+            } else if (canvasObj.objectType === "square") {
+              layerName = gauciParams.square;
+            } else if (canvasObj.objectType === "rectangle") {
+              layerName = gauciParams.rectangle;
+            } else if (canvasObj.objectType === "triangle") {
+              layerName = gauciParams.triangle;
+            } else if (canvasObj.objectType === "ellipse") {
+              layerName = gauciParams.ellipse;
+            } else if (canvasObj.objectType === "trapezoid") {
+              layerName = gauciParams.trapezoid;
+            } else if (canvasObj.objectType === "pentagon") {
+              layerName = gauciParams.pentagon;
+            } else if (canvasObj.objectType === "octagon") {
+              layerName = gauciParams.octagon;
+            } else if (canvasObj.objectType === "emerald") {
+              layerName = gauciParams.emerald;
+            } else if (canvasObj.objectType === "star") {
+              layerName = gauciParams.star;
+            } else if (canvasObj.objectType === "element") {
+              layerName = gauciParams.element;
+              layerIcon = "star";
+            } else if (canvasObj.objectType === "customSVG") {
+              layerName = gauciParams.customSvg;
+            } else if (canvasObj.objectType === "qrCode") {
+              layerName = gauciParams.qrCode;
+              layerIcon = "qr_code";
+            }
+            // if (canvasObj.type === "textbox") {
+            //   layerName = canvasObj.text;
+            //   layerIcon = "title";
+            // } else if (canvasObj.type === "rect") {
+            //   layerName = gauciParams.rectangle;
+            // } else if (canvasObj.type === "circle") {
+            //   layerName = gauciParams.circle;
+            // } else if (canvasObj.type === "triangle") {
+            //   layerName = gauciParams.triangle;
+            // } else if (canvasObj.type === "path") {
+            //   layerName = gauciParams.element;
+            //   layerIcon = "star";
+            // } else if (canvasObj.type === "group") {
+            //   layerName = gauciParams.element;
+            //   layerIcon = "star";
+            // } else if (canvasObj.type === "image") {
+            //   layerName = gauciParams.image;
+            //   layerIcon = "image";
+            // }
+
+            if ("layerName" in canvasObj) {
+              layerName = canvasObj.layerName;
+            }
+
+            output =
+              '<li id="' +
+              canvasObj.id +
+              '" data-type="' +
+              canvasObj.objectType +
+              '" class="layer-' +
+              canvasObj.objectType +
+              ' active" data-sort="' +
+              index +
+              '"><span class="material-icons">' +
+              layerIcon +
+              '</span><input class="layer-name" autocomplete="off" value="' +
+              layerName +
+              '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
+              lock +
+              '" title="' +
+              gauciParams.lockunlock +
+              '">' +
+              lockTag +
+              '</a><a class="material-icons text-success duplicate-layer" title="' +
+              gauciParams.duplicate +
+              '">content_copy</a><a class="material-icons layer-visibility ' +
+              visibility +
+              '" title="' +
+              gauciParams.showhide +
+              '">' +
+              visibilityTag +
+              '</a><a class="material-icons text-danger delete-layer" title="' +
+              gauciParams.delete +
+              '">clear</a></div></li>';
+
+            selector.find("#gauci-layers").prepend(output);
+
+            deleteLayerEvent(canvasObj.id);
+            cloneLayerEvent(canvasObj.id);
+            visibilityLayerEvent(canvasObj.id);
+            lockLayerEvent(canvasObj.id);
+            clickLayerEvent(canvasObj.id);
+            layerNameEvent(canvasObj.id);
+          });
+
           selector.find("#gauci-layers").sortable("refresh");
           checkLayers();
-          addDeleteIcon(obj);
-          addCloneIcon(obj);
         }
       }
     });
+
     canvas.on("object:modified", function (e) {
       var obj = e.target;
       if (obj.objectType == "textbox" && obj.id) {
@@ -3512,6 +3671,7 @@
         axis: "y",
         update: function (e, ui) {
           var objects = canvas.getObjects();
+          console.log(objects, "Objects data");
           $("#gauci-layers li").each(function (index, value) {
             $(this).attr("data-sort", index + 1);
             objects
@@ -5510,15 +5670,30 @@
         });
     });
     /* Get Scaled Size */
+    // function getScaledSize() {
+    //   var width = canvas.backgroundImage.getScaledHeight();
+    //   var height = canvas.backgroundImage.getScaledWidth();
+    //   if (rotate == 0 || rotate == 180 || rotate == -180) {
+    //     width = canvas.backgroundImage.getScaledWidth();
+    //     height = canvas.backgroundImage.getScaledHeight();
+    //   }
+    //   return [width, height];
+    // }
     function getScaledSize() {
-      var width = canvas.backgroundImage.getScaledHeight();
-      var height = canvas.backgroundImage.getScaledWidth();
-      if (rotate == 0 || rotate == 180 || rotate == -180) {
+      if (!canvas.backgroundImage) {
+        console.error("No background image found.");
+        return [2048, 2048]; // Return default values to avoid further errors
+      }
+
+      let width = canvas.backgroundImage.getScaledHeight();
+      let height = canvas.backgroundImage.getScaledWidth();
+      if (rotate === 0 || rotate === 180 || rotate === -180) {
         width = canvas.backgroundImage.getScaledWidth();
         height = canvas.backgroundImage.getScaledHeight();
       }
       return [width, height];
     }
+
     /* Add Text */
     selector.find("#gauci-add-text").on("click", function () {
       var text = new fabric.Textbox(gauciParams.textbox, {
@@ -6516,22 +6691,249 @@
     });
     /** Adding layout */
 
-    $(document).ready(function () {
-      setTimeout(function () {
-        AddingImage();
-        console.log("image is adding");
-      }, 400);
-    });
+    // $(document).ready(function () {
+    //   setTimeout(function () {
+    //     AddingImage();
+    //     console.log("image is adding");
+    //   }, 400);
+    // });
 
-    var preservedImage;
-    var layoutSource = null; // Renamed from imgUrl
-    let linkedMeshImageData = null;
+    // var preservedImage;
+    // var layoutSource = null; // Renamed from imgUrl
 
-    // Fetch image data from the API
+    // // Fetch image data from the API
+    // async function fetchImageData() {
+    //   try {
+    //     // const response = await fetch(`${baseUrl}/api/v1/product/all`);
+    //     // const data = await response.json();
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const productId = urlParams.get("id");
+    //     const response = await fetch(
+    //       `${baseUrl}/api/v1/product/get/${productId}`
+    //     );
+    //     const data = await response.json();
+    //     console.log(data);
+    //     const product = data.product;
+
+    //     if (product && product.linkedMeshImageData) {
+    //       const linkedMeshImageData = product.linkedMeshImageData;
+
+    //       // Get the tab container
+    //       const tabContainer = document.querySelector(".gauci-tab-cont");
+
+    //       // Clear any existing tabs (optional, if necessary)
+    //       tabContainer.innerHTML = "";
+
+    //       // Loop through the array to create tabs
+    //       linkedMeshImageData.forEach((meshData, index) => {
+    //         const tabDiv = document.createElement("div");
+    //         const tabContent = document.createElement("div");
+
+    //         tabContent.classList.add("gauci-open-page");
+    //         tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+
+    //         tabDiv.appendChild(tabContent);
+
+    //         // Set the first tab as active by default
+    //         if (index === 0) {
+    //           tabDiv.classList.add("active");
+    //           layoutSource = meshData.layoutUrl; // Set the initial layoutSource
+    //           console.log("Initial layoutSource:", layoutSource);
+    //         }
+
+    //         // Add click event listener for each tab
+    //         tabDiv.addEventListener("click", () => {
+    //           // Remove "active" class from all tabs
+    //           const allTabs = tabContainer.querySelectorAll("div");
+    //           allTabs.forEach((t) => t.classList.remove("active"));
+
+    //           // Add "active" class to the clicked tab
+    //           tabDiv.classList.add("active");
+
+    //           // Update layoutSource dynamically
+    //           layoutSource = meshData.layoutUrl;
+    //           console.log("Updated layoutSource:", layoutSource);
+    //         });
+
+    //         tabContainer.appendChild(tabDiv);
+    //       });
+
+    //       console.log("Tabs created successfully.");
+    //     } else {
+    //       console.error("No linkedMeshImageData found in the product.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching image data:", error);
+    //   }
+    // }
+
+    // async function AddingImage() {
+    //   console.log("adding image");
+
+    //   // Fetch image data first
+    //   await fetchImageData();
+
+    //   // Proceed only if layoutSource is available
+    //   if (layoutSource) {
+    //     console.log("png image filepath ", layoutSource);
+
+    //     // Delay the execution by 2 seconds (2000 milliseconds)
+    //     setTimeout(() => {
+    //       fabric.Image.fromURL(layoutSource, function (img) {
+    //         img.set({
+    //           selectable: false,
+    //           evented: false,
+    //           hasControls: false,
+    //           customId: "layoutImage",
+    //           isPreservedObject: true,
+    //         });
+
+    //         // Apply specific scaling if name is 'p3-type1'
+    //         const urlParams = new URLSearchParams(window.location.search);
+    //         const name = urlParams.get("name");
+    //         if (name === "p3-type1") {
+    //           img.scaleX = 2;
+    //           img.scaleY = 2;
+    //         }
+
+    //         preservedImage = img;
+    //         canvas.add(img);
+    //         canvas.renderAll();
+    //         onlyDeleteLayerEvent(img.id);
+    //       });
+    //     }, 1000); // 2 seconds delay
+    //   } else {
+    //     console.error("No layout source found. Image loading skipped.");
+    //   }
+    // }
+    // var preservedImage = null; // Declare preservedImage at the top
+    // var layoutSource = null; // Renamed from imgUrl
+    // async function fetchImageData() {
+    //   try {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const productId = urlParams.get("id");
+    //     const response = await fetch(
+    //       `${baseUrl}/api/v1/product/get/${productId}`
+    //     );
+    //     const data = await response.json();
+    //     console.log(data);
+    //     const product = data.product;
+
+    //     if (product && product.linkedMeshImageData) {
+    //       const linkedMeshImageData = product.linkedMeshImageData;
+
+    //       // Get the tab container
+    //       const tabContainer = document.querySelector(".gauci-tab-cont");
+
+    //       // Clear any existing tabs (optional, if necessary)
+    //       tabContainer.innerHTML = "";
+
+    //       // Loop through the array to create tabs
+    //       linkedMeshImageData.forEach((meshData, index) => {
+    //         const tabDiv = document.createElement("div");
+    //         const tabContent = document.createElement("div");
+
+    //         tabContent.classList.add("gauci-open-page");
+    //         tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+
+    //         tabDiv.appendChild(tabContent);
+
+    //         // Set the first tab as active by default
+    //         if (index === 0) {
+    //           tabDiv.classList.add("active");
+    //           layoutSource = meshData.layoutUrl; // Set the initial layoutSource
+    //           console.log("Initial layoutSource:", layoutSource);
+    //           AddingImage(); // Add the first image by default
+    //         }
+
+    //         // Add click event listener for each tab
+    //         tabDiv.addEventListener("click", () => {
+    //           // Remove "active" class from all tabs
+    //           const allTabs = tabContainer.querySelectorAll("div");
+    //           allTabs.forEach((t) => t.classList.remove("active"));
+
+    //           // Add "active" class to the clicked tab
+    //           tabDiv.classList.add("active");
+
+    //           // Update layoutSource dynamically
+    //           layoutSource = meshData.layoutUrl;
+    //           // console.log("Updated layoutSource:", layoutSource);
+
+    //           // Re-add the updated image
+    //           AddingImage();
+    //         });
+
+    //         tabContainer.appendChild(tabDiv);
+    //       });
+
+    //       console.log("Tabs created successfully.");
+    //     } else {
+    //       console.error("No linkedMeshImageData found in the product.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching image data:", error);
+    //   }
+    // }
+
+    // async function AddingImage() {
+    //   // console.log("Adding image");
+
+    //   // Ensure layoutSource is available
+    //   if (layoutSource) {
+    //     // console.log("PNG image filepath:", layoutSource);
+
+    //     // Remove the previous image from the canvas
+    //     if (preservedImage) {
+    //       canvas.remove(preservedImage);
+    //     }
+
+    //     // Delay the execution to allow layoutSource to be fully updated
+    //     setTimeout(() => {
+    //       fabric.Image.fromURL(layoutSource, function (img) {
+    //         img.set({
+    //           selectable: false,
+    //           evented: false,
+    //           hasControls: false,
+    //           customId: "layoutImage",
+    //           isPreservedObject: true,
+    //         });
+
+    //         // Apply specific scaling if name is 'p3-type1'
+    //         const urlParams = new URLSearchParams(window.location.search);
+    //         const name = urlParams.get("name");
+    //         if (name === "p3-type1") {
+    //           img.scaleX = 2;
+    //           img.scaleY = 2;
+    //         }
+
+    //         preservedImage = img;
+    //         canvas.add(img);
+    //         canvas.renderAll();
+    //         onlyDeleteLayerEvent(img.id);
+    //       });
+    //     }, 100); // Optional delay for smoother user experience
+    //   } else {
+    //     console.error("No layout source found. Image loading skipped.");
+    //   }
+    // }
+
+    // // On document ready, fetch image data
+    // $(document).ready(function () {
+    //   setTimeout(function () {
+    //     fetchImageData();
+    //     console.log("Fetching image data and setting tabs.");
+    //   }, 400);
+    // });
+
+    const tabCanvasStates = {}; // To store canvas JSON state for each tab
+    let activeTabId = null; // To track the currently active tab
+    let preservedImage = null; // To manage the layout image
+    let layoutSource = null; // URL of the current layout image
+    let allCanvasTabState = {};
+
+    // Function to fetch image data and set up tabs
     async function fetchImageData() {
       try {
-        // const response = await fetch(`${baseUrl}/api/v1/product/all`);
-        // const data = await response.json();
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get("id");
         const response = await fetch(
@@ -6539,37 +6941,84 @@
         );
         const data = await response.json();
         console.log(data);
-        const product = data.product;
-        // Get the 'name' query parameter from the URL
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const name = urlParams.get("name");
-        // console.log("name from query param is", name);
 
-        // Find the image URL based on the product name
-        // const product = data.products.find((item) => item.name === name);
-        if (product && product.modelUrl) {
-          linkedMeshImageData = product.linkedMeshImageData[0];
-          layoutSource = linkedMeshImageData.layoutUrl; // Set the image URL dynamically
-          console.log("Image URL from API: ", layoutSource);
+        const product = data.product;
+
+        if (product && product.linkedMeshImageData) {
+          const linkedMeshImageData = product.linkedMeshImageData;
+
+          // Get the tab container
+          const tabContainer = document.querySelector(".gauci-tab-cont");
+
+          // Clear any existing tabs (optional, if necessary)
+          tabContainer.innerHTML = "";
+
+          // Loop through the array to create tabs
+          linkedMeshImageData.forEach((meshData, index) => {
+            const tabDiv = document.createElement("div");
+            const tabContent = document.createElement("div");
+
+            tabContent.classList.add("gauci-open-page");
+            tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+            tabDiv.appendChild(tabContent);
+
+            // Generate a unique ID for the tab
+            const tabId = meshData.meshName || `tab-${index}`;
+
+            // Initialize the state for each tab
+            if (index === 0) {
+              // Set the first tab as active
+              tabDiv.classList.add("active");
+              activeTabId = tabId;
+              tabCanvasStates[tabId] = null; // Initialize with an empty state
+              layoutSource = meshData.layoutUrl; // Set the initial layoutSource
+              AddingImage(); // Add the first image by default
+            }
+
+            // Add click event listener for each tab
+            tabDiv.addEventListener("click", () => {
+              const previousTabId = activeTabId;
+
+              // Save the current tab's canvas state
+              saveCanvasState(previousTabId);
+
+              // Switch to the new tab
+              activeTabId = tabId;
+
+              // Clear the existing canvas
+              canvas.clear();
+
+              // Load the new tab's canvas state
+              loadCanvasState(tabId);
+
+              // Update layoutSource dynamically for the new tab
+              layoutSource = meshData.layoutUrl;
+
+              // Update the tab's "active" class
+              const allTabs = tabContainer.querySelectorAll("div");
+              allTabs.forEach((t) => t.classList.remove("active"));
+              tabDiv.classList.add("active");
+            });
+
+            tabContainer.appendChild(tabDiv);
+          });
+
+          console.log("Tabs created successfully.");
         } else {
-          console.error("Image not found for the specified name.");
+          console.error("No linkedMeshImageData found in the product.");
         }
       } catch (error) {
         console.error("Error fetching image data:", error);
       }
     }
 
+    // Function to add the layout image to the canvas
     async function AddingImage() {
-      console.log("adding image");
-
-      // Fetch image data first
-      await fetchImageData();
-
-      // Proceed only if layoutSource is available
       if (layoutSource) {
-        console.log("png image filepath ", layoutSource);
+        if (preservedImage) {
+          canvas.remove(preservedImage);
+        }
 
-        // Delay the execution by 2 seconds (2000 milliseconds)
         setTimeout(() => {
           fabric.Image.fromURL(layoutSource, function (img) {
             img.set({
@@ -6580,7 +7029,7 @@
               isPreservedObject: true,
             });
 
-            // Apply specific scaling if name is 'p3-type1'
+            // Apply specific scaling if necessary
             const urlParams = new URLSearchParams(window.location.search);
             const name = urlParams.get("name");
             if (name === "p3-type1") {
@@ -6591,13 +7040,81 @@
             preservedImage = img;
             canvas.add(img);
             canvas.renderAll();
-            onlyDeleteLayerEvent(img.id);
           });
-        }, 1000); // 2 seconds delay
+        }, 100); // Optional delay for smoother user experience
       } else {
         console.error("No layout source found. Image loading skipped.");
       }
     }
+
+    // Save the canvas state for a given tab
+    function saveCanvasState(tabId) {
+      if (tabId !== null && canvas) {
+        const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+        tabCanvasStates[tabId] = state; // Store the state
+        allCanvasTabState = tabCanvasStates;
+        console.log(allCanvasTabState);
+        console.log(`Saved canvas state for Tab ${tabId}`);
+      }
+    }
+
+    function loadCanvasState(tabId) {
+      if (tabCanvasStates[tabId]) {
+        canvas.loadFromJSON(tabCanvasStates[tabId], () => {
+          // Render all objects on the canvas
+          canvas.renderAll();
+          console.log(canvas.toJSON());
+          const allObjects = canvas.getObjects();
+          console.log(allObjects, "All Canvas Objects");
+          // Ensure the background image has the desired properties after loading
+          if (canvas) {
+            const objects = canvas.getObjects();
+            // console.log(objects);
+            const targetObject = objects.find(
+              (obj) => obj.type === "image" && obj.src.startsWith("http")
+            );
+            console.log(targetObject);
+            if (targetObject) {
+              // Set properties for the found object
+              targetObject.set({
+                selectable: false,
+                evented: false,
+                hasControls: false,
+              });
+            }
+            const targetMaskObject = objects.find(
+              (obj) => obj.type === "image" && !obj.src.startsWith("http")
+            );
+            if (targetMaskObject) {
+              storedActiveObject = targetMaskObject;
+              storedClipPath = targetMaskObject.clipPath;
+              syncClipPathWithImage(
+                targetMaskObject.clipPath,
+                targetMaskObject
+              );
+              handleMaskingDone();
+            }
+
+            canvas.renderAll();
+          }
+
+          console.log(`Loaded canvas state for Tab ${tabId}`);
+          console.log(activeTabId);
+          console.log(tabCanvasStates);
+        });
+      } else {
+        AddingImage(); // Load the default layout image for the tab
+        console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
+      }
+    }
+
+    // On document ready, fetch image data
+    $(document).ready(function () {
+      setTimeout(function () {
+        fetchImageData();
+        console.log("Fetching image data and setting tabs.");
+      }, 400);
+    });
 
     /*Toggel Border Tools*/
 
@@ -7245,6 +7762,7 @@
     let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
+      console.log(activeObject, "Active object of mask");
       clipPath.set({
         originX: activeObject.originX,
         originY: activeObject.originY,
@@ -7256,45 +7774,46 @@
       canvas.renderAll();
     }
 
+    function handleMaskingDone() {
+      canvas.remove(shell);
+      onlyDeleteLayerEvent(shell.id);
+
+      canvas.requestRenderAll();
+      console.log("value is ", clipPathOffset.top, clipPathOffset.left);
+
+      if (storedActiveObject && storedClipPath) {
+        relativeTop = storedClipPath.top - storedActiveObject.top;
+        relativeLeft = storedClipPath.left - storedActiveObject.left;
+
+        // Attach the event handlers to start syncing the clipPath with the image
+        storedActiveObject.on("moving", () =>
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
+        );
+        storedActiveObject.on("rotating", () =>
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
+        );
+        storedActiveObject.on("scaling", () =>
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
+        );
+
+        // Optionally, hide the "done" button after syncing starts
+        document.getElementById("done-masking-img").style.display = "none";
+        document.getElementById("replace-image-btn").style.display = "none";
+        // document.getElementById("edit-masking-button").style.display =
+        //   "block";
+        canvas.on("selection:cleared", function () {
+          document.getElementById("edit-masking-button").style.display = "none";
+        });
+      } else {
+        alert(
+          "No active object found for syncing. Please add a clip mask first."
+        );
+      }
+    }
+
     document
       .getElementById("done-masking-img")
-      .addEventListener("click", function () {
-        canvas.remove(shell);
-        onlyDeleteLayerEvent(shell.id);
-
-        canvas.requestRenderAll();
-        console.log("value is ", clipPathOffset.top, clipPathOffset.left);
-
-        if (storedActiveObject && storedClipPath) {
-          relativeTop = storedClipPath.top - storedActiveObject.top;
-          relativeLeft = storedClipPath.left - storedActiveObject.left;
-
-          // Attach the event handlers to start syncing the clipPath with the image
-          storedActiveObject.on("moving", () =>
-            syncClipPathWithImage(storedClipPath, storedActiveObject)
-          );
-          storedActiveObject.on("rotating", () =>
-            syncClipPathWithImage(storedClipPath, storedActiveObject)
-          );
-          storedActiveObject.on("scaling", () =>
-            syncClipPathWithImage(storedClipPath, storedActiveObject)
-          );
-
-          // Optionally, hide the "done" button after syncing starts
-          document.getElementById("done-masking-img").style.display = "none";
-          document.getElementById("replace-image-btn").style.display = "none";
-          // document.getElementById("edit-masking-button").style.display =
-          //   "block";
-          canvas.on("selection:cleared", function () {
-            document.getElementById("edit-masking-button").style.display =
-              "none";
-          });
-        } else {
-          alert(
-            "No active object found for syncing. Please add a clip mask first."
-          );
-        }
-      });
+      .addEventListener("click", handleMaskingDone);
 
     function applyTemplateClipMask(clipmaskObject) {
       //   console.log('Attempting to remove the object:', clipObject);
@@ -9284,7 +9803,80 @@
       selector.find("#gauci-canvas").removeClass("hide-canvas");
       selector.find("#gauci").removeClass("hide-canva");
     });
+    // selector.find(".thr-d").on("click", function () {
+    //   selector.find(".thr-d").addClass("active");
+    //   selector.find(".two-d").removeClass("active");
+    //   selector
+    //     .find(".td-interactive-btn-container-main-contianer")
+    //     .addClass("interactive-btn-alignment");
+    //   selector.find(".web-thr-d-main-container").addClass("display-unity");
+    //   selector.find("#gauci-canvas").addClass("hide-canvas");
+    //   selector.find("#gauci").addClass("hide-canva");
+    //   canvas.renderAll();
+    //   // updateCanvasState()
+    //   var name = "tester";
+    //   var quality = 1;
+    //   var format = "jpeg";
+    //   var objurl = "";
+    //   var link = document.createElement("a");
+    //   add_watermark();
+    //   canvas.setZoom(1);
+    //   selector.find("#gauci-img-zoom").val(100);
+    //   var zoomWidth = originalHeight;
+    //   var zoomHeight = originalWidth;
+    //   if (rotate == 0 || rotate == 180 || rotate == -180) {
+    //     zoomWidth = originalWidth;
+    //     zoomHeight = originalHeight;
+    //   }
+    //   canvas.setWidth(zoomWidth);
+    //   canvas.setHeight(zoomHeight);
+    //   var blob = "";
+
+    //   canvas.getObjects().forEach(function (obj) {
+    //     console.log("object:", obj);
+    //     if (obj.customId === "layoutImage") {
+    //       obj.visible = false;
+    //     }
+    //   });
+    //   var imgData = canvas.toDataURL({
+    //     format: format,
+    //     quality: quality,
+    //     enableRetinaScaling: false,
+    //   });
+    //   canvas.getObjects().forEach(function (obj) {
+    //     if (obj.customId === "layoutImage") {
+    //       obj.visible = true;
+    //     }
+    //   });
+    //   console.log(imgData);
+    //   // window.canvasFinalImage=imgData
+    //   if (format != "webp") {
+    //     imgData = changeDpiDataUrl(
+    //       imgData,
+    //       selector.find("#gauci-download-img-dpi").val()
+    //     );
+    //   }
+    //   blob = dataURLtoBlob(imgData);
+    //   objurl = URL.createObjectURL(blob);
+    //   console.log("object url", objurl);
+    //   if (objurl) {
+    //     var event = new CustomEvent("variableReady", {
+    //       detail: {
+    //         data: objurl,
+    //       },
+    //     });
+    //     document.dispatchEvent(event);
+    //   }
+    //   link.download = name + "." + format;
+    //   link.href = objurl;
+    //   // link.click();
+    //   remove_watermark();
+    //   adjustZoom();
+    //   canvas.requestRenderAll();
+    // });
+    const meshImageDataArray = [];
     selector.find(".thr-d").on("click", function () {
+      // Update classes based on user interaction
       selector.find(".thr-d").addClass("active");
       selector.find(".two-d").removeClass("active");
       selector
@@ -9293,68 +9885,97 @@
       selector.find(".web-thr-d-main-container").addClass("display-unity");
       selector.find("#gauci-canvas").addClass("hide-canvas");
       selector.find("#gauci").addClass("hide-canva");
-      canvas.renderAll();
-      // updateCanvasState()
-      var name = "tester";
-      var quality = 1;
-      var format = "jpeg";
-      var objurl = "";
-      var link = document.createElement("a");
-      add_watermark();
-      canvas.setZoom(1);
-      selector.find("#gauci-img-zoom").val(100);
-      var zoomWidth = originalHeight;
-      var zoomHeight = originalWidth;
-      if (rotate == 0 || rotate == 180 || rotate == -180) {
-        zoomWidth = originalWidth;
-        zoomHeight = originalHeight;
-      }
-      canvas.setWidth(zoomWidth);
-      canvas.setHeight(zoomHeight);
-      var blob = "";
-
-      canvas.getObjects().forEach(function (obj) {
-        console.log("object:", obj);
-        if (obj.customId === "layoutImage") {
-          obj.visible = false;
-        }
-      });
-      var imgData = canvas.toDataURL({
-        format: format,
-        quality: quality,
-        enableRetinaScaling: false,
-      });
-      canvas.getObjects().forEach(function (obj) {
-        if (obj.customId === "layoutImage") {
-          obj.visible = true;
-        }
-      });
-      console.log(imgData);
-      // window.canvasFinalImage=imgData
-      if (format != "webp") {
-        imgData = changeDpiDataUrl(
-          imgData,
-          selector.find("#gauci-download-img-dpi").val()
-        );
-      }
-      blob = dataURLtoBlob(imgData);
-      objurl = URL.createObjectURL(blob);
-      console.log("object url", objurl);
-      if (objurl) {
-        var event = new CustomEvent("variableReady", {
-          detail: {
-            data: objurl,
-          },
-        });
-        document.dispatchEvent(event);
-      }
-      link.download = name + "." + format;
-      link.href = objurl;
-      // link.click();
-      remove_watermark();
-      adjustZoom();
-      canvas.requestRenderAll();
+      saveCanvasState(activeTabId);
+      generateImagesFromCanvasStates();
+      // if (meshImageDataArray) {
+      //   var event = new CustomEvent("variableReady", {
+      //     detail: {
+      //       data: meshImageDataArray,
+      //     },
+      //   });
+      //   document.dispatchEvent(event);
+      // }
+      // if (meshImageDataArray) {
+      //   console.lof(meshImageDataArray, "Mesh image data array ");
+      //   // window.sharedData = window.sharedData || {};
+      //   window.meshImageDataArray = meshImageDataArray;
+      //   console.log(
+      //     "meshImageDataArray saved to global sharedData:",
+      //     meshImageDataArray
+      //   );
+      // }
+      const event = new CustomEvent("thrDClicked");
+      document.dispatchEvent(event);
     });
+
+    // Image generation function
+    function generateImagesFromCanvasStates() {
+      // Array to store image data for each tab
+      meshImageDataArray.length = 0;
+      Object.keys(tabCanvasStates).forEach((tabId) => {
+        // Create a temporary canvas with a width and height of 2048
+        const tempCanvas = new fabric.Canvas(null, {
+          width: 2048,
+          height: 2048,
+        });
+
+        // Load the JSON state into the temporary canvas
+        tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
+          const objects = tempCanvas.getObjects(); // Get all objects in the canvas
+          console.log(objects);
+          const corsImages = []; // Store references to CORS images
+
+          // Identify and hide CORS images
+          objects.forEach((obj) => {
+            if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+              corsImages.push(obj); // Keep a reference to this object
+              obj.visible = false; // Hide the object
+            }
+          });
+
+          tempCanvas.renderAll(); // Render the canvas without CORS images
+
+          // Generate the base64 image
+          try {
+            const base64Image = tempCanvas.toDataURL({
+              format: "png",
+              quality: 1.0,
+            });
+            console.log(base64Image);
+
+            // Push the data into the array
+            meshImageDataArray.push({
+              meshName: tabId,
+              meshImageData: base64Image,
+            });
+          } catch (error) {
+            console.error(`Error generating image for Tab ID ${tabId}:`, error);
+          }
+
+          // Restore visibility of CORS images
+          corsImages.forEach((obj) => {
+            obj.visible = true;
+          });
+
+          tempCanvas.renderAll(); // Re-render the canvas with all objects
+
+          // Clean up the temporary canvas
+          tempCanvas.clear();
+          tempCanvas.dispose();
+
+          if (
+            meshImageDataArray.length === Object.keys(tabCanvasStates).length
+          ) {
+            // console.log("Generated Images Array:", meshImageDataArray);
+            window.meshImageDataArray = meshImageDataArray;
+            console.log(
+              window.meshImageDataArray,
+              "Window data from gauci file"
+            );
+          }
+        });
+      });
+    }
 
     function loadTemplateFromUrl() {
       var params = new URLSearchParams(window.location.search);

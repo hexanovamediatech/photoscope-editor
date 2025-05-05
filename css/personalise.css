@@ -789,7 +789,7 @@ button#personaliseAdjustBtn img {
 
 .gauci-content-save-bar {
   position: absolute;
-  top: 0px;
+  top: 60px;
   left: 20px;
   margin-top: 20px;
   margin: 10px;
@@ -1295,6 +1295,64 @@ div#personaliseDoneBtn img {
   cursor: pointer;
 }
 
+.gauci-tab-cont {
+  display: flex;
+  padding: 0 20px;
+  min-height: 52px;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  gap: 4px;
+  /* background: #1e202a; */
+}
+
+.gauci-tab-cont > div {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  max-width: 110px;
+  top: auto !important;
+  bottom: 0 !important;
+  transition: none !important;
+  text-align: center;
+}
+
+.gauci-tab-cont > div.active > .gauci-open-page {
+  background: #1c1d26;
+  color: #fff;
+}
+.gauci-tab-cont > div.active {
+  max-width: 160px;
+}
+
+.gauci-tab-cont > div > .gauci-open-page {
+  display: block;
+  padding: 0 30px 0 15px;
+  height: 46px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  line-height: 44px;
+  text-align: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  background: #1e202a;
+  border: 1px solid #303030;
+}
+/* .gauic-tab-inactive {
+  cursor: pointer;
+}
+.gauic-tab-active {
+  cursor: pointer;
+  height: 48px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background: #1c1d26;
+} */
 @media (max-width: 1024px) {
   .template-name-tag {
     font-size: 10px;
