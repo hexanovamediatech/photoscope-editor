@@ -988,14 +988,76 @@ initialize3DViewer();
     const data = await response.json();
     const dataArray = data.data; // Access the array from the data object
     console.log(dataArray);
+    // console.log(Array.isArray(dataArray));
+    if (dataArray === null) {
+      hideSkeletonLoader();
+      const emptyData = [];
+      const dummyTemplateCount = 10;
+      for (let i = 0; i < dummyTemplateCount; i++) {
+        const dummyTemplate = {
+          name: `Template ${i + 1}`,
+          imageUrl: "../../assets/custom/temp-img-2.jpg",
+          key: `dummy-template-${i + 1}`,
+          isPublic: true,
+          src: "path/to/dummy/template.json",
+          isDummy: true,
+        };
+        emptyData.push(dummyTemplate);
+      }
+      console.log(emptyData);
+      emptyData.forEach((item) => {
+        const mainDiv = document.createElement("div");
+        mainDiv.classList.add("template-main-cont");
+
+        const imageDiv = document.createElement("div");
+        imageDiv.classList.add("template-image-cont");
+
+        const newImg = document.createElement("img");
+        newImg.src = item.imageUrl;
+        newImg.alt = item.name;
+        newImg.classList.add("template-image-box");
+        newImg.loading = "lazy";
+
+        imageDiv.appendChild(newImg);
+
+        const nameP = document.createElement("p");
+        // nameP.textContent = item.name;
+        if (item.name.length > 12) {
+          // Show the first 10 characters followed by "..."
+          nameP.textContent = item.name.substring(0, 12) + "...";
+          // Set the title attribute to show the full name on hover
+          nameP.setAttribute("title", item.name);
+        } else {
+          // If the name is less than or equal to 10 characters, show it fully
+          nameP.textContent = item.name;
+        }
+        nameP.classList.add("template-name-tag");
+
+        mainDiv.appendChild(imageDiv);
+        mainDiv.appendChild(nameP);
+
+        container.appendChild(mainDiv);
+        // Favorite icon using PNGs
+
+        if (item.isDummy) {
+          const overlay = document.createElement("img");
+          overlay.classList.add("template-overlay-icon");
+          overlay.id = "templateOverLay";
+          overlay.src = "../../assets/custom/overlay-temp.png";
+          mainDiv.appendChild(overlay);
+        }
+      });
+    }
     if (Array.isArray(dataArray)) {
       // Filter the objects with type "p2-type1"
+
       const urlParams = new URLSearchParams(window.location.search);
       const name = urlParams.get("name");
 
       const filteredData = dataArray.filter(
         (obj) => obj.type === name && obj.isPublic === true
       );
+      console.log(filteredData);
       if (filteredData.length < 10) {
         const dummyTemplateCount = 10 - filteredData.length;
         for (let i = 0; i < dummyTemplateCount; i++) {
@@ -1224,6 +1286,7 @@ initialize3DViewer();
       });
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
+      // hideSkeletonLoader();
     }
   } catch (error) {
     console.error("Error fetching data:", error);

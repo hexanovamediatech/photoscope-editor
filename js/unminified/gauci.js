@@ -3487,25 +3487,25 @@
               layerName = gauciParams.qrCode;
               layerIcon = "qr_code";
             }
-            // if (canvasObj.type === "textbox") {
-            //   layerName = canvasObj.text;
-            //   layerIcon = "title";
-            // } else if (canvasObj.type === "rect") {
-            //   layerName = gauciParams.rectangle;
-            // } else if (canvasObj.type === "circle") {
-            //   layerName = gauciParams.circle;
-            // } else if (canvasObj.type === "triangle") {
-            //   layerName = gauciParams.triangle;
-            // } else if (canvasObj.type === "path") {
-            //   layerName = gauciParams.element;
-            //   layerIcon = "star";
-            // } else if (canvasObj.type === "group") {
-            //   layerName = gauciParams.element;
-            //   layerIcon = "star";
-            // } else if (canvasObj.type === "image") {
-            //   layerName = gauciParams.image;
-            //   layerIcon = "image";
-            // }
+            if (canvasObj.type === "textbox") {
+              layerName = canvasObj.text;
+              layerIcon = "title";
+            } else if (canvasObj.type === "rect") {
+              layerName = gauciParams.rectangle;
+            } else if (canvasObj.type === "circle") {
+              layerName = gauciParams.circle;
+            } else if (canvasObj.type === "triangle") {
+              layerName = gauciParams.triangle;
+            } else if (canvasObj.type === "path") {
+              layerName = gauciParams.element;
+              layerIcon = "star";
+            } else if (canvasObj.type === "group") {
+              layerName = gauciParams.element;
+              layerIcon = "star";
+            } else if (canvasObj.type === "image") {
+              layerName = gauciParams.image;
+              layerIcon = "image";
+            }
 
             if ("layerName" in canvasObj) {
               layerName = canvasObj.layerName;
@@ -7048,6 +7048,155 @@
     }
 
     // Save the canvas state for a given tab
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON());
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     const output = Object.keys(allCanvasTabState).map((key) => ({
+    //       part: key,
+    //       jsonData: JSON.parse(allCanvasTabState[key]),
+    //     }));
+
+    //     console.log(output);
+
+    //     // const originalFormat = {};
+    //     // output.forEach((item) => {
+    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+    //     // });
+
+    //     // console.log(originalFormat);
+    //   }
+    // }
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON());
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     // const originalFormat = {};
+    //     // output.forEach((item) => {
+    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+    //     // });
+
+    //     // console.log(originalFormat);
+    //   }
+    // }
+
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     const output = Object.keys(allCanvasTabState).map((key) => ({
+    //       part: key,
+    //       jsonData: JSON.parse(allCanvasTabState[key]),
+    //     }));
+
+    //     console.log(output);
+
+    //     // console.log(originalFormat);
+    //   }
+    // }
+
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     const output = Object.keys(allCanvasTabState).map((key) => ({
+    //       part: key,
+    //       jsonData: JSON.parse(allCanvasTabState[key]),
+    //     }));
+
+    //     console.log(output);
+
+    //     // const originalFormat = {};
+    //     // output.forEach((item) => {
+    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+    //     // });
+
+    //     // console.log(originalFormat);
+    //   }
+    // }
+
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     const output = Object.keys(allCanvasTabState).map((key) => ({
+    //       part: key,
+    //       jsonData: JSON.parse(allCanvasTabState[key]),
+    //     }));
+
+    //     console.log(output);
+
+    //     // const originalFormat = {};
+    //     // output.forEach((item) => {
+    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+    //     // });
+
+    //     // console.log(originalFormat);
+    //   }
+    // }
+
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     const output = Object.keys(allCanvasTabState).map((key) => ({
+    //       part: key,
+    //       jsonData: JSON.parse(allCanvasTabState[key]),
+    //     }));
+
+    //     console.log(output);
+
+    //   }
+    // }
+
+    // function saveCanvasState(tabId) {
+    //   if (tabId !== null && canvas) {
+    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
+    //     tabCanvasStates[tabId] = state; // Store the state
+    //     allCanvasTabState = tabCanvasStates;
+    //     console.log(allCanvasTabState);
+    //     console.log(`Saved canvas state for Tab ${tabId}`);
+
+    //     const output = Object.keys(allCanvasTabState).map((key) => ({
+    //       part: key,
+    //       jsonData: JSON.parse(allCanvasTabState[key]),
+    //     }));
+
+    //     console.log(output);
+
+    //     // const originalFormat = {};
+    //     // output.forEach((item) => {
+    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+    //     // });
+
+    //     // console.log(originalFormat);
+    //   }
+    // }
+
     function saveCanvasState(tabId) {
       if (tabId !== null && canvas) {
         const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
@@ -7055,6 +7204,20 @@
         allCanvasTabState = tabCanvasStates;
         console.log(allCanvasTabState);
         console.log(`Saved canvas state for Tab ${tabId}`);
+
+        const output = Object.keys(allCanvasTabState).map((key) => ({
+          part: key,
+          jsonData: JSON.parse(allCanvasTabState[key]),
+        }));
+
+        console.log(output);
+
+        // const originalFormat = {};
+        // output.forEach((item) => {
+        //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+        // });
+
+        // console.log(originalFormat);
       }
     }
 
