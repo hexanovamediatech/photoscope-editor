@@ -983,6 +983,67 @@ button#personaliseAdjustBtn img {
   color: #333;
 }
 
+.hexa-drop-down-main-cont {
+  display: none;
+}
+
+.hexa-drop-down-cont {
+  margin: 20px;
+  position: relative;
+}
+.hexa-drop-down-select-cont {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #00a3ff;
+  transition: all 0.3s;
+  padding: 5px 10px;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.hexa-dropdown-ul-list {
+  display: none;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  z-index: 100;
+  border-radius: 8px;
+
+  width: 100%;
+}
+.hexa-dropdown-list {
+  padding: 5px 10px;
+  width: 100%;
+  background-color: #f2f6fe;
+  cursor: pointer;
+  /* border-bottom: 1px solid #303030; */
+  color: #aaa;
+  transition: all 0.3s;
+}
+.show-dropdown {
+  display: block;
+}
+.hexa-dropdown-list:hover {
+  color: #0c0b18;
+}
+.hexa-dropdown-list:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.hexa-dropdown-list:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.hexa-dropdown-selected {
+}
+.hexa-drop-down-select-cont:hover {
+  background: #0188d4;
+}
+
 @media (min-width: 1200px) {
   .personalise-template-list-cont,
   .personalise-button-main-cont {
