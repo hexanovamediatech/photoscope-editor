@@ -709,8 +709,8 @@ function generateImagesFromCanvasStates() {
   Object.keys(originalFormat).forEach((tabId) => {
     // Create a temporary canvas with a width and height of 2048
     const tempCanvas = new fabric.Canvas(null, {
-      width: 2048,
-      height: 2048,
+      width: 1024,
+      height: 1024,
     });
 
     // Load the JSON state into the temporary canvas
@@ -720,20 +720,20 @@ function generateImagesFromCanvasStates() {
       const corsImages = []; // Store references to CORS images
 
       // Identify and hide CORS images
-      objects.forEach((obj) => {
-        if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-          corsImages.push(obj); // Keep a reference to this object
-          obj.visible = false; // Hide the object
-        }
-      });
+      // objects.forEach((obj) => {
+      //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+      //     corsImages.push(obj); // Keep a reference to this object
+      //     obj.visible = false; // Hide the object
+      //   }
+      // });
 
       tempCanvas.renderAll(); // Render the canvas without CORS images
 
       // Generate the base64 image
       try {
         const base64Image = tempCanvas.toDataURL({
-          format: "png",
-          quality: 1.0,
+          format: "jpeg", // More compressed
+          quality: 0.6,
         });
 
         // Push the data into the array
@@ -757,7 +757,7 @@ function generateImagesFromCanvasStates() {
       tempCanvas.dispose();
 
       if (meshImageDataArray.length === Object.keys(originalFormat).length) {
-        // console.log("Generated Images Array:", meshImageDataArray);
+        console.log("Generated Images Array:", meshImageDataArray);
         // window.meshImageDataArray = meshImageDataArray;
         // console.log(meshImageDataArray, "Window data from gauci file");
         applyTexturesToMeshes();
@@ -765,215 +765,6 @@ function generateImagesFromCanvasStates() {
     });
   });
 }
-
-// function loadJSONToCanvas(jsonData) {
-//   console.log(jsonData, "json data here ");
-//   if (!newFabricCanvas) {
-//     initializeCanvas();
-//   }
-
-//   newFabricCanvas.clear();
-
-//   const label1 = document.getElementById("label-1");
-//   const label2 = document.getElementById("label-2");
-//   const input1 = document.getElementById("text-1");
-//   const input2 = document.getElementById("text-2");
-//   label1.style.display = "none";
-//   label2.style.display = "none";
-//   input1.style.display = "none";
-//   input2.style.display = "none";
-
-//   // Count the number of textboxes in the JSON data
-//   const textBoxCount = jsonData.objects.filter(
-//     (obj) => obj.type === "textbox"
-//   ).length;
-
-//   const showImage = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   if (showImage.length > 0) {
-//     const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
-
-//     const miniEditorPopupImage = document.getElementById(
-//       "min-editor-popup-image"
-//     );
-//     const miniEditordummyImage = document.getElementById(
-//       "min-editor-dummy-image"
-//     );
-//     if (window.innerWidth < 1024) {
-//       miniEditordummyImage.src = clipmaskImage.src;
-//       miniEditordummyImage.style.width = "100%";
-//       miniEditordummyImage.classList.add("dummyImageCoverFit");
-//     }
-
-//     // const dummyImage = document.getElementById("min-editor-dummy-image");
-
-//     // Check if the image element exists and if the clipmaskImage has a valid src
-//     if (miniEditorPopupImage && clipmaskImage.src) {
-//       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-//       miniEditorPopupImage.src = clipmaskImage.src;
-//       // dummyImage.style.width = "100%";
-//       // dummyImage.style.height = "100%";
-//       // dummyImage.style.objectFit = "cover";
-//       // dummyImage.src = clipmaskImage.src;
-//       // dummyImage.style.borderRadius = "10px";
-//     }
-//     //  else {
-//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
-//     // }
-//   }
-
-//   // Show input fields based on the number of textboxes
-//   if (textBoxCount > 0) {
-//     label1.style.display = "block";
-//     input1.style.display = "block"; // Show the first input field
-//   }
-//   if (textBoxCount > 1) {
-//     label2.style.display = "block";
-//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
-//   }
-//   const replaceImgBtn = document.getElementById("replace-btn-cont");
-//   const imageFound = jsonData.objects.find(
-//     (obj) => obj.type === "image" && !obj.src.startsWith("http")
-//   );
-//   if (imageFound) {
-//     replaceImgBtn.style.display = "block";
-//   } else {
-//     replaceImgBtn.style.display = "none";
-//   }
-//   // Load the JSON data into the existing Fabric.js canvas
-//   let nextIndex = 1;
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "textbox") {
-//       // Assign a default dataIndex if not provided
-//       obj.dataIndex = obj.dataIndex || nextIndex++;
-//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
-//       if (inputField) {
-//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
-//       }
-//     }
-//   });
-//   newFabricCanvas.loadFromJSON(
-//     jsonData,
-//     function () {
-//       console.log(jsonData.objects);
-
-//       // Load and scale the background image if it exists
-//       if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
-//         const bgImageData = jsonData.backgroundImage.src;
-//         fabric.Image.fromURL(bgImageData, function (bgImage) {
-//           // Set the background image properties
-//           bgImage.set({
-//             scaleX: 0.22, // Apply the scale factor
-//             scaleY: 0.22, // Apply the scale factor
-//             left: jsonData.backgroundImage.left,
-//             top: jsonData.backgroundImage.top,
-//             originX: "left",
-//             originY: "top",
-//           });
-
-//           newFabricCanvas.setBackgroundImage(
-//             bgImage,
-//             newFabricCanvas.renderAll.bind(newFabricCanvas)
-//           );
-//         });
-//       }
-
-//       // After loading the JSON, resize and reposition all objects to fit the canvas
-//       newFabricCanvas.getObjects().forEach((obj, index) => {
-//         if (index === 0) {
-//           // Scale down the first object
-//           obj.scaleX *= 0.22;
-//           obj.scaleY *= 0.22;
-//         } else {
-//           // Apply a different scaling factor for other objects
-//           obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-//           obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-//           // Adjust top and left properties to make the object visible
-//           obj.left *= 0.22; // Adjust the position as needed
-//           obj.top *= 0.22; // Adjust the position as needed
-//         }
-
-//         if (obj.clipPath) {
-//           obj.clipPath.set({
-//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
-//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
-//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
-//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
-//           });
-//         }
-
-//         obj.setCoords();
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       // Force a render to ensure all objects, including clipPaths, are applied
-//       newFabricCanvas.renderAll();
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       window.editedCanvasJson = savedCanvasJSON;
-//       const allObjects = newFabricCanvas.getObjects();
-
-//       // Save the first object (assuming it's the background image)
-//       const firstObject = allObjects[0];
-
-//       // Remove the first object from the canvas
-//       newFabricCanvas.remove(firstObject);
-
-//       // Render the canvas without the first object
-//       newFabricCanvas.renderAll();
-//       const originalWidth = newFabricCanvas.width;
-//       const originalHeight = newFabricCanvas.height;
-
-//       // Set the canvas dimensions to 1080x1080 for the export
-//       newFabricCanvas.setDimensions({
-//         width: 1080,
-//         height: 1080,
-//       });
-//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
-
-//       // Convert the remaining objects on the canvas to an image
-//       const format = "jpeg";
-//       const quality = 1;
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       newFabricCanvas.setDimensions({
-//         width: originalWidth,
-//         height: originalHeight,
-//       });
-//       newFabricCanvas.setZoom(1);
-//       // Pass the image data to the changeTexture function
-//       fabricImageConverted = imgData;
-//       console.log("this is thefabricImageConverted", fabricImageConverted);
-//       if (selectedMesh) {
-//         changeTexture(fabricImageConverted);
-//       }
-
-//       // Add the first object back to its original position
-//       newFabricCanvas.insertAt(firstObject, 0);
-
-//       // Render the canvas to show all objects again
-//       newFabricCanvas.renderAll();
-//     },
-//     function (error) {
-//       console.error("Error loading JSON:", error);
-//       console.log("Loaded JSON Data:", jsonData);
-//     }
-//   );
-// }
 
 function loadJSONToCanvas(jsonData) {
   console.log(jsonData, "json data here ");
@@ -997,36 +788,35 @@ function loadJSONToCanvas(jsonData) {
     (obj) => obj.type === "textbox"
   ).length;
 
-  const showImage = jsonData.objects.filter((obj) => obj.type === "image");
+  const showImage = jsonData.objects.filter(
+    (obj) => obj.customId === "clipmask"
+  );
   if (showImage.length > 0) {
-    imageReplace = true;
-    const clipmaskImage = showImage[1]; // Assuming there's at least one matching image
-    console.log(clipmaskImage);
-    if (clipmaskImage) {
-      const miniEditorPopupImage = document.getElementById(
-        "min-editor-popup-image"
-      );
-      const miniEditordummyImage = document.getElementById(
-        "min-editor-dummy-image"
-      );
-      if (window.innerWidth < 1024) {
-        miniEditordummyImage.src = clipmaskImage.src;
-        miniEditordummyImage.style.width = "100%";
-        miniEditordummyImage.classList.add("dummyImageCoverFit");
-      }
+    const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
 
-      // const dummyImage = document.getElementById("min-editor-dummy-image");
+    const miniEditorPopupImage = document.getElementById(
+      "min-editor-popup-image"
+    );
+    const miniEditordummyImage = document.getElementById(
+      "min-editor-dummy-image"
+    );
+    if (window.innerWidth < 1024) {
+      miniEditordummyImage.src = clipmaskImage.src;
+      miniEditordummyImage.style.width = "100%";
+      miniEditordummyImage.classList.add("dummyImageCoverFit");
+    }
 
-      // Check if the image element exists and if the clipmaskImage has a valid src
-      if (miniEditorPopupImage && clipmaskImage.src) {
-        // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-        miniEditorPopupImage.src = clipmaskImage.src;
-        // dummyImage.style.width = "100%";
-        // dummyImage.style.height = "100%";
-        // dummyImage.style.objectFit = "cover";
-        // dummyImage.src = clipmaskImage.src;
-        // dummyImage.style.borderRadius = "10px";
-      }
+    // const dummyImage = document.getElementById("min-editor-dummy-image");
+
+    // Check if the image element exists and if the clipmaskImage has a valid src
+    if (miniEditorPopupImage && clipmaskImage.src) {
+      // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+      miniEditorPopupImage.src = clipmaskImage.src;
+      // dummyImage.style.width = "100%";
+      // dummyImage.style.height = "100%";
+      // dummyImage.style.objectFit = "cover";
+      // dummyImage.src = clipmaskImage.src;
+      // dummyImage.style.borderRadius = "10px";
     }
     //  else {
     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
@@ -1177,13 +967,223 @@ function loadJSONToCanvas(jsonData) {
 
       // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
+    },
+    function (error) {
+      console.error("Error loading JSON:", error);
+      console.log("Loaded JSON Data:", jsonData);
     }
-    // function (error) {
-    //   console.error("Error loading JSON:", error);
-    //   console.log("Loaded JSON Data:", jsonData);
-    // }
   );
 }
+
+// function loadJSONToCanvas(jsonData) {
+//   console.log(jsonData, "json data here ");
+//   if (!newFabricCanvas) {
+//     initializeCanvas();
+//   }
+
+//   newFabricCanvas.clear();
+
+//   const label1 = document.getElementById("label-1");
+//   const label2 = document.getElementById("label-2");
+//   const input1 = document.getElementById("text-1");
+//   const input2 = document.getElementById("text-2");
+//   label1.style.display = "none";
+//   label2.style.display = "none";
+//   input1.style.display = "none";
+//   input2.style.display = "none";
+
+//   // Count the number of textboxes in the JSON data
+//   const textBoxCount = jsonData.objects.filter(
+//     (obj) => obj.type === "textbox"
+//   ).length;
+
+//   const showImage = jsonData.objects.filter((obj) => obj.type === "image");
+//   if (showImage.length > 0) {
+//     imageReplace = true;
+//     const clipmaskImage = showImage[1]; // Assuming there's at least one matching image
+//     console.log(clipmaskImage);
+//     if (clipmaskImage) {
+//       const miniEditorPopupImage = document.getElementById(
+//         "min-editor-popup-image"
+//       );
+//       const miniEditordummyImage = document.getElementById(
+//         "min-editor-dummy-image"
+//       );
+//       if (window.innerWidth < 1024) {
+//         miniEditordummyImage.src = clipmaskImage.src;
+//         miniEditordummyImage.style.width = "100%";
+//         miniEditordummyImage.classList.add("dummyImageCoverFit");
+//       }
+
+//       // const dummyImage = document.getElementById("min-editor-dummy-image");
+
+//       // Check if the image element exists and if the clipmaskImage has a valid src
+//       if (miniEditorPopupImage && clipmaskImage.src) {
+//         // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+//         miniEditorPopupImage.src = clipmaskImage.src;
+//         // dummyImage.style.width = "100%";
+//         // dummyImage.style.height = "100%";
+//         // dummyImage.style.objectFit = "cover";
+//         // dummyImage.src = clipmaskImage.src;
+//         // dummyImage.style.borderRadius = "10px";
+//       }
+//     }
+//     //  else {
+//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
+//     // }
+//   }
+
+//   // Show input fields based on the number of textboxes
+//   if (textBoxCount > 0) {
+//     label1.style.display = "block";
+//     input1.style.display = "block"; // Show the first input field
+//   }
+//   if (textBoxCount > 1) {
+//     label2.style.display = "block";
+//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
+//   }
+//   const replaceImgBtn = document.getElementById("replace-btn-cont");
+//   const imageFound = jsonData.objects.find(
+//     (obj) => obj.type === "image" && !obj.src.startsWith("http")
+//   );
+//   if (imageFound) {
+//     replaceImgBtn.style.display = "block";
+//   } else {
+//     replaceImgBtn.style.display = "none";
+//   }
+//   // Load the JSON data into the existing Fabric.js canvas
+//   let nextIndex = 1;
+//   jsonData.objects.forEach((obj) => {
+//     if (obj.type === "textbox") {
+//       // Assign a default dataIndex if not provided
+//       obj.dataIndex = obj.dataIndex || nextIndex++;
+//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
+//       if (inputField) {
+//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
+//       }
+//     }
+//   });
+//   newFabricCanvas.loadFromJSON(
+//     jsonData,
+//     function () {
+//       console.log(jsonData.objects);
+
+//       // Load and scale the background image if it exists
+//       if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
+//         const bgImageData = jsonData.backgroundImage.src;
+//         fabric.Image.fromURL(bgImageData, function (bgImage) {
+//           // Set the background image properties
+//           bgImage.set({
+//             scaleX: 0.22, // Apply the scale factor
+//             scaleY: 0.22, // Apply the scale factor
+//             left: jsonData.backgroundImage.left,
+//             top: jsonData.backgroundImage.top,
+//             originX: "left",
+//             originY: "top",
+//           });
+
+//           newFabricCanvas.setBackgroundImage(
+//             bgImage,
+//             newFabricCanvas.renderAll.bind(newFabricCanvas)
+//           );
+//         });
+//       }
+
+//       // After loading the JSON, resize and reposition all objects to fit the canvas
+//       newFabricCanvas.getObjects().forEach((obj, index) => {
+//         if (index === 0) {
+//           // Scale down the first object
+//           obj.scaleX *= 0.22;
+//           obj.scaleY *= 0.22;
+//         } else {
+//           // Apply a different scaling factor for other objects
+//           obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+//           obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+
+//           // Adjust top and left properties to make the object visible
+//           obj.left *= 0.22; // Adjust the position as needed
+//           obj.top *= 0.22; // Adjust the position as needed
+//         }
+
+//         if (obj.clipPath) {
+//           obj.clipPath.set({
+//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
+//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
+//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
+//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
+//           });
+//         }
+
+//         obj.setCoords();
+//         obj.set({
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+//       });
+
+//       // Force a render to ensure all objects, including clipPaths, are applied
+//       newFabricCanvas.renderAll();
+
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       window.editedCanvasJson = savedCanvasJSON;
+//       const allObjects = newFabricCanvas.getObjects();
+
+//       // Save the first object (assuming it's the background image)
+//       const firstObject = allObjects[0];
+
+//       // Remove the first object from the canvas
+//       newFabricCanvas.remove(firstObject);
+
+//       // Render the canvas without the first object
+//       newFabricCanvas.renderAll();
+//       const originalWidth = newFabricCanvas.width;
+//       const originalHeight = newFabricCanvas.height;
+
+//       // Set the canvas dimensions to 1080x1080 for the export
+//       newFabricCanvas.setDimensions({
+//         width: 1080,
+//         height: 1080,
+//       });
+//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+
+//       // Convert the remaining objects on the canvas to an image
+//       const format = "jpeg";
+//       const quality = 1;
+//       const imgData = newFabricCanvas.toDataURL({
+//         format: format,
+//         quality: quality,
+//         enableRetinaScaling: false,
+//       });
+//       newFabricCanvas.setDimensions({
+//         width: originalWidth,
+//         height: originalHeight,
+//       });
+//       newFabricCanvas.setZoom(1);
+//       // Pass the image data to the changeTexture function
+//       fabricImageConverted = imgData;
+//       console.log("this is thefabricImageConverted", fabricImageConverted);
+//       if (selectedMesh) {
+//         changeTexture(fabricImageConverted);
+//       }
+
+//       // Add the first object back to its original position
+//       newFabricCanvas.insertAt(firstObject, 0);
+
+//       // Render the canvas to show all objects again
+//       newFabricCanvas.renderAll();
+//     }
+//     // function (error) {
+//     //   console.error("Error loading JSON:", error);
+//     //   console.log("Loaded JSON Data:", jsonData);
+//     // }
+//   );
+// }
 
 function setNewImageSrc(imageSrc) {
   newImageSrc = imageSrc;
@@ -1666,59 +1666,59 @@ initialize3DViewer();
           newImg.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
           console.log(activeItem);
-          const dropdownList = document.querySelector(".hexa-dropdown-ul-list");
-          const selectedBox = document.querySelector(".hexa-dropdown-selected");
-          const selectContainer = document.querySelector(
-            ".hexa-drop-down-select-cont"
-          );
+          // const dropdownList = document.querySelector(".hexa-dropdown-ul-list");
+          // const selectedBox = document.querySelector(".hexa-dropdown-selected");
+          // const selectContainer = document.querySelector(
+          //   ".hexa-drop-down-select-cont"
+          // );
 
-          while (dropdownList.firstChild) {
-            dropdownList.removeChild(dropdownList.firstChild);
-          }
+          // while (dropdownList.firstChild) {
+          //   dropdownList.removeChild(dropdownList.firstChild);
+          // }
 
-          // Step 1: Populate <ul> dynamically
-          activeItem.forEach((item, index) => {
-            const li = document.createElement("li");
-            li.className = "hexa-dropdown-list";
-            li.textContent = item.part;
-            li.addEventListener("click", () => {
-              selectedBox.textContent = item.part;
-              dropdownList.classList.remove("show-dropdown");
-              selectedModelPart = item.part;
-              loadJSONToCanvas(item?.jsonData);
-            });
-            dropdownList.appendChild(li);
-          });
+          // // Step 1: Populate <ul> dynamically
+          // activeItem.forEach((item, index) => {
+          //   const li = document.createElement("li");
+          //   li.className = "hexa-dropdown-list";
+          //   li.textContent = item.part;
+          //   li.addEventListener("click", () => {
+          //     selectedBox.textContent = item.part;
+          //     dropdownList.classList.remove("show-dropdown");
+          //     selectedModelPart = item.part;
+          //     loadJSONToCanvas(item?.jsonData);
+          //   });
+          //   dropdownList.appendChild(li);
+          // });
 
           // Step 2: Set default selected to first item
-          if (activeItem.length > 0) {
-            selectedBox.textContent = activeItem[0].part;
-            selectedModelPart = activeItem[0].part;
-            loadJSONToCanvas(activeItem[0].jsonData);
-          }
+          // if (activeItem.length > 0) {
+          //   selectedBox.textContent = activeItem[0].part;
+          //   selectedModelPart = activeItem[0].part;
+          //   loadJSONToCanvas(activeItem[0].jsonData);
+          // }
 
-          // Step 3: Toggle dropdown on click
-          selectContainer.addEventListener("click", () => {
-            dropdownList.classList.add("show-dropdown");
-          });
-          // Optional: Hide when clicking outside
-          document.addEventListener("click", (e) => {
-            if (!e.target.closest(".hexa-drop-down-cont")) {
-              dropdownList.classList.remove("show-dropdown");
-            }
-          });
+          // // Step 3: Toggle dropdown on click
+          // selectContainer.addEventListener("click", () => {
+          //   dropdownList.classList.add("show-dropdown");
+          // });
+          // // Optional: Hide when clicking outside
+          // document.addEventListener("click", (e) => {
+          //   if (!e.target.closest(".hexa-drop-down-cont")) {
+          //     dropdownList.classList.remove("show-dropdown");
+          //   }
+          // });
 
           activeItem.forEach((item) => {
             originalFormat[item.part] = JSON.stringify(item.jsonData);
           });
 
-          console.log(originalFormat);
+          // console.log(originalFormat);
           generateImagesFromCanvasStates();
 
-          const dropDownCont = document.getElementById(
-            "hexa-drop-down-main-one"
-          );
-          dropDownCont.style.display = "block";
+          // const dropDownCont = document.getElementById(
+          //   "hexa-drop-down-main-one"
+          // );
+          // dropDownCont.style.display = "block";
           // const realEditCont = document.getElementById(
           //   "personaliseImageUploadPopup"
           // );
