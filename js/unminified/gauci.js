@@ -1441,1745 +1441,201 @@
     //   });
     // });
 
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     // Get all tab states in the required format
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     console.log("output json converted:", output);
-    //     // Process each tab's canvas data and prepare for upload
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise((resolve) => {
-    //         // Create temporary canvas to process each part
-    //         const tempCanvas = new fabric.StaticCanvas();
-    //         tempCanvas.loadFromJSON(tab.jsonData, () => {
-    //           // Convert to JSON with specific properties
-    //           const json = tempCanvas.toJSON([
-    //             "objectType",
-    //             "gradientFill",
-    //             "roundedCorners",
-    //             "mode",
-    //             "selectable",
-    //             "lockMovementX",
-    //             "lockMovementY",
-    //             "lockRotation",
-    //             "crossOrigin",
-    //             "layerName",
-    //             "customId",
-    //           ]);
-
-    //           // Filter objects if needed
-    //           const objects = tempCanvas.getObjects();
-    //           const filteredObjects = objects.filter(
-    //             (obj) => obj.customId !== "layoutImage"
-    //           );
-
-    //           // Temporarily hide non-filtered objects for image generation
-    //           tempCanvas.getObjects().forEach((obj) => {
-    //             obj.visible = filteredObjects.includes(obj);
-    //           });
-
-    //           // Generate image preview
-    //           const canvasImageUrl = tempCanvas.toDataURL({
-    //             format: "png",
-    //             multiplier: 2,
-    //           });
-
-    //           // Restore visibility
-    //           tempCanvas.getObjects().forEach((obj) => {
-    //             obj.visible = true;
-    //           });
-
-    //           // Process background image if exists
-    //           if (json.backgroundImage && json.backgroundImage.src) {
-    //             convertToDataURL(json.backgroundImage.src, (dataUrl) => {
-    //               json.backgroundImage.src = dataUrl;
-    //               resolve({
-    //                 part: tab.part,
-    //                 json,
-    //                 canvasImageUrl,
-    //               });
-    //             });
-    //           } else {
-    //             resolve({
-    //               part: tab.part,
-    //               json,
-    //               canvasImageUrl,
-    //             });
-    //           }
-    //         });
-    //       });
-    //     });
-
-    //     // Process all parts and prepare upload
-    //     Promise.all(processPromises).then((results) => {
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       // Add all files to FormData
-    //       results.forEach((result) => {
-    //         // Add JSON file
-    //         const jsonBlob = new Blob([JSON.stringify(result.json)], {
-    //           type: "application/json",
-    //         });
-    //         const jsonFilename = `template_${result.part}_${timestamp}.json`;
-    //         formData.append("files", jsonBlob, jsonFilename);
-
-    //         // Add image file
-    //         const imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         const imageFilename = `template_image_${result.part}_${timestamp}.png`;
-    //         formData.append("files", imageBlob, imageFilename);
-    //       });
-
-    //       // Upload all files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           // Organize URLs by part
-    //           const templateData = results.map((result) => {
-    //             const jsonUrl = response.urls.find((url) =>
-    //               url.includes(`template_${result.part}_${timestamp}.json`)
-    //             );
-    //             const imageUrl = response.urls.find((url) =>
-    //               url.includes(`template_image_${result.part}_${timestamp}.png`)
-    //             );
-
-    //             return {
-    //               part: result.part,
-    //               jsonData: jsonUrl,
-    //               imageUrl: imageUrl,
-    //             };
-    //           });
-
-    //           // Prepare final payload
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           const data = {
-    //             key: key,
-    //             src: templateData,
-    //             name: name,
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           console.log("JSON data to upload:", data);
-
-    //           // Upload metadata
-    //           uploadData(data)
-    //             .then(() => {
-    //               Swal.fire({
-    //                 title: "Success",
-    //                 text: "All templates saved successfully!",
-    //                 icon: "success",
-    //               });
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               Swal.fire({
-    //                 icon: "error",
-    //                 title: "Failed",
-    //                 text: error.message || "Failed to save templates",
-    //               });
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           Swal.fire({
-    //             icon: "error",
-    //             title: "Upload Failed",
-    //             text: error || "File upload failed",
-    //           });
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   // Show public/private modal before proceeding
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     // Get all canvas states in the required format
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     console.log("output json converted:", output);
-
-    //     // Process each tab's canvas data and prepare for upload
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise((resolve) => {
-    //         // Create temporary canvas
-    //         const tempCanvasEl = document.createElement("canvas");
-    //         const tempCanvas = new fabric.Canvas(tempCanvasEl);
-
-    //         // First ensure all images have crossOrigin set
-    //         if (tab.jsonData.objects) {
-    //           tab.jsonData.objects.forEach((obj) => {
-    //             if (obj.type === "image" && obj.src) {
-    //               obj.crossOrigin = "anonymous";
-    //             }
-    //           });
-    //         }
-
-    //         // Handle background image CORS
-    //         if (
-    //           tab.jsonData.backgroundImage &&
-    //           tab.jsonData.backgroundImage.src
-    //         ) {
-    //           tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-    //         }
-
-    //         // Load the canvas data
-    //         tempCanvas.loadFromJSON(
-    //           tab.jsonData,
-    //           () => {
-    //             // Convert to JSON with specific properties
-    //             const json = tempCanvas.toJSON([
-    //               "objectType",
-    //               "gradientFill",
-    //               "roundedCorners",
-    //               "mode",
-    //               "selectable",
-    //               "lockMovementX",
-    //               "lockMovementY",
-    //               "lockRotation",
-    //               "crossOrigin",
-    //               "layerName",
-    //               "customId",
-    //             ]);
-
-    //             // Filter objects
-    //             const objects = tempCanvas.getObjects();
-    //             const filteredObjects = objects.filter(
-    //               (obj) => obj.customId !== "layoutImage"
-    //             );
-
-    //             // Temporarily hide non-filtered objects for image generation
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = filteredObjects.includes(obj);
-    //             });
-
-    //             // Generate image URL with error handling
-    //             let canvasImageUrl;
-    //             try {
-    //               canvasImageUrl = tempCanvas.toDataURL({
-    //                 format: "png",
-    //                 multiplier: 2,
-    //               });
-    //             } catch (e) {
-    //               console.error("Error generating preview for", tab.part, e);
-    //               // Fallback to transparent 1x1 pixel
-    //               canvasImageUrl =
-    //                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    //             }
-
-    //             // Restore visibility
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = true;
-    //             });
-
-    //             // Process background image if exists
-    //             if (json.backgroundImage && json.backgroundImage.src) {
-    //               // Create new image with CORS handling
-    //               const img = new Image();
-    //               img.crossOrigin = "Anonymous";
-    //               img.onload = function () {
-    //                 const tempCanvas = document.createElement("canvas");
-    //                 const ctx = tempCanvas.getContext("2d");
-    //                 tempCanvas.width = img.width;
-    //                 tempCanvas.height = img.height;
-    //                 ctx.drawImage(img, 0, 0);
-    //                 json.backgroundImage.src =
-    //                   tempCanvas.toDataURL("image/png");
-    //                 resolve({
-    //                   part: tab.part,
-    //                   json,
-    //                   canvasImageUrl,
-    //                 });
-    //               };
-    //               img.onerror = function () {
-    //                 // If CORS fails, remove the background image
-    //                 delete json.backgroundImage.src;
-    //                 resolve({
-    //                   part: tab.part,
-    //                   json,
-    //                   canvasImageUrl,
-    //                 });
-    //               };
-    //               img.src = json.backgroundImage.src;
-    //             } else {
-    //               resolve({
-    //                 part: tab.part,
-    //                 json,
-    //                 canvasImageUrl,
-    //               });
-    //             }
-    //           },
-    //           null,
-    //           { crossOrigin: "anonymous" }
-    //         ); // Fabric.js loadFromJSON options
-    //       });
-    //     });
-
-    //     // After all canvases are processed
-    //     Promise.all(processPromises).then((results) => {
-    //       console.log("process promises results:", results);
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       // Add all files to FormData
-    //       results.forEach((result) => {
-    //         // JSON file
-    //         const template = JSON.stringify(result.json);
-    //         const jsonBlob = new Blob([template], { type: "application/json" });
-    //         const jsonFilename = `template_${result.part}_${timestamp}.json`;
-    //         formData.append("files", jsonBlob, jsonFilename);
-
-    //         // Image file
-    //         var imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         var imageFileName = `template_image_${result.part}_${timestamp}.png`;
-    //         formData.append("files", imageBlob, imageFileName);
-    //       });
-
-    //       // Upload files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           // Organize URLs by part
-    //           const templateUrls = {};
-    //           response.urls.forEach((url) => {
-    //             const match = url.match(
-    //               /template_(image_)?([^_]+)_\d+\.(json|png|jpe?g)/
-    //             );
-    //             if (match) {
-    //               const part = match[2]; // Handle, Body, or Lid
-    //               const type = match[3] === "json" ? "jsonData" : "imageUrl";
-    //               if (!templateUrls[part]) templateUrls[part] = {};
-    //               templateUrls[part][type] = url;
-    //             }
-    //           });
-
-    //           console.log("templateUrls", templateUrls);
-
-    //           // Prepare final payload
-    //           const templates = Object.keys(templateUrls).map((part) => ({
-    //             part,
-    //             jsonData: templateUrls[part].jsonData,
-    //             imageUrl: templateUrls[part].imageUrl,
-    //           }));
-
-    //           console.log("final payload templates:", templates);
-
-    //           // Get metadata
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           // Final data structure
-    //           var data = {
-    //             key: key,
-    //             src: templates,
-    //             name: name,
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           console.log("final payload data:", data);
-
-    //           // Upload the data object
-    //           uploadData(data)
-    //             .then(() => {
-    //               Swal.fire({
-    //                 title: "Success",
-    //                 text: "All templates saved successfully!",
-    //                 icon: "success",
-    //               });
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               const message =
-    //                 error.message ||
-    //                 "Something went wrong uploading, try again!";
-    //               Swal.fire({
-    //                 icon: "error",
-    //                 title: "failed",
-    //                 text: message,
-    //               });
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           const message =
-    //             error.message ||
-    //             error ||
-    //             "Something went wrong uploading, try again!";
-    //           Swal.fire({
-    //             icon: "error",
-    //             title: "failed",
-    //             text: message,
-    //           });
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   // Show public/private modal before proceeding
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     // Get all canvas states in the required format
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     console.log("output json converted:", output);
-
-    //     // Process each tab's canvas data and prepare for upload
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise((resolve) => {
-    //         // Create temporary canvas
-    //         const tempCanvasEl = document.createElement("canvas");
-    //         const tempCanvas = new fabric.Canvas(tempCanvasEl);
-
-    //         // First ensure all images have crossOrigin set
-    //         if (tab.jsonData.objects) {
-    //           tab.jsonData.objects.forEach((obj) => {
-    //             if (obj.type === "image" && obj.src) {
-    //               obj.crossOrigin = "anonymous";
-    //             }
-    //           });
-    //         }
-
-    //         // Handle background image CORS
-    //         if (
-    //           tab.jsonData.backgroundImage &&
-    //           tab.jsonData.backgroundImage.src
-    //         ) {
-    //           tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-    //         }
-
-    //         // Load the canvas data with CORS handling
-    //         tempCanvas.loadFromJSON(
-    //           tab.jsonData,
-    //           () => {
-    //             // Get the exact canvas data as-is (using toObject instead of toJSON)
-    //             const jsonData = tempCanvas.toObject();
-
-    //             // Process background image src if it exists
-    //             const processBackground =
-    //               jsonData.backgroundImage && jsonData.backgroundImage.src
-    //                 ? new Promise((resolveBg) => {
-    //                     if (jsonData.backgroundImage.src.startsWith("data:")) {
-    //                       resolveBg();
-    //                     } else {
-    //                       const img = new Image();
-    //                       img.crossOrigin = "Anonymous";
-    //                       img.onload = function () {
-    //                         const tempCanvas = document.createElement("canvas");
-    //                         const ctx = tempCanvas.getContext("2d");
-    //                         tempCanvas.width = img.width;
-    //                         tempCanvas.height = img.height;
-    //                         ctx.drawImage(img, 0, 0);
-    //                         jsonData.backgroundImage.src =
-    //                           tempCanvas.toDataURL("image/png");
-    //                         resolveBg();
-    //                       };
-    //                       img.onerror = function () {
-    //                         // If CORS fails, keep original URL
-    //                         resolveBg();
-    //                       };
-    //                       img.src = jsonData.backgroundImage.src;
-    //                     }
-    //                   })
-    //                 : Promise.resolve();
-
-    //             // Process all image objects
-    //             const processObjects = Promise.all(
-    //               jsonData.objects.map((obj) => {
-    //                 if (
-    //                   obj.type === "image" &&
-    //                   obj.src &&
-    //                   !obj.src.startsWith("data:")
-    //                 ) {
-    //                   return new Promise((resolveObj) => {
-    //                     const img = new Image();
-    //                     img.crossOrigin = "Anonymous";
-    //                     img.onload = function () {
-    //                       const tempCanvas = document.createElement("canvas");
-    //                       const ctx = tempCanvas.getContext("2d");
-    //                       tempCanvas.width = img.width;
-    //                       tempCanvas.height = img.height;
-    //                       ctx.drawImage(img, 0, 0);
-    //                       obj.src = tempCanvas.toDataURL("image/png");
-    //                       resolveObj();
-    //                     };
-    //                     img.onerror = function () {
-    //                       // If CORS fails, keep original URL
-    //                       resolveObj();
-    //                     };
-    //                     img.src = obj.src;
-    //                   });
-    //                 }
-    //                 return Promise.resolve();
-    //               })
-    //             );
-
-    //             // Filter objects (same as original)
-    //             const filteredObjects = tempCanvas
-    //               .getObjects()
-    //               .filter((obj) => obj.customId !== "layoutImage");
-
-    //             // Temporarily hide non-filtered objects for image generation
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = filteredObjects.includes(obj);
-    //             });
-
-    //             // Generate image URL with error handling
-    //             let canvasImageUrl;
-    //             try {
-    //               canvasImageUrl = tempCanvas.toDataURL({
-    //                 format: "png",
-    //                 multiplier: 2,
-    //               });
-    //             } catch (e) {
-    //               console.error("Error generating preview for", tab.part, e);
-    //               // Fallback to transparent 1x1 pixel
-    //               canvasImageUrl =
-    //                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    //             }
-
-    //             // Restore visibility
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = true;
-    //             });
-
-    //             // Wait for all image processing to complete
-    //             Promise.all([processBackground, processObjects]).then(() => {
-    //               resolve({
-    //                 part: tab.part,
-    //                 jsonData: jsonData, // The complete canvas data
-    //                 canvasImageUrl: canvasImageUrl,
-    //               });
-    //             });
-    //           },
-    //           null,
-    //           { crossOrigin: "anonymous" }
-    //         );
-    //       });
-    //     });
-
-    //     // After all canvases are processed
-    //     Promise.all(processPromises).then((results) => {
-    //       console.log("process promises results:", results);
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       // Add all files to FormData
-    //       results.forEach((result) => {
-    //         // JSON file - using the complete jsonData
-    //         const template = JSON.stringify(result.jsonData);
-    //         const jsonBlob = new Blob([template], { type: "application/json" });
-    //         const jsonFilename = `template_${result.part}_${timestamp}.json`;
-    //         formData.append("files", jsonBlob, jsonFilename);
-
-    //         // Image file
-    //         var imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         var imageFileName = `template_image_${result.part}_${timestamp}.png`;
-    //         formData.append("files", imageBlob, imageFileName);
-    //       });
-
-    //       // Upload files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           console.log("upload response:", response);
-
-    //           // Prepare the final payload with exact structure
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = "template_" + Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           // Map the results to match your required payload structure
-    //           const src = results.map((result) => ({
-    //             part: result.part,
-    //             jsonData: result.jsonData, // The complete canvas data
-    //           }));
-
-    //           const payload = {
-    //             key: key,
-    //             name: name,
-    //             src: src, // Array of parts with their complete jsonData
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           console.log("final payload:", payload);
-
-    //           // Upload the data object
-    //           uploadData(payload)
-    //             .then(() => {
-    //               Swal.fire({
-    //                 title: "Success",
-    //                 text: "All templates saved successfully!",
-    //                 icon: "success",
-    //               });
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               const message =
-    //                 error.message ||
-    //                 "Something went wrong uploading, try again!";
-    //               Swal.fire({
-    //                 icon: "error",
-    //                 title: "failed",
-    //                 text: message,
-    //               });
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           const message =
-    //             error.message ||
-    //             error ||
-    //             "Something went wrong uploading, try again!";
-    //           Swal.fire({
-    //             icon: "error",
-    //             title: "failed",
-    //             text: message,
-    //           });
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise((resolve) => {
-    //         const tempCanvasEl = document.createElement("canvas");
-    //         const tempCanvas = new fabric.Canvas(tempCanvasEl);
-
-    //         // Set crossOrigin for all images
-    //         if (tab.jsonData.objects) {
-    //           tab.jsonData.objects.forEach((obj) => {
-    //             if (obj.type === "image" && obj.src) {
-    //               obj.crossOrigin = "anonymous";
-    //             }
-    //           });
-    //         }
-
-    //         if (tab.jsonData.backgroundImage?.src) {
-    //           tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-    //         }
-
-    //         tempCanvas.loadFromJSON(
-    //           tab.jsonData,
-    //           async () => {
-    //             // Get complete canvas data with objects preserved
-    //             const jsonData = tempCanvas.toObject();
-
-    //             // Process background image
-    //             if (
-    //               jsonData.backgroundImage?.src &&
-    //               !jsonData.backgroundImage.src.startsWith("data:")
-    //             ) {
-    //               try {
-    //                 const formData = new FormData();
-    //                 const response = await fetch(jsonData.backgroundImage.src);
-    //                 const blob = await response.blob();
-    //                 formData.append("files", blob, `bg_${Date.now()}.png`);
-
-    //                 const uploadResponse = await $.ajax({
-    //                   url: `${baseUrl}/api/v1/user/media/upload`,
-    //                   type: "POST",
-    //                   data: formData,
-    //                   processData: false,
-    //                   contentType: false,
-    //                 });
-
-    //                 if (uploadResponse.urls?.[0]) {
-    //                   jsonData.backgroundImage.src = uploadResponse.urls[0];
-    //                 }
-    //               } catch (e) {
-    //                 console.error("Background image upload failed:", e);
-    //               }
-    //             }
-
-    //             // Process object images
-    //             if (jsonData.objects) {
-    //               for (const obj of jsonData.objects) {
-    //                 if (
-    //                   obj.type === "image" &&
-    //                   obj.src &&
-    //                   !obj.src.startsWith("data:")
-    //                 ) {
-    //                   try {
-    //                     const formData = new FormData();
-    //                     const response = await fetch(obj.src);
-    //                     const blob = await response.blob();
-    //                     formData.append("files", blob, `obj_${Date.now()}.png`);
-
-    //                     const uploadResponse = await $.ajax({
-    //                       url: `${baseUrl}/api/v1/user/media/upload`,
-    //                       type: "POST",
-    //                       data: formData,
-    //                       processData: false,
-    //                       contentType: false,
-    //                     });
-
-    //                     if (uploadResponse.urls?.[0]) {
-    //                       obj.src = uploadResponse.urls[0];
-    //                     }
-    //                   } catch (e) {
-    //                     console.error("Object image upload failed:", e);
-    //                   }
-    //                 }
-    //               }
-    //             }
-
-    //             // Generate preview image
-    //             const filteredObjects = tempCanvas
-    //               .getObjects()
-    //               .filter((obj) => obj.customId !== "layoutImage");
-
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = filteredObjects.includes(obj);
-    //             });
-
-    //             let canvasImageUrl;
-    //             try {
-    //               canvasImageUrl = tempCanvas.toDataURL({
-    //                 format: "png",
-    //                 multiplier: 2,
-    //               });
-    //             } catch (e) {
-    //               console.error("Preview generation error:", e);
-    //               canvasImageUrl =
-    //                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    //             }
-
-    //             resolve({
-    //               part: tab.part,
-    //               jsonData: jsonData, // Contains all objects
-    //               canvasImageUrl: canvasImageUrl,
-    //             });
-    //           },
-    //           null,
-    //           { crossOrigin: "anonymous" }
-    //         );
-    //       });
-    //     });
-
-    //     Promise.all(processPromises).then((results) => {
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       results.forEach((result) => {
-    //         const template = JSON.stringify(result.jsonData);
-    //         const jsonBlob = new Blob([template], { type: "application/json" });
-    //         formData.append(
-    //           "files",
-    //           jsonBlob,
-    //           `template_${result.part}_${timestamp}.json`
-    //         );
-
-    //         const imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         formData.append(
-    //           "files",
-    //           imageBlob,
-    //           `template_image_${result.part}_${timestamp}.png`
-    //         );
-    //       });
-
-    //       // Upload files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = "template_" + Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           // Prepare final payload (EXACT structure you requested)
-    //           const payload = {
-    //             key: key,
-    //             name: name,
-    //             src: results.map((result) => ({
-    //               part: result.part,
-    //               jsonData: result.jsonData, // Contains all objects
-    //             })),
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           uploadData(payload)
-    //             .then(() => {
-    //               Swal.fire("Success", "Saved successfully!", "success");
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               Swal.fire(
-    //                 "Error",
-    //                 "Save failed: " + (error.message || error),
-    //                 "error"
-    //               );
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           Swal.fire("Error", "Upload failed: " + error, "error");
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise((resolve) => {
-    //         const tempCanvasEl = document.createElement("canvas");
-    //         const tempCanvas = new fabric.Canvas(tempCanvasEl);
-
-    //         // First ensure all images have crossOrigin set in the original JSON
-    //         if (tab.jsonData.objects) {
-    //           tab.jsonData.objects.forEach((obj) => {
-    //             if (obj.type === "image" && obj.src) {
-    //               obj.crossOrigin = "anonymous";
-    //             }
-    //           });
-    //         }
-
-    //         if (tab.jsonData.backgroundImage?.src) {
-    //           tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-    //         }
-
-    //         // Load the canvas with proper object preservation
-    //         tempCanvas.loadFromJSON(
-    //           tab.jsonData,
-    //           async () => {
-    //             // Get the COMPLETE canvas data including all objects
-    //             const canvasData = {
-    //               ...tempCanvas.toObject(),
-    //               background: tab.jsonData.background, // Preserve original background
-    //               backgroundImage: tab.jsonData.backgroundImage, // Preserve background image
-    //             };
-
-    //             // Process background image if needed
-    //             if (
-    //               canvasData.backgroundImage?.src &&
-    //               !canvasData.backgroundImage.src.startsWith("data:")
-    //             ) {
-    //               try {
-    //                 const formData = new FormData();
-    //                 const response = await fetch(
-    //                   canvasData.backgroundImage.src
-    //                 );
-    //                 const blob = await response.blob();
-    //                 formData.append("files", blob, `bg_${Date.now()}.png`);
-
-    //                 const uploadResponse = await $.ajax({
-    //                   url: `${baseUrl}/api/v1/user/media/upload`,
-    //                   type: "POST",
-    //                   data: formData,
-    //                   processData: false,
-    //                   contentType: false,
-    //                 });
-
-    //                 if (uploadResponse.urls?.[0]) {
-    //                   canvasData.backgroundImage.src = uploadResponse.urls[0];
-    //                 }
-    //               } catch (e) {
-    //                 console.error("Background image conversion failed:", e);
-    //               }
-    //             }
-
-    //             // Process all object images
-    //             if (canvasData.objects && canvasData.objects.length > 0) {
-    //               for (const obj of canvasData.objects) {
-    //                 if (
-    //                   obj.type === "image" &&
-    //                   obj.src &&
-    //                   !obj.src.startsWith("data:")
-    //                 ) {
-    //                   try {
-    //                     const formData = new FormData();
-    //                     const response = await fetch(obj.src);
-    //                     const blob = await response.blob();
-    //                     formData.append("files", blob, `obj_${Date.now()}.png`);
-
-    //                     const uploadResponse = await $.ajax({
-    //                       url: `${baseUrl}/api/v1/user/media/upload`,
-    //                       type: "POST",
-    //                       data: formData,
-    //                       processData: false,
-    //                       contentType: false,
-    //                     });
-
-    //                     if (uploadResponse.urls?.[0]) {
-    //                       obj.src = uploadResponse.urls[0];
-    //                     }
-    //                   } catch (e) {
-    //                     console.error("Object image conversion failed:", e);
-    //                   }
-    //                 }
-    //               }
-    //             }
-
-    //             // Generate preview image
-    //             const filteredObjects = tempCanvas
-    //               .getObjects()
-    //               .filter((obj) => obj.customId !== "layoutImage");
-
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = filteredObjects.includes(obj);
-    //             });
-
-    //             let canvasImageUrl;
-    //             try {
-    //               canvasImageUrl = tempCanvas.toDataURL({
-    //                 format: "png",
-    //                 multiplier: 2,
-    //               });
-    //             } catch (e) {
-    //               console.error("Preview generation error:", e);
-    //               canvasImageUrl =
-    //                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    //             }
-
-    //             resolve({
-    //               part: tab.part,
-    //               jsonData: canvasData, // Contains ALL objects
-    //               canvasImageUrl: canvasImageUrl,
-    //             });
-    //           },
-    //           null,
-    //           { crossOrigin: "anonymous" }
-    //         );
-    //       });
-    //     });
-
-    //     Promise.all(processPromises).then((results) => {
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       results.forEach((result) => {
-    //         const template = JSON.stringify(result.jsonData);
-    //         const jsonBlob = new Blob([template], { type: "application/json" });
-    //         formData.append(
-    //           "files",
-    //           jsonBlob,
-    //           `template_${result.part}_${timestamp}.json`
-    //         );
-
-    //         const imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         formData.append(
-    //           "files",
-    //           imageBlob,
-    //           `template_image_${result.part}_${timestamp}.png`
-    //         );
-    //       });
-
-    //       // Upload files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = "template_" + Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           // Final payload with complete objects
-    //           const payload = {
-    //             key: key,
-    //             name: name,
-    //             src: results.map((result) => ({
-    //               part: result.part,
-    //               jsonData: result.jsonData, // Contains ALL objects
-    //             })),
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           uploadData(payload)
-    //             .then(() => {
-    //               Swal.fire("Success", "Saved successfully!", "success");
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               Swal.fire(
-    //                 "Error",
-    //                 "Save failed: " + (error.message || error),
-    //                 "error"
-    //               );
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           Swal.fire("Error", "Upload failed: " + error, "error");
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise(async (resolve) => {
-    //         // Create temporary canvas
-    //         const tempCanvasEl = document.createElement("canvas");
-    //         const tempCanvas = new fabric.Canvas(tempCanvasEl);
-
-    //         // 1. FIRST PRESERVE THE ORIGINAL OBJECTS
-    //         const originalObjects = tab.jsonData.objects || [];
-
-    //         // 2. PROCESS IMAGES IN THE ORIGINAL JSON DATA
-    //         // Set crossOrigin for all images
-    //         if (tab.jsonData.objects) {
-    //           tab.jsonData.objects.forEach((obj) => {
-    //             if (obj.type === "image" && obj.src) {
-    //               obj.crossOrigin = "anonymous";
-    //             }
-    //           });
-    //         }
-
-    //         if (tab.jsonData.backgroundImage?.src) {
-    //           tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-    //         }
-
-    //         // 3. LOAD CANVAS WHILE PRESERVING OBJECTS
-    //         tempCanvas.loadFromJSON(
-    //           tab.jsonData,
-    //           async () => {
-    //             // 4. GET THE COMPLETE CANVAS DATA
-    //             const jsonData = {
-    //               version: "5.3.0",
-    //               objects: [], // We'll populate this from original objects
-    //               background: tab.jsonData.background,
-    //               backgroundImage: tab.jsonData.backgroundImage,
-    //             };
-
-    //             // 5. PROCESS AND CONVERT ALL OBJECT IMAGES
-    //             if (originalObjects.length > 0) {
-    //               jsonData.objects = await Promise.all(
-    //                 originalObjects.map(async (obj) => {
-    //                   // Clone the object to avoid modifying original
-    //                   const newObj = { ...obj };
-
-    //                   // Convert image URLs if needed
-    //                   if (
-    //                     newObj.type === "image" &&
-    //                     newObj.src &&
-    //                     !newObj.src.startsWith("data:")
-    //                   ) {
-    //                     try {
-    //                       const formData = new FormData();
-    //                       const response = await fetch(newObj.src);
-    //                       const blob = await response.blob();
-    //                       formData.append(
-    //                         "files",
-    //                         blob,
-    //                         `obj_${Date.now()}.png`
-    //                       );
-
-    //                       const uploadResponse = await $.ajax({
-    //                         url: `${baseUrl}/api/v1/user/media/upload`,
-    //                         type: "POST",
-    //                         data: formData,
-    //                         processData: false,
-    //                         contentType: false,
-    //                       });
-
-    //                       if (uploadResponse.urls?.[0]) {
-    //                         newObj.src = uploadResponse.urls[0];
-    //                       }
-    //                     } catch (e) {
-    //                       console.error("Object image conversion failed:", e);
-    //                     }
-    //                   }
-    //                   return newObj;
-    //                 })
-    //               );
-    //             }
-
-    //             // 6. PROCESS BACKGROUND IMAGE IF EXISTS
-    //             if (
-    //               jsonData.backgroundImage?.src &&
-    //               !jsonData.backgroundImage.src.startsWith("data:")
-    //             ) {
-    //               try {
-    //                 const formData = new FormData();
-    //                 const response = await fetch(jsonData.backgroundImage.src);
-    //                 const blob = await response.blob();
-    //                 formData.append("files", blob, `bg_${Date.now()}.png`);
-
-    //                 const uploadResponse = await $.ajax({
-    //                   url: `${baseUrl}/api/v1/user/media/upload`,
-    //                   type: "POST",
-    //                   data: formData,
-    //                   processData: false,
-    //                   contentType: false,
-    //                 });
-
-    //                 if (uploadResponse.urls?.[0]) {
-    //                   jsonData.backgroundImage.src = uploadResponse.urls[0];
-    //                 }
-    //               } catch (e) {
-    //                 console.error("Background image conversion failed:", e);
-    //               }
-    //             }
-
-    //             // 7. GENERATE PREVIEW IMAGE
-    //             // First add all objects to temp canvas for preview generation
-    //             tempCanvas.clear();
-    //             if (jsonData.background) {
-    //               tempCanvas.setBackgroundColor(jsonData.background);
-    //             }
-    //             if (jsonData.backgroundImage) {
-    //               tempCanvas.setBackgroundImage(
-    //                 jsonData.backgroundImage.src,
-    //                 () => {
-    //                   tempCanvas.renderAll();
-    //                 }
-    //               );
-    //             }
-    //             jsonData.objects.forEach((obj) => {
-    //               tempCanvas.add(
-    //                 new fabric[
-    //                   obj.type.charAt(0).toUpperCase() + obj.type.slice(1)
-    //                 ](obj)
-    //               );
-    //             });
-
-    //             // Filter objects for preview
-    //             const filteredObjects = jsonData.objects.filter(
-    //               (obj) => obj.customId !== "layoutImage"
-    //             );
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = filteredObjects.includes(obj);
-    //             });
-
-    //             let canvasImageUrl;
-    //             try {
-    //               canvasImageUrl = tempCanvas.toDataURL({
-    //                 format: "png",
-    //                 multiplier: 2,
-    //               });
-    //             } catch (e) {
-    //               console.error("Preview generation error:", e);
-    //               canvasImageUrl =
-    //                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    //             }
-
-    //             resolve({
-    //               part: tab.part,
-    //               jsonData: jsonData, // Contains ALL objects
-    //               canvasImageUrl: canvasImageUrl,
-    //             });
-    //           },
-    //           null,
-    //           { crossOrigin: "anonymous" }
-    //         );
-    //       });
-    //     });
-
-    //     Promise.all(processPromises).then((results) => {
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       results.forEach((result) => {
-    //         const template = JSON.stringify(result.jsonData);
-    //         const jsonBlob = new Blob([template], { type: "application/json" });
-    //         formData.append(
-    //           "files",
-    //           jsonBlob,
-    //           `template_${result.part}_${timestamp}.json`
-    //         );
-
-    //         const imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         formData.append(
-    //           "files",
-    //           imageBlob,
-    //           `template_image_${result.part}_${timestamp}.png`
-    //         );
-    //       });
-
-    //       // Upload files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = "template_" + Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           // Final payload with complete objects
-    //           const payload = {
-    //             key: key,
-    //             name: name,
-    //             src: results.map((result) => ({
-    //               part: result.part,
-    //               jsonData: result.jsonData, // Contains ALL objects
-    //             })),
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           console.log("Final payload with objects:", payload);
-
-    //           uploadData(payload)
-    //             .then(() => {
-    //               Swal.fire("Success", "Saved successfully!", "success");
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               Swal.fire(
-    //                 "Error",
-    //                 "Save failed: " + (error.message || error),
-    //                 "error"
-    //               );
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           Swal.fire("Error", "Upload failed: " + error, "error");
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     const output = Object.keys(tabCanvasStates).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(tabCanvasStates[key]),
-    //     }));
-
-    //     const processPromises = output.map((tab) => {
-    //       return new Promise(async (resolve) => {
-    //         // Create temporary canvas
-    //         const tempCanvasEl = document.createElement("canvas");
-    //         const tempCanvas = new fabric.Canvas(tempCanvasEl);
-
-    //         // 1. FIRST PRESERVE THE ORIGINAL OBJECTS
-    //         const originalObjects = tab.jsonData.objects || [];
-
-    //         // 2. PROCESS IMAGES IN THE ORIGINAL JSON DATA
-    //         // Set crossOrigin for all images
-    //         if (tab.jsonData.objects) {
-    //           tab.jsonData.objects.forEach((obj) => {
-    //             if (obj.type === "image" && obj.src) {
-    //               obj.crossOrigin = "anonymous";
-    //             }
-    //           });
-    //         }
-
-    //         if (tab.jsonData.backgroundImage?.src) {
-    //           tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-    //         }
-
-    //         // 3. LOAD CANVAS WHILE PRESERVING OBJECTS
-    //         tempCanvas.loadFromJSON(
-    //           tab.jsonData,
-    //           async () => {
-    //             // 4. GET THE COMPLETE CANVAS DATA
-    //             const jsonData = {
-    //               version: "5.3.0",
-    //               objects: [], // We'll populate this from original objects
-    //               background: tab.jsonData.background,
-    //               backgroundImage: tab.jsonData.backgroundImage,
-    //             };
-
-    //             // 5. PROCESS AND CONVERT ALL OBJECT IMAGES
-    //             if (originalObjects.length > 0) {
-    //               jsonData.objects = await Promise.all(
-    //                 originalObjects.map(async (obj) => {
-    //                   // Clone the object to avoid modifying original
-    //                   const newObj = { ...obj };
-
-    //                   // Convert image URLs if needed
-    //                   if (
-    //                     newObj.type === "image" &&
-    //                     newObj.src &&
-    //                     !newObj.src.startsWith("data:")
-    //                   ) {
-    //                     try {
-    //                       const formData = new FormData();
-    //                       const response = await fetch(newObj.src, {
-    //                         mode: "cors",
-    //                       });
-    //                       const blob = await response.blob();
-    //                       formData.append(
-    //                         "files",
-    //                         blob,
-    //                         `obj_${Date.now()}.png`
-    //                       );
-
-    //                       const uploadResponse = await $.ajax({
-    //                         url: `${baseUrl}/api/v1/user/media/upload`,
-    //                         type: "POST",
-    //                         data: formData,
-    //                         processData: false,
-    //                         contentType: false,
-    //                       });
-
-    //                       if (uploadResponse.urls?.[0]) {
-    //                         newObj.src = uploadResponse.urls[0]; // Ensure src is updated
-    //                       } else {
-    //                         console.warn(
-    //                           "No public URL returned for object image:",
-    //                           newObj.src
-    //                         );
-    //                       }
-    //                     } catch (e) {
-    //                       console.error("Object image conversion failed:", e);
-    //                     }
-    //                   }
-    //                   return newObj;
-    //                 })
-    //               );
-    //             }
-
-    //             // 6. PROCESS BACKGROUND IMAGE IF EXISTS
-    //             if (
-    //               jsonData.backgroundImage?.src &&
-    //               !jsonData.backgroundImage.src.startsWith("data:")
-    //             ) {
-    //               try {
-    //                 const formData = new FormData();
-    //                 const response = await fetch(jsonData.backgroundImage.src);
-    //                 const blob = await response.blob();
-    //                 formData.append("files", blob, `bg_${Date.now()}.png`);
-
-    //                 const uploadResponse = await $.ajax({
-    //                   url: `${baseUrl}/api/v1/user/media/upload`,
-    //                   type: "POST",
-    //                   data: formData,
-    //                   processData: false,
-    //                   contentType: false,
-    //                 });
-
-    //                 if (uploadResponse.urls?.[0]) {
-    //                   jsonData.backgroundImage.src = uploadResponse.urls[0];
-    //                 }
-    //               } catch (e) {
-    //                 console.error("Background image conversion failed:", e);
-    //               }
-    //             }
-
-    //             // 7. GENERATE PREVIEW IMAGE
-    //             // First add all objects to temp canvas for preview generation
-    //             tempCanvas.clear();
-    //             if (jsonData.background) {
-    //               tempCanvas.setBackgroundColor(jsonData.background);
-    //             }
-    //             if (jsonData.backgroundImage) {
-    //               tempCanvas.setBackgroundImage(
-    //                 jsonData.backgroundImage.src,
-    //                 () => {
-    //                   tempCanvas.renderAll();
-    //                 }
-    //               );
-    //             }
-    //             jsonData.objects.forEach((obj) => {
-    //               tempCanvas.add(
-    //                 new fabric[
-    //                   obj.type.charAt(0).toUpperCase() + obj.type.slice(1)
-    //                 ](obj)
-    //               );
-    //             });
-
-    //             // Filter objects for preview
-    //             const filteredObjects = jsonData.objects.filter(
-    //               (obj) => obj.customId !== "layoutImage"
-    //             );
-    //             tempCanvas.getObjects().forEach((obj) => {
-    //               obj.visible = filteredObjects.includes(obj);
-    //             });
-
-    //             let canvasImageUrl;
-    //             try {
-    //               canvasImageUrl = tempCanvas.toDataURL({
-    //                 format: "png",
-    //                 multiplier: 2,
-    //               });
-    //             } catch (e) {
-    //               console.error("Preview generation error:", e);
-    //               canvasImageUrl =
-    //                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    //             }
-
-    //             resolve({
-    //               part: tab.part,
-    //               jsonData: jsonData, // Contains ALL objects with updated src
-    //               canvasImageUrl: canvasImageUrl,
-    //             });
-    //           },
-    //           null,
-    //           { crossOrigin: "anonymous" }
-    //         );
-    //       });
-    //     });
-
-    //     Promise.all(processPromises).then((results) => {
-    //       const formData = new FormData();
-    //       const timestamp = new Date().getTime();
-
-    //       results.forEach((result) => {
-    //         const template = JSON.stringify(result.jsonData);
-    //         const jsonBlob = new Blob([template], { type: "application/json" });
-    //         formData.append(
-    //           "files",
-    //           jsonBlob,
-    //           `template_${result.part}_${timestamp}.json`
-    //         );
-
-    //         const imageBlob = dataURLtoBlob(result.canvasImageUrl);
-    //         formData.append(
-    //           "files",
-    //           imageBlob,
-    //           `template_image_${result.part}_${timestamp}.png`
-    //         );
-    //       });
-
-    //       // Upload files
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-    //           const key = "template_" + Math.random().toString(36).substr(2, 9);
-    //           const name = selector.find("#gauci-json-save-name").val();
-
-    //           // Final payload with complete objects
-    //           const payload = {
-    //             key: key,
-    //             name: name,
-    //             src: results.map((result) => ({
-    //               part: result.part,
-    //               jsonData: result.jsonData, // Contains objects with public URLs
-    //             })),
-    //             type: modelName,
-    //             isPublic: isPublic,
-    //           };
-
-    //           console.log("Final payload with objects:", payload);
-
-    //           uploadData(payload)
-    //             .then(() => {
-    //               Swal.fire("Success", "Saved successfully!", "success");
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               Swal.fire(
-    //                 "Error",
-    //                 "Save failed: " + (error.message || error),
-    //                 "error"
-    //               );
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           Swal.fire("Error", "Upload failed: " + error, "error");
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
     selector.find("#gauci-json-save").on("click", function () {
-      // saveCanvasState(activeTabId);
-      showPublicPrivateModal().then((isPublic) => {
-        const output = Object.keys(tabCanvasStates).map((key) => ({
-          part: key,
-          jsonData: JSON.parse(tabCanvasStates[key]),
-        }));
+      saveCanvasState(activeTabId);
+      console.log(mainPart);
 
-        const processPromises = output.map((tab) => {
-          return new Promise(async (resolve) => {
-            // Create temporary canvas
-            const tempCanvasEl = document.createElement("canvas");
-            const tempCanvas = new fabric.Canvas(tempCanvasEl);
+      showPublicPrivateModal().then(async (isPublic) => {
+        // const output = Object.keys(tabCanvasStates).map((key) => ({
+        //   part: key,
+        //   jsonData: JSON.parse(tabCanvasStates[key]),
+        // }));
+        let output = Object.keys(tabCanvasStates).map((key) => {
+          const jsonData = JSON.parse(tabCanvasStates[key]);
 
-            // 1. FIRST PRESERVE THE ORIGINAL OBJECTS
-            const originalObjects = tab.jsonData.objects || [];
-
-            // 2. PROCESS IMAGES IN THE ORIGINAL JSON DATA
-            // Set crossOrigin for all images
-            if (tab.jsonData.objects) {
-              tab.jsonData.objects.forEach((obj) => {
-                if (obj.type === "image" && obj.src) {
-                  obj.crossOrigin = "anonymous";
-                }
-              });
+          // Safely update objects inside jsonData
+          jsonData.objects = jsonData.objects.map((obj) => {
+            if (obj.type === "image" && obj.clipPath) {
+              return {
+                ...obj,
+                customId: "clipmask",
+              };
             }
-
-            if (tab.jsonData.backgroundImage?.src) {
-              tab.jsonData.backgroundImage.crossOrigin = "anonymous";
-            }
-
-            // 3. LOAD CANVAS WHILE PRESERVING OBJECTS
-            tempCanvas.loadFromJSON(
-              tab.jsonData,
-              async () => {
-                // 4. GET THE COMPLETE CANVAS DATA
-                const jsonData = {
-                  version: "5.3.0",
-                  objects: [], // We'll populate this from original objects
-                  background: tab.jsonData.background,
-                  backgroundImage: tab.jsonData.backgroundImage,
-                };
-
-                // 5. PROCESS AND CONVERT ALL OBJECT IMAGES
-                if (originalObjects.length > 0) {
-                  jsonData.objects = await Promise.all(
-                    originalObjects.map(async (obj, index) => {
-                      // Clone the object to avoid modifying original
-                      const newObj = { ...obj };
-
-                      // Convert image URLs, including base64
-                      if (newObj.type === "image" && newObj.src) {
-                        try {
-                          let blob;
-                          if (newObj.src.startsWith("data:")) {
-                            // Convert base64 to blob
-                            const base64Response = await fetch(newObj.src);
-                            blob = await base64Response.blob();
-                          } else {
-                            // Fetch non-base64 image
-                            const response = await fetch(newObj.src, {
-                              mode: "cors",
-                            });
-                            blob = await response.blob();
-                          }
-
-                          const formData = new FormData();
-                          formData.append(
-                            "files",
-                            blob,
-                            `obj_${Date.now()}_${index}.png`
-                          );
-
-                          const uploadResponse = await $.ajax({
-                            url: `${baseUrl}/api/v1/user/media/upload`,
-                            type: "POST",
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                          });
-
-                          if (uploadResponse.urls?.[0]) {
-                            newObj.src = uploadResponse.urls[0]; // Update src with public URL
-                          } else {
-                            console.warn(
-                              "No public URL returned for object image:",
-                              newObj.src
-                            );
-                          }
-                        } catch (e) {
-                          console.error("Object image conversion failed:", e);
-                        }
-                      }
-                      return newObj;
-                    })
-                  );
-                }
-
-                // 6. PROCESS BACKGROUND IMAGE IF EXISTS
-                if (
-                  jsonData.backgroundImage?.src &&
-                  !jsonData.backgroundImage.src.startsWith("data:")
-                ) {
-                  try {
-                    const formData = new FormData();
-                    const response = await fetch(jsonData.backgroundImage.src);
-                    const blob = await response.blob();
-                    formData.append("files", blob, `bg_${Date.now()}.png`);
-
-                    const uploadResponse = await $.ajax({
-                      url: `${baseUrl}/api/v1/user/media/upload`,
-                      type: "POST",
-                      data: formData,
-                      processData: false,
-                      contentType: false,
-                    });
-
-                    if (uploadResponse.urls?.[0]) {
-                      jsonData.backgroundImage.src = uploadResponse.urls[0];
-                    }
-                  } catch (e) {
-                    console.error("Background image conversion failed:", e);
-                  }
-                }
-
-                // 7. GENERATE PREVIEW IMAGE
-                // First add all objects to temp canvas for preview generation
-                tempCanvas.clear();
-                if (jsonData.background) {
-                  tempCanvas.setBackgroundColor(jsonData.background);
-                }
-                if (jsonData.backgroundImage) {
-                  tempCanvas.setBackgroundImage(
-                    jsonData.backgroundImage.src,
-                    () => {
-                      tempCanvas.renderAll();
-                    }
-                  );
-                }
-                jsonData.objects.forEach((obj) => {
-                  tempCanvas.add(
-                    new fabric[
-                      obj.type.charAt(0).toUpperCase() + obj.type.slice(1)
-                    ](obj)
-                  );
-                });
-
-                // Filter objects for preview
-                const filteredObjects = jsonData.objects.filter(
-                  (obj) => obj.customId !== "layoutImage"
-                );
-                tempCanvas.getObjects().forEach((obj) => {
-                  obj.visible = filteredObjects.includes(obj);
-                });
-
-                let canvasImageUrl;
-                try {
-                  canvasImageUrl = tempCanvas.toDataURL({
-                    format: "png",
-                    multiplier: 2,
-                  });
-                } catch (e) {
-                  console.error("Preview generation error:", e);
-                  canvasImageUrl =
-                    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-                }
-
-                resolve({
-                  part: tab.part,
-                  jsonData: jsonData, // Contains ALL objects with updated src
-                  canvasImageUrl: canvasImageUrl,
-                });
-              },
-              null,
-              { crossOrigin: "anonymous" }
-            );
+            return obj;
           });
+
+          return {
+            part: key,
+            jsonData: jsonData,
+          };
         });
 
-        Promise.all(processPromises).then((results) => {
-          const formData = new FormData();
-          const timestamp = new Date().getTime();
+        console.log(output);
 
-          results.forEach((result) => {
-            const template = JSON.stringify(result.jsonData);
-            const jsonBlob = new Blob([template], { type: "application/json" });
-            formData.append(
-              "files",
-              jsonBlob,
-              `template_${result.part}_${timestamp}.json`
-            );
+        let selectedItem =
+          output.find((item) => item.part === mainPart) || output[0]; // fallback if mainPart not found
+        console.log(selectedItem);
 
-            const imageBlob = dataURLtoBlob(result.canvasImageUrl);
-            formData.append(
-              "files",
-              imageBlob,
-              `template_image_${result.part}_${timestamp}.png`
-            );
+        // 🎨 Step 2: Convert selected jsonData to image blob
+        let imageUrl = "";
+        const tempCanvas = new fabric.Canvas(null, {
+          width: 2048,
+          height: 2048,
+        });
+
+        tempCanvas.loadFromJSON(selectedItem.jsonData, async () => {
+          const objects = tempCanvas.getObjects();
+          const corsImages = [];
+          console.log(objects);
+          // Hide external images to avoid CORS issues
+          objects.forEach((obj) => {
+            if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+              corsImages.push(obj);
+              obj.visible = false;
+            }
           });
 
-          // Upload files
-          $.ajax({
-            url: `${baseUrl}/api/v1/user/media/upload`,
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-              const urlParams = new URLSearchParams(window.location.search);
-              const modelName = urlParams.get("name");
-              const key = "template_" + Math.random().toString(36).substr(2, 9);
-              const name = selector.find("#gauci-json-save-name").val();
+          tempCanvas.renderAll();
 
-              // Final payload with complete objects
-              const payload = {
-                key: key,
-                name: name,
-                src: results.map((result) => ({
-                  part: result.part,
-                  jsonData: result.jsonData, // Contains objects with public URLs
-                })),
-                type: modelName,
-                isPublic: isPublic,
-              };
+          try {
+            const base64Image = tempCanvas.toDataURL({
+              format: "jpeg",
+              quality: 1.0,
+            });
+            console.log(base64Image);
+            const blob = dataURLtoBlob(base64Image);
+            const formData = new FormData();
+            const timestamp = new Date().getTime();
+            const imageFileName = `preview_${timestamp}.jpg`;
+            formData.append("files", blob, imageFileName);
 
-              console.log("Final payload with objects:", payload);
+            const response = await $.ajax({
+              url: `${baseUrl}/api/v1/user/media/upload`,
+              type: "POST",
+              data: formData,
+              processData: false,
+              contentType: false,
+            });
 
-              uploadData(payload)
-                .then(() => {
-                  Swal.fire("Success", "Saved successfully!", "success");
-                  selector.find(".gauci-modal").hide();
-                })
-                .catch((error) => {
-                  Swal.fire(
-                    "Error",
-                    "Save failed: " + (error.message || error),
-                    "error"
+            const previewUrl = response.urls.find(
+              (url) =>
+                url.endsWith(".png") ||
+                url.endsWith(".jpg") ||
+                url.endsWith(".jpeg")
+            );
+
+            if (previewUrl) {
+              imageUrl = previewUrl;
+            }
+          } catch (err) {
+            console.error("Error uploading preview image:", err);
+          }
+
+          // 🔁 Step 3: Cleanup
+          corsImages.forEach((obj) => (obj.visible = true));
+          tempCanvas.clear();
+          tempCanvas.dispose();
+
+          const updatedJsonArray = [];
+
+          for (const item of output) {
+            const objects = item.jsonData.objects || [];
+
+            for (const obj of objects) {
+              if (
+                obj.type === "image" &&
+                obj.src &&
+                obj.src.startsWith("data:image")
+              ) {
+                const imageBlob = dataURLtoBlob(obj.src);
+                const timestamp = new Date().getTime();
+                const imageFileName = `image_${timestamp}_${Math.random()
+                  .toString(36)
+                  .substr(2, 5)}.png`;
+
+                const formData = new FormData();
+                formData.append("files", imageBlob, imageFileName);
+
+                try {
+                  const response = await $.ajax({
+                    url: `${baseUrl}/api/v1/user/media/upload`,
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                  });
+
+                  const uploadedUrl = response.urls.find(
+                    (url) =>
+                      url.endsWith(".png") ||
+                      url.endsWith(".jpg") ||
+                      url.endsWith(".jpeg")
                   );
-                });
-            },
-            error: function (xhr, status, error) {
-              Swal.fire("Error", "Upload failed: " + error, "error");
-            },
+
+                  if (uploadedUrl) {
+                    obj.src = uploadedUrl;
+                  }
+                } catch (error) {
+                  console.error("Error uploading image blob:", error);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Upload Failed",
+                    text: "One or more images could not be uploaded.",
+                  });
+                  return;
+                }
+              }
+            }
+
+            updatedJsonArray.push({
+              part: item.part,
+              jsonData: item.jsonData,
+            });
+          }
+
+          const originalFormat = {};
+          updatedJsonArray.forEach((item) => {
+            originalFormat[item.part] = JSON.stringify(item.jsonData);
           });
+          console.log(originalFormat);
+
+          // 🔍 Step 1: Get specific object for image preview generation
+
+          // 📤 Step 4: Prepare data and call final upload API
+          const key = Math.random().toString(36).substr(2, 9);
+          const name = selector.find("#gauci-json-save-name").val();
+          const urlParams = new URLSearchParams(window.location.search);
+          const modelName = urlParams.get("name");
+
+          const data = {
+            key: key,
+            src: originalFormat,
+            imageUrl: imageUrl, // ✅ set preview image URL
+            name: name,
+            type: modelName,
+            isPublic: isPublic,
+          };
+
+          uploadData(data)
+            .then(() => {
+              Swal.fire({
+                title: "Success",
+                text: "Template uploaded successfully!",
+                icon: "success",
+              });
+              Swal.close();
+              selector.find(".gauci-modal").hide();
+            })
+            .catch((error) => {
+              const message =
+                error.message || "Something went wrong during upload.";
+              toastr.error(message, "Error");
+              Swal.fire({
+                icon: "error",
+                title: "Upload Failed",
+                text: message,
+              });
+            });
         });
       });
     });
@@ -8673,6 +7129,7 @@
     let preservedImage = null; // To manage the layout image
     let layoutSource = null; // URL of the current layout image
     let allCanvasTabState = {};
+    let mainPart = null;
 
     // Function to fetch image data and set up tabs
     async function fetchImageData() {
@@ -8686,6 +7143,9 @@
         console.log(data);
 
         const product = data.product;
+        console.log(product);
+        mainPart = product?.mainPart?.meshName;
+        console.log(mainPart);
 
         if (product && product.linkedMeshImageData) {
           const linkedMeshImageData = product.linkedMeshImageData;
@@ -8814,131 +7274,6 @@
     //     // console.log(originalFormat);
     //   }
     // }
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON());
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     // const originalFormat = {};
-    //     // output.forEach((item) => {
-    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-    //     // });
-
-    //     // console.log(originalFormat);
-    //   }
-    // }
-
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     const output = Object.keys(allCanvasTabState).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(allCanvasTabState[key]),
-    //     }));
-
-    //     console.log(output);
-
-    //     // console.log(originalFormat);
-    //   }
-    // }
-
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     const output = Object.keys(allCanvasTabState).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(allCanvasTabState[key]),
-    //     }));
-
-    //     console.log(output);
-
-    //     // const originalFormat = {};
-    //     // output.forEach((item) => {
-    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-    //     // });
-
-    //     // console.log(originalFormat);
-    //   }
-    // }
-
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     const output = Object.keys(allCanvasTabState).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(allCanvasTabState[key]),
-    //     }));
-
-    //     console.log(output);
-
-    //     // const originalFormat = {};
-    //     // output.forEach((item) => {
-    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-    //     // });
-
-    //     // console.log(originalFormat);
-    //   }
-    // }
-
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     const output = Object.keys(allCanvasTabState).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(allCanvasTabState[key]),
-    //     }));
-
-    //     console.log(output);
-
-    //   }
-    // }
-
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     const output = Object.keys(allCanvasTabState).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(allCanvasTabState[key]),
-    //     }));
-
-    //     console.log(output);
-
-    //     // const originalFormat = {};
-    //     // output.forEach((item) => {
-    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-    //     // });
-
-    //     // console.log(originalFormat);
-    //   }
-    // }
 
     function saveCanvasState(tabId) {
       if (tabId !== null && canvas) {
@@ -8955,12 +7290,12 @@
 
         console.log(output);
 
-        // const originalFormat = {};
-        // output.forEach((item) => {
-        //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-        // });
+        const originalFormat = {};
+        output.forEach((item) => {
+          originalFormat[item.part] = JSON.stringify(item.jsonData);
+        });
 
-        // console.log(originalFormat);
+        console.log(originalFormat);
       }
     }
 
@@ -11843,10 +10178,15 @@
 
           // Generate the base64 image
           try {
+            // const base64Image = tempCanvas.toDataURL({
+            //   format: "png",
+            //   quality: 1.0,
+            // });
             const base64Image = tempCanvas.toDataURL({
-              format: "png",
+              format: "jpeg", // More compressed
               quality: 1.0,
             });
+
             console.log(base64Image);
 
             // Push the data into the array
