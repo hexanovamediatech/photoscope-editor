@@ -23,6 +23,8 @@ let originalFormat = {};
 let editedArrayFormat = [];
 let selectedModelPart = "";
 let mainPart = "";
+let mainPartMesh = null;
+let selectedItem = null;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -322,6 +324,68 @@ function render() {
 //   }
 // }
 
+function changeTexture(newUrl) {
+  if (scene) {
+    const textureLoader = new THREE.TextureLoader();
+    console.log(selectedMesh);
+    const specificMesh = scene.getObjectByName(mainPartMesh);
+
+    if (specificMesh) {
+      textureLoader.load(
+        "assets/3d/76_leather texture-seamless.jpg",
+        (bumpMap) => {
+          textureLoader.load(newUrl, (texture) => {
+            const material = new THREE.MeshStandardMaterial({
+              map: texture,
+              // bumpMap: bumpMap,
+              roughness: 1,
+              metalness: 1,
+              opacity: 1,
+              bumpScale: 0.5,
+            });
+            specificMesh.material = material;
+            // texture.repeat.set(1.9, -1.9);
+            // texture.offset.set(0.92, 0.5);
+            if (selectedMesh === "P2_Top2") {
+              texture.repeat.set(1.9, -1.9);
+              texture.offset.set(0.92, 0.5);
+            } else if (selectedMesh === "P3_typ3_Top") {
+              texture.repeat.set(1.23, -1.23);
+              texture.offset.set(0.875, 1.13);
+            } else if (selectedMesh === "P3_Top") {
+              texture.repeat.set(1.7, -1.7);
+              texture.offset.set(1.0, 1.04);
+            } else if (selectedMesh === "P4Type1") {
+              // texture.repeat.set(2.0, -2.0);
+              // texture.offset.set(0.9, 0.4);
+              console.log("No changes required");
+            } else if (selectedMesh === "P5_typ1") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "Ear_L2") {
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "part2") {
+              texture.repeat.set(-1, 1);
+              texture.offset.set(1, 1);
+            } else if (selectedMesh === "polySurface1") {
+              // texture.repeat.set(1.6, -1.6);
+              // texture.offset.set(0.93, 0.55);
+              texture.repeat.set(1, -1);
+            } else {
+              console.warn(
+                "No specific texture settings for selectedMesh:",
+                selectedMesh
+              );
+            }
+            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+          });
+        }
+      );
+    }
+  }
+}
+
 // function applyTexturesToMeshes() {
 //   // meshImageDataArray = window.meshImageDataArray;
 //   console.log(meshImageDataArray, "Mesh Image from threeD Model");
@@ -511,12 +575,23 @@ document
       );
       realEditCont.style.display = "block";
       // Check if there is an active item
-      if (activeItem) {
+      // if (activeItem) {
+      //   try {
+      //     const response = await fetch(activeItem.src);
+      //     const jsonData = await response.json();
+      //     // Load the JSON data to the canvas
+      //     loadJSONToCanvas(jsonData);
+      //   } catch (error) {
+      //     console.error("Error fetching or parsing the JSON:", error);
+      //   }
+      // }
+
+      if (selectedItem) {
         try {
-          const response = await fetch(activeItem.src);
-          const jsonData = await response.json();
+          // const response = await fetch(activeItem.src);
+          // const jsonData = await response.json();
           // Load the JSON data to the canvas
-          loadJSONToCanvas(jsonData);
+          loadJSONToCanvas(selectedItem.jsonData);
         } catch (error) {
           console.error("Error fetching or parsing the JSON:", error);
         }
@@ -550,17 +625,17 @@ function initializeCanvas() {
 
 document.getElementById("text-1").addEventListener("input", function () {
   updateCanvasText(1, this.value);
-  if (activeItem) {
+  if (selectedItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "visible";
+    openModalBtn.style.visibility = "invisible";
   }
 });
 
 document.getElementById("text-2").addEventListener("input", function () {
   updateCanvasText(2, this.value);
-  if (activeItem) {
+  if (selectedItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "visible";
+    openModalBtn.style.visibility = "invisible";
   }
 });
 
@@ -683,13 +758,26 @@ function replaceImageSrc(json, newImageSrc, callback) {
     const imageHeight = img.height;
 
     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
+    console.log(json.objects);
 
     // Find the object where obj.type === "image" and obj.src does not start with "http"
+    // json.objects.forEach((obj) => {
+    //   if (obj.type === "image" && !obj.src.startsWith("http")) {
+    //     obj.src = newImageSrc;
+    //     obj.width = imageWidth; // Set the width and height if needed
+    //     obj.height = imageHeight;
+    //   }
+    // });
+
+    // const imageUpdatedJSON = json;
+    let found = false;
+
     json.objects.forEach((obj) => {
-      if (obj.type === "image" && !obj.src.startsWith("http")) {
+      if (!found && obj.customId === "clipmask" && obj.type === "image") {
         obj.src = newImageSrc;
-        obj.width = imageWidth; // Set the width and height if needed
+        obj.width = imageWidth;
         obj.height = imageHeight;
+        found = true; // Only update the first matching object
       }
     });
 
@@ -720,7 +808,7 @@ function generateImagesFromCanvasStates() {
     tempCanvas.loadFromJSON(originalFormat[tabId], () => {
       const objects = tempCanvas.getObjects(); // Get all objects in the canvas
       console.log(objects);
-      const corsImages = []; // Store references to CORS images
+      // const corsImages = []; // Store references to CORS images
 
       // Identify and hide CORS images
       // objects.forEach((obj) => {
@@ -749,9 +837,9 @@ function generateImagesFromCanvasStates() {
       }
 
       // Restore visibility of CORS images
-      corsImages.forEach((obj) => {
-        obj.visible = true;
-      });
+      // corsImages.forEach((obj) => {
+      //   obj.visible = true;
+      // });
 
       tempCanvas.renderAll(); // Re-render the canvas with all objects
 
@@ -1173,20 +1261,63 @@ function loadJSONToCanvas(jsonData) {
       }
 
       // After loading the JSON, resize and reposition all objects to fit the canvas
-      newFabricCanvas.getObjects().forEach((obj, index) => {
-        if (index === 0) {
-          // Scale down the first object
-          obj.scaleX *= 0.22;
-          obj.scaleY *= 0.22;
-        } else {
-          // Apply a different scaling factor for other objects
-          obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-          obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+      // newFabricCanvas.getObjects().forEach((obj, index) => {
+      //   if (index === 0) {
+      //     // Scale down the first object
+      //     obj.scaleX *= 0.22;
+      //     obj.scaleY *= 0.22;
+      //   } else {
+      //     // Apply a different scaling factor for other objects
+      //     obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+      //     obj.scaleY *= 0.22; // Adjust the scaling factor as needed
 
-          // Adjust top and left properties to make the object visible
-          obj.left *= 0.22; // Adjust the position as needed
-          obj.top *= 0.22; // Adjust the position as needed
-        }
+      //     // Adjust top and left properties to make the object visible
+      //     obj.left *= 0.22; // Adjust the position as needed
+      //     obj.top *= 0.22; // Adjust the position as needed
+      //   }
+
+      //   if (obj.clipPath) {
+      //     obj.clipPath.set({
+      //       scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
+      //       scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
+      //       left: obj.clipPath.left * 0.22, // Adjust the position as needed
+      //       top: obj.clipPath.top * 0.22, // Adjust the position as needed
+      //     });
+      //   }
+
+      //   obj.setCoords();
+      //   obj.set({
+      //     selectable: false,
+      //     hasControls: false,
+      //     hasBorders: false,
+      //     lockMovementX: true,
+      //     lockMovementY: true,
+      //     lockRotation: true,
+      //     lockScalingX: true,
+      //     lockScalingY: true,
+      //   });
+      // });
+      // After loading the JSON, resize and reposition all objects to fit the canvas
+      newFabricCanvas.getObjects().forEach((obj, index) => {
+        // if (index === 0) {
+        //   // Scale down the first object
+        //   obj.scaleX *= 0.22;
+        //   obj.scaleY *= 0.22;
+        // } else {
+        //   // Apply a different scaling factor for other objects
+        //   obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+        //   obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+
+        //   // Adjust top and left properties to make the object visible
+        //   obj.left *= 0.22; // Adjust the position as needed
+        //   obj.top *= 0.22; // Adjust the position as needed
+        // }
+        obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+        obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+
+        // Adjust top and left properties to make the object visible
+        obj.left *= 0.22; // Adjust the position as needed
+        obj.top *= 0.22; // Adjust the position as needed
 
         if (obj.clipPath) {
           obj.clipPath.set({
@@ -1218,10 +1349,10 @@ function loadJSONToCanvas(jsonData) {
       const allObjects = newFabricCanvas.getObjects();
 
       // Save the first object (assuming it's the background image)
-      const firstObject = allObjects[0];
+      // const firstObject = allObjects[0];
 
       // Remove the first object from the canvas
-      newFabricCanvas.remove(firstObject);
+      // newFabricCanvas.remove(firstObject);
 
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
@@ -1256,7 +1387,7 @@ function loadJSONToCanvas(jsonData) {
       }
 
       // Add the first object back to its original position
-      newFabricCanvas.insertAt(firstObject, 0);
+      // newFabricCanvas.insertAt(firstObject, 0);
 
       // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
@@ -1313,9 +1444,9 @@ function setNewImageSrc(imageSrc) {
 
 // Assuming the user selects an image via an input field
 function handleImageUploadAlternate(event) {
-  if (activeItem) {
+  if (selectedItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "visible";
+    openModalBtn.style.visibility = "invisible";
     const file = event.target.files[0];
     const reader = new FileReader();
 
@@ -1353,13 +1484,18 @@ document
       // Set properties for the first object in the canvas
       const objects = newFabricCanvas.getObjects();
       console.log(objects);
-      const targetObject = objects.find(
-        (obj) => obj.type === "image" && !obj.src.startsWith("http")
+      // const targetObject = objects.find(
+      //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
+      // );
+      const targetObject = objects.filter(
+        (obj) => obj.customId === "clipmask" && obj.type === "image"
       );
 
-      if (targetObject) {
+      console.log(targetObject);
+
+      if (targetObject[0]) {
         // Set properties for the found object
-        targetObject.set({
+        targetObject[0].set({
           selectable: true,
           hasControls: true,
           hasBorders: true,
@@ -1387,7 +1523,7 @@ document
     popupMiniCanvas.style.display = "none";
   });
 document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
-  if (activeItem) {
+  if (selectedItem) {
     if (newFabricCanvas) {
       newFabricCanvas.forEachObject((obj) => {
         obj.set({
@@ -1408,6 +1544,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       console.log(window.editedCanvasJson);
 
       const allObjects = newFabricCanvas.getObjects();
+      console.log(allObjects);
 
       // Save the first object (assuming it's the background image)
       const firstObject = allObjects[0];
@@ -1828,12 +1965,15 @@ initialize3DViewer();
             // }
             // const jsonData = await jsonResponse.json();
             // window.originalCanvasJson = jsonData;
-            let selectedItem =
+            selectedItem =
               editedArrayFormat.find((item) => item.part === mainPart) ||
               editedArrayFormat[0];
             console.log(selectedItem);
             imageReplace = true;
             // console.log(originalFormat);
+            mainPartMesh = selectedItem?.part;
+
+            window.originalCanvasJson = selectedItem.jsonData;
 
             // const miniEditorAdjust =
             //   document.getElementById("miniE-adjust-Btn");
