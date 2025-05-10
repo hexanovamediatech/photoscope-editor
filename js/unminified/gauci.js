@@ -1450,18 +1450,43 @@
         //   part: key,
         //   jsonData: JSON.parse(tabCanvasStates[key]),
         // }));
+        // let output = Object.keys(tabCanvasStates).map((key) => {
+        //   const jsonData = JSON.parse(tabCanvasStates[key]);
+
+        //   // Safely update objects inside jsonData
+        //   jsonData.objects = jsonData.objects.map((obj) => {
+        //     if (obj.type === "image" && obj.clipPath) {
+        //       return {
+        //         ...obj,
+        //         customId: "clipmask",
+        //       };
+        //     }
+        //     return obj;
+        //   });
+
+        //   return {
+        //     part: key,
+        //     jsonData: jsonData,
+        //   };
+        // });
         let output = Object.keys(tabCanvasStates).map((key) => {
           const jsonData = JSON.parse(tabCanvasStates[key]);
 
           // Safely update objects inside jsonData
           jsonData.objects = jsonData.objects.map((obj) => {
+            let updatedObj = { ...obj };
+
+            // If obj.type is "image" and it has a clipPath, set customId
             if (obj.type === "image" && obj.clipPath) {
-              return {
-                ...obj,
-                customId: "clipmask",
-              };
+              updatedObj.customId = "clipmask";
             }
-            return obj;
+
+            // If crossOrigin exists (even if null), set it to "anonymous"
+            if ("crossOrigin" in obj) {
+              updatedObj.crossOrigin = "anonymous";
+            }
+
+            return updatedObj;
           });
 
           return {
