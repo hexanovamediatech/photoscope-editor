@@ -3155,72 +3155,72 @@
     //     console.log("No saved canvas JSON found in localStorage.");
     //   }
     // });
-    selector.find("#openEditor").on("click", function () {
-      var $mainContainer = selector.find("#mini-editor-main-cont");
-      var $buttonContainer = selector.find("#webg-buttons-container");
+    // selector.find("#openEditor").on("click", function () {
+    //   var $mainContainer = selector.find("#mini-editor-main-cont");
+    //   var $buttonContainer = selector.find("#webg-buttons-container");
 
-      // Remove the 'personalise-page-active' class from the main container
-      $mainContainer.removeClass("personalise-page-active");
-      // Add the 'personalise-page-inactive' class to the main container
-      $mainContainer.addClass("personalise-page-inactive");
+    //   // Remove the 'personalise-page-active' class from the main container
+    //   $mainContainer.removeClass("personalise-page-active");
+    //   // Add the 'personalise-page-inactive' class to the main container
+    //   $mainContainer.addClass("personalise-page-inactive");
 
-      // Remove the 'toggle-2d-3d-cont' class from the button container
-      $buttonContainer.removeClass("toggle-2d-3d-cont");
+    //   // Remove the 'toggle-2d-3d-cont' class from the button container
+    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
 
-      var editedCanvasJson = window.editedCanvasJson;
-      var originalCanvasJson = window.originalCanvasJson;
-      console.log(editedCanvasJson);
+    //   var editedCanvasJson = window.editedCanvasJson;
+    //   var originalCanvasJson = window.originalCanvasJson;
+    //   console.log(editedCanvasJson);
 
-      if (editedCanvasJson && originalCanvasJson) {
-        var originalCanvasObject = originalCanvasJson;
-        var editedCanvasObject = editedCanvasJson;
+    //   if (editedCanvasJson && originalCanvasJson) {
+    //     var originalCanvasObject = originalCanvasJson;
+    //     var editedCanvasObject = editedCanvasJson;
 
-        // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
-        editedCanvasObject.objects.forEach((editedObj, index) => {
-          if (originalCanvasObject.objects[index]) {
-            var originalObj = originalCanvasObject.objects[index];
+    //     // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
+    //     editedCanvasObject.objects.forEach((editedObj, index) => {
+    //       if (originalCanvasObject.objects[index]) {
+    //         var originalObj = originalCanvasObject.objects[index];
 
-            // Copy the values for top, left, scaleX, and scaleY from originalObj
-            // editedObj.top = originalObj.top;
-            // editedObj.left = originalObj.left;
-            // editedObj.scaleX = originalObj.scaleX;
-            // editedObj.scaleY = originalObj.scaleY;
+    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
+    //         // editedObj.top = originalObj.top;
+    //         // editedObj.left = originalObj.left;
+    //         // editedObj.scaleX = originalObj.scaleX;
+    //         // editedObj.scaleY = originalObj.scaleY;
 
-            // Iterate over properties of the originalObj and add missing ones to editedObj
-            for (var key in originalObj) {
-              if (
-                originalObj.hasOwnProperty(key) &&
-                !editedObj.hasOwnProperty(key)
-              ) {
-                editedObj[key] = originalObj[key];
-              }
-            }
+    //         // Iterate over properties of the originalObj and add missing ones to editedObj
+    //         for (var key in originalObj) {
+    //           if (
+    //             originalObj.hasOwnProperty(key) &&
+    //             !editedObj.hasOwnProperty(key)
+    //           ) {
+    //             editedObj[key] = originalObj[key];
+    //           }
+    //         }
 
-            // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
-            if (editedObj.type === "textbox") {
-              originalObj.text = editedObj.text;
-            }
-            if (
-              editedObj.type === "image" &&
-              !editedObj.src.startsWith("http")
-            ) {
-              originalObj.top = editedObj.top * 4.6;
-              originalObj.left = editedObj.left * 4.6;
-              originalObj.scaleY = editedObj.scaleX * 4.6;
-              originalObj.scaleX = editedObj.scaleY * 4.6;
-            }
-          }
-        });
+    //         // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
+    //         if (editedObj.type === "textbox") {
+    //           originalObj.text = editedObj.text;
+    //         }
+    //         if (
+    //           editedObj.type === "image" &&
+    //           !editedObj.src.startsWith("http")
+    //         ) {
+    //           originalObj.top = editedObj.top * 4.6;
+    //           originalObj.left = editedObj.left * 4.6;
+    //           originalObj.scaleY = editedObj.scaleX * 4.6;
+    //           originalObj.scaleX = editedObj.scaleY * 4.6;
+    //         }
+    //       }
+    //     });
 
-        console.log(editedCanvasObject);
-        console.log(originalCanvasObject);
+    //     console.log(editedCanvasObject);
+    //     console.log(originalCanvasObject);
 
-        // Load the updated original canvas JSON into your editor or canvas
-        loadJSON(originalCanvasObject);
-      } else {
-        console.log("No saved canvas JSON found in localStorage.");
-      }
-    });
+    //     // Load the updated original canvas JSON into your editor or canvas
+    //     loadJSON(originalCanvasObject);
+    //   } else {
+    //     console.log("No saved canvas JSON found in localStorage.");
+    //   }
+    // });
 
     // selector.find("#editInEditorpBtn").on("click", function () {
     //   var $mainContainer = selector.find("#mini-editor-main-cont");
@@ -3268,6 +3268,181 @@
     //     console.log("No saved canvas JSON found in localStorage.");
     //   }
     // });
+    // selector.find("#editInEditorpBtn").on("click", function () {
+    //   var $mainContainer = selector.find("#mini-editor-main-cont");
+    //   var $buttonContainer = selector.find("#webg-buttons-container");
+
+    //   // Remove the 'personalise-page-active' class from the main container
+    //   $mainContainer.removeClass("personalise-page-active");
+    //   // Add the 'personalise-page-inactive' class to the main container
+    //   $mainContainer.addClass("personalise-page-inactive");
+
+    //   // Remove the 'toggle-2d-3d-cont' class from the button container
+    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
+
+    //   var editedCanvasJson = window.editedCanvasJson;
+    //   var originalCanvasJson = window.originalCanvasJson;
+    //   console.log(editedCanvasJson);
+
+    //   if (editedCanvasJson && originalCanvasJson) {
+    //     var originalCanvasObject = originalCanvasJson;
+    //     var editedCanvasObject = editedCanvasJson;
+
+    //     // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
+    //     editedCanvasObject.objects.forEach((editedObj, index) => {
+    //       if (originalCanvasObject.objects[index]) {
+    //         var originalObj = originalCanvasObject.objects[index];
+
+    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
+    //         // editedObj.top = originalObj.top;
+    //         // editedObj.left = originalObj.left;
+    //         // editedObj.scaleX = originalObj.scaleX;
+    //         // editedObj.scaleY = originalObj.scaleY;
+
+    //         // Iterate over properties of the originalObj and add missing ones to editedObj
+    //         for (var key in originalObj) {
+    //           if (
+    //             originalObj.hasOwnProperty(key) &&
+    //             !editedObj.hasOwnProperty(key)
+    //           ) {
+    //             editedObj[key] = originalObj[key];
+    //           }
+    //         }
+
+    //         // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
+    //         if (editedObj.type === "textbox") {
+    //           originalObj.text = editedObj.text;
+    //         }
+    //         if (
+    //           editedObj.type === "image" &&
+    //           !editedObj.src.startsWith("http")
+    //         ) {
+    //           originalObj.top = editedObj.top * 4.6;
+    //           originalObj.left = editedObj.left * 4.6;
+    //           originalObj.scaleY = editedObj.scaleX * 4.6;
+    //           originalObj.scaleX = editedObj.scaleY * 4.6;
+    //         }
+    //       }
+    //     });
+
+    //     console.log(editedCanvasObject);
+    //     console.log(originalCanvasObject);
+
+    //     // Load the updated original canvas JSON into your editor or canvas
+    //     loadJSON(originalCanvasObject);
+    //   } else {
+    //     console.log("No saved canvas JSON found in localStorage.");
+    //   }
+    // });
+
+    selector.find("#openEditor").on("click", function () {
+      var $mainContainer = selector.find("#mini-editor-main-cont");
+      var $buttonContainer = selector.find("#webg-buttons-container");
+
+      // Remove the 'personalise-page-active' class from the main container
+      $mainContainer.removeClass("personalise-page-active");
+      // Add the 'personalise-page-inactive' class to the main container
+      $mainContainer.addClass("personalise-page-inactive");
+
+      // Remove the 'toggle-2d-3d-cont' class from the button container
+      $buttonContainer.removeClass("toggle-2d-3d-cont");
+
+      var editedCanvasJson = window.editedCanvasJson;
+      // var originalCanvasJson = window.originalCanvasJson;
+      console.log(editedCanvasJson);
+      var selectedOrginalFormat = window.selectedOriginalJsonPart;
+      var orginalDataFormat = window.originalFormat;
+
+      var editedArrayFormat = Object.keys(orginalDataFormat).map((key) => ({
+        part: key,
+        jsonData: JSON.parse(orginalDataFormat[key]),
+      }));
+      var newObject = {
+        part: selectedOrginalFormat.part,
+        jsonData: editedCanvasJson,
+      };
+
+      console.log(newObject);
+      console.log(editedArrayFormat);
+      // Step 1: Filter original object by part
+      var originalMatched = editedArrayFormat.find(
+        (obj) => obj.part === newObject.part
+      );
+
+      if (originalMatched) {
+        var originalObjects = originalMatched.jsonData.objects || [];
+        var modifiedObjects = newObject.jsonData.objects || [];
+
+        // Step 2: Fill missing data in modified objects from original
+        modifiedObjects.forEach((modObj, index) => {
+          let origObj = originalObjects[index];
+          if (origObj) {
+            for (let key in origObj) {
+              if (!(key in modObj)) {
+                modObj[key] = origObj[key];
+              }
+            }
+          }
+
+          // ✅ Step 3: Convert crossOrigin: null → "anonymous"
+          if (modObj.crossOrigin === null) {
+            modObj.crossOrigin = "anonymous";
+          }
+
+          if (modObj.scaleX !== undefined) modObj.scaleX *= 4.55;
+          if (modObj.scaleY !== undefined) modObj.scaleY *= 4.55;
+          if (modObj.left !== undefined) modObj.left *= 4.55;
+          if (modObj.top !== undefined) modObj.top *= 4.55;
+
+          // ✅ Step 4: Handle clipPath if present
+          if (modObj.clipPath) {
+            let clip = modObj.clipPath;
+            if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
+            if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
+            if (clip.left !== undefined) clip.left *= 4.55;
+            if (clip.top !== undefined) clip.top *= 4.55;
+          }
+        });
+
+        // Step 4: Assign updated objects back to jsonData
+        newObject.jsonData.objects = modifiedObjects;
+      }
+
+      // Final result
+      console.log(newObject);
+      var updatedArrayFormat = editedArrayFormat.map((obj) => {
+        if (obj.part === newObject.part) {
+          return newObject; // Replace with modified object
+        }
+        return obj; // Keep as is
+      });
+
+      console.log(updatedArrayFormat);
+      const originalFormat = {};
+      updatedArrayFormat.forEach((item) => {
+        originalFormat[item.part] = JSON.stringify(item.jsonData);
+      });
+      console.log(originalFormat);
+
+      console.log(tabCanvasStates);
+      console.log(activeTabId);
+      console.log(preservedImage);
+      console.log(layoutSource);
+      tabCanvasStates = originalFormat;
+      allCanvasTabState = originalFormat;
+      loadCanvasState(activeTabId);
+      console.log(allCanvasTabState);
+      console.log(mainPart);
+      //      let tabCanvasStates = {}; // To store canvas JSON state for each tab
+      // let activeTabId = null; // To track the currently active tab
+      // let preservedImage = null; // To manage the layout image
+      // let layoutSource = null; // URL of the current layout image
+      // let allCanvasTabState = {};
+      // let mainPart = null;
+      // console.log(selectedOrginalFormat);
+      // console.log(orginalDataFormat);
+    });
+
     selector.find("#editInEditorpBtn").on("click", function () {
       var $mainContainer = selector.find("#mini-editor-main-cont");
       var $buttonContainer = selector.find("#webg-buttons-container");
@@ -3281,58 +3456,91 @@
       $buttonContainer.removeClass("toggle-2d-3d-cont");
 
       var editedCanvasJson = window.editedCanvasJson;
-      var originalCanvasJson = window.originalCanvasJson;
+      // var originalCanvasJson = window.originalCanvasJson;
       console.log(editedCanvasJson);
+      var selectedOrginalFormat = window.selectedOriginalJsonPart;
+      var orginalDataFormat = window.originalFormat;
 
-      if (editedCanvasJson && originalCanvasJson) {
-        var originalCanvasObject = originalCanvasJson;
-        var editedCanvasObject = editedCanvasJson;
+      var editedArrayFormat = Object.keys(orginalDataFormat).map((key) => ({
+        part: key,
+        jsonData: JSON.parse(orginalDataFormat[key]),
+      }));
+      var newObject = {
+        part: selectedOrginalFormat.part,
+        jsonData: editedCanvasJson,
+      };
 
-        // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
-        editedCanvasObject.objects.forEach((editedObj, index) => {
-          if (originalCanvasObject.objects[index]) {
-            var originalObj = originalCanvasObject.objects[index];
+      console.log(newObject);
+      console.log(editedArrayFormat);
+      // Step 1: Filter original object by part
+      var originalMatched = editedArrayFormat.find(
+        (obj) => obj.part === newObject.part
+      );
 
-            // Copy the values for top, left, scaleX, and scaleY from originalObj
-            // editedObj.top = originalObj.top;
-            // editedObj.left = originalObj.left;
-            // editedObj.scaleX = originalObj.scaleX;
-            // editedObj.scaleY = originalObj.scaleY;
+      if (originalMatched) {
+        var originalObjects = originalMatched.jsonData.objects || [];
+        var modifiedObjects = newObject.jsonData.objects || [];
 
-            // Iterate over properties of the originalObj and add missing ones to editedObj
-            for (var key in originalObj) {
-              if (
-                originalObj.hasOwnProperty(key) &&
-                !editedObj.hasOwnProperty(key)
-              ) {
-                editedObj[key] = originalObj[key];
+        // Step 2: Fill missing data in modified objects from original
+        modifiedObjects.forEach((modObj, index) => {
+          let origObj = originalObjects[index];
+          if (origObj) {
+            for (let key in origObj) {
+              if (!(key in modObj)) {
+                modObj[key] = origObj[key];
               }
             }
+          }
 
-            // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
-            if (editedObj.type === "textbox") {
-              originalObj.text = editedObj.text;
-            }
-            if (
-              editedObj.type === "image" &&
-              !editedObj.src.startsWith("http")
-            ) {
-              originalObj.top = editedObj.top * 4.6;
-              originalObj.left = editedObj.left * 4.6;
-              originalObj.scaleY = editedObj.scaleX * 4.6;
-              originalObj.scaleX = editedObj.scaleY * 4.6;
-            }
+          // ✅ Step 3: Convert crossOrigin: null → "anonymous"
+          if (modObj.crossOrigin === null) {
+            modObj.crossOrigin = "anonymous";
+          }
+
+          if (modObj.scaleX !== undefined) modObj.scaleX *= 4.55;
+          if (modObj.scaleY !== undefined) modObj.scaleY *= 4.55;
+          if (modObj.left !== undefined) modObj.left *= 4.55;
+          if (modObj.top !== undefined) modObj.top *= 4.55;
+
+          // ✅ Step 4: Handle clipPath if present
+          if (modObj.clipPath) {
+            let clip = modObj.clipPath;
+            if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
+            if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
+            if (clip.left !== undefined) clip.left *= 4.55;
+            if (clip.top !== undefined) clip.top *= 4.55;
           }
         });
 
-        console.log(editedCanvasObject);
-        console.log(originalCanvasObject);
-
-        // Load the updated original canvas JSON into your editor or canvas
-        loadJSON(originalCanvasObject);
-      } else {
-        console.log("No saved canvas JSON found in localStorage.");
+        // Step 4: Assign updated objects back to jsonData
+        newObject.jsonData.objects = modifiedObjects;
       }
+
+      // Final result
+      console.log(newObject);
+      var updatedArrayFormat = editedArrayFormat.map((obj) => {
+        if (obj.part === newObject.part) {
+          return newObject; // Replace with modified object
+        }
+        return obj; // Keep as is
+      });
+
+      console.log(updatedArrayFormat);
+      const originalFormat = {};
+      updatedArrayFormat.forEach((item) => {
+        originalFormat[item.part] = JSON.stringify(item.jsonData);
+      });
+      console.log(originalFormat);
+
+      console.log(tabCanvasStates);
+      console.log(activeTabId);
+      console.log(preservedImage);
+      console.log(layoutSource);
+      tabCanvasStates = originalFormat;
+      allCanvasTabState = originalFormat;
+      loadCanvasState(activeTabId);
+      console.log(allCanvasTabState);
+      console.log(mainPart);
     });
 
     /**Disable Right Click */
@@ -7149,7 +7357,7 @@
     //   }, 400);
     // });
 
-    const tabCanvasStates = {}; // To store canvas JSON state for each tab
+    let tabCanvasStates = {}; // To store canvas JSON state for each tab
     let activeTabId = null; // To track the currently active tab
     let preservedImage = null; // To manage the layout image
     let layoutSource = null; // URL of the current layout image

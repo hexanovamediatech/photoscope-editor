@@ -1584,6 +1584,7 @@ function loadJSONToCanvas(jsonData) {
       window.editedCanvasJson = savedCanvasJSON;
       const allObjects = newFabricCanvas.getObjects();
       console.log(allObjects);
+      console.log(savedCanvasJSON);
 
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
@@ -2116,6 +2117,7 @@ initialize3DViewer();
           newImg.classList.add("active");
           activeItem = item.src; // Set the clicked item as active
           originalFormat = item.src;
+          window.originalFormat = originalFormat;
           console.log(activeItem);
           console.log(mainPart);
 
@@ -2198,6 +2200,7 @@ initialize3DViewer();
               editedArrayFormat.find((item) => item.part === mainPart) ||
               editedArrayFormat[0];
             console.log(selectedItem);
+            window.selectedOriginalJsonPart = selectedItem;
             imageReplace = true;
             // console.log(originalFormat);
             mainPartMesh = selectedItem?.part;
