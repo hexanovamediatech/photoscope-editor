@@ -7772,12 +7772,13 @@
           console.log(allObjects, "All Canvas Objects");
           // Ensure the background image has the desired properties after loading
           if (canvas) {
-            const objects = canvas.getObjects();
+            // const objects = canvas.getObjects();
             // console.log(objects);
-            const targetObject = objects.find(
+            const targetObject = allObjects.find(
               (obj) => obj.type === "image" && obj.src.startsWith("http")
             );
             console.log(targetObject);
+
             if (targetObject) {
               // Set properties for the found object
               targetObject.set({
@@ -7786,21 +7787,37 @@
                 hasControls: false,
               });
             }
-            const targetMaskObject = objects.find(
-              (obj) => obj.type === "image" && !obj.src.startsWith("http")
+
+            // const targetMaskObject = allObjects.find(
+            //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
+            // );
+            // const json = canvas.toJSON();
+            // console.log(json);
+            // const jsonObjects = json.objects || [];
+
+            // const targetMaskObject = allObjects.find(
+            //   (obj) => obj.type === "image" && obj.customId === "clipmask"
+            // );
+            const targetMaskObject = allObjects.find(
+              (obj) => obj.type === "image" && obj.clipPath
             );
+            console.log(targetMaskObject);
             if (targetMaskObject) {
               storedActiveObject = targetMaskObject;
               storedClipPath = targetMaskObject.clipPath;
-
+              console.log(storedActiveObject);
+              console.log(storedClipPath.top, storedClipPath.left);
+              // addClipMask(targetMaskObject.clipPath, targetMaskObject);
+              applyTemplateClipMask(targetMaskObject);
+              handleMaskingDone();
               syncClipPathWithImage(
                 targetMaskObject.clipPath,
                 targetMaskObject
               );
-              handleMaskingDone();
             }
 
             canvas.renderAll();
+            console.log(canvas.toJSON());
           }
 
           console.log(`Loaded canvas state for Tab ${tabId}`);
@@ -7812,6 +7829,81 @@
         console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
       }
     }
+
+    // function loadCanvasState(tabId) {
+    //   if (tabCanvasStates[tabId]) {
+    //     canvas.loadFromJSON(tabCanvasStates[tabId], () => {
+    //       // Step 1: Initial render
+    //       canvas.renderAll();
+
+    //       // Step 2: Delay to ensure all objects (like clipPath) are fully initialized
+    //       setTimeout(() => {
+    //         console.log(canvas.toJSON());
+
+    //         const allObjects = canvas.getObjects();
+    //         console.log(allObjects, "All Canvas Objects");
+
+    //         // Ensure the background image has the desired properties after loading
+    //         if (canvas) {
+    //           const objects = canvas.getObjects();
+    //           console.log(objects);
+
+    //           const targetObject = objects.find(
+    //             (obj) => obj.type === "image" && obj.src?.startsWith("http")
+    //           );
+    //           console.log("Background Image Object:", targetObject);
+
+    //           if (targetObject) {
+    //             // Set properties for the found object
+    //             targetObject.set({
+    //               selectable: false,
+    //               evented: false,
+    //               hasControls: false,
+    //             });
+    //           }
+
+    //           canvas.renderAll();
+    //           console.log("After setting background object:", canvas.toJSON());
+
+    //           // Now find the targetMaskObject (clipmask)
+    //           const targetMaskObject = objects.find(
+    //             (obj) => obj.type === "image" && obj.customId === "clipmask"
+    //           );
+
+    //           console.log("Target Mask Object:", targetMaskObject);
+
+    //           if (targetMaskObject) {
+    //             storedActiveObject = targetMaskObject;
+    //             storedClipPath = targetMaskObject.clipPath;
+    //             console.log("Stored Active Object:", storedActiveObject);
+    //             console.log("Stored ClipPath:", storedClipPath);
+
+    //             // Confirm clipPath is ready
+    //             console.log("ClipPath Left:", storedClipPath?.left);
+    //             console.log("ClipPath Top:", storedClipPath?.top);
+
+    //             // Sync clipPath position and handle masking
+    //             syncClipPathWithImage(
+    //               targetMaskObject.clipPath,
+    //               targetMaskObject
+    //             );
+    //             handleMaskingDone();
+    //           }
+
+    //           canvas.renderAll();
+    //           console.log("Final Canvas State:", canvas.toJSON());
+    //         }
+
+    //         console.log(`Loaded canvas state for Tab ${tabId}`);
+    //         console.log("Active Tab ID:", activeTabId);
+    //         console.log("All Tab Canvas States:", tabCanvasStates);
+    //       }, 50); // Delay allows full rendering including clipPath
+    //     });
+    //   } else {
+    //     AddingImage(); // Load the default layout image for the tab
+    //     console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
+    //   }
+    // }
 
     // On document ready, fetch image data
     $(document).ready(function () {
@@ -8468,6 +8560,15 @@
 
     function syncClipPathWithImage(clipPath, activeObject) {
       console.log(activeObject, "Active object of mask");
+      // console.log(clipPath);
+      // console.log(clipPath.top, clipPath.left);
+      // console.log(activeObject.top, activeObject.left);
+      // relativeTop = clipPath.top - activeObject.top;
+      // relativeLeft = clipPath.left - activeObject.left;
+      // applyTemplateClipMask(activeObject);
+      // handleMaskingDone();
+      // syncClipPathWithImage(activeObject.clipPath, activeObject);
+
       clipPath.set({
         originX: activeObject.originX,
         originY: activeObject.originY,
@@ -8481,7 +8582,9 @@
 
     function handleMaskingDone() {
       canvas.remove(shell);
-      onlyDeleteLayerEvent(shell.id);
+      if (shell) {
+        onlyDeleteLayerEvent(shell?.id);
+      }
 
       canvas.requestRenderAll();
       console.log("value is ", clipPathOffset.top, clipPathOffset.left);
@@ -8597,6 +8700,8 @@
     function unlinkClipPath() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
+        console.log(storedActiveObject);
+        console.log(storedClipPath);
         storedActiveObject.off("moving");
         storedActiveObject.off("rotating");
         storedActiveObject.off("scaling");
@@ -8605,7 +8710,9 @@
         storedActiveObject.clipPath = storedClipPath;
 
         // Optionally, re-add the shell for further editing
-        canvas.add(shell);
+        if (shell) {
+          canvas.add(shell);
+        }
         shell.set({
           top: storedClipPath.top,
           left: storedClipPath.left,
