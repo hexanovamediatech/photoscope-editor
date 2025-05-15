@@ -1705,10 +1705,78 @@
       });
     }
 
+    // function fetchAndDisplayTemplates() {
+    //   const url = window.location.href;
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const modelName = urlParams.get("name");
+
+    //   // Fetch the user email first
+    //   getUserEmail()
+    //     .then((userEmail) => {
+    //       // After getting the user email, fetch all saved templates
+    //       return getAllSavedData(userEmail);
+    //     })
+    //     .then((assets) => {
+    //       console.log("all the templates in library:", assets);
+    //       const templatesContainer = $("#gauci-my-templates");
+    //       templatesContainer.empty(); // Clear existing content
+
+    //       // Filter templates for the specific model type
+    //       const filteredAssets = assets.filter(
+    //         (asset) => asset.type === modelName
+    //       );
+    //       if (filteredAssets.length === 0) {
+    //         // If no templates found for the model type, show a message
+    //         templatesContainer.html(
+    //           `<div class="notice notice-info">No templates found for model: ${modelName}.</div>`
+    //         );
+    //       }
+    //       if (assets.length === 0) {
+    //         templatesContainer.html(
+    //           '<div class="notice notice-info">No templates found.</div>'
+    //         );
+    //       } else {
+    //         assets.forEach((asset) => {
+    //           if (asset.type === modelName) {
+    //             const jsonblob = new Blob([asset.src], { type: "text/plain" });
+    //             const jsonurl = URL.createObjectURL(jsonblob);
+
+    //             const listItem = $("<li>").attr("data-keyword", asset.name);
+
+    //             listItem.html(`
+    //                     <div>${asset.name}</div>
+    //                     <div>
+    //                         <button type="button" class="gauci-btn primary gauci-select-template" data-json='${JSON.stringify(
+    //                           asset.src
+    //                         )}">
+    //                             <span class="material-icons">check</span>Select
+    //                         </button>
+    //                         <button type="button" class="gauci-btn danger gauci-template-delete" data-target="${
+    //                           asset.key
+    //                         }">
+    //                             <span class="material-icons">clear</span>Delete
+    //                         </button>
+    //                     </div>
+    //                 `);
+
+    //             templatesContainer.append(listItem);
+    //           }
+    //         });
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       // toastr.error(error.message, "Error retrieving assets");
+    //       console.log(error.message, "Error retrieving assets");
+    //     });
+    // }
     function fetchAndDisplayTemplates() {
-      const url = window.location.href;
       const urlParams = new URLSearchParams(window.location.search);
       const modelName = urlParams.get("name");
+
+      // Initialize global store if not exists
+      if (!window.assetSrcStore) {
+        window.assetSrcStore = {};
+      }
 
       // Fetch the user email first
       getUserEmail()
@@ -1717,52 +1785,52 @@
           return getAllSavedData(userEmail);
         })
         .then((assets) => {
-          console.log("all the templates in library:", assets);
+          console.log("All templates in library:", assets);
           const templatesContainer = $("#gauci-my-templates");
           templatesContainer.empty(); // Clear existing content
 
-          // Filter templates for the specific model type
           const filteredAssets = assets.filter(
             (asset) => asset.type === modelName
           );
+
           if (filteredAssets.length === 0) {
-            // If no templates found for the model type, show a message
             templatesContainer.html(
               `<div class="notice notice-info">No templates found for model: ${modelName}.</div>`
             );
+            return;
           }
-          if (assets.length === 0) {
-            templatesContainer.html(
-              '<div class="notice notice-info">No templates found.</div>'
-            );
-          } else {
-            assets.forEach((asset) => {
-              if (asset.type === modelName) {
-                const jsonblob = new Blob([asset.src], { type: "text/plain" });
-                const jsonurl = URL.createObjectURL(jsonblob);
 
-                const listItem = $("<li>").attr("data-keyword", asset.name);
+          filteredAssets.forEach((asset) => {
+            const uniqueId = `template-${asset.key}`;
 
-                listItem.html(`
-                        <div>${asset.name}</div>
-                        <div>
-                            <button type="button" class="gauci-btn primary gauci-select-template" data-json="${asset.src}">
-                                <span class="material-icons">check</span>Select
-                            </button>
-                            <button type="button" class="gauci-btn danger gauci-template-delete" data-target="${asset.key}">
-                                <span class="material-icons">clear</span>Delete
-                            </button>
-                        </div>
-                    `);
+            // Store the src in memory
+            window.assetSrcStore[uniqueId] = asset.src;
 
-                templatesContainer.append(listItem);
-              }
-            });
-          }
+            const listItem = $("<li>").attr("data-keyword", asset.name);
+
+            listItem.html(`
+          <div>${asset.name}</div>
+          <div>
+            <button 
+              type="button" 
+              class="gauci-btn primary gauci-select-template" 
+              data-id="${uniqueId}">
+              <span class="material-icons">check</span>Select
+            </button>
+            <button 
+              type="button" 
+              class="gauci-btn danger gauci-template-delete" 
+              data-target="${asset.key}">
+              <span class="material-icons">clear</span>Delete
+            </button>
+          </div>
+        `);
+
+            templatesContainer.append(listItem);
+          });
         })
         .catch((error) => {
-          // toastr.error(error.message, "Error retrieving assets");
-          console.log(error.message, "Error retrieving assets");
+          console.log("Error retrieving assets:", error.message);
         });
     }
 
@@ -2149,6 +2217,125 @@
       selector.find(".gauci-modal").hide();
     });
     /* Add Template */
+    // selector
+    //   .find(".template-selection")
+    //   .on("click", ".gauci-select-template", function () {
+    //     selector
+    //       .find("#gauci-canvas-wrap, .gauci-content-bar")
+    //       .css("visibility", "visible");
+    //     selector.find(".gauci-modal").hide();
+    //     selector.find("#gauci-canvas-loader").css("display", "flex");
+    //     var objects = canvas.getObjects();
+    //     objects
+    //       .filter((element) => element.objectType != "BG")
+    //       .forEach((element) => canvas.remove(element));
+    //     selector.find("#gauci-layers li").remove();
+    //     checkLayers();
+    //     $.getJSON($(this).data("json"), function (json) {
+    //       console.log("this is the editedCanvasobject 2", json);
+    //       loadJSON(json);
+    //       setTimeout(function () {
+    //         addToHistory(
+    //           '<span class="material-icons">flag</span>' + gauciParams.started
+    //         );
+    //       }, 100);
+    //     })
+    //       .fail(function (jqxhr, textStatus, error) {
+    //         toastr.error("Request Failed: " + error, gauciParams.error);
+    //       })
+    //       .always(function () {
+    //         selector.find("#gauci-canvas-loader").hide();
+    //       });
+    //   });
+
+    // selector
+    //   .find(".template-selection")
+    //   .on("click", ".gauci-select-template", function () {
+    //     selector
+    //       .find("#gauci-canvas-wrap, .gauci-content-bar")
+    //       .css("visibility", "visible");
+    //     selector.find(".gauci-modal").hide();
+    //     selector.find("#gauci-canvas-loader").css("display", "flex");
+    //     var objects = canvas.getObjects();
+    //     objects
+    //       .filter((element) => element.objectType != "BG")
+    //       .forEach((element) => canvas.remove(element));
+    //     selector.find("#gauci-layers li").remove();
+    //     checkLayers();
+    //     $.getJSON($(this).data("json"), function (json) {
+    //       console.log("this is the editedCanvasobject 2", json);
+    //       // loadJSON(json);
+    //       // setTimeout(function () {
+    //       //   addToHistory(
+    //       //     '<span class="material-icons">flag</span>' + gauciParams.started
+    //       //   );
+    //       // }, 100);
+    //     })
+    //       .fail(function (jqxhr, textStatus, error) {
+    //         toastr.error("Request Failed: " + error, gauciParams.error);
+    //       })
+    //       .always(function () {
+    //         selector.find("#gauci-canvas-loader").hide();
+    //       });
+    //   });
+
+    // selector
+    //   .find(".template-selection")
+    //   .on("click", ".gauci-select-template", function () {
+    //     const jsonData = $(this).data("json");
+    //     try {
+    //       const prettyJson = JSON.stringify(jsonData, null, 2); // indented, readable format
+    //       console.log(prettyJson);
+    //     } catch (e) {
+    //       console.error("Invalid JSON data:", e);
+    //     }
+
+    //     // console.log(jsonData);
+    //     // const output = Object.keys(jsonData).map((key) => ({
+    //     //   part: key,
+    //     //   jsonData: JSON.parse(jsonData[key]),
+    //     // }));
+    // console.log(output);
+    // tabCanvasStates = {};
+    // tabCanvasStates = jsonData;
+    // allCanvasTabState = jsonData;
+    // console.log(activeTabId);
+    // loadCanvasState(activeTabId);
+    // tabCanvasStates = jsonData;
+    // loadCanvasState(activeTabId);
+    //   });
+
+    //   selector
+    // .find(".template-selection")
+    // .on("click", ".gauci-select-template", function () {
+    //   selector
+    //     .find("#gauci-canvas-wrap, .gauci-content-bar")
+    //     .css("visibility", "visible");
+    //   selector.find(".gauci-modal").hide();
+    //   selector.find("#gauci-canvas-loader").css("display", "flex");
+    //   var objects = canvas.getObjects();
+    //   objects
+    //     .filter((element) => element.objectType != "BG")
+    //     .forEach((element) => canvas.remove(element));
+    //   selector.find("#gauci-layers li").remove();
+    //   checkLayers();
+    //   $.getJSON($(this).data("json"), function (json) {
+    //     console.log("this is the editedCanvasobject 2", json);
+    //     loadJSON(json);
+    //     setTimeout(function () {
+    //       addToHistory(
+    //         '<span class="material-icons">flag</span>' + gauciParams.started
+    //       );
+    //     }, 100);
+    //   })
+    //     .fail(function (jqxhr, textStatus, error) {
+    //       toastr.error("Request Failed: " + error, gauciParams.error);
+    //     })
+    //     .always(function () {
+    //       selector.find("#gauci-canvas-loader").hide();
+    //     });
+    // });
+
     selector
       .find(".template-selection")
       .on("click", ".gauci-select-template", function () {
@@ -2157,28 +2344,71 @@
           .css("visibility", "visible");
         selector.find(".gauci-modal").hide();
         selector.find("#gauci-canvas-loader").css("display", "flex");
-        var objects = canvas.getObjects();
-        objects
-          .filter((element) => element.objectType != "BG")
-          .forEach((element) => canvas.remove(element));
+
+        // var objects = canvas.getObjects();
+        // objects
+        //   .filter((element) => element.objectType != "BG")
+        //   .forEach((element) => canvas.remove(element));
         selector.find("#gauci-layers li").remove();
         checkLayers();
-        $.getJSON($(this).data("json"), function (json) {
-          console.log("this is the editedCanvasobject 2", json);
-          loadJSON(json);
+
+        // ✅ Get the template data from memory
+        const id = $(this).data("id");
+        const jsonData = window.assetSrcStore[id];
+
+        if (!jsonData) {
+          toastr.error("No template data found.", gauciParams.error);
+          selector.find("#gauci-canvas-loader").hide();
+          return;
+        }
+
+        try {
+          if (jsonData) {
+            console.log("✅ srcData (raw):", jsonData);
+            // console.log(output);
+            tabCanvasStates = {};
+            tabCanvasStates = jsonData;
+            allCanvasTabState = jsonData;
+            console.log(activeTabId);
+            loadCanvasState(activeTabId);
+            // tabCanvasStates = jsonData;
+            // loadCanvasState(activeTabId);
+          } else {
+            console.warn("⚠️ No data found for ID:", id);
+          }
+
           setTimeout(function () {
             addToHistory(
               '<span class="material-icons">flag</span>' + gauciParams.started
             );
           }, 100);
-        })
-          .fail(function (jqxhr, textStatus, error) {
-            toastr.error("Request Failed: " + error, gauciParams.error);
-          })
-          .always(function () {
-            selector.find("#gauci-canvas-loader").hide();
-          });
+        } catch (e) {
+          console.error("Error parsing canvas data:", e);
+          toastr.error("Failed to load template data.", gauciParams.error);
+        } finally {
+          selector.find("#gauci-canvas-loader").hide();
+        }
       });
+
+    // $(document).on("click", ".gauci-select-template", function () {
+    //   const id = $(this).data("id");
+    //   const jsonData = window.assetSrcStore[id];
+
+    //   if (jsonData) {
+    //     console.log("✅ srcData (raw):", jsonData);
+    //     // console.log(output);
+    //     tabCanvasStates = {};
+    //     tabCanvasStates = jsonData;
+    //     allCanvasTabState = jsonData;
+    //     console.log(activeTabId);
+    //     loadCanvasState(activeTabId);
+    //     tabCanvasStates = jsonData;
+    //     loadCanvasState(activeTabId);
+    //   } else {
+    //     console.warn("⚠️ No data found for ID:", id);
+    //   }
+    // });
+
     /* Search My Templates */
     selector.find("#gauci-my-templates-search").on("click", function () {
       var input = $(this).parent().find("input");
@@ -7562,6 +7792,7 @@
             if (targetMaskObject) {
               storedActiveObject = targetMaskObject;
               storedClipPath = targetMaskObject.clipPath;
+
               syncClipPathWithImage(
                 targetMaskObject.clipPath,
                 targetMaskObject
@@ -10400,12 +10631,20 @@
           const corsImages = []; // Store references to CORS images
 
           // Identify and hide CORS images
-          objects.forEach((obj) => {
-            if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-              corsImages.push(obj); // Keep a reference to this object
-              obj.visible = false; // Hide the object
-            }
-          });
+          // objects.forEach((obj) => {
+          //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+          //     corsImages.push(obj); // Keep a reference to this object
+          //     obj.visible = false; // Hide the object
+          //   }
+          // });
+
+          // Filter objects with type === "image" and get the first one
+          const imageObjects = objects.filter((obj) => obj.type === "image");
+
+          if (imageObjects.length > 0) {
+            corsImages.push(imageObjects[0]); // Push only the first image object
+            imageObjects[0].visible = false; // Hide the object
+          }
 
           tempCanvas.renderAll(); // Render the canvas without CORS images
 
