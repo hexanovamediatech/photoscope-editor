@@ -23,8 +23,6 @@ let originalFormat = {};
 let editedArrayFormat = [];
 let selectedModelPart = "";
 let mainPart = "";
-let mainPartMesh = null;
-let selectedItem = null;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -324,68 +322,6 @@ function render() {
 //   }
 // }
 
-function changeTexture(newUrl) {
-  if (scene) {
-    const textureLoader = new THREE.TextureLoader();
-    console.log(selectedMesh);
-    const specificMesh = scene.getObjectByName(mainPartMesh);
-
-    if (specificMesh) {
-      textureLoader.load(
-        "assets/3d/76_leather texture-seamless.jpg",
-        (bumpMap) => {
-          textureLoader.load(newUrl, (texture) => {
-            const material = new THREE.MeshStandardMaterial({
-              map: texture,
-              // bumpMap: bumpMap,
-              roughness: 1,
-              metalness: 1,
-              opacity: 1,
-              bumpScale: 0.5,
-            });
-            specificMesh.material = material;
-            // texture.repeat.set(1.9, -1.9);
-            // texture.offset.set(0.92, 0.5);
-            if (selectedMesh === "P2_Top2") {
-              texture.repeat.set(1.9, -1.9);
-              texture.offset.set(0.92, 0.5);
-            } else if (selectedMesh === "P3_typ3_Top") {
-              texture.repeat.set(1.23, -1.23);
-              texture.offset.set(0.875, 1.13);
-            } else if (selectedMesh === "P3_Top") {
-              texture.repeat.set(1.7, -1.7);
-              texture.offset.set(1.0, 1.04);
-            } else if (selectedMesh === "P4Type1") {
-              // texture.repeat.set(2.0, -2.0);
-              // texture.offset.set(0.9, 0.4);
-              console.log("No changes required");
-            } else if (selectedMesh === "P5_typ1") {
-              texture.repeat.set(1, -1);
-              texture.offset.set(1, 1);
-            } else if (selectedMesh === "Ear_L2") {
-              texture.repeat.set(1, -1);
-              texture.offset.set(1, 1);
-            } else if (selectedMesh === "part2") {
-              texture.repeat.set(-1, 1);
-              texture.offset.set(1, 1);
-            } else if (selectedMesh === "polySurface1") {
-              // texture.repeat.set(1.6, -1.6);
-              // texture.offset.set(0.93, 0.55);
-              texture.repeat.set(1, -1);
-            } else {
-              console.warn(
-                "No specific texture settings for selectedMesh:",
-                selectedMesh
-              );
-            }
-            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-          });
-        }
-      );
-    }
-  }
-}
-
 // function applyTexturesToMeshes() {
 //   // meshImageDataArray = window.meshImageDataArray;
 //   console.log(meshImageDataArray, "Mesh Image from threeD Model");
@@ -575,23 +511,12 @@ document
       );
       realEditCont.style.display = "block";
       // Check if there is an active item
-      // if (activeItem) {
-      //   try {
-      //     const response = await fetch(activeItem.src);
-      //     const jsonData = await response.json();
-      //     // Load the JSON data to the canvas
-      //     loadJSONToCanvas(jsonData);
-      //   } catch (error) {
-      //     console.error("Error fetching or parsing the JSON:", error);
-      //   }
-      // }
-
-      if (selectedItem) {
+      if (activeItem) {
         try {
-          // const response = await fetch(activeItem.src);
-          // const jsonData = await response.json();
+          const response = await fetch(activeItem.src);
+          const jsonData = await response.json();
           // Load the JSON data to the canvas
-          loadJSONToCanvas(selectedItem.jsonData);
+          loadJSONToCanvas(jsonData);
         } catch (error) {
           console.error("Error fetching or parsing the JSON:", error);
         }
@@ -625,17 +550,17 @@ function initializeCanvas() {
 
 document.getElementById("text-1").addEventListener("input", function () {
   updateCanvasText(1, this.value);
-  if (selectedItem) {
+  if (activeItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "invisible";
+    openModalBtn.style.visibility = "visible";
   }
 });
 
 document.getElementById("text-2").addEventListener("input", function () {
   updateCanvasText(2, this.value);
-  if (selectedItem) {
+  if (activeItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "invisible";
+    openModalBtn.style.visibility = "visible";
   }
 });
 
@@ -666,10 +591,10 @@ function updateCanvasText(textIndex, newText) {
   const allObjects = newFabricCanvas.getObjects();
 
   // Save the first object (assuming it's the background image)
-  // const firstObject = allObjects[0];
+  const firstObject = allObjects[0];
 
-  // // Remove the first object from the canvas
-  // newFabricCanvas.remove(firstObject);
+  // Remove the first object from the canvas
+  newFabricCanvas.remove(firstObject);
 
   // Render the canvas without the first object
   newFabricCanvas.renderAll();
@@ -701,7 +626,7 @@ function updateCanvasText(textIndex, newText) {
   changeTexture(fabricImageConverted);
 
   // Add the first object back to its original position
-  // newFabricCanvas.insertAt(firstObject, 0);
+  newFabricCanvas.insertAt(firstObject, 0);
 
   // Render the canvas to show all objects again
   newFabricCanvas.renderAll();
@@ -758,26 +683,13 @@ function replaceImageSrc(json, newImageSrc, callback) {
     const imageHeight = img.height;
 
     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
-    console.log(json.objects);
 
     // Find the object where obj.type === "image" and obj.src does not start with "http"
-    // json.objects.forEach((obj) => {
-    //   if (obj.type === "image" && !obj.src.startsWith("http")) {
-    //     obj.src = newImageSrc;
-    //     obj.width = imageWidth; // Set the width and height if needed
-    //     obj.height = imageHeight;
-    //   }
-    // });
-
-    // const imageUpdatedJSON = json;
-    let found = false;
-
     json.objects.forEach((obj) => {
-      if (!found && obj.customId === "clipmask" && obj.type === "image") {
+      if (obj.type === "image" && !obj.src.startsWith("http")) {
         obj.src = newImageSrc;
-        obj.width = imageWidth;
+        obj.width = imageWidth; // Set the width and height if needed
         obj.height = imageHeight;
-        found = true; // Only update the first matching object
       }
     });
 
@@ -792,70 +704,6 @@ function replaceImageSrc(json, newImageSrc, callback) {
     console.error("Failed to load the image");
   };
 }
-
-// function generateImagesFromCanvasStates() {
-//   // Array to store image data for each tab
-//   meshImageDataArray = [];
-//   meshImageDataArray.length = 0;
-//   Object.keys(originalFormat).forEach((tabId) => {
-//     // Create a temporary canvas with a width and height of 2048
-//     const tempCanvas = new fabric.Canvas(null, {
-//       width: 2048,
-//       height: 2048,
-//     });
-
-//     // Load the JSON state into the temporary canvas
-//     tempCanvas.loadFromJSON(originalFormat[tabId], () => {
-//       const objects = tempCanvas.getObjects(); // Get all objects in the canvas
-//       console.log(objects);
-//       // const corsImages = []; // Store references to CORS images
-
-//       // Identify and hide CORS images
-//       // objects.forEach((obj) => {
-//       //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-//       //     corsImages.push(obj); // Keep a reference to this object
-//       //     obj.visible = false; // Hide the object
-//       //   }
-//       // });
-
-//       tempCanvas.renderAll(); // Render the canvas without CORS images
-
-//       // Generate the base64 image
-//       try {
-//         const base64Image = tempCanvas.toDataURL({
-//           format: "jpeg", // More compressed
-//           quality: 1,
-//         });
-
-//         // Push the data into the array
-//         meshImageDataArray.push({
-//           meshName: tabId,
-//           meshImageData: base64Image,
-//         });
-//       } catch (error) {
-//         console.error(`Error generating image for Tab ID ${tabId}:`, error);
-//       }
-
-//       // Restore visibility of CORS images
-//       // corsImages.forEach((obj) => {
-//       //   obj.visible = true;
-//       // });
-
-//       tempCanvas.renderAll(); // Re-render the canvas with all objects
-
-//       // Clean up the temporary canvas
-//       tempCanvas.clear();
-//       tempCanvas.dispose();
-
-//       if (meshImageDataArray.length === Object.keys(originalFormat).length) {
-//         console.log("Generated Images Array:", meshImageDataArray);
-//         // window.meshImageDataArray = meshImageDataArray;
-//         // console.log(meshImageDataArray, "Window data from gauci file");
-//         applyTexturesToMeshes();
-//       }
-//     });
-//   });
-// }
 
 function generateImagesFromCanvasStates() {
   // Array to store image data for each tab
@@ -872,9 +720,19 @@ function generateImagesFromCanvasStates() {
     tempCanvas.loadFromJSON(originalFormat[tabId], () => {
       const objects = tempCanvas.getObjects(); // Get all objects in the canvas
       console.log(objects);
+      const corsImages = []; // Store references to CORS images
+
+      // Identify and hide CORS images
+      // objects.forEach((obj) => {
+      //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+      //     corsImages.push(obj); // Keep a reference to this object
+      //     obj.visible = false; // Hide the object
+      //   }
+      // });
 
       tempCanvas.renderAll(); // Render the canvas without CORS images
 
+      // Generate the base64 image
       try {
         const base64Image = tempCanvas.toDataURL({
           format: "jpeg", // More compressed
@@ -889,6 +747,11 @@ function generateImagesFromCanvasStates() {
       } catch (error) {
         console.error(`Error generating image for Tab ID ${tabId}:`, error);
       }
+
+      // Restore visibility of CORS images
+      corsImages.forEach((obj) => {
+        obj.visible = true;
+      });
 
       tempCanvas.renderAll(); // Re-render the canvas with all objects
 
@@ -1191,264 +1054,6 @@ function generateImagesFromCanvasStates() {
 //   );
 // }
 
-// function loadJSONToCanvas(jsonData) {
-//   console.log(jsonData, "json data here ");
-//   if (!newFabricCanvas) {
-//     initializeCanvas();
-//   }
-
-//   newFabricCanvas.clear();
-
-//   const label1 = document.getElementById("label-1");
-//   const label2 = document.getElementById("label-2");
-//   const input1 = document.getElementById("text-1");
-//   const input2 = document.getElementById("text-2");
-//   label1.style.display = "none";
-//   label2.style.display = "none";
-//   input1.style.display = "none";
-//   input2.style.display = "none";
-
-//   // Count the number of textboxes in the JSON data
-//   const textBoxCount = jsonData.objects.filter(
-//     (obj) => obj.type === "textbox"
-//   ).length;
-
-//   const showImage = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   // const showImage = jsonData.objects.filter((obj) => obj.type === "image");
-//   if (showImage.length > 0) {
-//     const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
-//     console.log(clipmaskImage);
-
-//     const miniEditorPopupImage = document.getElementById(
-//       "min-editor-popup-image"
-//     );
-//     const miniEditordummyImage = document.getElementById(
-//       "min-editor-dummy-image"
-//     );
-//     if (window.innerWidth < 1024) {
-//       miniEditordummyImage.src = clipmaskImage.src;
-//       miniEditordummyImage.style.width = "100%";
-//       miniEditordummyImage.classList.add("dummyImageCoverFit");
-//     }
-
-//     const dummyImage = document.getElementById("min-editor-dummy-image");
-
-//     // Check if the image element exists and if the clipmaskImage has a valid src
-//     if (miniEditorPopupImage && clipmaskImage.src) {
-//       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-//       miniEditorPopupImage.src = clipmaskImage.src;
-//       dummyImage.style.width = "100%";
-//       dummyImage.style.height = "100%";
-//       dummyImage.style.objectFit = "cover";
-//       dummyImage.src = clipmaskImage.src;
-//       dummyImage.style.borderRadius = "10px";
-//     }
-//     //  else {
-//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
-//     // }
-//   }
-
-//   // Show input fields based on the number of textboxes
-//   if (textBoxCount > 0) {
-//     label1.style.display = "block";
-//     input1.style.display = "block"; // Show the first input field
-//   }
-//   if (textBoxCount > 1) {
-//     label2.style.display = "block";
-//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
-//   }
-//   const replaceImgBtn = document.getElementById("replace-btn-cont");
-//   // const imageFound = jsonData.objects.find(
-//   //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
-//   // );
-//   const imageFound = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   if (imageFound[0]) {
-//     replaceImgBtn.style.display = "block";
-//   } else {
-//     replaceImgBtn.style.display = "none";
-//   }
-//   // Load the JSON data into the existing Fabric.js canvas
-//   let nextIndex = 1;
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "textbox") {
-//       // Assign a default dataIndex if not provided
-//       obj.dataIndex = obj.dataIndex || nextIndex++;
-//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
-//       if (inputField) {
-//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
-//       }
-//     }
-//   });
-//   newFabricCanvas.loadFromJSON(
-//     jsonData,
-//     function () {
-//       console.log(jsonData.objects);
-
-//       // Load and scale the background image if it exists
-//       // if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
-//       //   const bgImageData = jsonData.backgroundImage.src;
-//       //   fabric.Image.fromURL(bgImageData, function (bgImage) {
-//       //     // Set the background image properties
-//       //     bgImage.set({
-//       //       scaleX: 0.22, // Apply the scale factor
-//       //       scaleY: 0.22, // Apply the scale factor
-//       //       left: jsonData.backgroundImage.left,
-//       //       top: jsonData.backgroundImage.top,
-//       //       originX: "left",
-//       //       originY: "top",
-//       //     });
-
-//       //     newFabricCanvas.setBackgroundImage(
-//       //       bgImage,
-//       //       newFabricCanvas.renderAll.bind(newFabricCanvas)
-//       //     );
-//       //   });
-//       // }
-
-//       // After loading the JSON, resize and reposition all objects to fit the canvas
-//       // newFabricCanvas.getObjects().forEach((obj, index) => {
-//       //   if (index === 0) {
-//       //     // Scale down the first object
-//       //     obj.scaleX *= 0.22;
-//       //     obj.scaleY *= 0.22;
-//       //   } else {
-//       //     // Apply a different scaling factor for other objects
-//       //     obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-//       //     obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-//       //     // Adjust top and left properties to make the object visible
-//       //     obj.left *= 0.22; // Adjust the position as needed
-//       //     obj.top *= 0.22; // Adjust the position as needed
-//       //   }
-
-//       //   if (obj.clipPath) {
-//       //     obj.clipPath.set({
-//       //       scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
-//       //       scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
-//       //       left: obj.clipPath.left * 0.22, // Adjust the position as needed
-//       //       top: obj.clipPath.top * 0.22, // Adjust the position as needed
-//       //     });
-//       //   }
-
-//       //   obj.setCoords();
-//       //   obj.set({
-//       //     selectable: false,
-//       //     hasControls: false,
-//       //     hasBorders: false,
-//       //     lockMovementX: true,
-//       //     lockMovementY: true,
-//       //     lockRotation: true,
-//       //     lockScalingX: true,
-//       //     lockScalingY: true,
-//       //   });
-//       // });
-//       // After loading the JSON, resize and reposition all objects to fit the canvas
-//       newFabricCanvas.getObjects().forEach((obj, index) => {
-//         // if (index === 0) {
-//         //   // Scale down the first object
-//         //   obj.scaleX *= 0.22;
-//         //   obj.scaleY *= 0.22;
-//         // } else {
-//         //   // Apply a different scaling factor for other objects
-//         //   obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-//         //   obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-//         //   // Adjust top and left properties to make the object visible
-//         //   obj.left *= 0.22; // Adjust the position as needed
-//         //   obj.top *= 0.22; // Adjust the position as needed
-//         // }
-//         obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-//         obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-//         // Adjust top and left properties to make the object visible
-//         obj.left *= 0.22; // Adjust the position as needed
-//         obj.top *= 0.22; // Adjust the position as needed
-
-//         if (obj.clipPath) {
-//           obj.clipPath.set({
-//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
-//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
-//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
-//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
-//           });
-//         }
-
-//         obj.setCoords();
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       // Force a render to ensure all objects, including clipPaths, are applied
-//       newFabricCanvas.renderAll();
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       window.editedCanvasJson = savedCanvasJSON;
-//       const allObjects = newFabricCanvas.getObjects();
-//       console.log(allObjects);
-
-//       // Save the first object (assuming it's the background image)
-//       // const firstObject = allObjects[0];
-
-//       // Remove the first object from the canvas
-//       // newFabricCanvas.remove(firstObject);
-
-//       // Render the canvas without the first object
-//       newFabricCanvas.renderAll();
-//       const originalWidth = newFabricCanvas.width;
-//       const originalHeight = newFabricCanvas.height;
-
-//       // Set the canvas dimensions to 1080x1080 for the export
-//       newFabricCanvas.setDimensions({
-//         width: 1080,
-//         height: 1080,
-//       });
-//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
-
-//       // Convert the remaining objects on the canvas to an image
-//       const format = "jpeg";
-//       const quality = 1;
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       newFabricCanvas.setDimensions({
-//         width: originalWidth,
-//         height: originalHeight,
-//       });
-//       newFabricCanvas.setZoom(1);
-//       // Pass the image data to the changeTexture function
-//       fabricImageConverted = imgData;
-//       console.log("this is thefabricImageConverted", fabricImageConverted);
-//       if (selectedMesh) {
-//         changeTexture(fabricImageConverted);
-//       }
-
-//       // Add the first object back to its original position
-//       // newFabricCanvas.insertAt(firstObject, 0);
-
-//       // Render the canvas to show all objects again
-//       newFabricCanvas.renderAll();
-//     },
-//     function (error) {
-//       console.error("Error loading JSON:", error);
-//       console.log("Loaded JSON Data:", jsonData);
-//     }
-//   );
-// }
-
 function loadJSONToCanvas(jsonData) {
   console.log(jsonData, "json data here ");
   if (!newFabricCanvas) {
@@ -1546,14 +1151,42 @@ function loadJSONToCanvas(jsonData) {
     function () {
       console.log(jsonData.objects);
 
+      // Load and scale the background image if it exists
+      if (jsonData.backgroundImage && jsonData.backgroundImage.src) {
+        const bgImageData = jsonData.backgroundImage.src;
+        fabric.Image.fromURL(bgImageData, function (bgImage) {
+          // Set the background image properties
+          bgImage.set({
+            scaleX: 0.22, // Apply the scale factor
+            scaleY: 0.22, // Apply the scale factor
+            left: jsonData.backgroundImage.left,
+            top: jsonData.backgroundImage.top,
+            originX: "left",
+            originY: "top",
+          });
+
+          newFabricCanvas.setBackgroundImage(
+            bgImage,
+            newFabricCanvas.renderAll.bind(newFabricCanvas)
+          );
+        });
+      }
+
       // After loading the JSON, resize and reposition all objects to fit the canvas
       newFabricCanvas.getObjects().forEach((obj, index) => {
-        obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-        obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+        if (index === 0) {
+          // Scale down the first object
+          obj.scaleX *= 0.22;
+          obj.scaleY *= 0.22;
+        } else {
+          // Apply a different scaling factor for other objects
+          obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+          obj.scaleY *= 0.22; // Adjust the scaling factor as needed
 
-        // Adjust top and left properties to make the object visible
-        obj.left *= 0.22; // Adjust the position as needed
-        obj.top *= 0.22; // Adjust the position as needed
+          // Adjust top and left properties to make the object visible
+          obj.left *= 0.22; // Adjust the position as needed
+          obj.top *= 0.22; // Adjust the position as needed
+        }
 
         if (obj.clipPath) {
           obj.clipPath.set({
@@ -1583,8 +1216,12 @@ function loadJSONToCanvas(jsonData) {
       savedCanvasJSON = newFabricCanvas.toJSON();
       window.editedCanvasJson = savedCanvasJSON;
       const allObjects = newFabricCanvas.getObjects();
-      console.log(allObjects);
-      console.log(savedCanvasJSON);
+
+      // Save the first object (assuming it's the background image)
+      const firstObject = allObjects[0];
+
+      // Remove the first object from the canvas
+      newFabricCanvas.remove(firstObject);
 
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
@@ -1618,9 +1255,11 @@ function loadJSONToCanvas(jsonData) {
         changeTexture(fabricImageConverted);
       }
 
+      // Add the first object back to its original position
+      newFabricCanvas.insertAt(firstObject, 0);
+
       // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
-      console.log(newFabricCanvas.toJSON());
     },
     function (error) {
       console.error("Error loading JSON:", error);
@@ -1664,7 +1303,7 @@ function setNewImageSrc(imageSrc) {
       loadJSONToCanvas(imageUpdatedJSON);
 
       window.editedCanvasJson = imageUpdatedJSON;
-      console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
+      // console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
     });
   } else {
     // Log the updated JSON (without changing image source) to the console
@@ -1674,9 +1313,9 @@ function setNewImageSrc(imageSrc) {
 
 // Assuming the user selects an image via an input field
 function handleImageUploadAlternate(event) {
-  if (selectedItem) {
+  if (activeItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "invisible";
+    openModalBtn.style.visibility = "visible";
     const file = event.target.files[0];
     const reader = new FileReader();
 
@@ -1714,18 +1353,13 @@ document
       // Set properties for the first object in the canvas
       const objects = newFabricCanvas.getObjects();
       console.log(objects);
-      // const targetObject = objects.find(
-      //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
-      // );
-      const targetObject = objects.filter(
-        (obj) => obj.customId === "clipmask" && obj.type === "image"
+      const targetObject = objects.find(
+        (obj) => obj.type === "image" && !obj.src.startsWith("http")
       );
 
-      console.log(targetObject);
-
-      if (targetObject[0]) {
+      if (targetObject) {
         // Set properties for the found object
-        targetObject[0].set({
+        targetObject.set({
           selectable: true,
           hasControls: true,
           hasBorders: true,
@@ -1753,7 +1387,7 @@ document
     popupMiniCanvas.style.display = "none";
   });
 document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
-  if (selectedItem) {
+  if (activeItem) {
     if (newFabricCanvas) {
       newFabricCanvas.forEachObject((obj) => {
         obj.set({
@@ -1774,13 +1408,12 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       console.log(window.editedCanvasJson);
 
       const allObjects = newFabricCanvas.getObjects();
-      console.log(newFabricCanvas.toJSON());
 
       // Save the first object (assuming it's the background image)
-      // const firstObject = allObjects[0];
+      const firstObject = allObjects[0];
 
       // Remove the first object from the canvas
-      // newFabricCanvas.remove(firstObject);
+      newFabricCanvas.remove(firstObject);
 
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
@@ -1811,7 +1444,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       changeTexture(fabricImageConverted);
 
       // Add the first object back to its original position
-      // newFabricCanvas.insertAt(firstObject, 0);
+      newFabricCanvas.insertAt(firstObject, 0);
 
       // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
@@ -1839,8 +1472,744 @@ initialize3DViewer();
 //   console.log(selectedModelPart, "updated text content");
 // });
 
+// (async () => {
+//   var container = document.getElementById("template-cont-box");
+//   function showSkeletonLoader() {
+//     const skeletonContainer = document.createElement("div");
+//     skeletonContainer.classList.add("skeleton-container");
+
+//     for (let i = 0; i < 10; i++) {
+//       const skeletonBox = document.createElement("div");
+//       skeletonBox.classList.add("skeleton-box");
+
+//       const skeletonText = document.createElement("div");
+//       skeletonText.classList.add("skeleton-text");
+
+//       skeletonBox.appendChild(skeletonText);
+//       skeletonContainer.appendChild(skeletonBox);
+//     }
+
+//     container.appendChild(skeletonContainer);
+//   }
+
+//   function hideSkeletonLoader() {
+//     const skeletonContainer = container.querySelector(".skeleton-container");
+//     if (skeletonContainer) {
+//       container.removeChild(skeletonContainer); // Remove the skeleton loader
+//     }
+//   }
+
+//   // Show the skeleton loader before fetching data
+//   showSkeletonLoader();
+
+//   try {
+//     const response = await fetch(`${baseUrl}/api/v1/user/get/all/templates`);
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     const dataArray = data.data; // Access the array from the data object
+//     console.log(dataArray);
+//     // console.log(Array.isArray(dataArray));
+//     if (dataArray === null) {
+//       hideSkeletonLoader();
+//       const emptyData = [];
+//       const dummyTemplateCount = 10;
+//       for (let i = 0; i < dummyTemplateCount; i++) {
+//         const dummyTemplate = {
+//           name: `Template ${i + 1}`,
+//           imageUrl: "../../assets/custom/temp-img-2.jpg",
+//           key: `dummy-template-${i + 1}`,
+//           isPublic: true,
+//           src: "path/to/dummy/template.json",
+//           isDummy: true,
+//         };
+//         emptyData.push(dummyTemplate);
+//       }
+//       console.log(emptyData);
+//       emptyData.forEach((item) => {
+//         const mainDiv = document.createElement("div");
+//         mainDiv.classList.add("template-main-cont");
+
+//         const imageDiv = document.createElement("div");
+//         imageDiv.classList.add("template-image-cont");
+
+//         const newImg = document.createElement("img");
+//         newImg.src = item.imageUrl;
+//         newImg.alt = item.name;
+//         newImg.classList.add("template-image-box");
+//         newImg.loading = "lazy";
+
+//         imageDiv.appendChild(newImg);
+
+//         const nameP = document.createElement("p");
+//         // nameP.textContent = item.name;
+//         if (item.name.length > 12) {
+//           // Show the first 10 characters followed by "..."
+//           nameP.textContent = item.name.substring(0, 12) + "...";
+//           // Set the title attribute to show the full name on hover
+//           nameP.setAttribute("title", item.name);
+//         } else {
+//           // If the name is less than or equal to 10 characters, show it fully
+//           nameP.textContent = item.name;
+//         }
+//         nameP.classList.add("template-name-tag");
+
+//         mainDiv.appendChild(imageDiv);
+//         mainDiv.appendChild(nameP);
+
+//         container.appendChild(mainDiv);
+//         // Favorite icon using PNGs
+
+//         if (item.isDummy) {
+//           const overlay = document.createElement("img");
+//           overlay.classList.add("template-overlay-icon");
+//           overlay.id = "templateOverLay";
+//           overlay.src = "../../assets/custom/overlay-temp.png";
+//           mainDiv.appendChild(overlay);
+//         }
+//       });
+//     }
+//     if (Array.isArray(dataArray)) {
+//       // Filter the objects with type "p2-type1"
+
+//       const urlParams = new URLSearchParams(window.location.search);
+//       const name = urlParams.get("name");
+
+//       const filteredData = dataArray.filter(
+//         (obj) => obj.type === name && obj.isPublic === true
+//       );
+//       console.log(filteredData);
+//       if (filteredData.length < 10) {
+//         const dummyTemplateCount = 10 - filteredData.length;
+//         for (let i = 0; i < dummyTemplateCount; i++) {
+//           const dummyTemplate = {
+//             name: `Template ${i + 1}`,
+//             imageUrl: "../../assets/custom/temp-img-2.jpg",
+//             key: `dummy-template-${i + 1}`,
+//             isPublic: true,
+//             src: "path/to/dummy/template.json",
+//             isDummy: true,
+//           };
+//           filteredData.push(dummyTemplate);
+//         }
+//       }
+//       const personaliseButton = document.getElementById(
+//         "personaliseOpenPopupBtn"
+//       );
+
+//       // Check if the filtered data is empty, and hide the button if it is
+//       if (filteredData.length === 0) {
+//         personaliseButton.style.display = "none"; // Hide the button
+//       } else {
+//         personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
+//       }
+
+//       // Fetch favorites to compare with
+//       const favoriteResponse = await fetch(
+//         `${baseUrl}/api/v1/user/favorite/templates`,
+//         {
+//           method: "GET",
+//           credentials: "include",
+//         }
+//       );
+//       const favoriteData = await favoriteResponse.json();
+//       hideSkeletonLoader();
+
+//       const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
+
+//       filteredData.forEach((item) => {
+//         const mainDiv = document.createElement("div");
+//         mainDiv.classList.add("template-main-cont");
+
+//         let dummyimageUrl = "../../assets/custom/temp-img-2.jpg";
+//         const imageDiv = document.createElement("div");
+
+//         imageDiv.classList.add("template-image-cont");
+
+//         const newImg = document.createElement("img");
+//         newImg.src = item?.imageUrl || dummyimageUrl;
+//         newImg.alt = item.name;
+//         newImg.classList.add("template-image-box");
+//         newImg.loading = "lazy";
+
+//         imageDiv.appendChild(newImg);
+
+//         const nameP = document.createElement("p");
+//         // nameP.textContent = item.name;
+//         if (item.name.length > 12) {
+//           // Show the first 10 characters followed by "..."
+//           nameP.textContent = item.name.substring(0, 12) + "...";
+//           // Set the title attribute to show the full name on hover
+//           nameP.setAttribute("title", item.name);
+//         } else {
+//           // If the name is less than or equal to 10 characters, show it fully
+//           nameP.textContent = item.name;
+//         }
+//         nameP.classList.add("template-name-tag");
+
+//         mainDiv.appendChild(imageDiv);
+//         mainDiv.appendChild(nameP);
+
+//         container.appendChild(mainDiv);
+//         // Favorite icon using PNGs
+//         if (!item.isDummy) {
+//           const favIcon = document.createElement("img");
+//           favIcon.classList.add("template-fav-icon");
+//           favIcon.id = "templateFavIcon";
+//           // Check if this template is in the favorites list
+//           const isFavorite = favoriteKeys?.includes(item.key);
+//           favIcon.src = isFavorite
+//             ? "../../assets/custom/heart-filled.png"
+//             : "../../assets/custom/heart2.png";
+//           favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
+//           favIcon.style.cursor = "pointer";
+
+//           if (!isFavorite) {
+//             favIcon.style.filter = "brightness(0) invert(1)"; // Make heart2.png white
+//           }
+
+//           favIcon.addEventListener("mouseenter", () => {
+//             if (isFavorite) {
+//               favIcon.src = "../../assets/custom/heart2.png"; // Switch to unfilled on hover
+//               favIcon.style.filter = "brightness(0) invert(1)"; // Make it white on hover
+//             } else {
+//               favIcon.src = "../../assets/custom/heart-filled.png"; // Switch to filled on hover
+//               favIcon.style.filter = ""; // Remove the filter for heart-filled
+//             }
+//           });
+//           favIcon.addEventListener("mouseleave", () => {
+//             if (isFavorite) {
+//               favIcon.src = "../../assets/custom/heart-filled.png"; // Return to filled if it's favorite
+//               favIcon.style.filter = ""; // No filter for filled heart
+//             } else {
+//               favIcon.src = "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
+//               favIcon.style.filter = "brightness(0) invert(1)"; // Keep it white
+//             }
+//           });
+//           // newDiv.appendChild(favIcon);
+
+//           mainDiv.appendChild(favIcon);
+
+//           favIcon.addEventListener("click", async (e) => {
+//             e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
+
+//             const templateKey = item.key;
+
+//             // Call the favorite toggle function
+//             const isSuccess = await handleFavTempllate(templateKey);
+
+//             // If the request was successful, immediately toggle the icon
+//             if (isSuccess) {
+//               const isCurrentlyFavorite =
+//                 favIcon.src.includes("heart-filled.png");
+//               favIcon.src = isCurrentlyFavorite
+//                 ? "../../assets/custom/heart2.png"
+//                 : "../../assets/custom/heart-filled.png";
+//               favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+
+//               const message = isCurrentlyFavorite
+//                 ? "Removed from favorites!"
+//                 : "Added to favorites!";
+
+//               Swal.fire({
+//                 title: message,
+//                 text: "Success",
+//                 icon: "success",
+//               });
+//             } else {
+//               Swal.fire({
+//                 icon: "warning",
+//                 title: "Warning",
+//                 text: "Please login to add template into Favorites",
+//               });
+//             }
+//           });
+//         }
+//         if (item.isDummy) {
+//           const overlay = document.createElement("img");
+//           overlay.classList.add("template-overlay-icon");
+//           overlay.id = "templateOverLay";
+//           overlay.src = "../../assets/custom/overlay-temp.png";
+//           mainDiv.appendChild(overlay);
+//         }
+//         // let isDropdownEventAttached = false;
+//         mainDiv.addEventListener("click", async () => {
+//           // Remove active class from previously selected item
+//           // console.log(selectedModelPart, "Selected model part");
+//           // originalFormat = {};
+//           const previouslyActive = document.querySelector(
+//             ".template-image-box.active"
+//           );
+
+//           if (previouslyActive) {
+//             previouslyActive.classList.remove("active");
+//           }
+//           templateId = item.key;
+//           console.log("templateId", templateId);
+//           newImg.classList.add("active");
+//           activeItem = item.src; // Set the clicked item as active
+//           originalFormat = item.src;
+//           console.log(activeItem);
+//           console.log(mainPart);
+
+//           // const dropdownList = document.querySelector(".hexa-dropdown-ul-list");
+//           // const selectedBox = document.querySelector(".hexa-dropdown-selected");
+//           // const selectContainer = document.querySelector(
+//           //   ".hexa-drop-down-select-cont"
+//           // );
+
+//           // while (dropdownList.firstChild) {
+//           //   dropdownList.removeChild(dropdownList.firstChild);
+//           // }
+
+//           // // Step 1: Populate <ul> dynamically
+//           // activeItem.forEach((item, index) => {
+//           //   const li = document.createElement("li");
+//           //   li.className = "hexa-dropdown-list";
+//           //   li.textContent = item.part;
+//           //   li.addEventListener("click", () => {
+//           //     selectedBox.textContent = item.part;
+//           //     dropdownList.classList.remove("show-dropdown");
+//           //     selectedModelPart = item.part;
+//           //     loadJSONToCanvas(item?.jsonData);
+//           //   });
+//           //   dropdownList.appendChild(li);
+//           // });
+
+//           // Step 2: Set default selected to first item
+//           // if (activeItem.length > 0) {
+//           //   selectedBox.textContent = activeItem[0].part;
+//           //   selectedModelPart = activeItem[0].part;
+//           //   loadJSONToCanvas(activeItem[0].jsonData);
+//           // }
+
+//           // // Step 3: Toggle dropdown on click
+//           // selectContainer.addEventListener("click", () => {
+//           //   dropdownList.classList.add("show-dropdown");
+//           // });
+//           // // Optional: Hide when clicking outside
+//           // document.addEventListener("click", (e) => {
+//           //   if (!e.target.closest(".hexa-drop-down-cont")) {
+//           //     dropdownList.classList.remove("show-dropdown");
+//           //   }
+//           // });
+
+//           // activeItem.forEach((item) => {
+//           //   originalFormat[item.part] = JSON.stringify(item.jsonData);
+//           // });
+
+//           editedArrayFormat = Object.keys(activeItem).map((key) => ({
+//             part: key,
+//             jsonData: JSON.parse(activeItem[key]),
+//           }));
+//           console.log(editedArrayFormat);
+
+//           // let selectedItem =
+//           //   editedArrayFormat.find((item) => item.part === mainPart) ||
+//           //   editedArrayFormat[0];
+//           // // console.log(originalFormat);
+//           // loadJSONToCanvas(selectedItem.jsonData);
+//           generateImagesFromCanvasStates();
+
+//           // const dropDownCont = document.getElementById(
+//           //   "hexa-drop-down-main-one"
+//           // );
+//           // dropDownCont.style.display = "block";
+//           // const realEditCont = document.getElementById(
+//           //   "personaliseImageUploadPopup"
+//           // );
+//           // realEditCont.style.display = "block";
+
+//           try {
+//             // const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
+//             // if (!jsonResponse.ok) {
+//             //   throw new Error(`HTTP error! status: ${jsonResponse.status}`);
+//             // }
+//             // const jsonData = await jsonResponse.json();
+//             // window.originalCanvasJson = jsonData;
+//             let selectedItem =
+//               editedArrayFormat.find((item) => item.part === mainPart) ||
+//               editedArrayFormat[0];
+//             console.log(selectedItem);
+//             imageReplace = true;
+//             // console.log(originalFormat);
+
+//             // const miniEditorAdjust =
+//             //   document.getElementById("miniE-adjust-Btn");
+//             // miniEditorAdjust.classList.add("display-none-prop");
+//             // miniEditorAdjust.classList.remove("display-block-prop");
+//             const miniEditorSaveBtnt = document.getElementById(
+//               "gauci-save-mini-cont"
+//             );
+//             miniEditorSaveBtnt.classList.add("display-block-prop");
+//             miniEditorSaveBtnt.classList.remove("display-none-prop");
+//             // document.getElementById("personaliseOpenPopupBtn").disabled = false;
+//             // const miniEditorAdjust =
+//             //   document.getElementById("miniE-adjust-Btn");
+//             // miniEditorAdjust.classList.remove("display-none-prop");
+//             // miniEditorAdjust.classList.add("display-block-prop");
+
+//             // Hide Canvas in popup
+//             // const miniEditorCont = document.getElementById("mini-editor-Cont");
+//             // miniEditorCont.classList.add("display-none-prop");
+//             // miniEditorCont.classList.remove("display-block-prop");
+
+//             // const dummyCont = document.getElementById(
+//             //   "personaliseImageDummyCont"
+//             // );
+//             // dummyCont.style.display = "block";
+//             const dummyCont = document.getElementById(
+//               "personaliseImageDummyCont"
+//             );
+
+//             function updateDisplayStyle() {
+//               if (window.innerWidth < 1024) {
+//                 dummyCont.style.display = "flex";
+//               } else {
+//                 dummyCont.style.display = "block";
+//               }
+//             }
+
+//             // Initial check
+//             updateDisplayStyle();
+//             const realEditCont = document.getElementById(
+//               "personaliseImageUploadPopup"
+//             );
+//             realEditCont.style.display = "none";
+//             const imageInput = document.getElementById("personaliseImgUpload");
+//             imageInput.value = "";
+//             imageReplace = true;
+//             // loadJSONToCanvas(jsonData);
+//             loadJSONToCanvas(selectedItem.jsonData);
+//             // setupEventListener();
+//           } catch (fetchError) {
+//             console.error("Error fetching JSON data:", fetchError);
+//           }
+//         });
+//       });
+//     } else {
+//       console.error("Error: The fetched data is not an array:", dataArray);
+//       // hideSkeletonLoader();
+//     }
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     hideSkeletonLoader();
+//   }
+// })();
+
+// (async () => {
+//   var container = document.getElementById("template-cont-box");
+
+//   function showSkeletonLoader() {
+//     const skeletonContainer = document.createElement("div");
+//     skeletonContainer.classList.add("skeleton-container");
+
+//     for (let i = 0; i < 10; i++) {
+//       const skeletonBox = document.createElement("div");
+//       skeletonBox.classList.add("skeleton-box");
+
+//       const skeletonText = document.createElement("div");
+//       skeletonText.classList.add("skeleton-text");
+
+//       skeletonBox.appendChild(skeletonText);
+//       skeletonContainer.appendChild(skeletonBox);
+//     }
+
+//     container.appendChild(skeletonContainer);
+//   }
+
+//   function hideSkeletonLoader() {
+//     const skeletonContainer = container.querySelector(".skeleton-container");
+//     if (skeletonContainer) {
+//       container.removeChild(skeletonContainer);
+//     }
+//   }
+
+//   // Show the skeleton loader before fetching data
+//   showSkeletonLoader();
+
+//   try {
+//     const response = await fetch(`${baseUrl}/api/v1/user/get/all/templates`);
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     const dataArray = data.data;
+
+//     if (dataArray === null) {
+//       hideSkeletonLoader();
+//       const emptyData = [];
+//       const dummyTemplateCount = 10;
+//       for (let i = 0; i < dummyTemplateCount; i++) {
+//         const dummyTemplate = {
+//           name: `Template ${i + 1}`,
+//           imageUrl: "../../assets/custom/temp-img-2.jpg",
+//           key: `dummy-template-${i + 1}`,
+//           isPublic: true,
+//           src: "path/to/dummy/template.json",
+//           isDummy: true,
+//         };
+//         emptyData.push(dummyTemplate);
+//       }
+
+//       emptyData.forEach((item) => {
+//         const mainDiv = document.createElement("div");
+//         mainDiv.classList.add("template-main-cont");
+
+//         const imageDiv = document.createElement("div");
+//         imageDiv.classList.add("template-image-cont");
+
+//         const newImg = document.createElement("img");
+//         newImg.src = item.imageUrl;
+//         newImg.alt = item.name;
+//         newImg.classList.add("template-image-box");
+//         newImg.loading = "lazy";
+
+//         imageDiv.appendChild(newImg);
+
+//         const nameP = document.createElement("p");
+//         if (item.name.length > 12) {
+//           nameP.textContent = item.name.substring(0, 12) + "...";
+//           nameP.setAttribute("title", item.name);
+//         } else {
+//           nameP.textContent = item.name;
+//         }
+//         nameP.classList.add("template-name-tag");
+
+//         mainDiv.appendChild(imageDiv);
+//         mainDiv.appendChild(nameP);
+
+//         container.appendChild(mainDiv);
+
+//         if (item.isDummy) {
+//           const overlay = document.createElement("img");
+//           overlay.classList.add("template-overlay-icon");
+//           overlay.id = "templateOverLay";
+//           overlay.src = "../../assets/custom/overlay-temp.png";
+//           mainDiv.appendChild(overlay);
+//         }
+//       });
+//     }
+
+//     if (Array.isArray(dataArray)) {
+//       const urlParams = new URLSearchParams(window.location.search);
+//       const name = urlParams.get("name");
+
+//       const filteredData = dataArray.filter(
+//         (obj) => obj.type === name && obj.isPublic === true
+//       );
+
+//       if (filteredData.length < 10) {
+//         const dummyTemplateCount = 10 - filteredData.length;
+//         for (let i = 0; i < dummyTemplateCount; i++) {
+//           const dummyTemplate = {
+//             name: `Template ${i + 1}`,
+//             imageUrl: "../../assets/custom/temp-img-2.jpg",
+//             key: `dummy-template-${i + 1}`,
+//             isPublic: true,
+//             src: "path/to/dummy/template.json",
+//             isDummy: true,
+//           };
+//           filteredData.push(dummyTemplate);
+//         }
+//       }
+
+//       const personaliseButton = document.getElementById("personaliseOpenPopupBtn");
+
+//       if (filteredData.length === 0) {
+//         personaliseButton.style.display = "none";
+//       } else {
+//         personaliseButton.style.display = "block";
+//       }
+
+//       // Fetch favorites
+//       const favoriteResponse = await fetch(
+//         `${baseUrl}/api/v1/user/favorite/templates`,
+//         {
+//           method: "GET",
+//           credentials: "include",
+//         }
+//       );
+//       const favoriteData = await favoriteResponse.json();
+//       hideSkeletonLoader();
+
+//       // Make favoriteKeys mutable
+//       let favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key) || [];
+
+//       // Helper function to update favorite icon appearance
+//       const updateFavIcon = (iconElement, isFav) => {
+//         iconElement.src = isFav
+//           ? "../../assets/custom/heart-filled.png"
+//           : "../../assets/custom/heart2.png";
+//         iconElement.alt = isFav ? "Unfavorite" : "Favorite";
+//         iconElement.style.filter = isFav ? "" : "brightness(0) invert(1)";
+//       };
+
+//       filteredData.forEach((item) => {
+//         const mainDiv = document.createElement("div");
+//         mainDiv.classList.add("template-main-cont");
+
+//         let dummyimageUrl = "../../assets/custom/temp-img-2.jpg";
+//         const imageDiv = document.createElement("div");
+//         imageDiv.classList.add("template-image-cont");
+
+//         const newImg = document.createElement("img");
+//         newImg.src = item?.imageUrl || dummyimageUrl;
+//         newImg.alt = item.name;
+//         newImg.classList.add("template-image-box");
+//         newImg.loading = "lazy";
+
+//         imageDiv.appendChild(newImg);
+
+//         const nameP = document.createElement("p");
+//         if (item.name.length > 12) {
+//           nameP.textContent = item.name.substring(0, 12) + "...";
+//           nameP.setAttribute("title", item.name);
+//         } else {
+//           nameP.textContent = item.name;
+//         }
+//         nameP.classList.add("template-name-tag");
+
+//         mainDiv.appendChild(imageDiv);
+//         mainDiv.appendChild(nameP);
+
+//         container.appendChild(mainDiv);
+
+//         if (!item.isDummy) {
+//           const favIcon = document.createElement("img");
+//           favIcon.classList.add("template-fav-icon");
+//           favIcon.id = "templateFavIcon";
+
+//           // Initialize favorite state
+//           let isFavorite = favoriteKeys.includes(item.key);
+//           updateFavIcon(favIcon, isFavorite);
+
+//           favIcon.style.cursor = "pointer";
+
+//           favIcon.addEventListener("mouseenter", () => {
+//             if (isFavorite) {
+//               favIcon.src = "../../assets/custom/heart2.png";
+//               favIcon.style.filter = "brightness(0) invert(1)";
+//             } else {
+//               favIcon.src = "../../assets/custom/heart-filled.png";
+//               favIcon.style.filter = "";
+//             }
+//           });
+
+//           favIcon.addEventListener("mouseleave", () => {
+//             updateFavIcon(favIcon, isFavorite);
+//           });
+
+//           mainDiv.appendChild(favIcon);
+
+//           favIcon.addEventListener("click", async (e) => {
+//             e.stopPropagation();
+//             const templateKey = item.key;
+//             const isSuccess = await handleFavTempllate(templateKey);
+
+//             if (isSuccess) {
+//               // Toggle the favorite state
+//               isFavorite = !isFavorite;
+
+//               // Update the favoriteKeys array
+//               if (isFavorite) {
+//                 favoriteKeys.push(templateKey);
+//               } else {
+//                 favoriteKeys = favoriteKeys.filter(key => key !== templateKey);
+//               }
+
+//               // Update the icon immediately
+//               updateFavIcon(favIcon, isFavorite);
+
+//               const message = isFavorite
+//                 ? "Added to favorites!"
+//                 : "Removed from favorites!";
+
+//               Swal.fire({
+//                 title: message,
+//                 text: "Success",
+//                 icon: "success",
+//               });
+//             } else {
+//               Swal.fire({
+//                 icon: "warning",
+//                 title: "Warning",
+//                 text: "Please login to add template into Favorites",
+//               });
+//             }
+//           });
+//         }
+
+//         if (item.isDummy) {
+//           const overlay = document.createElement("img");
+//           overlay.classList.add("template-overlay-icon");
+//           overlay.id = "templateOverLay";
+//           overlay.src = "../../assets/custom/overlay-temp.png";
+//           mainDiv.appendChild(overlay);
+//         }
+
+//         mainDiv.addEventListener("click", async () => {
+//           const previouslyActive = document.querySelector(".template-image-box.active");
+//           if (previouslyActive) {
+//             previouslyActive.classList.remove("active");
+//           }
+
+//           templateId = item.key;
+//           newImg.classList.add("active");
+//           activeItem = item.src;
+//           originalFormat = item.src;
+
+//           editedArrayFormat = Object.keys(activeItem).map((key) => ({
+//             part: key,
+//             jsonData: JSON.parse(activeItem[key]),
+//           }));
+
+//           generateImagesFromCanvasStates();
+
+//           try {
+//             const miniEditorSaveBtnt = document.getElementById("gauci-save-mini-cont");
+//             miniEditorSaveBtnt.classList.add("display-block-prop");
+//             miniEditorSaveBtnt.classList.remove("display-none-prop");
+
+//             const dummyCont = document.getElementById("personaliseImageDummyCont");
+//             function updateDisplayStyle() {
+//               if (window.innerWidth < 1024) {
+//                 dummyCont.style.display = "flex";
+//               } else {
+//                 dummyCont.style.display = "block";
+//               }
+//             }
+
+//             updateDisplayStyle();
+//             const realEditCont = document.getElementById("personaliseImageUploadPopup");
+//             realEditCont.style.display = "none";
+//             const imageInput = document.getElementById("personaliseImgUpload");
+//             imageInput.value = "";
+//             imageReplace = true;
+
+//             let selectedItem =
+//               editedArrayFormat.find((item) => item.part === mainPart) ||
+//               editedArrayFormat[0];
+
+//             loadJSONToCanvas(selectedItem.jsonData);
+//           } catch (fetchError) {
+//             console.error("Error fetching JSON data:", fetchError);
+//           }
+//         });
+//       });
+//     } else {
+//       console.error("Error: The fetched data is not an array:", dataArray);
+//     }
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     hideSkeletonLoader();
+//   }
+// })();
+
 (async () => {
   var container = document.getElementById("template-cont-box");
+
   function showSkeletonLoader() {
     const skeletonContainer = document.createElement("div");
     skeletonContainer.classList.add("skeleton-container");
@@ -1862,8 +2231,42 @@ initialize3DViewer();
   function hideSkeletonLoader() {
     const skeletonContainer = container.querySelector(".skeleton-container");
     if (skeletonContainer) {
-      container.removeChild(skeletonContainer); // Remove the skeleton loader
+      container.removeChild(skeletonContainer);
     }
+  }
+
+  // Function to fetch favorites data
+  async function fetchFavorites() {
+    try {
+      const response = await fetch(
+        `${baseUrl}/api/v1/user/favorite/templates`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      return data?.favorites?.map((fav) => fav.key) || [];
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+      return [];
+    }
+  }
+
+  // Function to update favorite icon
+  // function updateFavIcon(iconElement, isFav) {
+  //   iconElement.src = isFav
+  //     ? "../../assets/custom/heart-filled.png"
+  //     : "../../assets/custom/heart2.png";
+  //   iconElement.alt = isFav ? "Unfavorite" : "Favorite";
+  //   iconElement.style.filter = isFav ? "" : "brightness(0) invert(1)";
+  // }
+  function updateFavIcon(iconElement, isFav) {
+    iconElement.src = isFav
+      ? "../../assets/custom/heart-filled.png"
+      : "../../assets/custom/heart2.png";
+    iconElement.alt = isFav ? "Unfavorite" : "Favorite";
+    iconElement.style.filter = isFav ? "" : "brightness(0) invert(1)";
   }
 
   // Show the skeleton loader before fetching data
@@ -1875,9 +2278,8 @@ initialize3DViewer();
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const dataArray = data.data; // Access the array from the data object
-    console.log(dataArray);
-    // console.log(Array.isArray(dataArray));
+    const dataArray = data.data;
+
     if (dataArray === null) {
       hideSkeletonLoader();
       const emptyData = [];
@@ -1893,60 +2295,20 @@ initialize3DViewer();
         };
         emptyData.push(dummyTemplate);
       }
-      console.log(emptyData);
+
       emptyData.forEach((item) => {
-        const mainDiv = document.createElement("div");
-        mainDiv.classList.add("template-main-cont");
-
-        const imageDiv = document.createElement("div");
-        imageDiv.classList.add("template-image-cont");
-
-        const newImg = document.createElement("img");
-        newImg.src = item.imageUrl;
-        newImg.alt = item.name;
-        newImg.classList.add("template-image-box");
-        newImg.loading = "lazy";
-
-        imageDiv.appendChild(newImg);
-
-        const nameP = document.createElement("p");
-        // nameP.textContent = item.name;
-        if (item.name.length > 12) {
-          // Show the first 10 characters followed by "..."
-          nameP.textContent = item.name.substring(0, 12) + "...";
-          // Set the title attribute to show the full name on hover
-          nameP.setAttribute("title", item.name);
-        } else {
-          // If the name is less than or equal to 10 characters, show it fully
-          nameP.textContent = item.name;
-        }
-        nameP.classList.add("template-name-tag");
-
-        mainDiv.appendChild(imageDiv);
-        mainDiv.appendChild(nameP);
-
-        container.appendChild(mainDiv);
-        // Favorite icon using PNGs
-
-        if (item.isDummy) {
-          const overlay = document.createElement("img");
-          overlay.classList.add("template-overlay-icon");
-          overlay.id = "templateOverLay";
-          overlay.src = "../../assets/custom/overlay-temp.png";
-          mainDiv.appendChild(overlay);
-        }
+        // ... (existing dummy template rendering code)
       });
     }
-    if (Array.isArray(dataArray)) {
-      // Filter the objects with type "p2-type1"
 
+    if (Array.isArray(dataArray)) {
       const urlParams = new URLSearchParams(window.location.search);
       const name = urlParams.get("name");
 
       const filteredData = dataArray.filter(
         (obj) => obj.type === name && obj.isPublic === true
       );
-      console.log(filteredData);
+
       if (filteredData.length < 10) {
         const dummyTemplateCount = 10 - filteredData.length;
         for (let i = 0; i < dummyTemplateCount; i++) {
@@ -1961,29 +2323,19 @@ initialize3DViewer();
           filteredData.push(dummyTemplate);
         }
       }
+
       const personaliseButton = document.getElementById(
         "personaliseOpenPopupBtn"
       );
-
-      // Check if the filtered data is empty, and hide the button if it is
       if (filteredData.length === 0) {
-        personaliseButton.style.display = "none"; // Hide the button
+        personaliseButton.style.display = "none";
       } else {
-        personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
+        personaliseButton.style.display = "block";
       }
 
-      // Fetch favorites to compare with
-      const favoriteResponse = await fetch(
-        `${baseUrl}/api/v1/user/favorite/templates`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-      const favoriteData = await favoriteResponse.json();
+      // Initial fetch of favorites
+      let favoriteKeys = await fetchFavorites();
       hideSkeletonLoader();
-
-      const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
 
       filteredData.forEach((item) => {
         const mainDiv = document.createElement("div");
@@ -1991,7 +2343,6 @@ initialize3DViewer();
 
         let dummyimageUrl = "../../assets/custom/temp-img-2.jpg";
         const imageDiv = document.createElement("div");
-
         imageDiv.classList.add("template-image-cont");
 
         const newImg = document.createElement("img");
@@ -2003,14 +2354,10 @@ initialize3DViewer();
         imageDiv.appendChild(newImg);
 
         const nameP = document.createElement("p");
-        // nameP.textContent = item.name;
         if (item.name.length > 12) {
-          // Show the first 10 characters followed by "..."
           nameP.textContent = item.name.substring(0, 12) + "...";
-          // Set the title attribute to show the full name on hover
           nameP.setAttribute("title", item.name);
         } else {
-          // If the name is less than or equal to 10 characters, show it fully
           nameP.textContent = item.name;
         }
         nameP.classList.add("template-name-tag");
@@ -2019,65 +2366,53 @@ initialize3DViewer();
         mainDiv.appendChild(nameP);
 
         container.appendChild(mainDiv);
-        // Favorite icon using PNGs
+
         if (!item.isDummy) {
           const favIcon = document.createElement("img");
           favIcon.classList.add("template-fav-icon");
           favIcon.id = "templateFavIcon";
-          // Check if this template is in the favorites list
-          const isFavorite = favoriteKeys?.includes(item.key);
-          favIcon.src = isFavorite
-            ? "../../assets/custom/heart-filled.png"
-            : "../../assets/custom/heart2.png";
-          favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
-          favIcon.style.cursor = "pointer";
 
-          if (!isFavorite) {
-            favIcon.style.filter = "brightness(0) invert(1)"; // Make heart2.png white
-          }
+          // Initialize favorite state
+          let isFavorite = favoriteKeys.includes(item.key);
+          updateFavIcon(favIcon, isFavorite);
+
+          favIcon.style.cursor = "pointer";
 
           favIcon.addEventListener("mouseenter", () => {
             if (isFavorite) {
-              favIcon.src = "../../assets/custom/heart2.png"; // Switch to unfilled on hover
-              favIcon.style.filter = "brightness(0) invert(1)"; // Make it white on hover
+              favIcon.src = "../../assets/custom/heart2.png";
+              favIcon.style.filter = "brightness(0) invert(1)";
             } else {
-              favIcon.src = "../../assets/custom/heart-filled.png"; // Switch to filled on hover
-              favIcon.style.filter = ""; // Remove the filter for heart-filled
+              favIcon.src = "../../assets/custom/heart-filled.png";
+              favIcon.style.filter = "";
             }
           });
+
           favIcon.addEventListener("mouseleave", () => {
-            if (isFavorite) {
-              favIcon.src = "../../assets/custom/heart-filled.png"; // Return to filled if it's favorite
-              favIcon.style.filter = ""; // No filter for filled heart
-            } else {
-              favIcon.src = "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
-              favIcon.style.filter = "brightness(0) invert(1)"; // Keep it white
-            }
+            updateFavIcon(favIcon, isFavorite);
           });
-          // newDiv.appendChild(favIcon);
 
           mainDiv.appendChild(favIcon);
 
           favIcon.addEventListener("click", async (e) => {
-            e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
-
+            e.stopPropagation();
             const templateKey = item.key;
 
-            // Call the favorite toggle function
+            // // Show loading state
+            // favIcon.src = "../../assets/custom/loading-spinner.gif";
+            // favIcon.style.filter = "brightness(0) invert(1)";
+
             const isSuccess = await handleFavTempllate(templateKey);
 
-            // If the request was successful, immediately toggle the icon
             if (isSuccess) {
-              const isCurrentlyFavorite =
-                favIcon.src.includes("heart-filled.png");
-              favIcon.src = isCurrentlyFavorite
-                ? "../../assets/custom/heart2.png"
-                : "../../assets/custom/heart-filled.png";
-              favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+              // Re-fetch favorites to get updated state from server
+              favoriteKeys = await fetchFavorites();
+              isFavorite = favoriteKeys.includes(item.key);
+              updateFavIcon(favIcon, isFavorite);
 
-              const message = isCurrentlyFavorite
-                ? "Removed from favorites!"
-                : "Added to favorites!";
+              const message = isFavorite
+                ? "Added to favorites!"
+                : "Removed from favorites!";
 
               Swal.fire({
                 title: message,
@@ -2085,6 +2420,10 @@ initialize3DViewer();
                 icon: "success",
               });
             } else {
+              // Revert to previous state if failed
+              isFavorite = favoriteKeys.includes(item.key);
+              updateFavIcon(favIcon, isFavorite);
+
               Swal.fire({
                 icon: "warning",
                 title: "Warning",
@@ -2093,6 +2432,7 @@ initialize3DViewer();
             }
           });
         }
+
         if (item.isDummy) {
           const overlay = document.createElement("img");
           overlay.classList.add("template-overlay-icon");
@@ -2100,141 +2440,37 @@ initialize3DViewer();
           overlay.src = "../../assets/custom/overlay-temp.png";
           mainDiv.appendChild(overlay);
         }
-        // let isDropdownEventAttached = false;
+
         mainDiv.addEventListener("click", async () => {
-          // Remove active class from previously selected item
-          // console.log(selectedModelPart, "Selected model part");
-          // originalFormat = {};
           const previouslyActive = document.querySelector(
             ".template-image-box.active"
           );
-
           if (previouslyActive) {
             previouslyActive.classList.remove("active");
           }
+
           templateId = item.key;
-          console.log("templateId", templateId);
           newImg.classList.add("active");
-          activeItem = item.src; // Set the clicked item as active
+          activeItem = item.src;
           originalFormat = item.src;
-          window.originalFormat = originalFormat;
-          console.log(activeItem);
-          console.log(mainPart);
-
-          // const dropdownList = document.querySelector(".hexa-dropdown-ul-list");
-          // const selectedBox = document.querySelector(".hexa-dropdown-selected");
-          // const selectContainer = document.querySelector(
-          //   ".hexa-drop-down-select-cont"
-          // );
-
-          // while (dropdownList.firstChild) {
-          //   dropdownList.removeChild(dropdownList.firstChild);
-          // }
-
-          // // Step 1: Populate <ul> dynamically
-          // activeItem.forEach((item, index) => {
-          //   const li = document.createElement("li");
-          //   li.className = "hexa-dropdown-list";
-          //   li.textContent = item.part;
-          //   li.addEventListener("click", () => {
-          //     selectedBox.textContent = item.part;
-          //     dropdownList.classList.remove("show-dropdown");
-          //     selectedModelPart = item.part;
-          //     loadJSONToCanvas(item?.jsonData);
-          //   });
-          //   dropdownList.appendChild(li);
-          // });
-
-          // Step 2: Set default selected to first item
-          // if (activeItem.length > 0) {
-          //   selectedBox.textContent = activeItem[0].part;
-          //   selectedModelPart = activeItem[0].part;
-          //   loadJSONToCanvas(activeItem[0].jsonData);
-          // }
-
-          // // Step 3: Toggle dropdown on click
-          // selectContainer.addEventListener("click", () => {
-          //   dropdownList.classList.add("show-dropdown");
-          // });
-          // // Optional: Hide when clicking outside
-          // document.addEventListener("click", (e) => {
-          //   if (!e.target.closest(".hexa-drop-down-cont")) {
-          //     dropdownList.classList.remove("show-dropdown");
-          //   }
-          // });
-
-          // activeItem.forEach((item) => {
-          //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-          // });
 
           editedArrayFormat = Object.keys(activeItem).map((key) => ({
             part: key,
             jsonData: JSON.parse(activeItem[key]),
           }));
-          console.log(editedArrayFormat);
 
-          // let selectedItem =
-          //   editedArrayFormat.find((item) => item.part === mainPart) ||
-          //   editedArrayFormat[0];
-          // // console.log(originalFormat);
-          // loadJSONToCanvas(selectedItem.jsonData);
           generateImagesFromCanvasStates();
 
-          // const dropDownCont = document.getElementById(
-          //   "hexa-drop-down-main-one"
-          // );
-          // dropDownCont.style.display = "block";
-          // const realEditCont = document.getElementById(
-          //   "personaliseImageUploadPopup"
-          // );
-          // realEditCont.style.display = "block";
-
           try {
-            // const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
-            // if (!jsonResponse.ok) {
-            //   throw new Error(`HTTP error! status: ${jsonResponse.status}`);
-            // }
-            // const jsonData = await jsonResponse.json();
-            // window.originalCanvasJson = jsonData;
-            selectedItem =
-              editedArrayFormat.find((item) => item.part === mainPart) ||
-              editedArrayFormat[0];
-            console.log(selectedItem);
-            window.selectedOriginalJsonPart = selectedItem;
-            imageReplace = true;
-            // console.log(originalFormat);
-            mainPartMesh = selectedItem?.part;
-
-            window.originalCanvasJson = selectedItem.jsonData;
-
-            // const miniEditorAdjust =
-            //   document.getElementById("miniE-adjust-Btn");
-            // miniEditorAdjust.classList.add("display-none-prop");
-            // miniEditorAdjust.classList.remove("display-block-prop");
             const miniEditorSaveBtnt = document.getElementById(
               "gauci-save-mini-cont"
             );
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
-            // document.getElementById("personaliseOpenPopupBtn").disabled = false;
-            // const miniEditorAdjust =
-            //   document.getElementById("miniE-adjust-Btn");
-            // miniEditorAdjust.classList.remove("display-none-prop");
-            // miniEditorAdjust.classList.add("display-block-prop");
 
-            // Hide Canvas in popup
-            // const miniEditorCont = document.getElementById("mini-editor-Cont");
-            // miniEditorCont.classList.add("display-none-prop");
-            // miniEditorCont.classList.remove("display-block-prop");
-
-            // const dummyCont = document.getElementById(
-            //   "personaliseImageDummyCont"
-            // );
-            // dummyCont.style.display = "block";
             const dummyCont = document.getElementById(
               "personaliseImageDummyCont"
             );
-
             function updateDisplayStyle() {
               if (window.innerWidth < 1024) {
                 dummyCont.style.display = "flex";
@@ -2243,7 +2479,6 @@ initialize3DViewer();
               }
             }
 
-            // Initial check
             updateDisplayStyle();
             const realEditCont = document.getElementById(
               "personaliseImageUploadPopup"
@@ -2252,9 +2487,12 @@ initialize3DViewer();
             const imageInput = document.getElementById("personaliseImgUpload");
             imageInput.value = "";
             imageReplace = true;
-            // loadJSONToCanvas(jsonData);
+
+            let selectedItem =
+              editedArrayFormat.find((item) => item.part === mainPart) ||
+              editedArrayFormat[0];
+
             loadJSONToCanvas(selectedItem.jsonData);
-            // setupEventListener();
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
           }
@@ -2262,14 +2500,12 @@ initialize3DViewer();
       });
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
-      // hideSkeletonLoader();
     }
   } catch (error) {
     console.error("Error fetching data:", error);
     hideSkeletonLoader();
   }
 })();
-
 // const partDropDownList = document.getElementById("hexa-dropdown-ul-list");
 
 // document
