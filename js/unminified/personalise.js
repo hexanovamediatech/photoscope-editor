@@ -860,7 +860,7 @@ function replaceImageSrc(json, newImageSrc, callback) {
 function generateImagesFromCanvasStates() {
   // Array to store image data for each tab
   meshImageDataArray = [];
-  meshImageDataArray.length = 0;
+  meshImageDataArray.length = 0; 
   Object.keys(originalFormat).forEach((tabId) => {
     // Create a temporary canvas with a width and height of 2048
     const tempCanvas = new fabric.Canvas(null, {
@@ -1544,7 +1544,6 @@ function loadJSONToCanvas(jsonData) {
   newFabricCanvas.loadFromJSON(
     jsonData,
     function () {
-      console.log(jsonData.objects);
 
       // After loading the JSON, resize and reposition all objects to fit the canvas
       newFabricCanvas.getObjects().forEach((obj, index) => {
@@ -2118,8 +2117,8 @@ initialize3DViewer();
           activeItem = item.src; // Set the clicked item as active
           originalFormat = item.src;
           window.originalFormat = originalFormat;
-          console.log(activeItem);
-          console.log(mainPart);
+          // console.log(activeItem);
+          // console.log(mainPart);
 
           // const dropdownList = document.querySelector(".hexa-dropdown-ul-list");
           // const selectedBox = document.querySelector(".hexa-dropdown-selected");
@@ -2166,12 +2165,12 @@ initialize3DViewer();
           // activeItem.forEach((item) => {
           //   originalFormat[item.part] = JSON.stringify(item.jsonData);
           // });
-
+          console.log('this is the activeitems', activeItem);
           editedArrayFormat = Object.keys(activeItem).map((key) => ({
             part: key,
             jsonData: JSON.parse(activeItem[key]),
           }));
-          console.log(editedArrayFormat);
+          console.log("edited array",editedArrayFormat);
 
           // let selectedItem =
           //   editedArrayFormat.find((item) => item.part === mainPart) ||
@@ -2233,8 +2232,7 @@ initialize3DViewer();
             // dummyCont.style.display = "block";
             const dummyCont = document.getElementById(
               "personaliseImageDummyCont"
-            );
-
+            ); 
             function updateDisplayStyle() {
               if (window.innerWidth < 1024) {
                 dummyCont.style.display = "flex";
@@ -2253,7 +2251,26 @@ initialize3DViewer();
             imageInput.value = "";
             imageReplace = true;
             // loadJSONToCanvas(jsonData);
-            loadJSONToCanvas(selectedItem.jsonData);
+            for (let i = 0; i < selectedItem.jsonData.objects.length; i++) {
+              console.log("we are sending data to load", selectedItem.jsonData.objects[i].src);
+          }
+          
+           // loadJSONToCanvas(selectedItem.jsonData);
+            const objects = selectedItem.jsonData.objects;
+
+            // preloadAllImages(objects).then(() => {
+                // console.log("All images preloaded, now loading canvas", selectedItem.jsonData);
+                loadJSONToCanvas(selectedItem.jsonData);
+            // });
+            preloadAllImages(selectedItem.jsonData)
+            .then(() => {
+              console.log("All images preloaded");
+              loadJSONToCanvas(selectedItem.jsonData);
+            }) 
+            .catch((err) => {
+              console.error("Error during image preloading", err);
+            });
+          
             // setupEventListener();
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
@@ -2269,6 +2286,29 @@ initialize3DViewer();
     hideSkeletonLoader();
   }
 })();
+
+function preloadAllImages(objects) {
+  console.log("preloadAllImages called");
+  return Promise.all(objects.map((obj) => {
+      if ( obj.src) {
+          return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.crossOrigin = 'anonymous'; 
+              img.onload = () => {
+                  console.log("c", obj.src);
+                  resolve();
+              };
+              img.onerror = (e) => {
+                  console.error("Failed to preload image:", obj.src, e);
+                  resolve(); 
+              };
+              img.src = obj.src;
+          });
+      } else {
+          return Promise.resolve(); // Not an image object
+      }
+  }));
+}
 
 // const partDropDownList = document.getElementById("hexa-dropdown-ul-list");
 
