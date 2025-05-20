@@ -325,6 +325,7 @@ function render() {
 // }
 
 function changeTexture(newUrl) {
+  console.log(newUrl);
   if (scene) {
     const textureLoader = new THREE.TextureLoader();
     console.log(selectedMesh);
@@ -666,10 +667,18 @@ function updateCanvasText(textIndex, newText) {
   const allObjects = newFabricCanvas.getObjects();
 
   // Save the first object (assuming it's the background image)
-  // const firstObject = allObjects[0];
+  const firstObject = allObjects[0];
 
   // // Remove the first object from the canvas
-  // newFabricCanvas.remove(firstObject);
+  if (
+    firstObject &&
+    firstObject.type === "image" &&
+    firstObject.getSrc &&
+    firstObject.getSrc().startsWith("http") &&
+    !firstObject.clipPath
+  ) {
+    newFabricCanvas.remove(firstObject);
+  }
 
   // Render the canvas without the first object
   newFabricCanvas.renderAll();
@@ -701,7 +710,7 @@ function updateCanvasText(textIndex, newText) {
   changeTexture(fabricImageConverted);
 
   // Add the first object back to its original position
-  // newFabricCanvas.insertAt(firstObject, 0);
+  newFabricCanvas.insertAt(firstObject, 0);
 
   // Render the canvas to show all objects again
   newFabricCanvas.renderAll();
@@ -857,31 +866,91 @@ function replaceImageSrc(json, newImageSrc, callback) {
 //   });
 // }
 
+// function generateImagesFromCanvasStates() {
+//   // Array to store image data for each tab
+//   meshImageDataArray = [];
+//   meshImageDataArray.length = 0;
+//   Object.keys(originalFormat).forEach((tabId) => {
+//     // Create a temporary canvas with a width and height of 2048
+//     const tempCanvas = new fabric.Canvas(null, {
+//       width: 2048,
+//       height: 2048,
+//     });
+
+//     // Load the JSON state into the temporary canvas
+//     tempCanvas.loadFromJSON(originalFormat[tabId], () => {
+//       const objects = tempCanvas.getObjects(); // Get all objects in the canvas
+//       console.log(objects);
+
+//       tempCanvas.renderAll(); // Render the canvas without CORS images
+
+//       try {
+//         const base64Image = tempCanvas.toDataURL({
+//           format: "jpeg", // More compressed
+//           quality: 1,
+//         });
+
+//         // Push the data into the array
+//         meshImageDataArray.push({
+//           meshName: tabId,
+//           meshImageData: base64Image,
+//         });
+//       } catch (error) {
+//         console.error(`Error generating image for Tab ID ${tabId}:`, error);
+//       }
+
+//       tempCanvas.renderAll(); // Re-render the canvas with all objects
+
+//       // Clean up the temporary canvas
+//       tempCanvas.clear();
+//       tempCanvas.dispose();
+
+//       if (meshImageDataArray.length === Object.keys(originalFormat).length) {
+//         console.log("Generated Images Array:", meshImageDataArray);
+//         // window.meshImageDataArray = meshImageDataArray;
+//         // console.log(meshImageDataArray, "Window data from gauci file");
+//         applyTexturesToMeshes();
+//       }
+//     });
+//   });
+// }
 function generateImagesFromCanvasStates() {
-  // Array to store image data for each tab
   meshImageDataArray = [];
-  meshImageDataArray.length = 0; 
+  meshImageDataArray.length = 0;
+
   Object.keys(originalFormat).forEach((tabId) => {
-    // Create a temporary canvas with a width and height of 2048
     const tempCanvas = new fabric.Canvas(null, {
       width: 2048,
       height: 2048,
     });
 
-    // Load the JSON state into the temporary canvas
     tempCanvas.loadFromJSON(originalFormat[tabId], () => {
-      const objects = tempCanvas.getObjects(); // Get all objects in the canvas
+      tempCanvas.renderAll();
+
+      // Get all objects from the canvas
+      const objects = tempCanvas.getObjects();
       console.log(objects);
 
-      tempCanvas.renderAll(); // Render the canvas without CORS images
+      // Remove the first object temporarily
+      const firstObject = objects[0];
+      if (
+        firstObject &&
+        firstObject.type === "image" &&
+        firstObject.getSrc &&
+        firstObject.getSrc().startsWith("http") &&
+        !firstObject.clipPath
+      ) {
+        tempCanvas.remove(firstObject);
+      }
+      tempCanvas.renderAll(); // Render after removing the object
 
       try {
         const base64Image = tempCanvas.toDataURL({
-          format: "jpeg", // More compressed
+          format: "jpeg",
           quality: 1,
         });
 
-        // Push the data into the array
+        // Push the image data to the array
         meshImageDataArray.push({
           meshName: tabId,
           meshImageData: base64Image,
@@ -890,16 +959,20 @@ function generateImagesFromCanvasStates() {
         console.error(`Error generating image for Tab ID ${tabId}:`, error);
       }
 
-      tempCanvas.renderAll(); // Re-render the canvas with all objects
+      // Re-insert the removed object (if any)
+      if (firstObject) {
+        tempCanvas.insertAt(firstObject, 0);
+      }
 
-      // Clean up the temporary canvas
+      tempCanvas.renderAll(); // Render after reinserting
+
+      // Clean up
       tempCanvas.clear();
       tempCanvas.dispose();
 
+      // Final check to call texture application
       if (meshImageDataArray.length === Object.keys(originalFormat).length) {
         console.log("Generated Images Array:", meshImageDataArray);
-        // window.meshImageDataArray = meshImageDataArray;
-        // console.log(meshImageDataArray, "Window data from gauci file");
         applyTexturesToMeshes();
       }
     });
@@ -1544,7 +1617,6 @@ function loadJSONToCanvas(jsonData) {
   newFabricCanvas.loadFromJSON(
     jsonData,
     function () {
-
       // After loading the JSON, resize and reposition all objects to fit the canvas
       newFabricCanvas.getObjects().forEach((obj, index) => {
         obj.scaleX *= 0.22; // Adjust the scaling factor as needed
@@ -1585,6 +1657,19 @@ function loadJSONToCanvas(jsonData) {
       console.log(allObjects);
       console.log(savedCanvasJSON);
 
+      const firstObject = allObjects[0];
+
+      // Remove the first object from the canvas
+      if (
+        firstObject &&
+        firstObject.type === "image" &&
+        firstObject.getSrc &&
+        firstObject.getSrc().startsWith("http") &&
+        !firstObject.clipPath
+      ) {
+        newFabricCanvas.remove(firstObject);
+      }
+
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
       const originalWidth = newFabricCanvas.width;
@@ -1616,7 +1701,7 @@ function loadJSONToCanvas(jsonData) {
       if (selectedMesh) {
         changeTexture(fabricImageConverted);
       }
-
+      newFabricCanvas.insertAt(firstObject, 0);
       // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
       console.log(newFabricCanvas.toJSON());
@@ -1776,10 +1861,19 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       console.log(newFabricCanvas.toJSON());
 
       // Save the first object (assuming it's the background image)
-      // const firstObject = allObjects[0];
+      const firstObject = allObjects[0];
 
       // Remove the first object from the canvas
       // newFabricCanvas.remove(firstObject);
+      if (
+        firstObject &&
+        firstObject.type === "image" &&
+        firstObject.getSrc &&
+        firstObject.getSrc().startsWith("http") &&
+        !firstObject.clipPath
+      ) {
+        newFabricCanvas.remove(firstObject);
+      }
 
       // Render the canvas without the first object
       newFabricCanvas.renderAll();
@@ -1810,7 +1904,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
       changeTexture(fabricImageConverted);
 
       // Add the first object back to its original position
-      // newFabricCanvas.insertAt(firstObject, 0);
+      newFabricCanvas.insertAt(firstObject, 0);
 
       // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
@@ -2165,12 +2259,12 @@ initialize3DViewer();
           // activeItem.forEach((item) => {
           //   originalFormat[item.part] = JSON.stringify(item.jsonData);
           // });
-          console.log('this is the activeitems', activeItem);
+          console.log("this is the activeitems", activeItem);
           editedArrayFormat = Object.keys(activeItem).map((key) => ({
             part: key,
             jsonData: JSON.parse(activeItem[key]),
           }));
-          console.log("edited array",editedArrayFormat);
+          console.log("edited array", editedArrayFormat);
 
           // let selectedItem =
           //   editedArrayFormat.find((item) => item.part === mainPart) ||
@@ -2232,7 +2326,7 @@ initialize3DViewer();
             // dummyCont.style.display = "block";
             const dummyCont = document.getElementById(
               "personaliseImageDummyCont"
-            ); 
+            );
             function updateDisplayStyle() {
               if (window.innerWidth < 1024) {
                 dummyCont.style.display = "flex";
@@ -2251,26 +2345,29 @@ initialize3DViewer();
             imageInput.value = "";
             imageReplace = true;
             // loadJSONToCanvas(jsonData);
-            for (let i = 0; i < selectedItem.jsonData.objects.length; i++) {
-              console.log("we are sending data to load", selectedItem.jsonData.objects[i].src);
-          }
-          
-           // loadJSONToCanvas(selectedItem.jsonData);
-            const objects = selectedItem.jsonData.objects;
+            for (let i = 0; i < selectedItem.jsonData?.objects?.length; i++) {
+              console.log(
+                "we are sending data to load",
+                selectedItem?.jsonData?.objects[i].src
+              );
+            }
+
+            // loadJSONToCanvas(selectedItem.jsonData);
+            const objects = selectedItem?.jsonData?.objects;
 
             // preloadAllImages(objects).then(() => {
-                // console.log("All images preloaded, now loading canvas", selectedItem.jsonData);
-                loadJSONToCanvas(selectedItem.jsonData);
+            // console.log("All images preloaded, now loading canvas", selectedItem.jsonData);
+            loadJSONToCanvas(selectedItem?.jsonData);
             // });
             preloadAllImages(selectedItem.jsonData)
-            .then(() => {
-              console.log("All images preloaded");
-              loadJSONToCanvas(selectedItem.jsonData);
-            }) 
-            .catch((err) => {
-              console.error("Error during image preloading", err);
-            });
-          
+              .then(() => {
+                console.log("All images preloaded");
+                loadJSONToCanvas(selectedItem.jsonData);
+              })
+              .catch((err) => {
+                console.error("Error during image preloading", err);
+              });
+
             // setupEventListener();
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
@@ -2288,26 +2385,28 @@ initialize3DViewer();
 })();
 
 function preloadAllImages(objects) {
-  console.log("preloadAllImages called");
-  return Promise.all(objects.map((obj) => {
-      if ( obj.src) {
-          return new Promise((resolve, reject) => {
-              const img = new Image();
-              img.crossOrigin = 'anonymous'; 
-              img.onload = () => {
-                  console.log("c", obj.src);
-                  resolve();
-              };
-              img.onerror = (e) => {
-                  console.error("Failed to preload image:", obj.src, e);
-                  resolve(); 
-              };
-              img.src = obj.src;
-          });
+  console.log("preloadAllImages called", objects);
+  return Promise.all(
+    objects?.objects?.map((obj) => {
+      if (obj?.src) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => {
+            console.log("c", obj.src);
+            resolve();
+          };
+          img.onerror = (e) => {
+            console.error("Failed to preload image:", obj.src, e);
+            resolve();
+          };
+          img.src = obj.src;
+        });
       } else {
-          return Promise.resolve(); // Not an image object
+        return Promise.resolve(); // Not an image object
       }
-  }));
+    })
+  );
 }
 
 // const partDropDownList = document.getElementById("hexa-dropdown-ul-list");
