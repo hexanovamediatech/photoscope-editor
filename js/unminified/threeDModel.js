@@ -275,6 +275,7 @@ function init() {
     // Apply textures to specific meshes dynamically
     const textureLoader = new THREE.TextureLoader();
     meshImageDataArray = window.meshImageDataArray;
+    console.log(meshImageDataArray, "three d model");
     meshImageDataArray.forEach(({ meshName, meshImageData }) => {
       const specificMesh = loadedModel.getObjectByName(meshName);
       if (specificMesh) {
@@ -288,17 +289,53 @@ function init() {
           specificMesh.material = material;
 
           // Apply specific texture transformations if needed
-          if (meshName === "P2_Top2") {
-            texture.repeat.set(1.9, -1.9);
-            texture.offset.set(0.92, 0.5);
-          } else if (meshName === "P3_typ3_Top") {
-            texture.repeat.set(1.23, -1.23);
-            texture.offset.set(0.875, 1.13);
-          } else if (meshName === "Ear_L2") {
-            texture.repeat.set(1, -1);
-            texture.offset.set(1, 1);
-          } else {
-            console.warn("No specific texture settings for mesh:", meshName);
+          // if (meshName === "P2_Top2") {
+          //   texture.repeat.set(1.9, -1.9);
+          //   texture.offset.set(0.92, 0.5);
+          // } else if (meshName === "P3_typ3_Top") {
+          //   texture.repeat.set(1.23, -1.23);
+          //   texture.offset.set(0.875, 1.13);
+          // } else if (meshName === "Ear_L2") {
+          //   texture.repeat.set(1, -1);
+          //   texture.offset.set(1, 1);
+          // } else {
+          //   console.warn("No specific texture settings for mesh:", meshName);
+          // }
+          switch (meshName) {
+            case "P2_Top2":
+              texture.repeat.set(1.9, -1.9);
+              texture.offset.set(0.92, 0.5);
+              break;
+            case "P3_typ3_Top":
+              texture.repeat.set(1.23, -1.23);
+              texture.offset.set(0.875, 1.13);
+              break;
+            case "P3_Top":
+              texture.repeat.set(1.7, -1.7);
+              texture.offset.set(1.0, 1.04);
+              break;
+            case "Booklet_innner":
+              console.log("No changes required for this mesh.");
+              break;
+            case "P5_typ1":
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+              break;
+            case "Ear_L2":
+              texture.repeat.set(1, -1);
+              texture.offset.set(1, 1);
+              break;
+            case "part2":
+              texture.repeat.set(-1, 1);
+              texture.offset.set(1, 1);
+              break;
+            case "polySurface1":
+              texture.repeat.set(1, -1);
+              break;
+            default:
+              console.warn(
+                `No specific texture settings for mesh: ${meshName}`
+              );
           }
 
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
