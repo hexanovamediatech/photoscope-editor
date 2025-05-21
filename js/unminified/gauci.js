@@ -9244,8 +9244,18 @@
     // }
 
     function logSelectedObject(canvas) {
+      // canvas.off("mouse:down");
       canvas.on("mouse:down", function (e) {
         // Debug: Confirm event is firing
+        if (!e.target) {
+          // canvas.selection = false; // Prevent blue rectangle
+          // console.log("Empty click: Multi-selection disabled");
+          // // Restore selection immediately to avoid side effects
+          // setTimeout(() => {
+          //   canvas.selection = true;
+          // }, 0);
+          return; // Exit to prevent further processing
+        }
 
         const selected = e.target; // Newly selected object
         console.log("Selection updated, new object:", selected);
@@ -11161,121 +11171,214 @@
     //   adjustZoom();
     //   canvas.requestRenderAll();
     // });
-    const meshImageDataArray = [];
-    selector.find(".thr-d").on("click", function () {
-      // Update classes based on user interaction
-      selector.find(".thr-d").addClass("active");
-      selector.find(".two-d").removeClass("active");
-      selector
-        .find(".td-interactive-btn-container-main-contianer")
-        .addClass("interactive-btn-alignment");
-      selector.find(".web-thr-d-main-container").addClass("display-unity");
-      selector.find("#gauci-canvas").addClass("hide-canvas");
-      selector.find("#gauci").addClass("hide-canva");
-      saveCanvasState(activeTabId);
-      generateImagesFromCanvasStates();
-      // if (meshImageDataArray) {
-      //   var event = new CustomEvent("variableReady", {
-      //     detail: {
-      //       data: meshImageDataArray,
-      //     },
-      //   });
-      //   document.dispatchEvent(event);
-      // }
-      // if (meshImageDataArray) {
-      //   console.lof(meshImageDataArray, "Mesh image data array ");
-      //   // window.sharedData = window.sharedData || {};
-      //   window.meshImageDataArray = meshImageDataArray;
-      //   console.log(
-      //     "meshImageDataArray saved to global sharedData:",
-      //     meshImageDataArray
-      //   );
-      // }
-      const event = new CustomEvent("thrDClicked");
-      document.dispatchEvent(event);
-    });
+    // const meshImageDataArray = [];
+    // selector.find(".thr-d").on("click", function () {
+    //   // Update classes based on user interaction
+    //   selector.find(".thr-d").addClass("active");
+    //   selector.find(".two-d").removeClass("active");
+    //   selector
+    //     .find(".td-interactive-btn-container-main-contianer")
+    //     .addClass("interactive-btn-alignment");
+    //   selector.find(".web-thr-d-main-container").addClass("display-unity");
+    //   selector.find("#gauci-canvas").addClass("hide-canvas");
+    //   selector.find("#gauci").addClass("hide-canva");
+    //   // saveCanvasState(activeTabId);
+    //   generateImagesFromCanvasStates();
+
+    //   const event = new CustomEvent("thrDClicked");
+    //   document.dispatchEvent(event);
+    // });
 
     // Image generation function
-    function generateImagesFromCanvasStates() {
+    // function generateImagesFromCanvasStates() {
+    //   saveCanvasState(activeTabId);
+    //   // Array to store image data for each tab
+    //   meshImageDataArray.length = 0;
+    //   Object.keys(tabCanvasStates).forEach((tabId) => {
+    //     // Create a temporary canvas with a width and height of 2048
+    //     const tempCanvas = new fabric.Canvas(null, {
+    //       width: 2048,
+    //       height: 2048,
+    //     });
+
+    //     // Load the JSON state into the temporary canvas
+    //     tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
+    //       const objects = tempCanvas.getObjects(); // Get all objects in the canvas
+    //       console.log(objects);
+    //       const corsImages = []; // Store references to CORS images
+
+    //       // Identify and hide CORS images
+    //       // objects.forEach((obj) => {
+    //       //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+    //       //     corsImages.push(obj); // Keep a reference to this object
+    //       //     obj.visible = false; // Hide the object
+    //       //   }
+    //       // });
+
+    //       // Filter objects with type === "image" and get the first one
+    //       // const imageObjects = objects.filter((obj) => obj.type === "image");
+
+    //       // if (imageObjects.length > 0) {
+    //       //   corsImages.push(imageObjects[0]); // Push only the first image object
+    //       //   imageObjects[0].visible = false; // Hide the object
+    //       // }
+
+    //       // tempCanvas.renderAll(); // Render the canvas without CORS images
+    //       const firstObject = objects[0];
+    //       if (
+    //         firstObject &&
+    //         firstObject.type === "image" &&
+    //         firstObject.getSrc &&
+    //         firstObject.getSrc().startsWith("http") &&
+    //         !firstObject.clipPath
+    //       ) {
+    //         tempCanvas.remove(firstObject);
+    //       }
+    //       tempCanvas.renderAll();
+
+    //       // Generate the base64 image
+    //       try {
+    //         // const base64Image = tempCanvas.toDataURL({
+    //         //   format: "png",
+    //         //   quality: 1.0,
+    //         // });
+    //         const base64Image = tempCanvas.toDataURL({
+    //           format: "jpeg", // More compressed
+    //           quality: 1.0,
+    //         });
+
+    //         console.log(base64Image);
+
+    //         // Push the data into the array
+    //         meshImageDataArray.push({
+    //           meshName: tabId,
+    //           meshImageData: base64Image,
+    //         });
+    //       } catch (error) {
+    //         console.error(`Error generating image for Tab ID ${tabId}:`, error);
+    //       }
+
+    //       // Restore visibility of CORS images
+    //       // corsImages.forEach((obj) => {
+    //       //   obj.visible = true;
+    //       // });
+
+    //       // tempCanvas.renderAll(); // Re-render the canvas with all objects
+    //       // Re-insert the removed object (if any)
+    //       if (firstObject) {
+    //         tempCanvas.insertAt(firstObject, 0);
+    //       }
+
+    //       tempCanvas.renderAll();
+
+    //       // Clean up the temporary canvas
+    //       tempCanvas.clear();
+    //       tempCanvas.dispose();
+
+    //       if (
+    //         meshImageDataArray.length === Object.keys(tabCanvasStates).length
+    //       ) {
+    //         // console.log("Generated Images Array:", meshImageDataArray);
+    //         window.meshImageDataArray = meshImageDataArray;
+    //         console.log(
+    //           window.meshImageDataArray,
+    //           "Window data from gauci file"
+    //         );
+    //       }
+    //     });
+    //   });
+    // }
+    const meshImageDataArray = [];
+
+    selector.find(".thr-d").on("click", function () {
+      generateImagesFromCanvasStates(); // Just call the function, UI updates are handled inside
+    });
+    async function generateImagesFromCanvasStates() {
       saveCanvasState(activeTabId);
-      // Array to store image data for each tab
-      meshImageDataArray.length = 0;
-      Object.keys(tabCanvasStates).forEach((tabId) => {
-        // Create a temporary canvas with a width and height of 2048
-        const tempCanvas = new fabric.Canvas(null, {
-          width: 2048,
-          height: 2048,
-        });
-
-        // Load the JSON state into the temporary canvas
-        tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
-          const objects = tempCanvas.getObjects(); // Get all objects in the canvas
-          console.log(objects);
-          const corsImages = []; // Store references to CORS images
-
-          // Identify and hide CORS images
-          // objects.forEach((obj) => {
-          //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-          //     corsImages.push(obj); // Keep a reference to this object
-          //     obj.visible = false; // Hide the object
-          //   }
-          // });
-
-          // Filter objects with type === "image" and get the first one
-          const imageObjects = objects.filter((obj) => obj.type === "image");
-
-          if (imageObjects.length > 0) {
-            corsImages.push(imageObjects[0]); // Push only the first image object
-            imageObjects[0].visible = false; // Hide the object
-          }
-
-          tempCanvas.renderAll(); // Render the canvas without CORS images
-
-          // Generate the base64 image
-          try {
-            // const base64Image = tempCanvas.toDataURL({
-            //   format: "png",
-            //   quality: 1.0,
-            // });
-            const base64Image = tempCanvas.toDataURL({
-              format: "jpeg", // More compressed
-              quality: 1.0,
-            });
-
-            console.log(base64Image);
-
-            // Push the data into the array
-            meshImageDataArray.push({
-              meshName: tabId,
-              meshImageData: base64Image,
-            });
-          } catch (error) {
-            console.error(`Error generating image for Tab ID ${tabId}:`, error);
-          }
-
-          // Restore visibility of CORS images
-          corsImages.forEach((obj) => {
-            obj.visible = true;
+      meshImageDataArray.length = 0; // Clear the array
+      window.tabCanvasStates = tabCanvasStates;
+      const tabIds = Object.keys(tabCanvasStates);
+      const promises = tabIds.map((tabId) => {
+        return new Promise((resolve, reject) => {
+          // Create a temporary canvas with a width and height of 2048
+          const tempCanvas = new fabric.Canvas(null, {
+            width: 2048,
+            height: 2048,
           });
 
-          tempCanvas.renderAll(); // Re-render the canvas with all objects
+          // Load the JSON state into the temporary canvas
+          tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
+            try {
+              const objects = tempCanvas.getObjects();
+              console.log(`Objects for tab ${tabId}:`, objects);
 
-          // Clean up the temporary canvas
-          tempCanvas.clear();
-          tempCanvas.dispose();
+              const firstObject = objects[0];
+              if (
+                firstObject &&
+                firstObject.type === "image" &&
+                firstObject.getSrc &&
+                firstObject.getSrc().startsWith("http") &&
+                !firstObject.clipPath
+              ) {
+                tempCanvas.remove(firstObject);
+              }
+              tempCanvas.renderAll();
 
-          if (
-            meshImageDataArray.length === Object.keys(tabCanvasStates).length
-          ) {
-            // console.log("Generated Images Array:", meshImageDataArray);
-            window.meshImageDataArray = meshImageDataArray;
-            console.log(
-              window.meshImageDataArray,
-              "Window data from gauci file"
-            );
-          }
+              // Generate the base64 image
+              const base64Image = tempCanvas.toDataURL({
+                format: "jpeg",
+                quality: 1.0,
+              });
+
+              console.log(`Base64 image generated for ${tabId}`);
+
+              // Push the data into the array
+              meshImageDataArray.push({
+                meshName: tabId,
+                meshImageData: base64Image,
+              });
+
+              if (firstObject) {
+                tempCanvas.insertAt(firstObject, 0);
+              }
+
+              tempCanvas.renderAll();
+              tempCanvas.clear();
+              tempCanvas.dispose();
+
+              resolve();
+            } catch (error) {
+              console.error(
+                `Error generating image for Tab ID ${tabId}:`,
+                error
+              );
+              reject(error);
+            }
+          });
         });
       });
+
+      try {
+        await Promise.all(promises);
+        console.log("All images generated:", meshImageDataArray);
+        window.meshImageDataArray = meshImageDataArray;
+
+        // Move UI updates and event dispatch here
+        selector.find(".thr-d").addClass("active");
+        selector.find(".two-d").removeClass("active");
+        selector
+          .find(".td-interactive-btn-container-main-contianer")
+          .addClass("interactive-btn-alignment");
+        selector.find(".web-thr-d-main-container").addClass("display-unity");
+        selector.find("#gauci-canvas").addClass("hide-canvas");
+        selector.find("#gauci").addClass("hide-canva");
+
+        // Dispatch the event to trigger 3D model rendering
+        const event = new CustomEvent("thrDClicked");
+        document.dispatchEvent(event);
+      } catch (error) {
+        console.error("Error processing canvas states:", error);
+      }
     }
 
     function loadTemplateFromUrl() {
