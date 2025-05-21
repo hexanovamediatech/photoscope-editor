@@ -1969,7 +1969,7 @@ initialize3DViewer();
     }
     const data = await response.json();
     const dataArray = data.data; // Access the array from the data object
-    console.log(dataArray);
+    console.log("dataArray", dataArray);
     // console.log(Array.isArray(dataArray));
     if (dataArray === null) {
       hideSkeletonLoader();
@@ -2065,18 +2065,45 @@ initialize3DViewer();
         personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
       }
 
-      // Fetch favorites to compare with
-      const favoriteResponse = await fetch(
-        `${baseUrl}/api/v1/user/favorite/templates`,
-        {
-          method: "GET",
-          credentials: "include",
+      // Add these two new functions right after hideSkeletonLoader()
+      async function fetchFavorites() {
+        try {
+          const response = await fetch(
+            `${baseUrl}/api/v1/user/favorite/templates`,
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
+          const data = await response.json();
+          return data?.favorites?.map((fav) => fav.key) || [];
+        } catch (error) {
+          console.error("Error fetching favorites:", error);
+          return [];
         }
-      );
-      const favoriteData = await favoriteResponse.json();
+      }
+
+      function updateFavIcon(iconElement, isFav) {
+        iconElement.src = isFav
+          ? "../../assets/custom/heart-filled.png"
+          : "../../assets/custom/heart2.png";
+        iconElement.alt = isFav ? "Unfavorite" : "Favorite";
+        iconElement.style.filter = isFav ? "" : "brightness(0) invert(1)";
+      }
+
+      // // Fetch favorites to compare with
+      // const favoriteResponse = await fetch(
+      //   `${baseUrl}/api/v1/user/favorite/templates`,
+      //   {
+      //     method: "GET",
+      //     credentials: "include",
+      //   }
+      // );
+      // const favoriteData = await favoriteResponse.json();
       hideSkeletonLoader();
 
-      const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
+      // const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
+      let favoriteKeys = await fetchFavorites();
 
       filteredData.forEach((item) => {
         const mainDiv = document.createElement("div");
@@ -2113,64 +2140,123 @@ initialize3DViewer();
 
         container.appendChild(mainDiv);
         // Favorite icon using PNGs
+        // if (!item.isDummy) {
+        //   const favIcon = document.createElement("img");
+        //   favIcon.classList.add("template-fav-icon");
+        //   favIcon.id = "templateFavIcon";
+        //   // Check if this template is in the favorites list
+        //   const isFavorite = favoriteKeys?.includes(item.key);
+        //   favIcon.src = isFavorite
+        //     ? "../../assets/custom/heart-filled.png"
+        //     : "../../assets/custom/heart2.png";
+        //   favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
+        //   favIcon.style.cursor = "pointer";
+
+        //   if (!isFavorite) {
+        //     favIcon.style.filter = "brightness(0) invert(1)"; // Make heart2.png white
+        //   }
+
+        //   favIcon.addEventListener("mouseenter", () => {
+        //     if (isFavorite) {
+        //       favIcon.src = "../../assets/custom/heart2.png"; // Switch to unfilled on hover
+        //       favIcon.style.filter = "brightness(0) invert(1)"; // Make it white on hover
+        //     } else {
+        //       favIcon.src = "../../assets/custom/heart-filled.png"; // Switch to filled on hover
+        //       favIcon.style.filter = ""; // Remove the filter for heart-filled
+        //     }
+        //   });
+        //   favIcon.addEventListener("mouseleave", () => {
+        //     if (isFavorite) {
+        //       favIcon.src = "../../assets/custom/heart-filled.png"; // Return to filled if it's favorite
+        //       favIcon.style.filter = ""; // No filter for filled heart
+        //     } else {
+        //       favIcon.src = "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
+        //       favIcon.style.filter = "brightness(0) invert(1)"; // Keep it white
+        //     }
+        //   });
+        //   // newDiv.appendChild(favIcon);
+
+        //   mainDiv.appendChild(favIcon);
+
+        //   favIcon.addEventListener("click", async (e) => {
+        //     e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
+
+        //     const templateKey = item.key;
+
+        //     // Call the favorite toggle function
+        //     const isSuccess = await handleFavTempllate(templateKey);
+
+        //     // If the request was successful, immediately toggle the icon
+        //     if (isSuccess) {
+        //       const isCurrentlyFavorite =
+        //         favIcon.src.includes("heart-filled.png");
+        //       favIcon.src = isCurrentlyFavorite
+        //         ? "../../assets/custom/heart2.png"
+        //         : "../../assets/custom/heart-filled.png";
+        //       favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+
+        //       const message = isCurrentlyFavorite
+        //         ? "Removed from favorites!"
+        //         : "Added to favorites!";
+
+        //       Swal.fire({
+        //         title: message,
+        //         text: "Success",
+        //         icon: "success",
+        //       });
+        //     } else {
+        //       Swal.fire({
+        //         icon: "warning",
+        //         title: "Warning",
+        //         text: "Please login to add template into Favorites",
+        //       });
+        //     }
+        //   });
+        // }
         if (!item.isDummy) {
           const favIcon = document.createElement("img");
           favIcon.classList.add("template-fav-icon");
           favIcon.id = "templateFavIcon";
-          // Check if this template is in the favorites list
-          const isFavorite = favoriteKeys?.includes(item.key);
-          favIcon.src = isFavorite
-            ? "../../assets/custom/heart-filled.png"
-            : "../../assets/custom/heart2.png";
-          favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
+
+          // Initialize favorite state
+          let isFavorite = favoriteKeys.includes(item.key);
+          updateFavIcon(favIcon, isFavorite);
+
           favIcon.style.cursor = "pointer";
 
-          if (!isFavorite) {
-            favIcon.style.filter = "brightness(0) invert(1)"; // Make heart2.png white
-          }
-
+          // Hover effects
           favIcon.addEventListener("mouseenter", () => {
             if (isFavorite) {
-              favIcon.src = "../../assets/custom/heart2.png"; // Switch to unfilled on hover
-              favIcon.style.filter = "brightness(0) invert(1)"; // Make it white on hover
+              favIcon.src = "../../assets/custom/heart2.png";
+              favIcon.style.filter = "brightness(0) invert(1)";
             } else {
-              favIcon.src = "../../assets/custom/heart-filled.png"; // Switch to filled on hover
-              favIcon.style.filter = ""; // Remove the filter for heart-filled
+              favIcon.src = "../../assets/custom/heart-filled.png";
+              favIcon.style.filter = "";
             }
           });
+
           favIcon.addEventListener("mouseleave", () => {
-            if (isFavorite) {
-              favIcon.src = "../../assets/custom/heart-filled.png"; // Return to filled if it's favorite
-              favIcon.style.filter = ""; // No filter for filled heart
-            } else {
-              favIcon.src = "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
-              favIcon.style.filter = "brightness(0) invert(1)"; // Keep it white
-            }
+            updateFavIcon(favIcon, isFavorite);
           });
-          // newDiv.appendChild(favIcon);
 
           mainDiv.appendChild(favIcon);
 
+          // Click handler
           favIcon.addEventListener("click", async (e) => {
-            e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
-
+            e.stopPropagation();
             const templateKey = item.key;
 
-            // Call the favorite toggle function
             const isSuccess = await handleFavTempllate(templateKey);
 
-            // If the request was successful, immediately toggle the icon
             if (isSuccess) {
-              const isCurrentlyFavorite =
-                favIcon.src.includes("heart-filled.png");
-              favIcon.src = isCurrentlyFavorite
-                ? "../../assets/custom/heart2.png"
-                : "../../assets/custom/heart-filled.png";
-              favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
+              // Re-fetch favorites to get updated state
+              favoriteKeys = await fetchFavorites();
+              isFavorite = favoriteKeys.includes(item.key);
+              updateFavIcon(favIcon, isFavorite);
 
-              const message = isCurrentlyFavorite
-                ? "Removed from favorites!"
-                : "Added to favorites!";
+              const message = isFavorite
+                ? "Added to favorites!"
+                : "Removed from favorites!";
 
               Swal.fire({
                 title: message,
@@ -2178,6 +2264,10 @@ initialize3DViewer();
                 icon: "success",
               });
             } else {
+              // Revert state if failed
+              isFavorite = favoriteKeys.includes(item.key);
+              updateFavIcon(favIcon, isFavorite);
+
               Swal.fire({
                 icon: "warning",
                 title: "Warning",

@@ -578,6 +578,31 @@ button.gauci-icon-menu-btn {
   /* width: 90px; */
 }
 
+.gauci-file-field {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 12px 10px;
+  cursor: pointer;
+  height: auto;
+  margin: 0;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
+  transition: color 0.2s ease-in-out;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.gauci-file-field:hover {
+  background: #242631;
+}
+.gauci-upload-btn {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
 .gauci-icon-menu-title {
   /* font-family: 'Roboto Condensed', sans-serif; */
   font-family: "Inter", sans-serif;
