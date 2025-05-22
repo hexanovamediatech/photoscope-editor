@@ -1641,15 +1641,37 @@
             isPublic: isPublic,
           };
 
+          // uploadData(data)
+          //   .then(() => {
+          //     Swal.fire({
+          //       title: "Success",
+          //       text: "Template uploaded successfully!",
+          //       icon: "success",
+          //     });
+          //     Swal.close();
+          //     selector.find(".gauci-modal").hide();
+          //   })
+          //   .catch((error) => {
+          //     const message =
+          //       error.message || "Something went wrong during upload.";
+          //     toastr.error(message, "Error");
+          //     Swal.fire({
+          //       icon: "error",
+          //       title: "Upload Failed",
+          //       text: message,
+          //     });
+          //   });
           uploadData(data)
             .then(() => {
               Swal.fire({
                 title: "Success",
                 text: "Template uploaded successfully!",
                 icon: "success",
+                confirmButtonText: "OK", // <-- this sets the button text
+              }).then(() => {
+                // After user clicks OK, close modal
+                selector.find(".gauci-modal").hide();
               });
-              Swal.close();
-              selector.find(".gauci-modal").hide();
             })
             .catch((error) => {
               const message =
@@ -7941,26 +7963,81 @@
     //   }
     // }
 
+    // function loadCanvasState(tabId) {
+    //   editButtonActive = false;
+
+    //   if (tabCanvasStates[tabId]) {
+    //     console.log(tabCanvasStates[tabId]);
+    //     canvas.loadFromJSON(tabCanvasStates[tabId], () => {
+    //       logSelectedObject(canvas);
+    //       canvas.renderAll();
+    //       console.log(canvas.toJSON());
+    //       const allObjects = canvas.getObjects();
+    //       // console.log(allObjects, "All Canvas Objects");
+
+    //       if (canvas) {
+    //         const targetObject = allObjects.find(
+    //           (obj) => obj.type === "image" && obj.src.startsWith("http")
+    //         );
+    //         console.log(targetObject);
+
+    //         if (targetObject) {
+    //           targetObject.set({
+    //             selectable: false,
+    //             evented: false,
+    //             hasControls: false,
+    //           });
+    //         }
+
+    //         const targetMaskObject = allObjects.find(
+    //           (obj) => obj.type === "image" && obj.clipPath
+    //         );
+    //         console.log(targetMaskObject);
+
+    //         canvas.renderAll();
+    //         console.log(canvas.toJSON());
+    //       }
+    //       console.log(`Loaded canvas state for Tab ${tabId}`);
+    //       console.log(activeTabId);
+    //       console.log(tabCanvasStates);
+    //       logSelectedObject(canvas);
+    //     });
+    //   } else {
+    //     AddingImage();
+    //     console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
+    //   }
+
+    //   console.log(
+    //     "Canvas event listeners after function:",
+    //     canvas.__eventListeners
+    //   ); // Debug: Final check
+    // }
+
     function loadCanvasState(tabId) {
       editButtonActive = false;
-      // console.log("Canvas before load:", canvas); // Debug: Log canvas instance
-      // console.log(
-      //   "Canvas event listeners before load:",
-      //   canvas.__eventListeners
-      // ); // Debug: Check listeners before load
 
       if (tabCanvasStates[tabId]) {
-        canvas.loadFromJSON(tabCanvasStates[tabId], () => {
-          // console.log("Canvas after loadFromJSON:", canvas); // Debug: Log canvas instance after load
-          // console.log(
-          //   "Canvas event listeners after load:",
-          //   canvas.__eventListeners
-          // ); // Debug: Check listeners after load
+        // Parse stringified JSON
+        let jsonData = JSON.parse(tabCanvasStates[tabId]);
+
+        // Modify image URLs with cache busting
+        jsonData.objects.forEach((obj) => {
+          if (obj.type === "image" && obj.src.startsWith("http")) {
+            obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
+          }
+        });
+
+        // Stringify modified JSON
+        tabCanvasStates[tabId] = JSON.stringify(jsonData);
+
+        console.log(tabCanvasStates[tabId]);
+
+        // Load modified JSON into canvas
+        canvas.loadFromJSON(jsonData, () => {
           logSelectedObject(canvas);
           canvas.renderAll();
           console.log(canvas.toJSON());
           const allObjects = canvas.getObjects();
-          // console.log(allObjects, "All Canvas Objects");
 
           if (canvas) {
             const targetObject = allObjects.find(
@@ -7980,49 +8057,6 @@
               (obj) => obj.type === "image" && obj.clipPath
             );
             console.log(targetMaskObject);
-            // if (targetMaskObject) {
-            //   storedActiveObject = targetMaskObject;
-            //   storedClipPath = targetMaskObject.clipPath;
-            //   let path = targetMaskObject.clipPath.path;
-            //   console.log("Stored object:", storedActiveObject);
-            //   console.log(
-            //     "Clip path position:",
-            //     storedClipPath?.top,
-            //     storedClipPath?.left
-            //   );
-
-            //   shell = new fabric.Path(path, {
-            //     fill: "", // Transparent shell
-            //     stroke: "black",
-            //     strokeWidth: 2,
-            //     scaleX: storedClipPath.scaleX,
-            //     scaleY: storedClipPath.scaleY,
-            //     lockScalingX: false,
-            //     lockScalingY: false,
-            //     lockSkewingX: true,
-            //     lockSkewingY: true,
-            //     originX: storedClipPath.originX,
-            //     originY: storedClipPath.originY,
-            //     top: storedClipPath.top,
-            //     left: storedClipPath.left,
-            //     selectable: true, // Make it interactive
-            //   });
-            //   function updateClipPathPosition() {
-            //     storedClipPath.set({
-            //       top: shell.top,
-            //       left: shell.left,
-            //       angle: shell.angle,
-            //       scaleX: shell.scaleX,
-            //       scaleY: shell.scaleY,
-            //     });
-            //     storedActiveObject.clipPath = storedClipPath;
-            //     canvas.requestRenderAll();
-            //   }
-            //   shell.on("moving", updateClipPathPosition);
-            //   shell.on("scaling", updateClipPathPosition);
-            //   shell.on("rotating", updateClipPathPosition);
-            //   handleMaskingDone();
-            // }
 
             canvas.renderAll();
             console.log(canvas.toJSON());
@@ -8040,7 +8074,7 @@
       console.log(
         "Canvas event listeners after function:",
         canvas.__eventListeners
-      ); // Debug: Final check
+      );
     }
 
     // On document ready, fetch image data
