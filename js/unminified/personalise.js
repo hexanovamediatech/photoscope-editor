@@ -1614,6 +1614,12 @@ function loadJSONToCanvas(jsonData) {
       }
     }
   });
+  jsonData.objects.forEach((obj) => {
+    if (obj.type === "image" && obj.src.startsWith("http")) {
+      obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
+    }
+  });
+  console.log(jsonData);
   newFabricCanvas.loadFromJSON(
     jsonData,
     function () {
