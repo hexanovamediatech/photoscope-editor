@@ -154,20 +154,30 @@ function initPersonalise() {
     loadedModel.traverse((child) => {
       if (child.isMesh && child.material) {
         if (Array.isArray(child.material)) {
-          // If the mesh has multiple materials
+
           child.material.forEach((material) => {
             material.side = THREE.DoubleSide;
+              if (!material.map) {
+            material.map = null;
+             material.color = new THREE.Color(0xffffff);
+           material.needsUpdate = true;
+        }
           });
         } else {
           // For single material
           child.material.side = THREE.DoubleSide;
+        
+           if (!child.material.map) {
+         child.material.map = null;
+        child.material.color = new THREE.Color(0xffffff);
+        child.material.needsUpdate = true;
+      }
+       
         }
       }
     });
     centerModel(loadedModel, camera);
-    // Add the centered model to the scene
     scene.add(loadedModel);
-    // loader.style.display = "none";
     hideLoader(loader);
   });
 
@@ -187,9 +197,11 @@ function initPersonalise() {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.minDistance = 1;
-  controls.maxDistance = 2;
-  controls.target.set(0, 0, 0); // Ensure controls target the center of the scene
+  // controls.minDistance = 1;
+  // controls.maxDistance = 2;
+  controls.minDistance = 0.9; // 10% less than before
+controls.maxDistance = 1.8;
+  controls.target.set(0, 0, 0);
   controls.update();
   onWindowResizePersonalise();
   window.addEventListener("resize", onWindowResizePersonalise);
