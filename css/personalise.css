@@ -820,6 +820,20 @@ button#personaliseAdjustBtn img {
   cursor: pointer;
   font-size: 20px;
 }
+.go-back-btn {
+  position: absolute;
+  bottom: -55px;
+  left: 20px;
+  /* margin-top: 20px; */
+  width: 80px;
+  padding: 5px 10px;
+  text-align: center;
+  /* border-radius: 40px; */
+  cursor: pointer;
+  z-index: 9;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 40px;
+}
 .save-icon-main-editor {
   border-top-left-radius: 40px;
   border-bottom-left-radius: 40px;
@@ -1042,6 +1056,11 @@ button#personaliseAdjustBtn img {
 }
 .hexa-drop-down-select-cont:hover {
   background: #0188d4;
+}
+
+.template-image-box.dummy {
+  cursor: default !important;
+  pointer-events: none; /* disables click and hover events */
 }
 
 @media (min-width: 1200px) {

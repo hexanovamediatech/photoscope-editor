@@ -1984,7 +1984,7 @@ initialize3DViewer();
       for (let i = 0; i < dummyTemplateCount; i++) {
         const dummyTemplate = {
           name: `Template ${i + 1}`,
-          imageUrl: "../../assets/custom/temp-img-2.jpg",
+          imageUrl: "../../assets/custom/dummy-temp.png",
           key: `dummy-template-${i + 1}`,
           isPublic: true,
           src: "path/to/dummy/template.json",
@@ -2033,6 +2033,10 @@ initialize3DViewer();
           overlay.id = "templateOverLay";
           overlay.src = "../../assets/custom/overlay-temp.png";
           mainDiv.appendChild(overlay);
+          mainDiv.style.cursor = "default";
+          mainDiv.style.pointerEvents = "none"; // optional: disable clicks completely
+          // mainDiv.classList.add("dummy");
+          return; // Don't attach click li
         }
       });
     }
@@ -2051,7 +2055,7 @@ initialize3DViewer();
         for (let i = 0; i < dummyTemplateCount; i++) {
           const dummyTemplate = {
             name: `Template ${i + 1}`,
-            imageUrl: "../../assets/custom/temp-img-2.jpg",
+            imageUrl: "../../assets/custom/dummy-temp.png",
             key: `dummy-template-${i + 1}`,
             isPublic: true,
             src: "path/to/dummy/template.json",
@@ -2115,7 +2119,7 @@ initialize3DViewer();
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("template-main-cont");
 
-        let dummyimageUrl = "../../assets/custom/temp-img-2.jpg";
+        let dummyimageUrl = "../../assets/custom/dummy-temp.png";
         const imageDiv = document.createElement("div");
 
         imageDiv.classList.add("template-image-cont");
@@ -2288,6 +2292,10 @@ initialize3DViewer();
           overlay.id = "templateOverLay";
           overlay.src = "../../assets/custom/overlay-temp.png";
           mainDiv.appendChild(overlay);
+          mainDiv.style.cursor = "default";
+          mainDiv.style.pointerEvents = "none"; // optional: disable clicks completely
+          // mainDiv.classList.add("dummy");
+          return; // Don't attach click li
         }
         // let isDropdownEventAttached = false;
         mainDiv.addEventListener("click", async () => {

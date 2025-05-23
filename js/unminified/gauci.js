@@ -3586,6 +3586,24 @@
     //     console.log("No saved canvas JSON found in localStorage.");
     //   }
     // });
+    // selector.find("#go-back-mini").on("click", function () {
+    //   var $mainContainer = selector.find("#mini-editor-main-cont");
+    //   var $buttonContainer = selector.find("#webg-buttons-container");
+
+    //   // Remove the 'personalise-page-active' class from the main container
+    //   // $mainContainer.removeClass("personalise-page-active");
+    //   // // Add the 'personalise-page-inactive' class to the main container
+    //   // $mainContainer.addClass("personalise-page-inactive");
+    //   // $buttonContainer.removeClass("toggle-2d-3d-cont");
+    //   $mainContainer.addClass("personalise-page-active");
+    //   // Add the 'personalise-page-inactive' class to the main container
+    //   $mainContainer.removeClass("personalise-page-inactive");
+    //   $buttonContainer.addClass("toggle-2d-3d-cont");
+    //   canvas.clear();
+    // });
+    selector.find("#go-back-mini").on("click", function () {
+      location.reload();
+    });
 
     selector.find("#openEditor").on("click", function () {
       var $mainContainer = selector.find("#mini-editor-main-cont");
@@ -3710,89 +3728,94 @@
       var editedCanvasJson = window.editedCanvasJson;
       // var originalCanvasJson = window.originalCanvasJson;
       console.log(editedCanvasJson);
-      var selectedOrginalFormat = window.selectedOriginalJsonPart;
-      var orginalDataFormat = window.originalFormat;
+      if (editedCanvasJson) {
+        var selectedOrginalFormat = window.selectedOriginalJsonPart;
+        var orginalDataFormat = window.originalFormat;
 
-      var editedArrayFormat = Object.keys(orginalDataFormat).map((key) => ({
-        part: key,
-        jsonData: JSON.parse(orginalDataFormat[key]),
-      }));
-      var newObject = {
-        part: selectedOrginalFormat.part,
-        jsonData: editedCanvasJson,
-      };
+        var editedArrayFormat = Object.keys(orginalDataFormat).map((key) => ({
+          part: key,
+          jsonData: JSON.parse(orginalDataFormat[key]),
+        }));
+        var newObject = {
+          part: selectedOrginalFormat.part,
+          jsonData: editedCanvasJson,
+        };
 
-      console.log(newObject);
-      console.log(editedArrayFormat);
-      // Step 1: Filter original object by part
-      var originalMatched = editedArrayFormat.find(
-        (obj) => obj.part === newObject.part
-      );
+        console.log(newObject);
+        console.log(editedArrayFormat);
+        // Step 1: Filter original object by part
+        var originalMatched = editedArrayFormat.find(
+          (obj) => obj.part === newObject.part
+        );
 
-      if (originalMatched) {
-        var originalObjects = originalMatched.jsonData.objects || [];
-        var modifiedObjects = newObject.jsonData.objects || [];
+        if (originalMatched) {
+          var originalObjects = originalMatched.jsonData.objects || [];
+          var modifiedObjects = newObject.jsonData.objects || [];
 
-        // Step 2: Fill missing data in modified objects from original
-        modifiedObjects.forEach((modObj, index) => {
-          let origObj = originalObjects[index];
-          if (origObj) {
-            for (let key in origObj) {
-              if (!(key in modObj)) {
-                modObj[key] = origObj[key];
+          // Step 2: Fill missing data in modified objects from original
+          modifiedObjects.forEach((modObj, index) => {
+            let origObj = originalObjects[index];
+            if (origObj) {
+              for (let key in origObj) {
+                if (!(key in modObj)) {
+                  modObj[key] = origObj[key];
+                }
               }
             }
-          }
 
-          // ✅ Step 3: Convert crossOrigin: null → "anonymous"
-          if (modObj.crossOrigin === null) {
-            modObj.crossOrigin = "anonymous";
-          }
+            // ✅ Step 3: Convert crossOrigin: null → "anonymous"
+            if (modObj.crossOrigin === null) {
+              modObj.crossOrigin = "anonymous";
+            }
 
-          if (modObj.scaleX !== undefined) modObj.scaleX *= 4.55;
-          if (modObj.scaleY !== undefined) modObj.scaleY *= 4.55;
-          if (modObj.left !== undefined) modObj.left *= 4.55;
-          if (modObj.top !== undefined) modObj.top *= 4.55;
+            if (modObj.scaleX !== undefined) modObj.scaleX *= 4.55;
+            if (modObj.scaleY !== undefined) modObj.scaleY *= 4.55;
+            if (modObj.left !== undefined) modObj.left *= 4.55;
+            if (modObj.top !== undefined) modObj.top *= 4.55;
 
-          // ✅ Step 4: Handle clipPath if present
-          if (modObj.clipPath) {
-            let clip = modObj.clipPath;
-            if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
-            if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
-            if (clip.left !== undefined) clip.left *= 4.55;
-            if (clip.top !== undefined) clip.top *= 4.55;
+            // ✅ Step 4: Handle clipPath if present
+            if (modObj.clipPath) {
+              let clip = modObj.clipPath;
+              if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
+              if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
+              if (clip.left !== undefined) clip.left *= 4.55;
+              if (clip.top !== undefined) clip.top *= 4.55;
+            }
+          });
+
+          // Step 4: Assign updated objects back to jsonData
+          newObject.jsonData.objects = modifiedObjects;
+        }
+
+        // Final result
+        console.log(newObject);
+        var updatedArrayFormat = editedArrayFormat.map((obj) => {
+          if (obj.part === newObject.part) {
+            return newObject; // Replace with modified object
           }
+          return obj; // Keep as is
         });
 
-        // Step 4: Assign updated objects back to jsonData
-        newObject.jsonData.objects = modifiedObjects;
+        console.log(updatedArrayFormat);
+        const originalFormat = {};
+        updatedArrayFormat.forEach((item) => {
+          originalFormat[item.part] = JSON.stringify(item.jsonData);
+        });
+        console.log(originalFormat);
+
+        console.log(tabCanvasStates);
+        console.log(activeTabId);
+        console.log(preservedImage);
+        console.log(layoutSource);
+        tabCanvasStates = originalFormat;
+        allCanvasTabState = originalFormat;
+        loadCanvasState(activeTabId);
+        console.log(allCanvasTabState);
+        console.log(mainPart);
       }
-
-      // Final result
-      console.log(newObject);
-      var updatedArrayFormat = editedArrayFormat.map((obj) => {
-        if (obj.part === newObject.part) {
-          return newObject; // Replace with modified object
-        }
-        return obj; // Keep as is
-      });
-
-      console.log(updatedArrayFormat);
-      const originalFormat = {};
-      updatedArrayFormat.forEach((item) => {
-        originalFormat[item.part] = JSON.stringify(item.jsonData);
-      });
-      console.log(originalFormat);
-
-      console.log(tabCanvasStates);
-      console.log(activeTabId);
-      console.log(preservedImage);
-      console.log(layoutSource);
-      tabCanvasStates = originalFormat;
-      allCanvasTabState = originalFormat;
-      loadCanvasState(activeTabId);
-      console.log(allCanvasTabState);
-      console.log(mainPart);
+      //  else {
+      //   fetchImageData();
+      // }
     });
 
     /**Disable Right Click */
