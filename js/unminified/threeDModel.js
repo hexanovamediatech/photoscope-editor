@@ -280,7 +280,7 @@ function init() {
     0.1,
     20
   );
-  camera.position.set(0, 0.08, 1); // Position camera farther to accommodate larger models
+  camera.position.set(0, 0, 0); // Position camera farther to accommodate larger models
 
   scene = new THREE.Scene();
 
@@ -392,7 +392,7 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  controls.minDistance = 1; // Minimum zoom distance
+  controls.minDistance = 0.3; // Minimum zoom distance
   controls.maxDistance = 2; // Maximum zoom distance
   controls.target.set(0, 0, 0);
   controls.update();
@@ -409,7 +409,7 @@ function centerModel(model, camera) {
   center = box.getCenter(new THREE.Vector3());
 
   // Calculate scaling factor to fit the model within the desired size
-  const targetSize = 1; // Adjust this value if needed
+  const targetSize = 0.29; // Adjust this value if needed
   const maxSize = Math.max(size.x, size.y, size.z);
   const scaleFactor = targetSize / maxSize;
 
@@ -427,7 +427,7 @@ function centerModel(model, camera) {
   camera.position.set(
     0,
     Math.max(size.y * scaleFactor, 1.5),
-    size.z * scaleFactor * 2
+    size.z * scaleFactor * 5                            
   );
   camera.lookAt(center);
 }
@@ -448,64 +448,6 @@ function render() {
   renderer.render(scene, camera);
 }
 
-// function changeTexture(newUrl) {
-//   if (scene) {
-//     const textureLoader = new THREE.TextureLoader();
-//     const specificMesh = scene.getObjectByName(selectedMesh);
-//     console.log(specificMesh, "specific mesh name");
-//     if (specificMesh) {
-//       textureLoader.load(
-//         "assets/3d/76_leather texture-seamless.jpg",
-//         (bumpMap) => {
-//           textureLoader.load(newUrl, (texture) => {
-//             const material = new THREE.MeshStandardMaterial({
-//               map: texture,
-//               // normalMap: texture,
-//               // bumpMap: bumpMap,
-//               roughness: 1,
-//               metalness: 1,
-//               opacity: 1,
-//               bumpScale: 0.5,
-//               side: THREE.DoubleSide,
-//             });
-//             specificMesh.material = material;
-
-//             if (selectedMesh === "P2_Top2") {
-//               texture.repeat.set(1.9, -1.9);
-//               texture.offset.set(0.92, 0.5);
-//             } else if (selectedMesh === "P3_typ3_Top") {
-//               texture.repeat.set(1.23, -1.23);
-//               texture.offset.set(0.875, 1.13);
-//             } else if (selectedMesh === "P3_Top") {
-//               texture.repeat.set(1.7, -1.7);
-//               texture.offset.set(1.0, 1.04);
-//             } else if (selectedMesh === "Booklet_innner") {
-//               console.log("No changes required");
-//             } else if (selectedMesh === "P5_typ1") {
-//               texture.repeat.set(1, -1);
-//               texture.offset.set(1, 1);
-//             } else if (selectedMesh === "Ear_L2") {
-//               texture.repeat.set(1, -1);
-//               texture.offset.set(1, 1);
-//             } else if (selectedMesh === "part2") {
-//               texture.repeat.set(-1, 1);
-//               texture.offset.set(1, 1);
-//             } else if (selectedMesh === "polySurface1") {
-//               texture.repeat.set(1, -1);
-//             } else {
-//               console.warn(
-//                 "No specific texture settings for selectedMesh:",
-//                 selectedMesh
-//               );
-//             }
-
-//             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-//           });
-//         }
-//       );
-//     }
-//   }
-// }
 function applyTexturesToMeshes() {
   meshImageDataArray = window.meshImageDataArray;
   console.log(
@@ -513,10 +455,7 @@ function applyTexturesToMeshes() {
     meshImageDataArray.length,
     "Mesh Image from threeD Model"
   );
-  // if (!scene) {
-  //   console.error("Scene is not initialized.");
-  //   return;
-  // }
+  
 
   const textureLoader = new THREE.TextureLoader();
 
@@ -592,96 +531,3 @@ function applyTexturesToMeshes() {
     }
   });
 }
-// function applyTexturesToMeshes() {
-//   const meshImageDataArray = window.meshImageDataArray;
-//   console.log("meshImageDataArray:", meshImageDataArray);
-
-//   if (!scene) {
-//     console.error("Scene is not initialized.");
-//     return;
-//   }
-
-//   const textureLoader = new THREE.TextureLoader();
-
-//   for (let i = 0; i < meshImageDataArray.length; i++) {
-//     const meshData = meshImageDataArray[i];
-//     const { meshName, meshImageData } = meshData;
-//     console.log(`Processing mesh ${i}: ${meshName}`);
-
-//     const specificMesh = scene.getObjectByName(meshName);
-//     if (!specificMesh) {
-//       console.error(`Mesh not found: ${meshName}`);
-//       continue;
-//     }
-
-//     textureLoader.load(
-//       "assets/3d/76_leather_texture-seamless.jpg",
-//       (bumpMap) => {
-//         textureLoader.load(
-//           meshImageData,
-//           (texture) => {
-//             console.log(`Texture loaded for ${meshName}`);
-//             const material = new THREE.MeshStandardMaterial({
-//               map: texture,
-//               roughness: 1,
-//               metalness: 1,
-//               opacity: 1,
-//               side: THREE.DoubleSide,
-//             });
-
-//             specificMesh.material = material;
-//             specificMesh.material.needsUpdate = true;
-
-//             switch (meshName) {
-//               case "P2_Top2":
-//                 texture.repeat.set(1.9, -1.9);
-//                 texture.offset.set(0.92, 0.5);
-//                 break;
-//               case "P3_typ3_Top":
-//                 texture.repeat.set(1.23, -1.23);
-//                 texture.offset.set(0.875, 1.13);
-//                 break;
-//               case "P3_Top":
-//                 texture.repeat.set(1.7, -1.7);
-//                 texture.offset.set(1.0, 1.04);
-//                 break;
-//               case "Booklet_innner":
-//                 console.log("No changes required for this mesh.");
-//                 break;
-//               case "P5_typ1":
-//                 texture.repeat.set(1, -1);
-//                 texture.offset.set(1, 1);
-//                 break;
-//               case "Ear_L2":
-//                 texture.repeat.set(1, -1);
-//                 texture.offset.set(1, 1);
-//                 break;
-//               case "part2":
-//                 texture.repeat.set(-1, 1);
-//                 texture.offset.set(1, 1);
-//                 break;
-//               case "polySurface1":
-//                 texture.repeat.set(1, -1);
-//                 break;
-//               default:
-//                 console.warn(
-//                   `No specific texture settings for mesh: ${meshName}`
-//                 );
-//             }
-
-//             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-//             console.log(`Texture applied to ${meshName}`);
-//           },
-//           undefined,
-//           (error) => {
-//             console.error(`Error loading texture for ${meshName}:`, error);
-//           }
-//         );
-//       },
-//       undefined,
-//       (error) => {
-//         console.error(`Error loading bump map for ${meshName}:`, error);
-//       }
-//     );
-//   }
-// }
