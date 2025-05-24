@@ -595,7 +595,7 @@ button.gauci-icon-menu-btn {
   align-items: center;
   justify-content: center;
 }
-.gauci-file-field:hover {
+.gauci-upload-btn-container:hover {
   background: #242631;
 }
 .gauci-upload-btn {
