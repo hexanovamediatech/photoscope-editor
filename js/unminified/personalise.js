@@ -154,25 +154,23 @@ function initPersonalise() {
     loadedModel.traverse((child) => {
       if (child.isMesh && child.material) {
         if (Array.isArray(child.material)) {
-
           child.material.forEach((material) => {
             material.side = THREE.DoubleSide;
-              if (!material.map) {
-            material.map = null;
-             material.color = new THREE.Color(0xffffff);
-           material.needsUpdate = true;
-        }
+            if (!material.map) {
+              material.map = null;
+              material.color = new THREE.Color(0xffffff);
+              material.needsUpdate = true;
+            }
           });
         } else {
           // For single material
           child.material.side = THREE.DoubleSide;
-        
-           if (!child.material.map) {
-         child.material.map = null;
-        child.material.color = new THREE.Color(0xffffff);
-        child.material.needsUpdate = true;
-      }
-       
+
+          if (!child.material.map) {
+            child.material.map = null;
+            child.material.color = new THREE.Color(0xffffff);
+            child.material.needsUpdate = true;
+          }
         }
       }
     });
@@ -200,7 +198,7 @@ function initPersonalise() {
   // controls.minDistance = 1;
   // controls.maxDistance = 2;
   controls.minDistance = 0.9; // 10% less than before
-controls.maxDistance = 1.8;
+  controls.maxDistance = 1.8;
   controls.target.set(0, 0, 0);
   controls.update();
   onWindowResizePersonalise();
@@ -482,6 +480,103 @@ function changeTexture(newUrl) {
 //   });
 // }
 
+// function resetModel() {
+//   scene.traverse((object) => {
+//     if (object.isMesh && object.material) {
+//       if (Array.isArray(object.material)) {
+//         object.material.forEach((material) => {
+//           material.map = null; // Remove texture
+//           material.color = new THREE.Color(0xffffff); // Default white
+//           material.side = THREE.DoubleSide;
+//           material.roughness = 1;
+//           material.metalness = 1;
+//           material.needsUpdate = true;
+//         });
+//       } else {
+//         object.material.map = null; // Remove texture
+//         object.material.color = new THREE.Color(0xffffff); // Default white
+//         object.material.side = THREE.DoubleSide;
+//         object.material.roughness = 1;
+//         object.material.metalness = 1;
+//         object.material.needsUpdate = true;
+//       }
+//     }
+//   });
+//   // Clear texture data array
+//   meshImageDataArray = [];
+// }
+// function resetModel() {
+//   // Remove existing model from the scene
+//   scene.children.forEach((child) => {
+//     if (child.isGroup || child.isMesh) {
+//       scene.remove(child);
+//     }
+//   });
+
+//   // Reload the GLB model to restore original materials and textures
+//   new GLTFLoader().load(modelSource, function (gltf) {
+//     const loadedModel = gltf.scene;
+
+//     loadedModel.traverse((child) => {
+//       if (child.isMesh && child.material) {
+//         if (Array.isArray(child.material)) {
+//           child.material.forEach((material) => {
+//             material.side = THREE.DoubleSide; // Keep original textures/materials
+//             material.needsUpdate = true;
+//           });
+//         } else {
+//           child.material.side = THREE.DoubleSide; // Keep original textures/materials
+//           child.material.needsUpdate = true;
+//         }
+//       }
+//     });
+
+//     centerModel(loadedModel, camera);
+//     scene.add(loadedModel);
+//   });
+
+//   // Clear texture data array
+//   meshImageDataArray = [];
+// }
+function resetModel() {
+  // Remove existing model from the scene
+  scene.children.forEach((child) => {
+    if (child.isGroup || child.isMesh) {
+      scene.remove(child);
+    }
+  });
+
+  // Reload the GLB model to restore original materials and textures
+  new GLTFLoader().load(modelSource, function (gltf) {
+    const loadedModel = gltf.scene;
+
+    loadedModel.traverse((child) => {
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach((material) => {
+            material.side = THREE.DoubleSide;
+            if (!material.map) {
+              material.color = new THREE.Color(0xffffff); // Set white for no texture
+            }
+            material.needsUpdate = true;
+          });
+        } else {
+          child.material.side = THREE.DoubleSide;
+          if (!child.material.map) {
+            child.material.color = new THREE.Color(0xffffff); // Set white for no texture
+          }
+          child.material.needsUpdate = true;
+        }
+      }
+    });
+
+    centerModel(loadedModel, camera);
+    scene.add(loadedModel);
+  });
+
+  // Clear texture data array
+  meshImageDataArray = [];
+}
 function applyTexturesToMeshes() {
   const textureLoader = new THREE.TextureLoader();
   const appliedMeshNames = meshImageDataArray.map((d) => d.meshName);
@@ -1950,6 +2045,386 @@ initialize3DViewer();
 //   console.log(selectedModelPart, "updated text content");
 // });
 
+// (async () => {
+//   var container = document.getElementById("template-cont-box");
+//   function showSkeletonLoader() {
+//     const skeletonContainer = document.createElement("div");
+//     skeletonContainer.classList.add("skeleton-container");
+
+//     for (let i = 0; i < 10; i++) {
+//       const skeletonBox = document.createElement("div");
+//       skeletonBox.classList.add("skeleton-box");
+
+//       const skeletonText = document.createElement("div");
+//       skeletonText.classList.add("skeleton-text");
+
+//       skeletonBox.appendChild(skeletonText);
+//       skeletonContainer.appendChild(skeletonBox);
+//     }
+
+//     container.appendChild(skeletonContainer);
+//   }
+
+//   function hideSkeletonLoader() {
+//     const skeletonContainer = container.querySelector(".skeleton-container");
+//     if (skeletonContainer) {
+//       container.removeChild(skeletonContainer); // Remove the skeleton loader
+//     }
+//   }
+
+//   // Show the skeleton loader before fetching data
+//   showSkeletonLoader();
+
+//   try {
+//     const response = await fetch(`${baseUrl}/api/v1/user/get/all/templates`);
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
+//     const data = await response.json();
+//     const dataArray = data.data; // Access the array from the data object
+//     console.log("dataArray", dataArray);
+//     // console.log(Array.isArray(dataArray));
+//     if (dataArray === null) {
+//       hideSkeletonLoader();
+//       const emptyData = [];
+//       const dummyTemplateCount = 10;
+//       for (let i = 0; i < dummyTemplateCount; i++) {
+//         const dummyTemplate = {
+//           name: `Template ${i + 1}`,
+//           imageUrl: "../../assets/custom/dummy-temp.png",
+//           key: `dummy-template-${i + 1}`,
+//           isPublic: true,
+//           src: "path/to/dummy/template.json",
+//           isDummy: true,
+//         };
+//         emptyData.push(dummyTemplate);
+//       }
+//       console.log(emptyData);
+//       emptyData.forEach((item) => {
+//         const mainDiv = document.createElement("div");
+//         mainDiv.classList.add("template-main-cont");
+
+//         const imageDiv = document.createElement("div");
+//         imageDiv.classList.add("template-image-cont");
+
+//         const newImg = document.createElement("img");
+//         newImg.src = item.imageUrl;
+//         newImg.alt = item.name;
+//         newImg.classList.add("template-image-box");
+//         newImg.loading = "lazy";
+
+//         imageDiv.appendChild(newImg);
+
+//         const nameP = document.createElement("p");
+//         // nameP.textContent = item.name;
+//         if (item.name.length > 12) {
+//           // Show the first 10 characters followed by "..."
+//           nameP.textContent = item.name.substring(0, 12) + "...";
+//           // Set the title attribute to show the full name on hover
+//           nameP.setAttribute("title", item.name);
+//         } else {
+//           // If the name is less than or equal to 10 characters, show it fully
+//           nameP.textContent = item.name;
+//         }
+//         nameP.classList.add("template-name-tag");
+
+//         mainDiv.appendChild(imageDiv);
+//         mainDiv.appendChild(nameP);
+
+//         container.appendChild(mainDiv);
+//         // Favorite icon using PNGs
+
+//         if (item.isDummy) {
+//           const overlay = document.createElement("img");
+//           overlay.classList.add("template-overlay-icon");
+//           overlay.id = "templateOverLay";
+//           overlay.src = "../../assets/custom/overlay-temp.png";
+//           mainDiv.appendChild(overlay);
+//           mainDiv.style.cursor = "default";
+//           mainDiv.style.pointerEvents = "none"; // optional: disable clicks completely
+//           // mainDiv.classList.add("dummy");
+//           return; // Don't attach click li
+//         }
+//       });
+//     }
+//     if (Array.isArray(dataArray)) {
+//       // Filter the objects with type "p2-type1"
+
+//       const urlParams = new URLSearchParams(window.location.search);
+//       const name = urlParams.get("name");
+
+//       const filteredData = dataArray.filter(
+//         (obj) => obj.type === name && obj.isPublic === true
+//       );
+//       console.log(filteredData);
+//       if (filteredData.length < 10) {
+//         const dummyTemplateCount = 10 - filteredData.length;
+//         for (let i = 0; i < dummyTemplateCount; i++) {
+//           const dummyTemplate = {
+//             name: `Template ${i + 1}`,
+//             imageUrl: "../../assets/custom/dummy-temp.png",
+//             key: `dummy-template-${i + 1}`,
+//             isPublic: true,
+//             src: "path/to/dummy/template.json",
+//             isDummy: true,
+//           };
+//           filteredData.push(dummyTemplate);
+//         }
+//       }
+//       const personaliseButton = document.getElementById(
+//         "personaliseOpenPopupBtn"
+//       );
+
+//       // Check if the filtered data is empty, and hide the button if it is
+//       if (filteredData.length === 0) {
+//         personaliseButton.style.display = "none"; // Hide the button
+//       } else {
+//         personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
+//       }
+
+//       // Add these two new functions right after hideSkeletonLoader()
+//       async function fetchFavorites() {
+//         try {
+//           const response = await fetch(
+//             `${baseUrl}/api/v1/user/favorite/templates`,
+//             {
+//               method: "GET",
+//               credentials: "include",
+//             }
+//           );
+//           const data = await response.json();
+//           return data?.favorites?.map((fav) => fav.key) || [];
+//         } catch (error) {
+//           console.error("Error fetching favorites:", error);
+//           return [];
+//         }
+//       }
+
+//       function updateFavIcon(iconElement, isFav) {
+//         iconElement.src = isFav
+//           ? "../../assets/custom/heart-filled.png"
+//           : "../../assets/custom/heart2.png";
+//         iconElement.alt = isFav ? "Unfavorite" : "Favorite";
+//         iconElement.style.filter = isFav ? "" : "brightness(0) invert(1)";
+//       }
+
+//       hideSkeletonLoader();
+
+//       // const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
+//       let favoriteKeys = await fetchFavorites();
+
+//       filteredData.forEach((item) => {
+//         const mainDiv = document.createElement("div");
+//         mainDiv.classList.add("template-main-cont");
+
+//         let dummyimageUrl = "../../assets/custom/dummy-temp.png";
+//         const imageDiv = document.createElement("div");
+
+//         imageDiv.classList.add("template-image-cont");
+
+//         const newImg = document.createElement("img");
+//         newImg.src = item?.imageUrl || dummyimageUrl;
+//         newImg.alt = item.name;
+//         newImg.classList.add("template-image-box");
+//         newImg.loading = "lazy";
+
+//         imageDiv.appendChild(newImg);
+
+//         const nameP = document.createElement("p");
+//         // nameP.textContent = item.name;
+//         if (item.name.length > 12) {
+//           // Show the first 10 characters followed by "..."
+//           nameP.textContent = item.name.substring(0, 12) + "...";
+//           // Set the title attribute to show the full name on hover
+//           nameP.setAttribute("title", item.name);
+//         } else {
+//           // If the name is less than or equal to 10 characters, show it fully
+//           nameP.textContent = item.name;
+//         }
+//         nameP.classList.add("template-name-tag");
+
+//         mainDiv.appendChild(imageDiv);
+//         mainDiv.appendChild(nameP);
+
+//         container.appendChild(mainDiv);
+
+//         if (!item.isDummy) {
+//           const favIcon = document.createElement("img");
+//           favIcon.classList.add("template-fav-icon");
+//           favIcon.id = "templateFavIcon";
+
+//           // Initialize favorite state
+//           let isFavorite = favoriteKeys.includes(item.key);
+//           updateFavIcon(favIcon, isFavorite);
+
+//           favIcon.style.cursor = "pointer";
+
+//           // Hover effects
+//           favIcon.addEventListener("mouseenter", () => {
+//             if (isFavorite) {
+//               favIcon.src = "../../assets/custom/heart2.png";
+//               favIcon.style.filter = "brightness(0) invert(1)";
+//             } else {
+//               favIcon.src = "../../assets/custom/heart-filled.png";
+//               favIcon.style.filter = "";
+//             }
+//           });
+
+//           favIcon.addEventListener("mouseleave", () => {
+//             updateFavIcon(favIcon, isFavorite);
+//           });
+
+//           mainDiv.appendChild(favIcon);
+
+//           // Click handler
+//           favIcon.addEventListener("click", async (e) => {
+//             e.stopPropagation();
+//             const templateKey = item.key;
+
+//             const isSuccess = await handleFavTempllate(templateKey);
+
+//             if (isSuccess) {
+//               // Re-fetch favorites to get updated state
+//               favoriteKeys = await fetchFavorites();
+//               isFavorite = favoriteKeys.includes(item.key);
+//               updateFavIcon(favIcon, isFavorite);
+
+//               const message = isFavorite
+//                 ? "Added to favorites!"
+//                 : "Removed from favorites!";
+
+//               Swal.fire({
+//                 title: message,
+//                 text: "Success",
+//                 icon: "success",
+//               });
+//             } else {
+//               // Revert state if failed
+//               isFavorite = favoriteKeys.includes(item.key);
+//               updateFavIcon(favIcon, isFavorite);
+
+//               Swal.fire({
+//                 icon: "warning",
+//                 title: "Warning",
+//                 text: "Please login to add template into Favorites",
+//               });
+//             }
+//           });
+//         }
+//         if (item.isDummy) {
+//           const overlay = document.createElement("img");
+//           overlay.classList.add("template-overlay-icon");
+//           overlay.id = "templateOverLay";
+//           overlay.src = "../../assets/custom/overlay-temp.png";
+//           mainDiv.appendChild(overlay);
+//           mainDiv.style.cursor = "default";
+//           mainDiv.style.pointerEvents = "none"; // optional: disable clicks completely
+//           // mainDiv.classList.add("dummy");
+//           return; // Don't attach click li
+//         }
+//         // let isDropdownEventAttached = false;
+//         mainDiv.addEventListener("click", async () => {
+//           const previouslyActive = document.querySelector(
+//             ".template-image-box.active"
+//           );
+
+//           if (previouslyActive) {
+//             previouslyActive.classList.remove("active");
+//           }
+//           templateId = item.key;
+//           console.log("templateId", templateId);
+//           newImg.classList.add("active");
+//           activeItem = item.src; // Set the clicked item as active
+//           originalFormat = item.src;
+//           window.originalFormat = originalFormat;
+
+//           console.log("this is the activeitems", activeItem);
+//           editedArrayFormat = Object.keys(activeItem).map((key) => ({
+//             part: key,
+//             jsonData: JSON.parse(activeItem[key]),
+//           }));
+//           console.log("edited array", editedArrayFormat);
+
+//           generateImagesFromCanvasStates();
+
+//           try {
+//             selectedItem =
+//               editedArrayFormat.find((item) => item.part === mainPart) ||
+//               editedArrayFormat[0];
+//             console.log(selectedItem);
+//             window.selectedOriginalJsonPart = selectedItem;
+//             imageReplace = true;
+//             // console.log(originalFormat);
+//             mainPartMesh = selectedItem?.part;
+
+//             window.originalCanvasJson = selectedItem.jsonData;
+
+//             const miniEditorSaveBtnt = document.getElementById(
+//               "gauci-save-mini-cont"
+//             );
+//             miniEditorSaveBtnt.classList.add("display-block-prop");
+//             miniEditorSaveBtnt.classList.remove("display-none-prop");
+
+//             const dummyCont = document.getElementById(
+//               "personaliseImageDummyCont"
+//             );
+//             function updateDisplayStyle() {
+//               if (window.innerWidth < 1024) {
+//                 dummyCont.style.display = "flex";
+//               } else {
+//                 dummyCont.style.display = "block";
+//               }
+//             }
+
+//             // Initial check
+//             updateDisplayStyle();
+//             const realEditCont = document.getElementById(
+//               "personaliseImageUploadPopup"
+//             );
+//             realEditCont.style.display = "none";
+//             const imageInput = document.getElementById("personaliseImgUpload");
+//             imageInput.value = "";
+//             imageReplace = true;
+//             // loadJSONToCanvas(jsonData);
+//             for (let i = 0; i < selectedItem.jsonData?.objects?.length; i++) {
+//               console.log(
+//                 "we are sending data to load",
+//                 selectedItem?.jsonData?.objects[i].src
+//               );
+//             }
+
+//             // loadJSONToCanvas(selectedItem.jsonData);
+//             const objects = selectedItem?.jsonData?.objects;
+
+//             // preloadAllImages(objects).then(() => {
+//             // console.log("All images preloaded, now loading canvas", selectedItem.jsonData);
+//             loadJSONToCanvas(selectedItem?.jsonData);
+//             // });
+//             preloadAllImages(selectedItem.jsonData)
+//               .then(() => {
+//                 console.log("All images preloaded");
+//                 loadJSONToCanvas(selectedItem.jsonData);
+//               })
+//               .catch((err) => {
+//                 console.error("Error during image preloading", err);
+//               });
+
+//             // setupEventListener();
+//           } catch (fetchError) {
+//             console.error("Error fetching JSON data:", fetchError);
+//           }
+//         });
+//       });
+//     } else {
+//       console.error("Error: The fetched data is not an array:", dataArray);
+//       // hideSkeletonLoader();
+//     }
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//     hideSkeletonLoader();
+//   }
+// })();
+
 (async () => {
   var container = document.getElementById("template-cont-box");
   function showSkeletonLoader() {
@@ -1973,9 +2448,20 @@ initialize3DViewer();
   function hideSkeletonLoader() {
     const skeletonContainer = container.querySelector(".skeleton-container");
     if (skeletonContainer) {
-      container.removeChild(skeletonContainer); // Remove the skeleton loader
+      container.removeChild(skeletonContainer);
     }
   }
+
+  // Define the "No Template" object
+  const noTemplate = {
+    name: "None",
+    imageUrl: "../../assets/custom/no-temp.jpg", // Replace with actual image path
+    key: "no-template",
+    isPublic: true,
+    src: "", // Empty or placeholder, to be defined later
+    isDummy: false, // Not a dummy template
+    deselectId: "no-template-deselect", // Unique identifier for "No Template"
+  };
 
   // Show the skeleton loader before fetching data
   showSkeletonLoader();
@@ -1986,13 +2472,13 @@ initialize3DViewer();
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    const dataArray = data.data; // Access the array from the data object
+    let dataArray = data.data; // Access the array from the data object
     console.log("dataArray", dataArray);
-    // console.log(Array.isArray(dataArray));
+
     if (dataArray === null) {
       hideSkeletonLoader();
-      const emptyData = [];
-      const dummyTemplateCount = 10;
+      const emptyData = [noTemplate]; // Start with "No Template"
+      const dummyTemplateCount = 9; // Reduced by 1 to account for "No Template"
       for (let i = 0; i < dummyTemplateCount; i++) {
         const dummyTemplate = {
           name: `Template ${i + 1}`,
@@ -2021,14 +2507,10 @@ initialize3DViewer();
         imageDiv.appendChild(newImg);
 
         const nameP = document.createElement("p");
-        // nameP.textContent = item.name;
         if (item.name.length > 12) {
-          // Show the first 10 characters followed by "..."
           nameP.textContent = item.name.substring(0, 12) + "...";
-          // Set the title attribute to show the full name on hover
           nameP.setAttribute("title", item.name);
         } else {
-          // If the name is less than or equal to 10 characters, show it fully
           nameP.textContent = item.name;
         }
         nameP.classList.add("template-name-tag");
@@ -2037,7 +2519,6 @@ initialize3DViewer();
         mainDiv.appendChild(nameP);
 
         container.appendChild(mainDiv);
-        // Favorite icon using PNGs
 
         if (item.isDummy) {
           const overlay = document.createElement("img");
@@ -2046,21 +2527,34 @@ initialize3DViewer();
           overlay.src = "../../assets/custom/overlay-temp.png";
           mainDiv.appendChild(overlay);
           mainDiv.style.cursor = "default";
-          mainDiv.style.pointerEvents = "none"; // optional: disable clicks completely
-          // mainDiv.classList.add("dummy");
-          return; // Don't attach click li
+          mainDiv.style.pointerEvents = "none";
+          return;
+        }
+
+        // Handle click for "No Template"
+        if (item.deselectId === "no-template-deselect") {
+          mainDiv.style.cursor = "pointer";
+          mainDiv.addEventListener("click", () => {
+            // Placeholder for "No Template" click handler
+            console.log("No Template clicked! Implement click behavior here.");
+            // Add your click logic here later
+            // Example: Clear canvas, reset state, etc.
+          });
+          return;
         }
       });
     }
-    if (Array.isArray(dataArray)) {
-      // Filter the objects with type "p2-type1"
 
+    if (Array.isArray(dataArray)) {
       const urlParams = new URLSearchParams(window.location.search);
       const name = urlParams.get("name");
 
-      const filteredData = dataArray.filter(
+      // Filter data and add "No Template" at index 0
+      let filteredData = dataArray.filter(
         (obj) => obj.type === name && obj.isPublic === true
       );
+      filteredData = [noTemplate, ...filteredData]; // Add "No Template" at index 0
+
       console.log(filteredData);
       if (filteredData.length < 10) {
         const dummyTemplateCount = 10 - filteredData.length;
@@ -2076,18 +2570,17 @@ initialize3DViewer();
           filteredData.push(dummyTemplate);
         }
       }
+
       const personaliseButton = document.getElementById(
         "personaliseOpenPopupBtn"
       );
 
-      // Check if the filtered data is empty, and hide the button if it is
       if (filteredData.length === 0) {
-        personaliseButton.style.display = "none"; // Hide the button
+        personaliseButton.style.display = "none";
       } else {
-        personaliseButton.style.display = "block"; // Show the button (optional, in case it needs to be re-displayed)
+        personaliseButton.style.display = "block";
       }
 
-      // Add these two new functions right after hideSkeletonLoader()
       async function fetchFavorites() {
         try {
           const response = await fetch(
@@ -2113,18 +2606,8 @@ initialize3DViewer();
         iconElement.style.filter = isFav ? "" : "brightness(0) invert(1)";
       }
 
-      // // Fetch favorites to compare with
-      // const favoriteResponse = await fetch(
-      //   `${baseUrl}/api/v1/user/favorite/templates`,
-      //   {
-      //     method: "GET",
-      //     credentials: "include",
-      //   }
-      // );
-      // const favoriteData = await favoriteResponse.json();
       hideSkeletonLoader();
 
-      // const favoriteKeys = favoriteData?.favorites?.map((fav) => fav.key);
       let favoriteKeys = await fetchFavorites();
 
       filteredData.forEach((item) => {
@@ -2133,7 +2616,6 @@ initialize3DViewer();
 
         let dummyimageUrl = "../../assets/custom/dummy-temp.png";
         const imageDiv = document.createElement("div");
-
         imageDiv.classList.add("template-image-cont");
 
         const newImg = document.createElement("img");
@@ -2145,14 +2627,10 @@ initialize3DViewer();
         imageDiv.appendChild(newImg);
 
         const nameP = document.createElement("p");
-        // nameP.textContent = item.name;
         if (item.name.length > 12) {
-          // Show the first 10 characters followed by "..."
           nameP.textContent = item.name.substring(0, 12) + "...";
-          // Set the title attribute to show the full name on hover
           nameP.setAttribute("title", item.name);
         } else {
-          // If the name is less than or equal to 10 characters, show it fully
           nameP.textContent = item.name;
         }
         nameP.classList.add("template-name-tag");
@@ -2161,143 +2639,7 @@ initialize3DViewer();
         mainDiv.appendChild(nameP);
 
         container.appendChild(mainDiv);
-        // Favorite icon using PNGs
-        // if (!item.isDummy) {
-        //   const favIcon = document.createElement("img");
-        //   favIcon.classList.add("template-fav-icon");
-        //   favIcon.id = "templateFavIcon";
-        //   // Check if this template is in the favorites list
-        //   const isFavorite = favoriteKeys?.includes(item.key);
-        //   favIcon.src = isFavorite
-        //     ? "../../assets/custom/heart-filled.png"
-        //     : "../../assets/custom/heart2.png";
-        //   favIcon.alt = isFavorite ? "Unfavorite" : "Favorite";
-        //   favIcon.style.cursor = "pointer";
 
-        //   if (!isFavorite) {
-        //     favIcon.style.filter = "brightness(0) invert(1)"; // Make heart2.png white
-        //   }
-
-        //   favIcon.addEventListener("mouseenter", () => {
-        //     if (isFavorite) {
-        //       favIcon.src = "../../assets/custom/heart2.png"; // Switch to unfilled on hover
-        //       favIcon.style.filter = "brightness(0) invert(1)"; // Make it white on hover
-        //     } else {
-        //       favIcon.src = "../../assets/custom/heart-filled.png"; // Switch to filled on hover
-        //       favIcon.style.filter = ""; // Remove the filter for heart-filled
-        //     }
-        //   });
-        //   favIcon.addEventListener("mouseleave", () => {
-        //     if (isFavorite) {
-        //       favIcon.src = "../../assets/custom/heart-filled.png"; // Return to filled if it's favorite
-        //       favIcon.style.filter = ""; // No filter for filled heart
-        //     } else {
-        //       favIcon.src = "../../assets/custom/heart2.png"; // Return to unfilled if not favorite
-        //       favIcon.style.filter = "brightness(0) invert(1)"; // Keep it white
-        //     }
-        //   });
-        //   // newDiv.appendChild(favIcon);
-
-        //   mainDiv.appendChild(favIcon);
-
-        //   favIcon.addEventListener("click", async (e) => {
-        //     e.stopPropagation(); // Prevents the event from triggering the mainDiv click event
-
-        //     const templateKey = item.key;
-
-        //     // Call the favorite toggle function
-        //     const isSuccess = await handleFavTempllate(templateKey);
-
-        //     // If the request was successful, immediately toggle the icon
-        //     if (isSuccess) {
-        //       const isCurrentlyFavorite =
-        //         favIcon.src.includes("heart-filled.png");
-        //       favIcon.src = isCurrentlyFavorite
-        //         ? "../../assets/custom/heart2.png"
-        //         : "../../assets/custom/heart-filled.png";
-        //       favIcon.alt = isCurrentlyFavorite ? "Favorite" : "Unfavorite";
-
-        //       const message = isCurrentlyFavorite
-        //         ? "Removed from favorites!"
-        //         : "Added to favorites!";
-
-        //       Swal.fire({
-        //         title: message,
-        //         text: "Success",
-        //         icon: "success",
-        //       });
-        //     } else {
-        //       Swal.fire({
-        //         icon: "warning",
-        //         title: "Warning",
-        //         text: "Please login to add template into Favorites",
-        //       });
-        //     }
-        //   });
-        // }
-        if (!item.isDummy) {
-          const favIcon = document.createElement("img");
-          favIcon.classList.add("template-fav-icon");
-          favIcon.id = "templateFavIcon";
-
-          // Initialize favorite state
-          let isFavorite = favoriteKeys.includes(item.key);
-          updateFavIcon(favIcon, isFavorite);
-
-          favIcon.style.cursor = "pointer";
-
-          // Hover effects
-          favIcon.addEventListener("mouseenter", () => {
-            if (isFavorite) {
-              favIcon.src = "../../assets/custom/heart2.png";
-              favIcon.style.filter = "brightness(0) invert(1)";
-            } else {
-              favIcon.src = "../../assets/custom/heart-filled.png";
-              favIcon.style.filter = "";
-            }
-          });
-
-          favIcon.addEventListener("mouseleave", () => {
-            updateFavIcon(favIcon, isFavorite);
-          });
-
-          mainDiv.appendChild(favIcon);
-
-          // Click handler
-          favIcon.addEventListener("click", async (e) => {
-            e.stopPropagation();
-            const templateKey = item.key;
-
-            const isSuccess = await handleFavTempllate(templateKey);
-
-            if (isSuccess) {
-              // Re-fetch favorites to get updated state
-              favoriteKeys = await fetchFavorites();
-              isFavorite = favoriteKeys.includes(item.key);
-              updateFavIcon(favIcon, isFavorite);
-
-              const message = isFavorite
-                ? "Added to favorites!"
-                : "Removed from favorites!";
-
-              Swal.fire({
-                title: message,
-                text: "Success",
-                icon: "success",
-              });
-            } else {
-              // Revert state if failed
-              isFavorite = favoriteKeys.includes(item.key);
-              updateFavIcon(favIcon, isFavorite);
-
-              Swal.fire({
-                icon: "warning",
-                title: "Warning",
-                text: "Please login to add template into Favorites",
-              });
-            }
-          });
-        }
         if (item.isDummy) {
           const overlay = document.createElement("img");
           overlay.classList.add("template-overlay-icon");
@@ -2305,15 +2647,147 @@ initialize3DViewer();
           overlay.src = "../../assets/custom/overlay-temp.png";
           mainDiv.appendChild(overlay);
           mainDiv.style.cursor = "default";
-          mainDiv.style.pointerEvents = "none"; // optional: disable clicks completely
-          // mainDiv.classList.add("dummy");
-          return; // Don't attach click li
+          mainDiv.style.pointerEvents = "none";
+          return;
         }
-        // let isDropdownEventAttached = false;
+
+        // Handle "No Template" click
+        // if (item.deselectId === "no-template-deselect") {
+        //   mainDiv.style.cursor = "pointer";
+        //   mainDiv.addEventListener("click", () => {
+        //     // Placeholder for "No Template" click handler
+        //     console.log("No Template clicked! Implement click behavior here.");
+        //     // Add your click logic here later
+        //     // Example: Clear canvas, reset state, etc.
+        //   });
+        //   return;
+        // }
+
+        if (item.deselectId === "no-template-deselect") {
+          mainDiv.style.cursor = "pointer";
+          mainDiv.addEventListener("click", () => {
+            // Reset the 3D model
+            resetModel(); // Defined in 3D code
+            // Clear canvas-related states
+            const previouslyActive = document.querySelector(
+              ".template-image-box.active"
+            );
+            if (previouslyActive) {
+              previouslyActive.classList.remove("active");
+            }
+            templateId = null;
+            activeItem = null;
+            originalFormat = null;
+            window.originalFormat = null;
+            editedArrayFormat = [];
+            selectedItem = null;
+            window.selectedOriginalJsonPart = null;
+            mainPartMesh = null;
+            window.originalCanvasJson = null;
+            meshImageDataArray = []; // Clear texture data
+            // Hide mini editor save button
+            const miniEditorSaveBtnt = document.getElementById(
+              "gauci-save-mini-cont"
+            );
+            miniEditorSaveBtnt.classList.add("display-none-prop");
+            miniEditorSaveBtnt.classList.remove("display-block-prop");
+            // Reset personalize image container
+            const dummyCont = document.getElementById(
+              "personaliseImageDummyCont"
+            );
+            dummyCont.style.display = "block";
+
+            const dummyImageRestore = document.getElementById(
+              "min-editor-dummy-image"
+            );
+            dummyImageRestore.src = "../../assets/custom/no-photo.png";
+            dummyImageRestore.style.width = "30%";
+            dummyImageRestore.style.height = "30%";
+
+            //             if (miniEditorPopupImage && clipmaskImage.src) {
+            //   // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+            //   miniEditorPopupImage.src = clipmaskImage.src;
+            //   dummyImage.style.width = "100%";
+            //   dummyImage.style.height = "100%";
+            //   dummyImage.style.objectFit = "cover";
+            //   dummyImage.src = clipmaskImage.src;
+            //   dummyImage.style.borderRadius = "10px";
+            // }
+            // //  else {
+            // //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
+            // // }
+            const realEditCont = document.getElementById(
+              "personaliseImageUploadPopup"
+            );
+            realEditCont.style.display = "none";
+            const imageInput = document.getElementById("personaliseImgUpload");
+            imageInput.value = "";
+            imageReplace = false;
+            console.log("No Template clicked! 3D model and canvas reset.");
+          });
+          return;
+        }
+
+        // Existing favorite icon logic
+        const favIcon = document.createElement("img");
+        favIcon.classList.add("template-fav-icon");
+        favIcon.id = "templateFavIcon";
+
+        let isFavorite = favoriteKeys.includes(item.key);
+        updateFavIcon(favIcon, isFavorite);
+
+        favIcon.style.cursor = "pointer";
+
+        favIcon.addEventListener("mouseenter", () => {
+          if (isFavorite) {
+            favIcon.src = "../../assets/custom/heart2.png";
+            favIcon.style.filter = "brightness(0) invert(1)";
+          } else {
+            favIcon.src = "../../assets/custom/heart-filled.png";
+            favIcon.style.filter = "";
+          }
+        });
+
+        favIcon.addEventListener("mouseleave", () => {
+          updateFavIcon(favIcon, isFavorite);
+        });
+
+        mainDiv.appendChild(favIcon);
+
+        favIcon.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          const templateKey = item.key;
+
+          const isSuccess = await handleFavTempllate(templateKey);
+
+          if (isSuccess) {
+            favoriteKeys = await fetchFavorites();
+            isFavorite = favoriteKeys.includes(item.key);
+            updateFavIcon(favIcon, isFavorite);
+
+            const message = isFavorite
+              ? "Added to favorites!"
+              : "Removed from favorites!";
+
+            Swal.fire({
+              title: message,
+              text: "Success",
+              icon: "success",
+            });
+          } else {
+            isFavorite = favoriteKeys.includes(item.key);
+            updateFavIcon(favIcon, isFavorite);
+
+            Swal.fire({
+              icon: "warning",
+              title: "Warning",
+              text: "Please login to add template into Favorites",
+            });
+          }
+        });
+
+        // Existing click handler for regular templates
         mainDiv.addEventListener("click", async () => {
-          // Remove active class from previously selected item
-          // console.log(selectedModelPart, "Selected model part");
-          // originalFormat = {};
           const previouslyActive = document.querySelector(
             ".template-image-box.active"
           );
@@ -2324,57 +2798,10 @@ initialize3DViewer();
           templateId = item.key;
           console.log("templateId", templateId);
           newImg.classList.add("active");
-          activeItem = item.src; // Set the clicked item as active
+          activeItem = item.src;
           originalFormat = item.src;
           window.originalFormat = originalFormat;
-          // console.log(activeItem);
-          // console.log(mainPart);
 
-          // const dropdownList = document.querySelector(".hexa-dropdown-ul-list");
-          // const selectedBox = document.querySelector(".hexa-dropdown-selected");
-          // const selectContainer = document.querySelector(
-          //   ".hexa-drop-down-select-cont"
-          // );
-
-          // while (dropdownList.firstChild) {
-          //   dropdownList.removeChild(dropdownList.firstChild);
-          // }
-
-          // // Step 1: Populate <ul> dynamically
-          // activeItem.forEach((item, index) => {
-          //   const li = document.createElement("li");
-          //   li.className = "hexa-dropdown-list";
-          //   li.textContent = item.part;
-          //   li.addEventListener("click", () => {
-          //     selectedBox.textContent = item.part;
-          //     dropdownList.classList.remove("show-dropdown");
-          //     selectedModelPart = item.part;
-          //     loadJSONToCanvas(item?.jsonData);
-          //   });
-          //   dropdownList.appendChild(li);
-          // });
-
-          // Step 2: Set default selected to first item
-          // if (activeItem.length > 0) {
-          //   selectedBox.textContent = activeItem[0].part;
-          //   selectedModelPart = activeItem[0].part;
-          //   loadJSONToCanvas(activeItem[0].jsonData);
-          // }
-
-          // // Step 3: Toggle dropdown on click
-          // selectContainer.addEventListener("click", () => {
-          //   dropdownList.classList.add("show-dropdown");
-          // });
-          // // Optional: Hide when clicking outside
-          // document.addEventListener("click", (e) => {
-          //   if (!e.target.closest(".hexa-drop-down-cont")) {
-          //     dropdownList.classList.remove("show-dropdown");
-          //   }
-          // });
-
-          // activeItem.forEach((item) => {
-          //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-          // });
           console.log("this is the activeitems", activeItem);
           editedArrayFormat = Object.keys(activeItem).map((key) => ({
             part: key,
@@ -2382,64 +2809,25 @@ initialize3DViewer();
           }));
           console.log("edited array", editedArrayFormat);
 
-          // let selectedItem =
-          //   editedArrayFormat.find((item) => item.part === mainPart) ||
-          //   editedArrayFormat[0];
-          // // console.log(originalFormat);
-          // loadJSONToCanvas(selectedItem.jsonData);
           generateImagesFromCanvasStates();
 
-          // const dropDownCont = document.getElementById(
-          //   "hexa-drop-down-main-one"
-          // );
-          // dropDownCont.style.display = "block";
-          // const realEditCont = document.getElementById(
-          //   "personaliseImageUploadPopup"
-          // );
-          // realEditCont.style.display = "block";
-
           try {
-            // const jsonResponse = await fetch(activeItem); // Assuming activeItem has a jsonUrl property
-            // if (!jsonResponse.ok) {
-            //   throw new Error(`HTTP error! status: ${jsonResponse.status}`);
-            // }
-            // const jsonData = await jsonResponse.json();
-            // window.originalCanvasJson = jsonData;
             selectedItem =
               editedArrayFormat.find((item) => item.part === mainPart) ||
               editedArrayFormat[0];
             console.log(selectedItem);
             window.selectedOriginalJsonPart = selectedItem;
             imageReplace = true;
-            // console.log(originalFormat);
             mainPartMesh = selectedItem?.part;
 
             window.originalCanvasJson = selectedItem.jsonData;
 
-            // const miniEditorAdjust =
-            //   document.getElementById("miniE-adjust-Btn");
-            // miniEditorAdjust.classList.add("display-none-prop");
-            // miniEditorAdjust.classList.remove("display-block-prop");
             const miniEditorSaveBtnt = document.getElementById(
               "gauci-save-mini-cont"
             );
             miniEditorSaveBtnt.classList.add("display-block-prop");
             miniEditorSaveBtnt.classList.remove("display-none-prop");
-            // document.getElementById("personaliseOpenPopupBtn").disabled = false;
-            // const miniEditorAdjust =
-            //   document.getElementById("miniE-adjust-Btn");
-            // miniEditorAdjust.classList.remove("display-none-prop");
-            // miniEditorAdjust.classList.add("display-block-prop");
 
-            // Hide Canvas in popup
-            // const miniEditorCont = document.getElementById("mini-editor-Cont");
-            // miniEditorCont.classList.add("display-none-prop");
-            // miniEditorCont.classList.remove("display-block-prop");
-
-            // const dummyCont = document.getElementById(
-            //   "personaliseImageDummyCont"
-            // );
-            // dummyCont.style.display = "block";
             const dummyCont = document.getElementById(
               "personaliseImageDummyCont"
             );
@@ -2451,7 +2839,6 @@ initialize3DViewer();
               }
             }
 
-            // Initial check
             updateDisplayStyle();
             const realEditCont = document.getElementById(
               "personaliseImageUploadPopup"
@@ -2460,21 +2847,7 @@ initialize3DViewer();
             const imageInput = document.getElementById("personaliseImgUpload");
             imageInput.value = "";
             imageReplace = true;
-            // loadJSONToCanvas(jsonData);
-            for (let i = 0; i < selectedItem.jsonData?.objects?.length; i++) {
-              console.log(
-                "we are sending data to load",
-                selectedItem?.jsonData?.objects[i].src
-              );
-            }
 
-            // loadJSONToCanvas(selectedItem.jsonData);
-            const objects = selectedItem?.jsonData?.objects;
-
-            // preloadAllImages(objects).then(() => {
-            // console.log("All images preloaded, now loading canvas", selectedItem.jsonData);
-            loadJSONToCanvas(selectedItem?.jsonData);
-            // });
             preloadAllImages(selectedItem.jsonData)
               .then(() => {
                 console.log("All images preloaded");
@@ -2483,8 +2856,6 @@ initialize3DViewer();
               .catch((err) => {
                 console.error("Error during image preloading", err);
               });
-
-            // setupEventListener();
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
           }
@@ -2492,7 +2863,6 @@ initialize3DViewer();
       });
     } else {
       console.error("Error: The fetched data is not an array:", dataArray);
-      // hideSkeletonLoader();
     }
   } catch (error) {
     console.error("Error fetching data:", error);
