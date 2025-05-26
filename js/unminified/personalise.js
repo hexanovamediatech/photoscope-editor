@@ -34,6 +34,15 @@ document.addEventListener("variableReady", function (e) {
   }
 });
 
+window.addEventListener("load", () => {
+  const loader = document.querySelector(".fullpage-loader");
+
+  // Hide loader after 2 seconds
+  setTimeout(() => {
+    if (loader) loader.style.display = "none";
+  }, 2000);
+});
+
 // async function fetchModelData() {
 //   try {
 //     const response = await fetch(`${baseUrl}/api/v1/product/all`);
