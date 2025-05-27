@@ -4130,134 +4130,137 @@
           // Clear previous layers before adding new ones
           selector.find("#gauci-layers").empty();
           console.log(canvas.getObjects());
-          canvas.getObjects().forEach((canvasObj, index) => {
-            console.log("object goes here");
-            console.log(canvasObj);
-            let output = "";
-            let layerName = "Object";
-            let layerIcon = "category";
-            let visibility = "layer-visible";
-            let visibilityTag = "visibility";
-            let lock = "layer-unlocked";
-            let lockTag = "lock_open";
+          canvas
+            .getObjects()
+            .slice(1)
+            .forEach((canvasObj, index) => {
+              console.log("object goes here");
+              console.log(canvasObj);
+              let output = "";
+              let layerName = "Object";
+              let layerIcon = "category";
+              let visibility = "layer-visible";
+              let visibilityTag = "visibility";
+              let lock = "layer-unlocked";
+              let lockTag = "lock_open";
 
-            if (canvasObj.visible === false) {
-              visibility = "layer-hidden";
-              visibilityTag = "visibility_off";
-            }
-            if (canvasObj.selectable === false) {
-              lock = "layer-locked";
-              lockTag = "lock";
-            }
+              if (canvasObj.visible === false) {
+                visibility = "layer-hidden";
+                visibilityTag = "visibility_off";
+              }
+              if (canvasObj.selectable === false) {
+                lock = "layer-locked";
+                lockTag = "lock";
+              }
 
-            canvasObj.set("id", new Date().getTime() + index); // Ensure unique ID
+              canvasObj.set("id", new Date().getTime() + index); // Ensure unique ID
 
-            if (canvasObj.objectType === "textbox") {
-              console.log("text goes here");
-              layerName = canvasObj.text;
-              layerIcon = "title";
-            } else if (canvasObj.objectType === "drawing") {
-              layerName = gauciParams.freeDrawing;
-              layerIcon = "brush";
-            } else if (canvasObj.objectType === "frame") {
-              layerName = gauciParams.frame;
-              layerIcon = "wallpaper";
-            } else if (canvasObj.objectType === "image") {
-              layerName = gauciParams.image;
-              layerIcon = "image";
-            } else if (canvasObj.objectType === "circle") {
-              layerName = gauciParams.circle;
-            } else if (canvasObj.objectType === "square") {
-              layerName = gauciParams.square;
-            } else if (canvasObj.objectType === "rectangle") {
-              layerName = gauciParams.rectangle;
-            } else if (canvasObj.objectType === "triangle") {
-              layerName = gauciParams.triangle;
-            } else if (canvasObj.objectType === "ellipse") {
-              layerName = gauciParams.ellipse;
-            } else if (canvasObj.objectType === "trapezoid") {
-              layerName = gauciParams.trapezoid;
-            } else if (canvasObj.objectType === "pentagon") {
-              layerName = gauciParams.pentagon;
-            } else if (canvasObj.objectType === "octagon") {
-              layerName = gauciParams.octagon;
-            } else if (canvasObj.objectType === "emerald") {
-              layerName = gauciParams.emerald;
-            } else if (canvasObj.objectType === "star") {
-              layerName = gauciParams.star;
-            } else if (canvasObj.objectType === "element") {
-              layerName = gauciParams.element;
-              layerIcon = "star";
-            } else if (canvasObj.objectType === "customSVG") {
-              layerName = gauciParams.customSvg;
-            } else if (canvasObj.objectType === "qrCode") {
-              layerName = gauciParams.qrCode;
-              layerIcon = "qr_code";
-            }
-            if (canvasObj.type === "textbox") {
-              layerName = canvasObj.text;
-              layerIcon = "title";
-            } else if (canvasObj.type === "rect") {
-              layerName = gauciParams.rectangle;
-            } else if (canvasObj.type === "circle") {
-              layerName = gauciParams.circle;
-            } else if (canvasObj.type === "triangle") {
-              layerName = gauciParams.triangle;
-            } else if (canvasObj.type === "path") {
-              layerName = gauciParams.element;
-              layerIcon = "star";
-            } else if (canvasObj.type === "group") {
-              layerName = gauciParams.element;
-              layerIcon = "star";
-            } else if (canvasObj.type === "image") {
-              layerName = gauciParams.image;
-              layerIcon = "image";
-            }
+              if (canvasObj.objectType === "textbox") {
+                console.log("text goes here");
+                layerName = canvasObj.text;
+                layerIcon = "title";
+              } else if (canvasObj.objectType === "drawing") {
+                layerName = gauciParams.freeDrawing;
+                layerIcon = "brush";
+              } else if (canvasObj.objectType === "frame") {
+                layerName = gauciParams.frame;
+                layerIcon = "wallpaper";
+              } else if (canvasObj.objectType === "image") {
+                layerName = gauciParams.image;
+                layerIcon = "image";
+              } else if (canvasObj.objectType === "circle") {
+                layerName = gauciParams.circle;
+              } else if (canvasObj.objectType === "square") {
+                layerName = gauciParams.square;
+              } else if (canvasObj.objectType === "rectangle") {
+                layerName = gauciParams.rectangle;
+              } else if (canvasObj.objectType === "triangle") {
+                layerName = gauciParams.triangle;
+              } else if (canvasObj.objectType === "ellipse") {
+                layerName = gauciParams.ellipse;
+              } else if (canvasObj.objectType === "trapezoid") {
+                layerName = gauciParams.trapezoid;
+              } else if (canvasObj.objectType === "pentagon") {
+                layerName = gauciParams.pentagon;
+              } else if (canvasObj.objectType === "octagon") {
+                layerName = gauciParams.octagon;
+              } else if (canvasObj.objectType === "emerald") {
+                layerName = gauciParams.emerald;
+              } else if (canvasObj.objectType === "star") {
+                layerName = gauciParams.star;
+              } else if (canvasObj.objectType === "element") {
+                layerName = gauciParams.element;
+                layerIcon = "star";
+              } else if (canvasObj.objectType === "customSVG") {
+                layerName = gauciParams.customSvg;
+              } else if (canvasObj.objectType === "qrCode") {
+                layerName = gauciParams.qrCode;
+                layerIcon = "qr_code";
+              }
+              if (canvasObj.type === "textbox") {
+                layerName = canvasObj.text;
+                layerIcon = "title";
+              } else if (canvasObj.type === "rect") {
+                layerName = gauciParams.rectangle;
+              } else if (canvasObj.type === "circle") {
+                layerName = gauciParams.circle;
+              } else if (canvasObj.type === "triangle") {
+                layerName = gauciParams.triangle;
+              } else if (canvasObj.type === "path") {
+                layerName = gauciParams.element;
+                layerIcon = "star";
+              } else if (canvasObj.type === "group") {
+                layerName = gauciParams.element;
+                layerIcon = "star";
+              } else if (canvasObj.type === "image") {
+                layerName = gauciParams.image;
+                layerIcon = "image";
+              }
 
-            if ("layerName" in canvasObj) {
-              layerName = canvasObj.layerName;
-            }
+              if ("layerName" in canvasObj) {
+                layerName = canvasObj.layerName;
+              }
 
-            output =
-              '<li id="' +
-              canvasObj.id +
-              '" data-type="' +
-              canvasObj.objectType +
-              '" class="layer-' +
-              canvasObj.objectType +
-              ' active" data-sort="' +
-              index +
-              '"><span class="material-icons">' +
-              layerIcon +
-              '</span><input class="layer-name" autocomplete="off" value="' +
-              layerName +
-              '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
-              lock +
-              '" title="' +
-              gauciParams.lockunlock +
-              '">' +
-              lockTag +
-              '</a><a class="material-icons text-success duplicate-layer" title="' +
-              gauciParams.duplicate +
-              '">content_copy</a><a class="material-icons layer-visibility ' +
-              visibility +
-              '" title="' +
-              gauciParams.showhide +
-              '">' +
-              visibilityTag +
-              '</a><a class="material-icons text-danger delete-layer" title="' +
-              gauciParams.delete +
-              '">clear</a></div></li>';
+              output =
+                '<li id="' +
+                canvasObj.id +
+                '" data-type="' +
+                canvasObj.objectType +
+                '" class="layer-' +
+                canvasObj.objectType +
+                ' active" data-sort="' +
+                index +
+                '"><span class="material-icons">' +
+                layerIcon +
+                '</span><input class="layer-name" autocomplete="off" value="' +
+                layerName +
+                '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
+                lock +
+                '" title="' +
+                gauciParams.lockunlock +
+                '">' +
+                lockTag +
+                '</a><a class="material-icons text-success duplicate-layer" title="' +
+                gauciParams.duplicate +
+                '">content_copy</a><a class="material-icons layer-visibility ' +
+                visibility +
+                '" title="' +
+                gauciParams.showhide +
+                '">' +
+                visibilityTag +
+                '</a><a class="material-icons text-danger delete-layer" title="' +
+                gauciParams.delete +
+                '">clear</a></div></li>';
 
-            selector.find("#gauci-layers").prepend(output);
+              selector.find("#gauci-layers").prepend(output);
 
-            deleteLayerEvent(canvasObj.id);
-            cloneLayerEvent(canvasObj.id);
-            visibilityLayerEvent(canvasObj.id);
-            lockLayerEvent(canvasObj.id);
-            clickLayerEvent(canvasObj.id);
-            layerNameEvent(canvasObj.id);
-          });
+              deleteLayerEvent(canvasObj.id);
+              cloneLayerEvent(canvasObj.id);
+              visibilityLayerEvent(canvasObj.id);
+              lockLayerEvent(canvasObj.id);
+              clickLayerEvent(canvasObj.id);
+              layerNameEvent(canvasObj.id);
+            });
 
           selector.find("#gauci-layers").sortable("refresh");
           checkLayers();
