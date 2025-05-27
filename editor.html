@@ -117,6 +117,19 @@
         </div>
       </div>
 
+      <!-- HTML inside your main page (ideally before 3D init) -->
+      <div class="fullpage-loader">
+        <div class="loader-spinner"></div>
+      </div>
+      <!-- HTML inside your main page (ideally before 3D init)
+      <div class="fullpage-loader">
+        <div class="loader-spinner">
+        </div>
+        <div class="loader-spinner-inner"></div>
+        <div class="loader-spinner-inner"></div>
+        <div class="loader-spinner-inner"></div>
+      </div> -->
+
       <!--
   <div id="gauci-mytemplates" class="gauci-tab">
     <div id="gauci-my-templates-menu">
@@ -215,7 +228,6 @@
             cursor: pointer;
             justify-content: center;
             padding: 12px 10px;
-            margin-left: 8px;
           "
         >
           <input
@@ -228,15 +240,20 @@
           <label
             for="gauci-img-upload"
             class="gauci-icon-menu-btn gauci-upload-btn"
-            style="display: flex; flex-direction: column"
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: anchor-center;
+              flex-direction: column;
+            "
           >
             <img
-              src="assets/custom/icons.png"
+              src="assets/custom/upload.png"
               alt="upload icon"
               class="gauci-custom-img gauci-normal-state-img"
             />
             <img
-              src="assets/custom/icons-hover.png"
+              src="assets/custom/upload-hover.png"
               alt="upload icon"
               class="gauci-custom-img gauci-hover-img"
             />

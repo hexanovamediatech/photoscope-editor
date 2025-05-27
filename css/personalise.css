@@ -823,8 +823,10 @@ button#personaliseAdjustBtn img {
 }
 .go-back-btn {
   position: absolute;
-  bottom: -55px;
-  left: 20px;
+  right: 100px;
+  top: 17px;
+  /* bottom: -55px; */
+  /* left: 20px; */
   /* margin-top: 20px; */
   width: 80px;
   padding: 5px 10px;
