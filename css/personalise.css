@@ -1069,6 +1069,7 @@ button#personaliseAdjustBtn img {
   height: 60px;
   object-fit: cover;
   border-radius: 8px;
+  cursor: pointer;
 }
 .multi-image-cont {
   width: 100%;

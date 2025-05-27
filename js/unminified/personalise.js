@@ -25,6 +25,7 @@ let selectedModelPart = "";
 let mainPart = "";
 let mainPartMesh = null;
 let selectedItem = null;
+let lastReplacedPhotoNumber = null;
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -866,7 +867,52 @@ function updateCanvasText(textIndex, newText) {
 //   console.log(imageUpdatedJSON, "image updated json strc");
 //   if (callback) callback(imageUpdatedJSON);
 // }
-function replaceImageSrc(json, newImageSrc, callback) {
+// function replaceImageSrc(json, newImageSrc, callback) {
+//   // Create a new image object to load the base64 image
+//   const img = new Image();
+//   img.src = newImageSrc;
+
+//   // Once the image is loaded, get its width and height
+//   img.onload = function () {
+//     const imageWidth = img.width;
+//     const imageHeight = img.height;
+
+//     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
+//     console.log(json.objects);
+
+//     // Find the object where obj.type === "image" and obj.src does not start with "http"
+//     // json.objects.forEach((obj) => {
+//     //   if (obj.type === "image" && !obj.src.startsWith("http")) {
+//     //     obj.src = newImageSrc;
+//     //     obj.width = imageWidth; // Set the width and height if needed
+//     //     obj.height = imageHeight;
+//     //   }
+//     // });
+
+//     // const imageUpdatedJSON = json;
+//     let found = false;
+
+//     json.objects.forEach((obj) => {
+//       if (!found && obj.customId === "clipmask" && obj.type === "image") {
+//         obj.src = newImageSrc;
+//         obj.width = imageWidth;
+//         obj.height = imageHeight;
+//         found = true; // Only update the first matching object
+//       }
+//     });
+
+//     const imageUpdatedJSON = json;
+//     console.log(imageUpdatedJSON, "image updated json structure");
+
+//     if (callback) callback(imageUpdatedJSON);
+//   };
+
+//   // Handle error if the image fails to load
+//   img.onerror = function () {
+//     console.error("Failed to load the image");
+//   };
+// }
+function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
   // Create a new image object to load the base64 image
   const img = new Image();
   img.src = newImageSrc;
@@ -879,26 +925,16 @@ function replaceImageSrc(json, newImageSrc, callback) {
     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
     console.log(json.objects);
 
-    // Find the object where obj.type === "image" and obj.src does not start with "http"
-    // json.objects.forEach((obj) => {
-    //   if (obj.type === "image" && !obj.src.startsWith("http")) {
-    //     obj.src = newImageSrc;
-    //     obj.width = imageWidth; // Set the width and height if needed
-    //     obj.height = imageHeight;
-    //   }
-    // });
-
-    // const imageUpdatedJSON = json;
-    let found = false;
-
-    json.objects.forEach((obj) => {
-      if (!found && obj.customId === "clipmask" && obj.type === "image") {
-        obj.src = newImageSrc;
-        obj.width = imageWidth;
-        obj.height = imageHeight;
-        found = true; // Only update the first matching object
-      }
-    });
+    // Find the image object at the specified index (adjusted for background image)
+    const targetIndex = imageIndex; // Since imageObjects skips index 0, imageIndex maps directly
+    if (
+      json.objects[targetIndex] &&
+      json.objects[targetIndex].type === "image"
+    ) {
+      json.objects[targetIndex].src = newImageSrc;
+      json.objects[targetIndex].width = imageWidth;
+      json.objects[targetIndex].height = imageHeight;
+    }
 
     const imageUpdatedJSON = json;
     console.log(imageUpdatedJSON, "image updated json structure");
@@ -911,7 +947,6 @@ function replaceImageSrc(json, newImageSrc, callback) {
     console.error("Failed to load the image");
   };
 }
-
 function generateImagesFromCanvasStates() {
   meshImageDataArray = [];
   meshImageDataArray.length = 0;
@@ -977,6 +1012,444 @@ function generateImagesFromCanvasStates() {
   });
 }
 
+// function loadJSONToCanvas(jsonData) {
+//   console.log(jsonData, "json data here ");
+//   if (!newFabricCanvas) {
+//     initializeCanvas();
+//   }
+
+//   newFabricCanvas.clear();
+
+//   const label1 = document.getElementById("label-1");
+//   const label2 = document.getElementById("label-2");
+//   const input1 = document.getElementById("text-1");
+//   const input2 = document.getElementById("text-2");
+//   label1.style.display = "none";
+//   label2.style.display = "none";
+//   input1.style.display = "none";
+//   input2.style.display = "none";
+
+//   // Count the number of textboxes in the JSON data
+//   const textBoxCount = jsonData.objects.filter(
+//     (obj) => obj.type === "textbox"
+//   ).length;
+
+//   const showImage = jsonData.objects.filter(
+//     (obj) => obj.customId === "clipmask"
+//   );
+//   // const showImage = jsonData.objects.filter((obj) => obj.type === "image");
+//   if (showImage.length > 0) {
+//     const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
+//     console.log(clipmaskImage);
+
+//     const miniEditorPopupImage = document.getElementById(
+//       "min-editor-popup-image"
+//     );
+//     const miniEditordummyImage = document.getElementById(
+//       "min-editor-dummy-image"
+//     );
+//     if (window.innerWidth < 1024) {
+//       miniEditordummyImage.src = clipmaskImage.src;
+//       miniEditordummyImage.style.width = "100%";
+//       miniEditordummyImage.classList.add("dummyImageCoverFit");
+//     }
+
+//     const dummyImage = document.getElementById("min-editor-dummy-image");
+
+//     // Check if the image element exists and if the clipmaskImage has a valid src
+//     if (miniEditorPopupImage && clipmaskImage.src) {
+//       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+//       miniEditorPopupImage.src = clipmaskImage.src;
+//       dummyImage.style.width = "100%";
+//       dummyImage.style.height = "100%";
+//       dummyImage.style.objectFit = "cover";
+//       dummyImage.src = clipmaskImage.src;
+//       dummyImage.style.borderRadius = "10px";
+//     }
+//     //  else {
+//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
+//     // }
+//   }
+
+//   // Show input fields based on the number of textboxes
+//   if (textBoxCount > 0) {
+//     label1.style.display = "block";
+//     input1.style.display = "block"; // Show the first input field
+//   }
+//   if (textBoxCount > 1) {
+//     label2.style.display = "block";
+//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
+//   }
+//   const replaceImgBtn = document.getElementById("replace-btn-cont");
+//   // const imageFound = jsonData.objects.find(
+//   //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
+//   // );
+//   const imageFound = jsonData.objects.filter(
+//     (obj) => obj.customId === "clipmask"
+//   );
+//   if (imageFound[0]) {
+//     replaceImgBtn.style.display = "block";
+//   } else {
+//     replaceImgBtn.style.display = "none";
+//   }
+//   // Load the JSON data into the existing Fabric.js canvas
+//   let nextIndex = 1;
+//   jsonData.objects.forEach((obj) => {
+//     if (obj.type === "textbox") {
+//       // Assign a default dataIndex if not provided
+//       obj.dataIndex = obj.dataIndex || nextIndex++;
+//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
+//       if (inputField) {
+//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
+//       }
+//     }
+//   });
+//   jsonData.objects.forEach((obj) => {
+//     if (obj.type === "image" && obj.src.startsWith("http")) {
+//       obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
+//     }
+//   });
+//   console.log(jsonData);
+//   newFabricCanvas.loadFromJSON(
+//     jsonData,
+//     function () {
+//       // After loading the JSON, resize and reposition all objects to fit the canvas
+//       newFabricCanvas.getObjects().forEach((obj, index) => {
+//         obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+//         obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+
+//         // Adjust top and left properties to make the object visible
+//         obj.left *= 0.22; // Adjust the position as needed
+//         obj.top *= 0.22; // Adjust the position as needed
+
+//         if (obj.clipPath) {
+//           obj.clipPath.set({
+//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
+//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
+//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
+//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
+//           });
+//         }
+
+//         obj.setCoords();
+//         obj.set({
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+//       });
+
+//       // Force a render to ensure all objects, including clipPaths, are applied
+//       newFabricCanvas.renderAll();
+
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       window.editedCanvasJson = savedCanvasJSON;
+//       const allObjects = newFabricCanvas.getObjects();
+//       console.log(allObjects);
+//       console.log(savedCanvasJSON);
+
+//       const firstObject = allObjects[0];
+
+//       // Remove the first object from the canvas
+//       if (
+//         firstObject &&
+//         firstObject.type === "image" &&
+//         firstObject.getSrc &&
+//         firstObject.getSrc().startsWith("http") &&
+//         !firstObject.clipPath
+//       ) {
+//         newFabricCanvas.remove(firstObject);
+//       }
+
+//       // Render the canvas without the first object
+//       newFabricCanvas.renderAll();
+//       const originalWidth = newFabricCanvas.width;
+//       const originalHeight = newFabricCanvas.height;
+
+//       // Set the canvas dimensions to 1080x1080 for the export
+//       newFabricCanvas.setDimensions({
+//         width: 1080,
+//         height: 1080,
+//       });
+//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+
+//       // Convert the remaining objects on the canvas to an image
+//       const format = "jpeg";
+//       const quality = 1;
+//       const imgData = newFabricCanvas.toDataURL({
+//         format: format,
+//         quality: quality,
+//         enableRetinaScaling: false,
+//       });
+//       newFabricCanvas.setDimensions({
+//         width: originalWidth,
+//         height: originalHeight,
+//       });
+//       newFabricCanvas.setZoom(1);
+//       // Pass the image data to the changeTexture function
+//       fabricImageConverted = imgData;
+//       console.log("this is thefabricImageConverted", fabricImageConverted);
+//       if (selectedMesh) {
+//         changeTexture(fabricImageConverted);
+//       }
+//       newFabricCanvas.insertAt(firstObject, 0);
+//       // Render the canvas to show all objects again
+//       newFabricCanvas.renderAll();
+//       console.log(newFabricCanvas.toJSON());
+//     },
+//     function (error) {
+//       console.error("Error loading JSON:", error);
+//       console.log("Loaded JSON Data:", jsonData);
+//     }
+//   );
+// }
+
+// function loadJSONToCanvas(jsonData) {
+//   console.log(jsonData, "json data here ");
+//   if (!newFabricCanvas) {
+//     initializeCanvas();
+//   }
+
+//   newFabricCanvas.clear();
+
+//   const label1 = document.getElementById("label-1");
+//   const label2 = document.getElementById("label-2");
+//   const input1 = document.getElementById("text-1");
+//   const input2 = document.getElementById("text-2");
+//   label1.style.display = "none";
+//   label2.style.display = "none";
+//   input1.style.display = "none";
+//   input2.style.display = "none";
+
+//   // Count the number of textboxes in the JSON data
+//   const textBoxCount = jsonData.objects.filter(
+//     (obj) => obj.type === "textbox"
+//   ).length;
+
+//   const multiImageContainer = document.querySelector(
+//     ".multi-image-replace-cont"
+//   );
+//   multiImageContainer.innerHTML = "";
+//   console.log(multiImageContainer);
+
+//   // Filter images, excluding the first one (background image)
+//   const imageObjects = jsonData.objects.filter(
+//     (obj, index) => obj.type === "image" && index !== 0
+//   );
+//   imageObjects.forEach((imageObj, index) => {
+//     const photoNumber = index + 1;
+//     const imageSection = document.createElement("div");
+//     imageSection.className = "multi-image-cont";
+//     imageSection.innerHTML = `
+//       <p class="photo-list-num">Photo ${photoNumber}</p>
+//       <div class="replace-image-main-box">
+//         <img
+//           src="${imageObj.src || "./assets/custom/no-temp.jpg"}"
+//           class="hexa-replc-img"
+//           alt="icon"
+//           id="hexa-replc-img-${photoNumber}"
+//         />
+//         <div class="replace-img-btn-cont" id="replace-btn-cont-${photoNumber}">
+//           <input
+//             type="file"
+//             name="gauci-file-${photoNumber}"
+//             id="personaliseImgUpload-${photoNumber}"
+//             class="gauci-hidden-file"
+//             accept="image/png, image/jpeg, image/webp"
+//           />
+//           <label
+//             for="personaliseImgUpload-${photoNumber}"
+//             class="gauci-btn primary gauci-lg-btn btn-full replace-btn-personalise"
+//           >
+//             <img src="./assets/custom/imgIcon.png" alt="icon" />
+//             <span>Replace</span>
+//           </label>
+//         </div>
+//       </div>
+//     `;
+//     multiImageContainer.appendChild(imageSection);
+//   });
+
+//   const showImage = jsonData.objects.filter(
+//     (obj) => obj.customId === "clipmask"
+//   );
+//   // const showImage = jsonData.objects.filter((obj) => obj.type === "image");
+//   if (showImage.length > 0) {
+//     const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
+//     console.log(clipmaskImage);
+
+//     const miniEditorPopupImage = document.getElementById(
+//       "min-editor-popup-image"
+//     );
+//     const miniEditordummyImage = document.getElementById(
+//       "min-editor-dummy-image"
+//     );
+//     if (window.innerWidth < 1024) {
+//       miniEditordummyImage.src = clipmaskImage.src;
+//       miniEditordummyImage.style.width = "100%";
+//       miniEditordummyImage.classList.add("dummyImageCoverFit");
+//     }
+
+//     const dummyImage = document.getElementById("min-editor-dummy-image");
+
+//     // Check if the image element exists and if the clipmaskImage has a valid src
+//     if (miniEditorPopupImage && clipmaskImage.src) {
+//       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
+//       miniEditorPopupImage.src = clipmaskImage.src;
+//       dummyImage.style.width = "100%";
+//       dummyImage.style.height = "100%";
+//       dummyImage.style.objectFit = "cover";
+//       dummyImage.src = clipmaskImage.src;
+//       dummyImage.style.borderRadius = "10px";
+//     }
+//     //  else {
+//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
+//     // }
+//   }
+
+//   // Show input fields based on the number of textboxes
+//   if (textBoxCount > 0) {
+//     label1.style.display = "block";
+//     input1.style.display = "block"; // Show the first input field
+//   }
+//   if (textBoxCount > 1) {
+//     label2.style.display = "block";
+//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
+//   }
+//   const replaceImgBtn = document.getElementById("replace-btn-cont-1");
+//   // const imageFound = jsonData.objects.find(
+//   //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
+//   // );
+//   const imageFound = jsonData.objects.filter(
+//     (obj) => obj.customId === "clipmask"
+//   );
+//   if (imageFound[0]) {
+//     replaceImgBtn.style.display = "block";
+//   } else {
+//     replaceImgBtn.style.display = "none";
+//   }
+//   // Load the JSON data into the existing Fabric.js canvas
+//   let nextIndex = 1;
+//   jsonData.objects.forEach((obj) => {
+//     if (obj.type === "textbox") {
+//       // Assign a default dataIndex if not provided
+//       obj.dataIndex = obj.dataIndex || nextIndex++;
+//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
+//       if (inputField) {
+//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
+//       }
+//     }
+//   });
+//   jsonData.objects.forEach((obj) => {
+//     if (obj.type === "image" && obj.src.startsWith("http")) {
+//       obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
+//     }
+//   });
+//   console.log(jsonData);
+//   newFabricCanvas.loadFromJSON(
+//     jsonData,
+//     function () {
+//       // After loading the JSON, resize and reposition all objects to fit the canvas
+//       newFabricCanvas.getObjects().forEach((obj, index) => {
+//         obj.scaleX *= 0.22; // Adjust the scaling factor as needed
+//         obj.scaleY *= 0.22; // Adjust the scaling factor as needed
+
+//         // Adjust top and left properties to make the object visible
+//         obj.left *= 0.22; // Adjust the position as needed
+//         obj.top *= 0.22; // Adjust the position as needed
+
+//         if (obj.clipPath) {
+//           obj.clipPath.set({
+//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
+//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
+//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
+//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
+//           });
+//         }
+
+//         obj.setCoords();
+//         obj.set({
+//           selectable: false,
+//           hasControls: false,
+//           hasBorders: false,
+//           lockMovementX: true,
+//           lockMovementY: true,
+//           lockRotation: true,
+//           lockScalingX: true,
+//           lockScalingY: true,
+//         });
+//       });
+
+//       // Force a render to ensure all objects, including clipPaths, are applied
+//       newFabricCanvas.renderAll();
+
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       window.editedCanvasJson = savedCanvasJSON;
+//       const allObjects = newFabricCanvas.getObjects();
+//       console.log(allObjects);
+//       console.log(savedCanvasJSON);
+
+//       const firstObject = allObjects[0];
+
+//       // Remove the first object from the canvas
+//       if (
+//         firstObject &&
+//         firstObject.type === "image" &&
+//         firstObject.getSrc &&
+//         firstObject.getSrc().startsWith("http") &&
+//         !firstObject.clipPath
+//       ) {
+//         newFabricCanvas.remove(firstObject);
+//       }
+
+//       // Render the canvas without the first object
+//       newFabricCanvas.renderAll();
+//       const originalWidth = newFabricCanvas.width;
+//       const originalHeight = newFabricCanvas.height;
+
+//       // Set the canvas dimensions to 1080x1080 for the export
+//       newFabricCanvas.setDimensions({
+//         width: 1080,
+//         height: 1080,
+//       });
+//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+
+//       // Convert the remaining objects on the canvas to an image
+//       const format = "jpeg";
+//       const quality = 1;
+//       const imgData = newFabricCanvas.toDataURL({
+//         format: format,
+//         quality: quality,
+//         enableRetinaScaling: false,
+//       });
+//       newFabricCanvas.setDimensions({
+//         width: originalWidth,
+//         height: originalHeight,
+//       });
+//       newFabricCanvas.setZoom(1);
+//       // Pass the image data to the changeTexture function
+//       fabricImageConverted = imgData;
+//       console.log("this is thefabricImageConverted", fabricImageConverted);
+//       if (selectedMesh) {
+//         changeTexture(fabricImageConverted);
+//       }
+//       newFabricCanvas.insertAt(firstObject, 0);
+//       // Render the canvas to show all objects again
+//       newFabricCanvas.renderAll();
+//       console.log(newFabricCanvas.toJSON());
+//     },
+//     function (error) {
+//       console.error("Error loading JSON:", error);
+//       console.log("Loaded JSON Data:", jsonData);
+//     }
+//   );
+// }
+
 function loadJSONToCanvas(jsonData) {
   console.log(jsonData, "json data here ");
   if (!newFabricCanvas) {
@@ -999,100 +1472,204 @@ function loadJSONToCanvas(jsonData) {
     (obj) => obj.type === "textbox"
   ).length;
 
-  const showImage = jsonData.objects.filter(
-    (obj) => obj.customId === "clipmask"
+  // Get the container for dynamic image replace buttons
+  const multiImageContainer = document.querySelector(
+    ".multi-image-replace-cont"
   );
-  // const showImage = jsonData.objects.filter((obj) => obj.type === "image");
-  if (showImage.length > 0) {
-    const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
-    console.log(clipmaskImage);
+  multiImageContainer.innerHTML = ""; // Clear existing content
 
-    const miniEditorPopupImage = document.getElementById(
-      "min-editor-popup-image"
+  // Filter images, excluding the first one (background image)
+  const imageObjects = jsonData.objects.filter(
+    (obj, index) => obj.type === "image" && index !== 0
+  );
+
+  // Dynamically generate image replace sections
+  imageObjects.forEach((imageObj, index) => {
+    const photoNumber = index + 1;
+    const imageSection = document.createElement("div");
+    imageSection.className = "multi-image-cont";
+    imageSection.innerHTML = `
+      <p class="photo-list-num">Photo ${photoNumber}</p>
+      <div class="replace-image-main-box">
+        <img
+          src="${imageObj.src || "./assets/custom/no-temp.jpg"}"
+          class="hexa-replc-img"
+          alt="icon"
+          id="hexa-replc-img-${photoNumber}"
+        />
+        <div class="replace-img-btn-cont" id="replace-btn-cont-${photoNumber}">
+          <input
+            type="file"
+            name="gauci-file-${photoNumber}"
+            id="personaliseImgUpload-${photoNumber}"
+            class="gauci-hidden-file"
+            accept="image/png, image/jpeg, image/webp"
+          />
+          <label
+            for="personaliseImgUpload-${photoNumber}"
+            class="gauci-btn primary gauci-lg-btn btn-full replace-btn-personalise"
+          >
+            <img src="./assets/custom/imgIcon.png" alt="icon" />
+            <span>Replace</span>
+          </label>
+        </div>
+      </div>
+    `;
+    multiImageContainer.appendChild(imageSection);
+    const imageElement = document.getElementById(
+      `hexa-replc-img-${photoNumber}`
     );
-    const miniEditordummyImage = document.getElementById(
-      "min-editor-dummy-image"
+    if (imageElement) {
+      imageElement.addEventListener("click", () => {
+        updateUIImages(imageObj.src || "./assets/custom/no-temp.jpg");
+      });
+    }
+  });
+
+  // Add event listeners for image uploads
+  imageObjects.forEach((_, index) => {
+    const photoNumber = index + 1;
+    const input = document.getElementById(
+      `personaliseImgUpload-${photoNumber}`
     );
-    if (window.innerWidth < 1024) {
-      miniEditordummyImage.src = clipmaskImage.src;
+    if (input) {
+      input.addEventListener("change", (event) =>
+        handleImageUploadAlternate(event, photoNumber)
+      );
+    }
+  });
+
+  // Existing logic for clipmask image
+  // const showImage = jsonData.objects.filter(
+  //   (obj) => obj.customId === "clipmask"
+  // );
+  // if (showImage.length > 0) {
+  //   const clipmaskImage = showImage[0];
+  //   console.log(clipmaskImage);
+
+  //   const miniEditorPopupImage = document.getElementById(
+  //     "min-editor-popup-image"
+  //   );
+  //   const miniEditordummyImage = document.getElementById(
+  //     "min-editor-dummy-image"
+  //   );
+  //   if (window.innerWidth < 1024 && miniEditordummyImage) {
+  //     miniEditordummyImage.src = clipmaskImage.src;
+  //     miniEditordummyImage.style.width = "100%";
+  //     miniEditordummyImage.classList.add("dummyImageCoverFit");
+  //   }
+
+  //   const dummyImage = document.getElementById("min-editor-dummy-image");
+  //   if (miniEditorPopupImage && clipmaskImage.src) {
+  //     miniEditorPopupImage.src = clipmaskImage.src;
+  //     if (dummyImage) {
+  //       dummyImage.style.width = "100%";
+  //       dummyImage.style.height = "100%";
+  //       dummyImage.style.objectFit = "cover";
+  //       dummyImage.src = clipmaskImage.src;
+  //       dummyImage.style.borderRadius = "10px";
+  //     }
+  //   }
+  // }
+
+  const imageToShow =
+    lastReplacedPhotoNumber !== null
+      ? jsonData.objects[lastReplacedPhotoNumber]
+      : jsonData.objects.find(
+          (obj, index) => obj.type === "image" && index !== 0
+        );
+
+  const miniEditorPopupImage = document.getElementById(
+    "min-editor-popup-image"
+  );
+  const miniEditordummyImage = document.getElementById(
+    "min-editor-dummy-image"
+  );
+  if (imageToShow && imageToShow.src) {
+    console.log("Showing image:", imageToShow);
+    if (window.innerWidth < 1024 && miniEditordummyImage) {
+      miniEditordummyImage.src = imageToShow.src;
       miniEditordummyImage.style.width = "100%";
       miniEditordummyImage.classList.add("dummyImageCoverFit");
     }
 
-    const dummyImage = document.getElementById("min-editor-dummy-image");
-
-    // Check if the image element exists and if the clipmaskImage has a valid src
-    if (miniEditorPopupImage && clipmaskImage.src) {
-      // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-      miniEditorPopupImage.src = clipmaskImage.src;
-      dummyImage.style.width = "100%";
-      dummyImage.style.height = "100%";
-      dummyImage.style.objectFit = "cover";
-      dummyImage.src = clipmaskImage.src;
-      dummyImage.style.borderRadius = "10px";
+    if (miniEditorPopupImage) {
+      miniEditorPopupImage.src = imageToShow.src;
+      if (miniEditordummyImage) {
+        miniEditordummyImage.style.width = "100%";
+        miniEditordummyImage.style.height = "100%";
+        miniEditordummyImage.style.objectFit = "cover";
+        miniEditordummyImage.src = imageToShow.src;
+        miniEditordummyImage.style.borderRadius = "10px";
+      }
     }
-    //  else {
-    //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
-    // }
+  } else {
+    console.warn("No valid image found to display");
+    if (miniEditorPopupImage) {
+      miniEditorPopupImage.src = "./assets/custom/no-temp.jpg";
+    }
+    if (miniEditordummyImage) {
+      miniEditordummyImage.src = "./assets/custom/no-temp.jpg";
+      miniEditordummyImage.style.width = "30%";
+      miniEditordummyImage.style.height = "30%";
+      miniEditordummyImage.style.objectFit = "contain";
+      // miniEditordummyImage.style.borderRadius = "10px";
+    }
   }
 
   // Show input fields based on the number of textboxes
   if (textBoxCount > 0) {
     label1.style.display = "block";
-    input1.style.display = "block"; // Show the first input field
+    input1.style.display = "block";
   }
   if (textBoxCount > 1) {
     label2.style.display = "block";
-    input2.style.display = "block"; // Show the second input field if there are two or more textboxes
+    input2.style.display = "block";
   }
-  const replaceImgBtn = document.getElementById("replace-btn-cont");
-  // const imageFound = jsonData.objects.find(
-  //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
+
+  // Show the first replace button if clipmask exists
+  // const replaceImgBtn = document.getElementById("replace-btn-cont-1");
+  // const imageFound = jsonData.objects.filter(
+  //   (obj) => obj.customId === "clipmask"
   // );
-  const imageFound = jsonData.objects.filter(
-    (obj) => obj.customId === "clipmask"
-  );
-  if (imageFound[0]) {
-    replaceImgBtn.style.display = "block";
-  } else {
-    replaceImgBtn.style.display = "none";
-  }
+  // if (imageFound[0] && replaceImgBtn) {
+  //   replaceImgBtn.style.display = "block";
+  // } else if (replaceImgBtn) {
+  //   replaceImgBtn.style.display = "none";
+  // }
+
   // Load the JSON data into the existing Fabric.js canvas
   let nextIndex = 1;
   jsonData.objects.forEach((obj) => {
     if (obj.type === "textbox") {
-      // Assign a default dataIndex if not provided
       obj.dataIndex = obj.dataIndex || nextIndex++;
       const inputField = document.getElementById(`text-${obj.dataIndex}`);
       if (inputField) {
-        inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
+        inputField.value = obj.text || "";
       }
     }
   });
   jsonData.objects.forEach((obj) => {
     if (obj.type === "image" && obj.src.startsWith("http")) {
-      obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
+      obj.src = `${obj.src}?t=${Date.now()}`;
     }
   });
   console.log(jsonData);
   newFabricCanvas.loadFromJSON(
     jsonData,
     function () {
-      // After loading the JSON, resize and reposition all objects to fit the canvas
       newFabricCanvas.getObjects().forEach((obj, index) => {
-        obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-        obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-        // Adjust top and left properties to make the object visible
-        obj.left *= 0.22; // Adjust the position as needed
-        obj.top *= 0.22; // Adjust the position as needed
+        obj.scaleX *= 0.22;
+        obj.scaleY *= 0.22;
+        obj.left *= 0.22;
+        obj.top *= 0.22;
 
         if (obj.clipPath) {
           obj.clipPath.set({
-            scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
-            scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
-            left: obj.clipPath.left * 0.22, // Adjust the position as needed
-            top: obj.clipPath.top * 0.22, // Adjust the position as needed
+            scaleX: obj.clipPath.scaleX * 0.22,
+            scaleY: obj.clipPath.scaleY * 0.22,
+            left: obj.clipPath.left * 0.22,
+            top: obj.clipPath.top * 0.22,
           });
         }
 
@@ -1109,7 +1686,6 @@ function loadJSONToCanvas(jsonData) {
         });
       });
 
-      // Force a render to ensure all objects, including clipPaths, are applied
       newFabricCanvas.renderAll();
 
       savedCanvasJSON = newFabricCanvas.toJSON();
@@ -1119,8 +1695,6 @@ function loadJSONToCanvas(jsonData) {
       console.log(savedCanvasJSON);
 
       const firstObject = allObjects[0];
-
-      // Remove the first object from the canvas
       if (
         firstObject &&
         firstObject.type === "image" &&
@@ -1131,19 +1705,16 @@ function loadJSONToCanvas(jsonData) {
         newFabricCanvas.remove(firstObject);
       }
 
-      // Render the canvas without the first object
       newFabricCanvas.renderAll();
       const originalWidth = newFabricCanvas.width;
       const originalHeight = newFabricCanvas.height;
 
-      // Set the canvas dimensions to 1080x1080 for the export
       newFabricCanvas.setDimensions({
         width: 1080,
         height: 1080,
       });
       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
 
-      // Convert the remaining objects on the canvas to an image
       const format = "jpeg";
       const quality = 1;
       const imgData = newFabricCanvas.toDataURL({
@@ -1156,14 +1727,12 @@ function loadJSONToCanvas(jsonData) {
         height: originalHeight,
       });
       newFabricCanvas.setZoom(1);
-      // Pass the image data to the changeTexture function
       fabricImageConverted = imgData;
       console.log("this is thefabricImageConverted", fabricImageConverted);
       if (selectedMesh) {
         changeTexture(fabricImageConverted);
       }
       newFabricCanvas.insertAt(firstObject, 0);
-      // Render the canvas to show all objects again
       newFabricCanvas.renderAll();
       console.log(newFabricCanvas.toJSON());
     },
@@ -1174,13 +1743,95 @@ function loadJSONToCanvas(jsonData) {
   );
 }
 
-function setNewImageSrc(imageSrc) {
+function updateUIImages(imageSrc) {
+  const miniEditorPopupImage = document.getElementById(
+    "min-editor-popup-image"
+  );
+  const miniEditordummyImage = document.getElementById(
+    "min-editor-dummy-image"
+  );
+
+  if (imageSrc) {
+    console.log("Updating UI images with src:", imageSrc);
+    if (window.innerWidth < 1024 && miniEditordummyImage) {
+      miniEditordummyImage.src = imageSrc;
+      miniEditordummyImage.style.width = "100%";
+      miniEditordummyImage.classList.add("dummyImageCoverFit");
+    }
+
+    if (miniEditorPopupImage) {
+      miniEditorPopupImage.src = imageSrc;
+      if (miniEditordummyImage) {
+        miniEditordummyImage.style.width = "100%";
+        miniEditordummyImage.style.height = "100%";
+        miniEditordummyImage.style.objectFit = "cover";
+        miniEditordummyImage.src = imageSrc;
+        miniEditordummyImage.style.borderRadius = "10px";
+      }
+    }
+  } else {
+    console.warn("No valid image found to display");
+    if (miniEditorPopupImage) {
+      miniEditorPopupImage.src = "./assets/custom/no-temp.jpg";
+    }
+    if (miniEditordummyImage) {
+      miniEditordummyImage.src = "./assets/custom/no-temp.jpg";
+      miniEditordummyImage.style.width = "30%";
+      miniEditordummyImage.style.height = "30%";
+      miniEditordummyImage.style.objectFit = "contain";
+    }
+  }
+}
+// function setNewImageSrc(imageSrc) {
+//   newImageSrc = imageSrc;
+
+//   var originalCanvasJson = window.originalCanvasJson;
+//   var editedCanvasJson = window.editedCanvasJson;
+
+//   // Function to overwrite the text in originalCanvasJsonwith editedCanvasJson's text
+//   function overwriteText(originalJSON, updatedJSON) {
+//     if (
+//       originalJSON.objects &&
+//       updatedJSON.objects &&
+//       originalJSON.objects.length === updatedJSON.objects.length
+//     ) {
+//       originalJSON.objects.forEach((obj, index) => {
+//         if (
+//           obj.type === "textbox" &&
+//           updatedJSON.objects[index].type === "textbox"
+//         ) {
+//           // Overwrite the text
+//           obj.text = updatedJSON.objects[index].text;
+//         }
+//       });
+//     }
+//   }
+
+//   // Overwrite text from editedCanvasJson to originalCanvasJson
+//   overwriteText(originalCanvasJson, editedCanvasJson);
+
+//   if (typeof newImageSrc !== "undefined") {
+//     // Replace the image source in the parsed JSON and compress it
+//     replaceImageSrc(originalCanvasJson, newImageSrc, (imageUpdatedJSON) => {
+//       // Load the updated JSON onto the canvas
+//       loadJSONToCanvas(imageUpdatedJSON);
+
+//       window.editedCanvasJson = imageUpdatedJSON;
+//       console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
+//     });
+//   } else {
+//     // Log the updated JSON (without changing image source) to the console
+//     console.log("Updated JSON with overwritten text:", originalCanvasJson);
+//   }
+// }
+
+function setNewImageSrc(imageSrc, imageIndex) {
   newImageSrc = imageSrc;
 
   var originalCanvasJson = window.originalCanvasJson;
   var editedCanvasJson = window.editedCanvasJson;
 
-  // Function to overwrite the text in originalCanvasJsonwith editedCanvasJson's text
+  // Function to overwrite the text in originalCanvasJson with editedCanvasJson's text
   function overwriteText(originalJSON, updatedJSON) {
     if (
       originalJSON.objects &&
@@ -1192,7 +1843,6 @@ function setNewImageSrc(imageSrc) {
           obj.type === "textbox" &&
           updatedJSON.objects[index].type === "textbox"
         ) {
-          // Overwrite the text
           obj.text = updatedJSON.objects[index].text;
         }
       });
@@ -1204,37 +1854,112 @@ function setNewImageSrc(imageSrc) {
 
   if (typeof newImageSrc !== "undefined") {
     // Replace the image source in the parsed JSON and compress it
-    replaceImageSrc(originalCanvasJson, newImageSrc, (imageUpdatedJSON) => {
-      // Load the updated JSON onto the canvas
-      loadJSONToCanvas(imageUpdatedJSON);
-
-      window.editedCanvasJson = imageUpdatedJSON;
-      console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
-    });
+    replaceImageSrc(
+      originalCanvasJson,
+      newImageSrc,
+      imageIndex,
+      (imageUpdatedJSON) => {
+        // Load the updated JSON onto the canvas
+        loadJSONToCanvas(imageUpdatedJSON);
+        window.editedCanvasJson = imageUpdatedJSON;
+        console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
+      }
+    );
   } else {
-    // Log the updated JSON (without changing image source) to the console
     console.log("Updated JSON with overwritten text:", originalCanvasJson);
   }
 }
 
 // Assuming the user selects an image via an input field
-function handleImageUploadAlternate(event) {
+// function handleImageUploadAlternate(event) {
+//   if (selectedItem) {
+//     const openModalBtn = document.getElementById("gauci-mini-editor-save");
+//     openModalBtn.style.visibility = "invisible";
+//     const file = event.target.files[0];
+//     const reader = new FileReader();
+
+//     reader.onload = function (e) {
+//       const imageSrc = e.target.result;
+//       setNewImageSrc(imageSrc); // Store the new image source
+//       // loadJSONToCanvas(savedCanvasJSON); // Reload the JSON to canvas with the new image
+//       const miniEditorPopupImage = document.getElementById(
+//         "min-editor-popup-image"
+//       );
+//       if (miniEditorPopupImage) {
+//         miniEditorPopupImage.src = imageSrc; // Set the new image source
+//       }
+//     };
+
+//     if (file) {
+//       reader.readAsDataURL(file);
+//     }
+//   }
+// }
+
+// function handleImageUploadAlternate(event, photoNumber) {
+//   if (selectedItem) {
+//     const openModalBtn = document.getElementById("gauci-mini-editor-save");
+//     if (openModalBtn) {
+//       openModalBtn.style.visibility = "invisible";
+//     }
+//     const file = event.target.files[0];
+//     const reader = new FileReader();
+
+//     reader.onload = function (e) {
+//       const imageSrc = e.target.result;
+//       // Update the UI image
+//       const uiImage = document.getElementById(`hexa-replc-img-${photoNumber}`);
+//       if (uiImage) {
+//         uiImage.src = imageSrc;
+//       }
+//       // Update min-editor-popup-image only for the first image (if needed)
+//       if (photoNumber === 1) {
+//         const miniEditorPopupImage = document.getElementById(
+//           "min-editor-popup-image"
+//         );
+//         if (miniEditorPopupImage) {
+//           miniEditorPopupImage.src = imageSrc;
+//         }
+//         const miniEditordummyImage = document.getElementById(
+//           "min-editor-dummy-image"
+//         );
+//         if (miniEditordummyImage) {
+//           miniEditordummyImage.src = imageSrc;
+//         }
+//       }
+//       // Map photoNumber to the correct jsonData.objects index (skip background image at index 0)
+//       const imageIndex = photoNumber; // jsonData.objects index is photoNumber (since we skip index 0)
+//       setNewImageSrc(imageSrc, imageIndex);
+//     };
+
+//     if (file) {
+//       reader.readAsDataURL(file);
+//     }
+//   }
+// }
+
+function handleImageUploadAlternate(event, photoNumber) {
   if (selectedItem) {
     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-    openModalBtn.style.visibility = "invisible";
+    if (openModalBtn) {
+      openModalBtn.style.visibility = "invisible";
+    }
     const file = event.target.files[0];
     const reader = new FileReader();
 
     reader.onload = function (e) {
       const imageSrc = e.target.result;
-      setNewImageSrc(imageSrc); // Store the new image source
-      // loadJSONToCanvas(savedCanvasJSON); // Reload the JSON to canvas with the new image
-      const miniEditorPopupImage = document.getElementById(
-        "min-editor-popup-image"
-      );
-      if (miniEditorPopupImage) {
-        miniEditorPopupImage.src = imageSrc; // Set the new image source
+      // Update the UI image
+      const uiImage = document.getElementById(`hexa-replc-img-${photoNumber}`);
+      if (uiImage) {
+        uiImage.src = imageSrc;
       }
+      // Set the last replaced image
+      lastReplacedPhotoNumber = photoNumber;
+      updateUIImages(imageSrc);
+      // Map photoNumber to the correct jsonData.objects index (skip background image at index 0)
+      const imageIndex = photoNumber; // jsonData.objects index is photoNumber (since we skip index 0)
+      setNewImageSrc(imageSrc, imageIndex);
     };
 
     if (file) {
@@ -1242,13 +1967,55 @@ function handleImageUploadAlternate(event) {
     }
   }
 }
-document
-  .getElementById("personaliseImgUpload")
-  .addEventListener("change", handleImageUploadAlternate);
+
+// document
+//   .getElementById("personaliseImgUpload")
+//   .addEventListener("change", handleImageUploadAlternate);
 // Replace image event listener
 
 // Event listener for the "Adjust" button click
 
+// document
+//   .getElementById("personaliseAdjustBtn")
+//   .addEventListener("click", () => {
+//     const popupMiniCanvas = document.getElementById("popup-mini-canvas");
+//     popupMiniCanvas.style.display = "flex";
+
+//     if (newFabricCanvas) {
+//       // Set properties for the first object in the canvas
+//       const objects = newFabricCanvas.getObjects();
+//       console.log(objects);
+//       // const targetObject = objects.find(
+//       //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
+//       // );
+//       const targetObject = objects.filter(
+//         (obj) => obj.customId === "clipmask" && obj.type === "image"
+//       );
+
+//       console.log(targetObject);
+
+//       if (targetObject[0]) {
+//         // Set properties for the found object
+//         targetObject[0].set({
+//           selectable: true,
+//           hasControls: true,
+//           hasBorders: true,
+//           lockMovementX: false,
+//           lockMovementY: false,
+//           lockRotation: false,
+//           lockScalingX: false,
+//           lockScalingY: false,
+//         });
+//       }
+
+//       // Render the canvas after adjustments
+//       newFabricCanvas.renderAll();
+
+//       // Save the updated canvas state to localStorage
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       window.editedCanvasJson = savedCanvasJSON;
+//     }
+//   });
 document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
@@ -1256,21 +2023,20 @@ document
     popupMiniCanvas.style.display = "flex";
 
     if (newFabricCanvas) {
-      // Set properties for the first object in the canvas
+      // Get all objects from the canvas
       const objects = newFabricCanvas.getObjects();
       console.log(objects);
-      // const targetObject = objects.find(
-      //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
-      // );
-      const targetObject = objects.filter(
-        (obj) => obj.customId === "clipmask" && obj.type === "image"
+
+      // Filter image objects, excluding the background image at index 0
+      const targetObjects = objects.filter(
+        (obj, index) => obj.type === "image" && index !== 0
       );
 
-      console.log(targetObject);
+      console.log(targetObjects);
 
-      if (targetObject[0]) {
-        // Set properties for the found object
-        targetObject[0].set({
+      // Make all target image objects selectable and adjustable
+      targetObjects.forEach((targetObject) => {
+        targetObject.set({
           selectable: true,
           hasControls: true,
           hasBorders: true,
@@ -1280,7 +2046,7 @@ document
           lockScalingX: false,
           lockScalingY: false,
         });
-      }
+      });
 
       // Render the canvas after adjustments
       newFabricCanvas.renderAll();
@@ -1323,7 +2089,7 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
       // Save the first object (assuming it's the background image)
       const firstObject = allObjects[0];
-
+      console.log(firstObject);
       // Remove the first object from the canvas
       // newFabricCanvas.remove(firstObject);
       if (
@@ -1642,6 +2408,7 @@ initialize3DViewer();
             window.selectedOriginalJsonPart = null;
             mainPartMesh = null;
             window.originalCanvasJson = null;
+            lastReplacedPhotoNumber = null;
             meshImageDataArray = []; // Clear texture data
             // Hide mini editor save button
             const miniEditorSaveBtnt = document.getElementById(
@@ -1678,8 +2445,8 @@ initialize3DViewer();
               "personaliseImageUploadPopup"
             );
             realEditCont.style.display = "none";
-            const imageInput = document.getElementById("personaliseImgUpload");
-            imageInput.value = "";
+            // const imageInput = document.getElementById("personaliseImgUpload");
+            // imageInput.value = "";
             imageReplace = false;
             console.log("No Template clicked! 3D model and canvas reset.");
           });
@@ -1801,19 +2568,20 @@ initialize3DViewer();
             const realEditCont = document.getElementById(
               "personaliseImageUploadPopup"
             );
-            realEditCont.style.display = "none";
-            const imageInput = document.getElementById("personaliseImgUpload");
-            imageInput.value = "";
-            imageReplace = true;
 
-            preloadAllImages(selectedItem.jsonData)
-              .then(() => {
-                console.log("All images preloaded");
-                loadJSONToCanvas(selectedItem.jsonData);
-              })
-              .catch((err) => {
-                console.error("Error during image preloading", err);
-              });
+            realEditCont.style.display = "none";
+            // const imageInput = document.getElementById("personaliseImgUpload");
+            // imageInput.value = "";
+            imageReplace = true;
+            loadJSONToCanvas(selectedItem.jsonData);
+            // preloadAllImages(selectedItem.jsonData)
+            //   .then(() => {
+            //     console.log("All images preloaded");
+            //     loadJSONToCanvas(selectedItem.jsonData);
+            //   })
+            //   .catch((err) => {
+            //     console.error("Error during image preloading", err);
+            //   });
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
           }
@@ -1828,30 +2596,30 @@ initialize3DViewer();
   }
 })();
 
-function preloadAllImages(objects) {
-  console.log("preloadAllImages called", objects);
-  return Promise.all(
-    objects?.objects?.map((obj) => {
-      if (obj?.src) {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.crossOrigin = "anonymous";
-          img.onload = () => {
-            console.log("c", obj.src);
-            resolve();
-          };
-          img.onerror = (e) => {
-            console.error("Failed to preload image:", obj.src, e);
-            resolve();
-          };
-          img.src = obj.src;
-        });
-      } else {
-        return Promise.resolve(); // Not an image object
-      }
-    })
-  );
-}
+// function preloadAllImages(objects) {
+//   console.log("preloadAllImages called", objects);
+//   return Promise.all(
+//     objects?.objects?.map((obj) => {
+//       if (obj?.src) {
+//         return new Promise((resolve, reject) => {
+//           const img = new Image();
+//           img.crossOrigin = "anonymous";
+//           img.onload = () => {
+//             console.log("c", obj.src);
+//             resolve();
+//           };
+//           img.onerror = (e) => {
+//             console.error("Failed to preload image:", obj.src, e);
+//             resolve();
+//           };
+//           img.src = obj.src;
+//         });
+//       } else {
+//         return Promise.resolve(); // Not an image object
+//       }
+//     })
+//   );
+// }
 
 // const partDropDownList = document.getElementById("hexa-dropdown-ul-list");
 
