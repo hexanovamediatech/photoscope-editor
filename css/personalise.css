@@ -1072,7 +1072,16 @@ button#personaliseAdjustBtn img {
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s;
 }
+.hexa-replc-img:hover {
+  border: 2px solid #00a3ff;
+}
+
+.hexa-replc-img.active-image {
+  border: 2px solid #00a3ff; /* Same border as hover for active state */
+}
+
 .multi-image-cont {
   width: 100%;
 }
