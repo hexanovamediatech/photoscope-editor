@@ -840,87 +840,6 @@ function updateCanvasText(textIndex, newText) {
   console.log(window.editedCanvasJson);
 }
 
-// function replaceImageSrc(json, newImageSrc, callback) {
-//   let imageFoundInGroup = false;
-
-//   // Check if there are images within groups
-//   json.objects.forEach((obj) => {
-//     if (obj.type === "group") {
-//       obj.objects.forEach((innerObj) => {
-//         if (innerObj.type === "image") {
-//           innerObj.src = newImageSrc;
-//           imageFoundInGroup = true;
-//         }
-//       });
-//     }
-//   });
-
-//   if (imageFoundInGroup) {
-//     json.objects.forEach((obj) => {
-//       if (obj.type === "group") {
-//         obj.objects.forEach((innerObj) => {
-//           if (innerObj.type === "image") {
-//             innerObj.src = newImageSrc;
-//           }
-//         });
-//       }
-//     });
-//   } else {
-//     if (json.objects.length > 1 && json.objects[1].type === "image") {
-//       json.objects[1].src = newImageSrc;
-//     }
-//     console.log("Image updated in second position or no groups found");
-//   }
-
-//   imageUpdatedJSON = json;
-//   console.log(imageUpdatedJSON, "image updated json strc");
-//   if (callback) callback(imageUpdatedJSON);
-// }
-// function replaceImageSrc(json, newImageSrc, callback) {
-//   // Create a new image object to load the base64 image
-//   const img = new Image();
-//   img.src = newImageSrc;
-
-//   // Once the image is loaded, get its width and height
-//   img.onload = function () {
-//     const imageWidth = img.width;
-//     const imageHeight = img.height;
-
-//     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
-//     console.log(json.objects);
-
-//     // Find the object where obj.type === "image" and obj.src does not start with "http"
-//     // json.objects.forEach((obj) => {
-//     //   if (obj.type === "image" && !obj.src.startsWith("http")) {
-//     //     obj.src = newImageSrc;
-//     //     obj.width = imageWidth; // Set the width and height if needed
-//     //     obj.height = imageHeight;
-//     //   }
-//     // });
-
-//     // const imageUpdatedJSON = json;
-//     let found = false;
-
-//     json.objects.forEach((obj) => {
-//       if (!found && obj.customId === "clipmask" && obj.type === "image") {
-//         obj.src = newImageSrc;
-//         obj.width = imageWidth;
-//         obj.height = imageHeight;
-//         found = true; // Only update the first matching object
-//       }
-//     });
-
-//     const imageUpdatedJSON = json;
-//     console.log(imageUpdatedJSON, "image updated json structure");
-
-//     if (callback) callback(imageUpdatedJSON);
-//   };
-
-//   // Handle error if the image fails to load
-//   img.onerror = function () {
-//     console.error("Failed to load the image");
-//   };
-// }
 function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
   // Create a new image object to load the base64 image
   const img = new Image();
@@ -1021,444 +940,6 @@ function generateImagesFromCanvasStates() {
   });
 }
 
-// function loadJSONToCanvas(jsonData) {
-//   console.log(jsonData, "json data here ");
-//   if (!newFabricCanvas) {
-//     initializeCanvas();
-//   }
-
-//   newFabricCanvas.clear();
-
-//   const label1 = document.getElementById("label-1");
-//   const label2 = document.getElementById("label-2");
-//   const input1 = document.getElementById("text-1");
-//   const input2 = document.getElementById("text-2");
-//   label1.style.display = "none";
-//   label2.style.display = "none";
-//   input1.style.display = "none";
-//   input2.style.display = "none";
-
-//   // Count the number of textboxes in the JSON data
-//   const textBoxCount = jsonData.objects.filter(
-//     (obj) => obj.type === "textbox"
-//   ).length;
-
-//   const showImage = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   // const showImage = jsonData.objects.filter((obj) => obj.type === "image");
-//   if (showImage.length > 0) {
-//     const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
-//     console.log(clipmaskImage);
-
-//     const miniEditorPopupImage = document.getElementById(
-//       "min-editor-popup-image"
-//     );
-//     const miniEditordummyImage = document.getElementById(
-//       "min-editor-dummy-image"
-//     );
-//     if (window.innerWidth < 1024) {
-//       miniEditordummyImage.src = clipmaskImage.src;
-//       miniEditordummyImage.style.width = "100%";
-//       miniEditordummyImage.classList.add("dummyImageCoverFit");
-//     }
-
-//     const dummyImage = document.getElementById("min-editor-dummy-image");
-
-//     // Check if the image element exists and if the clipmaskImage has a valid src
-//     if (miniEditorPopupImage && clipmaskImage.src) {
-//       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-//       miniEditorPopupImage.src = clipmaskImage.src;
-//       dummyImage.style.width = "100%";
-//       dummyImage.style.height = "100%";
-//       dummyImage.style.objectFit = "cover";
-//       dummyImage.src = clipmaskImage.src;
-//       dummyImage.style.borderRadius = "10px";
-//     }
-//     //  else {
-//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
-//     // }
-//   }
-
-//   // Show input fields based on the number of textboxes
-//   if (textBoxCount > 0) {
-//     label1.style.display = "block";
-//     input1.style.display = "block"; // Show the first input field
-//   }
-//   if (textBoxCount > 1) {
-//     label2.style.display = "block";
-//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
-//   }
-//   const replaceImgBtn = document.getElementById("replace-btn-cont");
-//   // const imageFound = jsonData.objects.find(
-//   //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
-//   // );
-//   const imageFound = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   if (imageFound[0]) {
-//     replaceImgBtn.style.display = "block";
-//   } else {
-//     replaceImgBtn.style.display = "none";
-//   }
-//   // Load the JSON data into the existing Fabric.js canvas
-//   let nextIndex = 1;
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "textbox") {
-//       // Assign a default dataIndex if not provided
-//       obj.dataIndex = obj.dataIndex || nextIndex++;
-//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
-//       if (inputField) {
-//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
-//       }
-//     }
-//   });
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "image" && obj.src.startsWith("http")) {
-//       obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
-//     }
-//   });
-//   console.log(jsonData);
-//   newFabricCanvas.loadFromJSON(
-//     jsonData,
-//     function () {
-//       // After loading the JSON, resize and reposition all objects to fit the canvas
-//       newFabricCanvas.getObjects().forEach((obj, index) => {
-//         obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-//         obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-//         // Adjust top and left properties to make the object visible
-//         obj.left *= 0.22; // Adjust the position as needed
-//         obj.top *= 0.22; // Adjust the position as needed
-
-//         if (obj.clipPath) {
-//           obj.clipPath.set({
-//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
-//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
-//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
-//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
-//           });
-//         }
-
-//         obj.setCoords();
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       // Force a render to ensure all objects, including clipPaths, are applied
-//       newFabricCanvas.renderAll();
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       window.editedCanvasJson = savedCanvasJSON;
-//       const allObjects = newFabricCanvas.getObjects();
-//       console.log(allObjects);
-//       console.log(savedCanvasJSON);
-
-//       const firstObject = allObjects[0];
-
-//       // Remove the first object from the canvas
-//       if (
-//         firstObject &&
-//         firstObject.type === "image" &&
-//         firstObject.getSrc &&
-//         firstObject.getSrc().startsWith("http") &&
-//         !firstObject.clipPath
-//       ) {
-//         newFabricCanvas.remove(firstObject);
-//       }
-
-//       // Render the canvas without the first object
-//       newFabricCanvas.renderAll();
-//       const originalWidth = newFabricCanvas.width;
-//       const originalHeight = newFabricCanvas.height;
-
-//       // Set the canvas dimensions to 1080x1080 for the export
-//       newFabricCanvas.setDimensions({
-//         width: 1080,
-//         height: 1080,
-//       });
-//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
-
-//       // Convert the remaining objects on the canvas to an image
-//       const format = "jpeg";
-//       const quality = 1;
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       newFabricCanvas.setDimensions({
-//         width: originalWidth,
-//         height: originalHeight,
-//       });
-//       newFabricCanvas.setZoom(1);
-//       // Pass the image data to the changeTexture function
-//       fabricImageConverted = imgData;
-//       console.log("this is thefabricImageConverted", fabricImageConverted);
-//       if (selectedMesh) {
-//         changeTexture(fabricImageConverted);
-//       }
-//       newFabricCanvas.insertAt(firstObject, 0);
-//       // Render the canvas to show all objects again
-//       newFabricCanvas.renderAll();
-//       console.log(newFabricCanvas.toJSON());
-//     },
-//     function (error) {
-//       console.error("Error loading JSON:", error);
-//       console.log("Loaded JSON Data:", jsonData);
-//     }
-//   );
-// }
-
-// function loadJSONToCanvas(jsonData) {
-//   console.log(jsonData, "json data here ");
-//   if (!newFabricCanvas) {
-//     initializeCanvas();
-//   }
-
-//   newFabricCanvas.clear();
-
-//   const label1 = document.getElementById("label-1");
-//   const label2 = document.getElementById("label-2");
-//   const input1 = document.getElementById("text-1");
-//   const input2 = document.getElementById("text-2");
-//   label1.style.display = "none";
-//   label2.style.display = "none";
-//   input1.style.display = "none";
-//   input2.style.display = "none";
-
-//   // Count the number of textboxes in the JSON data
-//   const textBoxCount = jsonData.objects.filter(
-//     (obj) => obj.type === "textbox"
-//   ).length;
-
-//   const multiImageContainer = document.querySelector(
-//     ".multi-image-replace-cont"
-//   );
-//   multiImageContainer.innerHTML = "";
-//   console.log(multiImageContainer);
-
-//   // Filter images, excluding the first one (background image)
-//   const imageObjects = jsonData.objects.filter(
-//     (obj, index) => obj.type === "image" && index !== 0
-//   );
-//   imageObjects.forEach((imageObj, index) => {
-//     const photoNumber = index + 1;
-//     const imageSection = document.createElement("div");
-//     imageSection.className = "multi-image-cont";
-//     imageSection.innerHTML = `
-//       <p class="photo-list-num">Photo ${photoNumber}</p>
-//       <div class="replace-image-main-box">
-//         <img
-//           src="${imageObj.src || "./assets/custom/no-temp.jpg"}"
-//           class="hexa-replc-img"
-//           alt="icon"
-//           id="hexa-replc-img-${photoNumber}"
-//         />
-//         <div class="replace-img-btn-cont" id="replace-btn-cont-${photoNumber}">
-//           <input
-//             type="file"
-//             name="gauci-file-${photoNumber}"
-//             id="personaliseImgUpload-${photoNumber}"
-//             class="gauci-hidden-file"
-//             accept="image/png, image/jpeg, image/webp"
-//           />
-//           <label
-//             for="personaliseImgUpload-${photoNumber}"
-//             class="gauci-btn primary gauci-lg-btn btn-full replace-btn-personalise"
-//           >
-//             <img src="./assets/custom/imgIcon.png" alt="icon" />
-//             <span>Replace</span>
-//           </label>
-//         </div>
-//       </div>
-//     `;
-//     multiImageContainer.appendChild(imageSection);
-//   });
-
-//   const showImage = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   // const showImage = jsonData.objects.filter((obj) => obj.type === "image");
-//   if (showImage.length > 0) {
-//     const clipmaskImage = showImage[0]; // Assuming there's at least one matching image
-//     console.log(clipmaskImage);
-
-//     const miniEditorPopupImage = document.getElementById(
-//       "min-editor-popup-image"
-//     );
-//     const miniEditordummyImage = document.getElementById(
-//       "min-editor-dummy-image"
-//     );
-//     if (window.innerWidth < 1024) {
-//       miniEditordummyImage.src = clipmaskImage.src;
-//       miniEditordummyImage.style.width = "100%";
-//       miniEditordummyImage.classList.add("dummyImageCoverFit");
-//     }
-
-//     const dummyImage = document.getElementById("min-editor-dummy-image");
-
-//     // Check if the image element exists and if the clipmaskImage has a valid src
-//     if (miniEditorPopupImage && clipmaskImage.src) {
-//       // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-//       miniEditorPopupImage.src = clipmaskImage.src;
-//       dummyImage.style.width = "100%";
-//       dummyImage.style.height = "100%";
-//       dummyImage.style.objectFit = "cover";
-//       dummyImage.src = clipmaskImage.src;
-//       dummyImage.style.borderRadius = "10px";
-//     }
-//     //  else {
-//     //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
-//     // }
-//   }
-
-//   // Show input fields based on the number of textboxes
-//   if (textBoxCount > 0) {
-//     label1.style.display = "block";
-//     input1.style.display = "block"; // Show the first input field
-//   }
-//   if (textBoxCount > 1) {
-//     label2.style.display = "block";
-//     input2.style.display = "block"; // Show the second input field if there are two or more textboxes
-//   }
-//   const replaceImgBtn = document.getElementById("replace-btn-cont-1");
-//   // const imageFound = jsonData.objects.find(
-//   //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
-//   // );
-//   const imageFound = jsonData.objects.filter(
-//     (obj) => obj.customId === "clipmask"
-//   );
-//   if (imageFound[0]) {
-//     replaceImgBtn.style.display = "block";
-//   } else {
-//     replaceImgBtn.style.display = "none";
-//   }
-//   // Load the JSON data into the existing Fabric.js canvas
-//   let nextIndex = 1;
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "textbox") {
-//       // Assign a default dataIndex if not provided
-//       obj.dataIndex = obj.dataIndex || nextIndex++;
-//       const inputField = document.getElementById(`text-${obj.dataIndex}`);
-//       if (inputField) {
-//         inputField.value = obj.text || ""; // Set the input field value to the text from the JSON
-//       }
-//     }
-//   });
-//   jsonData.objects.forEach((obj) => {
-//     if (obj.type === "image" && obj.src.startsWith("http")) {
-//       obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
-//     }
-//   });
-//   console.log(jsonData);
-//   newFabricCanvas.loadFromJSON(
-//     jsonData,
-//     function () {
-//       // After loading the JSON, resize and reposition all objects to fit the canvas
-//       newFabricCanvas.getObjects().forEach((obj, index) => {
-//         obj.scaleX *= 0.22; // Adjust the scaling factor as needed
-//         obj.scaleY *= 0.22; // Adjust the scaling factor as needed
-
-//         // Adjust top and left properties to make the object visible
-//         obj.left *= 0.22; // Adjust the position as needed
-//         obj.top *= 0.22; // Adjust the position as needed
-
-//         if (obj.clipPath) {
-//           obj.clipPath.set({
-//             scaleX: obj.clipPath.scaleX * 0.22, // Adjust the scaling factor as needed
-//             scaleY: obj.clipPath.scaleY * 0.22, // Adjust the scaling factor as needed
-//             left: obj.clipPath.left * 0.22, // Adjust the position as needed
-//             top: obj.clipPath.top * 0.22, // Adjust the position as needed
-//           });
-//         }
-
-//         obj.setCoords();
-//         obj.set({
-//           selectable: false,
-//           hasControls: false,
-//           hasBorders: false,
-//           lockMovementX: true,
-//           lockMovementY: true,
-//           lockRotation: true,
-//           lockScalingX: true,
-//           lockScalingY: true,
-//         });
-//       });
-
-//       // Force a render to ensure all objects, including clipPaths, are applied
-//       newFabricCanvas.renderAll();
-
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       window.editedCanvasJson = savedCanvasJSON;
-//       const allObjects = newFabricCanvas.getObjects();
-//       console.log(allObjects);
-//       console.log(savedCanvasJSON);
-
-//       const firstObject = allObjects[0];
-
-//       // Remove the first object from the canvas
-//       if (
-//         firstObject &&
-//         firstObject.type === "image" &&
-//         firstObject.getSrc &&
-//         firstObject.getSrc().startsWith("http") &&
-//         !firstObject.clipPath
-//       ) {
-//         newFabricCanvas.remove(firstObject);
-//       }
-
-//       // Render the canvas without the first object
-//       newFabricCanvas.renderAll();
-//       const originalWidth = newFabricCanvas.width;
-//       const originalHeight = newFabricCanvas.height;
-
-//       // Set the canvas dimensions to 1080x1080 for the export
-//       newFabricCanvas.setDimensions({
-//         width: 1080,
-//         height: 1080,
-//       });
-//       newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
-
-//       // Convert the remaining objects on the canvas to an image
-//       const format = "jpeg";
-//       const quality = 1;
-//       const imgData = newFabricCanvas.toDataURL({
-//         format: format,
-//         quality: quality,
-//         enableRetinaScaling: false,
-//       });
-//       newFabricCanvas.setDimensions({
-//         width: originalWidth,
-//         height: originalHeight,
-//       });
-//       newFabricCanvas.setZoom(1);
-//       // Pass the image data to the changeTexture function
-//       fabricImageConverted = imgData;
-//       console.log("this is thefabricImageConverted", fabricImageConverted);
-//       if (selectedMesh) {
-//         changeTexture(fabricImageConverted);
-//       }
-//       newFabricCanvas.insertAt(firstObject, 0);
-//       // Render the canvas to show all objects again
-//       newFabricCanvas.renderAll();
-//       console.log(newFabricCanvas.toJSON());
-//     },
-//     function (error) {
-//       console.error("Error loading JSON:", error);
-//       console.log("Loaded JSON Data:", jsonData);
-//     }
-//   );
-// }
-
 function loadJSONToCanvas(jsonData) {
   console.log(jsonData, "json data here ");
   if (!newFabricCanvas) {
@@ -1547,39 +1028,6 @@ function loadJSONToCanvas(jsonData) {
       );
     }
   });
-
-  // Existing logic for clipmask image
-  // const showImage = jsonData.objects.filter(
-  //   (obj) => obj.customId === "clipmask"
-  // );
-  // if (showImage.length > 0) {
-  //   const clipmaskImage = showImage[0];
-  //   console.log(clipmaskImage);
-
-  //   const miniEditorPopupImage = document.getElementById(
-  //     "min-editor-popup-image"
-  //   );
-  //   const miniEditordummyImage = document.getElementById(
-  //     "min-editor-dummy-image"
-  //   );
-  //   if (window.innerWidth < 1024 && miniEditordummyImage) {
-  //     miniEditordummyImage.src = clipmaskImage.src;
-  //     miniEditordummyImage.style.width = "100%";
-  //     miniEditordummyImage.classList.add("dummyImageCoverFit");
-  //   }
-
-  //   const dummyImage = document.getElementById("min-editor-dummy-image");
-  //   if (miniEditorPopupImage && clipmaskImage.src) {
-  //     miniEditorPopupImage.src = clipmaskImage.src;
-  //     if (dummyImage) {
-  //       dummyImage.style.width = "100%";
-  //       dummyImage.style.height = "100%";
-  //       dummyImage.style.objectFit = "cover";
-  //       dummyImage.src = clipmaskImage.src;
-  //       dummyImage.style.borderRadius = "10px";
-  //     }
-  //   }
-  // }
 
   const imageToShow =
     lastReplacedPhotoNumber !== null
@@ -1834,37 +1282,88 @@ function updateUIImages(imageSrc) {
 //   }
 // }
 
+// function setNewImageSrc(imageSrc, imageIndex) {
+//   newImageSrc = imageSrc;
+
+//   var originalCanvasJson = window.originalCanvasJson;
+//   var editedCanvasJson = window.editedCanvasJson;
+
+//   console.log(originalCanvasJson);
+//   console.log(editedCanvasJson);
+
+//   // Function to overwrite the text in originalCanvasJson with editedCanvasJson's text
+//   function overwriteText(originalJSON, updatedJSON) {
+//     if (
+//       originalJSON.objects &&
+//       updatedJSON.objects &&
+//       originalJSON.objects.length === updatedJSON.objects.length
+//     ) {
+//       originalJSON.objects.forEach((obj, index) => {
+//         if (
+//           obj.type === "textbox" &&
+//           updatedJSON.objects[index].type === "textbox"
+//         ) {
+//           obj.text = updatedJSON.objects[index].text;
+//         }
+//       });
+//     }
+//   }
+
+//   // Overwrite text from editedCanvasJson to originalCanvasJson
+//   overwriteText(originalCanvasJson, editedCanvasJson);
+
+//   if (typeof newImageSrc !== "undefined") {
+//     // Replace the image source in the parsed JSON and compress it
+//     replaceImageSrc(
+//       originalCanvasJson,
+//       newImageSrc,
+//       imageIndex,
+//       (imageUpdatedJSON) => {
+//         // Load the updated JSON onto the canvas
+//         loadJSONToCanvas(imageUpdatedJSON);
+//         window.editedCanvasJson = imageUpdatedJSON;
+//         console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
+//       }
+//     );
+//   } else {
+//     console.log("Updated JSON with overwritten text:", originalCanvasJson);
+//   }
+// }
+
 function setNewImageSrc(imageSrc, imageIndex) {
   newImageSrc = imageSrc;
 
-  var originalCanvasJson = window.originalCanvasJson;
   var editedCanvasJson = window.editedCanvasJson;
 
-  // Function to overwrite the text in originalCanvasJson with editedCanvasJson's text
-  function overwriteText(originalJSON, updatedJSON) {
-    if (
-      originalJSON.objects &&
-      updatedJSON.objects &&
-      originalJSON.objects.length === updatedJSON.objects.length
-    ) {
-      originalJSON.objects.forEach((obj, index) => {
-        if (
-          obj.type === "textbox" &&
-          updatedJSON.objects[index].type === "textbox"
-        ) {
-          obj.text = updatedJSON.objects[index].text;
-        }
-      });
-    }
-  }
+  console.log(editedCanvasJson);
 
-  // Overwrite text from editedCanvasJson to originalCanvasJson
-  overwriteText(originalCanvasJson, editedCanvasJson);
+  // Store editedCanvasJson in a new variable with a deep copy to avoid modifying the original
+  var newOriginalJson = JSON.parse(JSON.stringify(editedCanvasJson));
+
+  // Map over objects array and scale properties by 4.55
+  newOriginalJson.objects = newOriginalJson.objects.map((obj) => {
+    // Scale properties
+    if (obj.scaleX !== undefined) obj.scaleX *= 4.55;
+    if (obj.scaleY !== undefined) obj.scaleY *= 4.55;
+    if (obj.left !== undefined) obj.left *= 4.55;
+    if (obj.top !== undefined) obj.top *= 4.55;
+
+    // Handle clipPath if present
+    if (obj.clipPath) {
+      let clip = obj.clipPath;
+      if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
+      if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
+      if (clip.left !== undefined) clip.left *= 4.55;
+      if (clip.top !== undefined) clip.top *= 4.55;
+    }
+
+    return obj;
+  });
 
   if (typeof newImageSrc !== "undefined") {
-    // Replace the image source in the parsed JSON and compress it
+    // Replace the image source in the parsed JSON
     replaceImageSrc(
-      originalCanvasJson,
+      newOriginalJson, // Use the new scaled JSON
       newImageSrc,
       imageIndex,
       (imageUpdatedJSON) => {
@@ -1875,7 +1374,7 @@ function setNewImageSrc(imageSrc, imageIndex) {
       }
     );
   } else {
-    console.log("Updated JSON with overwritten text:", originalCanvasJson);
+    console.log("Updated JSON with new original:", newOriginalJson);
   }
 }
 
