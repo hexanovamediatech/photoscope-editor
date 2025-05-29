@@ -41,7 +41,7 @@ window.addEventListener("load", () => {
   // Hide loader after 2 seconds
   setTimeout(() => {
     if (loader) loader.style.display = "none";
-  }, 2000);
+  }, 1500);
 });
 
 // async function fetchModelData() {
