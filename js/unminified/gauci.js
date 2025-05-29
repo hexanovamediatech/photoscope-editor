@@ -1510,15 +1510,28 @@
 
         tempCanvas.loadFromJSON(selectedItem.jsonData, async () => {
           const objects = tempCanvas.getObjects();
-          const corsImages = [];
-          console.log(objects);
-          // Hide external images to avoid CORS issues
-          objects.forEach((obj) => {
-            if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-              corsImages.push(obj);
-              obj.visible = false;
-            }
-          });
+          const firstObject = objects[0];
+
+          // // Remove the first object from the canvas
+          if (
+            firstObject &&
+            firstObject.type === "image" &&
+            firstObject.getSrc &&
+            firstObject.getSrc().startsWith("http") &&
+            !firstObject.clipPath
+          ) {
+            tempCanvas.remove(firstObject);
+          }
+
+          // const corsImages = [];
+          // console.log(objects);
+          // // Hide external images to avoid CORS issues
+          // objects.forEach((obj) => {
+          //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+          //     corsImages.push(obj);
+          //     obj.visible = false;
+          //   }
+          // });
 
           tempCanvas.renderAll();
 
@@ -1557,7 +1570,11 @@
           }
 
           // 🔁 Step 3: Cleanup
-          corsImages.forEach((obj) => (obj.visible = true));
+          // corsImages.forEach((obj) => (obj.visible = true));
+          tempCanvas.insertAt(firstObject, 0);
+
+          // Render the canvas to show all objects again
+          tempCanvas.renderAll();
           tempCanvas.clear();
           tempCanvas.dispose();
 
@@ -1631,13 +1648,14 @@
           const name = selector.find("#gauci-json-save-name").val();
           const urlParams = new URLSearchParams(window.location.search);
           const modelName = urlParams.get("name");
-
+          const modelId = urlParams.get("id");
           const data = {
             key: key,
             src: originalFormat,
             imageUrl: imageUrl, // ✅ set preview image URL
             name: name,
             type: modelName,
+            modelId: modelId,
             isPublic: isPublic,
           };
 
@@ -7718,6 +7736,14 @@
           });
 
           console.log("Tabs created successfully.");
+          var params = new URLSearchParams(window.location.search);
+          // var name = params.get("name");
+          // var id = params.get("id");
+          // var templateName = params.get("templateName");
+          var key = params.get("key");
+          if (key) {
+            loadTemplateFromUrl();
+          }
         } else {
           console.error("No linkedMeshImageData found in the product.");
         }
@@ -11445,10 +11471,11 @@
       var params = new URLSearchParams(window.location.search);
       var name = params.get("name");
       var id = params.get("id");
-      var templateName = params.get("templateName");
-      console.log("This is the template params: ", name, id, templateName);
+      // var templateName = params.get("templateName");
+      var key = params.get("key");
+      // console.log("This is the template params: ", name, id, templateName);
 
-      if (!templateName) {
+      if (!key) {
         console.error("No template name found in the URL.");
         return;
       }
@@ -11473,7 +11500,7 @@
 
       // Fetch the template data using jQuery's AJAX
       $.ajax({
-        url: `${baseUrl}/api/v1/user/template/${id}`,
+        url: `${baseUrl}/api/v1/user/template/${key}`,
         method: "GET",
         xhrFields: {
           withCredentials: true, // to include credentials (cookies)
@@ -11482,23 +11509,96 @@
           console.log("Template data:", data);
 
           if (data.src) {
-            // Fetch the template JSON
-            $.getJSON(data.src, function (jsonData) {
-              console.log("Loaded template JSON:", jsonData);
-              loadJSON(jsonData);
-            }).fail(function () {
-              console.error("Error loading template JSON");
-            });
-          } else {
-            console.error("No template source URL found in the API response.");
+            if (data.src) {
+              console.log("✅ srcData (raw):", data.src);
+              // console.log(output);
+              tabCanvasStates = {};
+              tabCanvasStates = data.src;
+              console.log(tabCanvasStates);
+              allCanvasTabState = data.src;
+
+              console.log(activeTabId);
+              console.log(allCanvasTabState);
+              loadCanvasState(activeTabId);
+            }
           }
+
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
+
+          // $(document).on('keydown', function(event) {
+          //     if (event.key === 'Escape') {
+          //         var targetModal = selector.find('.gauci-modal:visible');
+          //         if (targetModal.length) {
+          //             targetModal.hide();
+          //         }
+          //     }
+          // });
+
+          // selector.find(".gauci-modal-close").on("click", function (e) {
+          //     e.preventDefault();
+          //     var target = $(this).data("target");
+          //     selector.find(target).hide();
+          // });
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
         },
         error: function (xhr, status, error) {
           console.error("Error fetching template:", status, error);
+          if (xhr.status === 401) {
+            Swal.fire({
+              icon: "info",
+              title: "Login Required",
+              text: "Please log in to view this template.",
+            });
+          }
         },
       });
     }
-    loadTemplateFromUrl();
+    // window.onload = function () {
+    //   // Push to the end of the event queue to allow async tasks to settle
+    //   setTimeout(loadTemplateFromUrl, 0);
+    // };
 
     $(document).on("keydown", function (event) {
       if (event.key === "Escape") {
