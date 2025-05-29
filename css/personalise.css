@@ -828,14 +828,21 @@ button#personaliseAdjustBtn img {
   /* bottom: -55px; */
   /* left: 20px; */
   /* margin-top: 20px; */
-  width: 80px;
+  width: 120px;
+  /* height: 42px; */
   padding: 5px 10px;
   text-align: center;
   /* border-radius: 40px; */
   cursor: pointer;
+  background: #242631;
+  color: #aaa;
   z-index: 9;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5);
+  /* box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.5); */
   border-radius: 40px;
+}
+.go-back-btn:hover {
+  background: #00a3ff;
+  color: #fff;
 }
 .save-icon-main-editor {
   border-top-left-radius: 40px;
@@ -857,6 +864,21 @@ button#personaliseAdjustBtn img {
   background: #00a3ff;
   /* color: #fff; */
 }
+
+.save-icon-main-editor img {
+  transition: filter 0.3s ease;
+}
+.library-icon-main-editor img {
+  transition: filter 0.3s ease;
+}
+
+.save-icon-main-editor:hover img {
+  filter: brightness(0) invert(1);
+}
+.library-icon-main-editor:hover img {
+  filter: brightness(0) invert(1);
+}
+
 .library-icon-main-editor {
   border-top-right-radius: 40px;
   border-bottom-right-radius: 40px;
