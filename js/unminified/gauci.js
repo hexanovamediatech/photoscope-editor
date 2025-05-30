@@ -53,9 +53,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () { },
-        saveTemplate: function () { },
-        saveImage: function () { },
+        customFunctions: function () {},
+        saveTemplate: function () {},
+        saveImage: function () {},
       },
       options
     );
@@ -183,13 +183,13 @@
             .find("#gauci-icons .gauci-grid")
             .append(
               '<div class="gauci-element add-element" data-elsource="' +
-              url +
-              '" data-loader="no" title="' +
-              item.icons[ii].name +
-              '">' +
-              '<span class="material-icons">' +
-              item.icons[ii].ligature +
-              "</div>"
+                url +
+                '" data-loader="no" title="' +
+                item.icons[ii].name +
+                '">' +
+                '<span class="material-icons">' +
+                item.icons[ii].ligature +
+                "</div>"
             );
         }
       }
@@ -1510,15 +1510,28 @@
 
         tempCanvas.loadFromJSON(selectedItem.jsonData, async () => {
           const objects = tempCanvas.getObjects();
-          const corsImages = [];
-          console.log(objects);
-          // Hide external images to avoid CORS issues
-          objects.forEach((obj) => {
-            if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-              corsImages.push(obj);
-              obj.visible = false;
-            }
-          });
+          const firstObject = objects[0];
+
+          // // Remove the first object from the canvas
+          if (
+            firstObject &&
+            firstObject.type === "image" &&
+            firstObject.getSrc &&
+            firstObject.getSrc().startsWith("http") &&
+            !firstObject.clipPath
+          ) {
+            tempCanvas.remove(firstObject);
+          }
+
+          // const corsImages = [];
+          // console.log(objects);
+          // // Hide external images to avoid CORS issues
+          // objects.forEach((obj) => {
+          //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
+          //     corsImages.push(obj);
+          //     obj.visible = false;
+          //   }
+          // });
 
           tempCanvas.renderAll();
 
@@ -1557,7 +1570,11 @@
           }
 
           // 🔁 Step 3: Cleanup
-          corsImages.forEach((obj) => (obj.visible = true));
+          // corsImages.forEach((obj) => (obj.visible = true));
+          tempCanvas.insertAt(firstObject, 0);
+
+          // Render the canvas to show all objects again
+          tempCanvas.renderAll();
           tempCanvas.clear();
           tempCanvas.dispose();
 
@@ -1631,13 +1648,14 @@
           const name = selector.find("#gauci-json-save-name").val();
           const urlParams = new URLSearchParams(window.location.search);
           const modelName = urlParams.get("name");
-
+          const modelId = urlParams.get("id");
           const data = {
             key: key,
             src: originalFormat,
             imageUrl: imageUrl, // ✅ set preview image URL
             name: name,
             type: modelName,
+            modelId: modelId,
             isPublic: isPublic,
           };
 
@@ -2126,7 +2144,7 @@
             }
           });
         },
-        function () { },
+        function () {},
         {
           crossOrigin: "anonymous",
         }
@@ -3030,7 +3048,7 @@
               canvas.setActiveObject(svg);
               canvas.requestRenderAll();
             },
-            function () { },
+            function () {},
             {
               crossOrigin: "anonymous",
             }
@@ -3239,12 +3257,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-        action +
-        '<span class="time">' +
-        time +
-        '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-        JSON.stringify(json) +
-        "</script></div></li>"
+          action +
+          '<span class="time">' +
+          time +
+          '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          JSON.stringify(json) +
+          "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -6687,8 +6705,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                          item.find(".select2-item").html() +
-                          "&text=abc",
+                            item.find(".select2-item").html() +
+                            "&text=abc",
                         ],
                       },
                       active: function () {
@@ -6875,18 +6893,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-          $(originalOption).data("icon") +
-          "</span>" +
-          icon.text +
-          "</div>"
+            $(originalOption).data("icon") +
+            "</span>" +
+            icon.text +
+            "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-          $(originalOption).data("font") +
-          '">' +
-          icon.text +
-          "</div>"
+            $(originalOption).data("font") +
+            '">' +
+            icon.text +
+            "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -7718,6 +7736,14 @@
           });
 
           console.log("Tabs created successfully.");
+          var params = new URLSearchParams(window.location.search);
+          // var name = params.get("name");
+          // var id = params.get("id");
+          // var templateName = params.get("templateName");
+          var key = params.get("key");
+          if (key) {
+            loadTemplateFromUrl();
+          }
         } else {
           console.error("No linkedMeshImageData found in the product.");
         }
@@ -8458,7 +8484,191 @@
 
     var transferedImageArr;
     var transfaredImage;
+    function crop(event) {
+      if (!transferedImageArr) {
+        transferedImageArr = [];
+      }
+      if (shape === "rectangle") {
+        const rectVariables = {
+          left: selectionRect.left,
+          top: selectionRect.top,
+          width: selectionRect.getScaledWidth(),
+          height: selectionRect.getScaledHeight(),
+          absolutePositioned: true,
+        };
+        let rect = new fabric.Rect(rectVariables);
+        var selectionRectId = selectionRect.id;
 
+        canvas.remove(selectionRect);
+        var cropped = new Image();
+        const cropperVariables = {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        };
+        cropped.src = activeImage.toDataURL(cropperVariables);
+
+        cropped.onload = function () {
+          canvas.remove(activeImage);
+          let image = new fabric.Image(cropped);
+          image.left = rect.left;
+          image.top = rect.top;
+          transfaredImage = image.height;
+          console.log(transfaredImage);
+          canvas.add(image);
+          image.setCoords();
+          canvas.renderAll();
+
+          transferedImageArr.push({
+            imageData: image,
+            activeImageData: activeImage,
+            layId: selectionRect.id,
+          });
+          console.log(transferedImageArr);
+          onlyDeleteLayerEvent(activeImage.id);
+          onlyDeleteLayerEvent(selectionRectId);
+        };
+      } else if (shape === "circle") {
+        const circleVariables = {
+          left: selectioncircle.left,
+          top: selectioncircle.top,
+          radius: selectioncircle.getScaledWidth() / 2,
+          absolutePositioned: true,
+        };
+        var selectioncircleId = selectioncircle.id;
+        let circle = new fabric.Circle(circleVariables);
+        activeImage.clipPath = circle;
+        canvas.remove(selectioncircle);
+        var cropped = new Image();
+        const cropperVariables = {
+          left: circle.left,
+          top: circle.top,
+          width: circle.radius * 2,
+          height: circle.radius * 2,
+        };
+        cropped.src = activeImage.toDataURL(cropperVariables);
+        cropped.onload = function () {
+          canvas.remove(activeImage);
+          let image = new fabric.Image(cropped);
+          image.left = cropperVariables.left;
+          image.top = cropperVariables.top;
+          transfaredImage = image.height;
+          canvas.add(image);
+          image.setCoords();
+          canvas.renderAll();
+          activeImage.clipPath = null;
+          transferedImageArr.push({
+            imageData: image,
+            activeImageData: activeImage,
+            layId: selectioncircle.id,
+          });
+          onlyDeleteLayerEvent(activeImage.id);
+          onlyDeleteLayerEvent(selectioncircleId);
+          console.log(transferedImageArr);
+        };
+      } else if (shape === "triangle") {
+        const triangleVariables = {
+          left: selectiontriangle.left,
+          top: selectiontriangle.top,
+          width: selectiontriangle.getScaledWidth(),
+          height: selectiontriangle.getScaledHeight(),
+          absolutePositioned: true,
+        };
+        var selectiontriangleId = selectiontriangle.id;
+        let triangleClipPath = new fabric.Triangle(triangleVariables);
+
+        activeImage.clipPath = triangleClipPath;
+        canvas.remove(selectiontriangle);
+        // canvas.add(triangleClipPath)
+        var cropped = new Image();
+        const cropperVariables = {
+          left: triangleClipPath.left,
+          top: triangleClipPath.top,
+          width: triangleClipPath.width,
+          height: triangleClipPath.height,
+        };
+        cropped.src = activeImage.toDataURL(cropperVariables);
+        cropped.onload = function () {
+          canvas.remove(activeImage);
+          let image = new fabric.Image(cropped);
+          image.left = cropperVariables.left;
+          image.top = cropperVariables.top;
+          transfaredImage = image.cacheKey;
+          canvas.add(image);
+          image.setCoords();
+          canvas.renderAll();
+          activeImage.clipPath = null;
+          transferedImageArr.push({
+            imageData: image,
+            activeImageData: activeImage,
+            layId: selectiontriangle.id,
+          });
+          onlyDeleteLayerEvent(activeImage.id);
+          onlyDeleteLayerEvent(selectiontriangleId);
+
+          console.log(transferedImageArr);
+        };
+      } else if (shape === "square") {
+      } else if (shape === "other") {
+        console.log(selectionSvg);
+        const newPath = selectionSvg.path;
+        console.log(newPath);
+        let svgMaterial = new fabric.Path(newPath, {
+          left: selectionSvg.left,
+          top: selectionSvg.top,
+          width: selectionSvg.getScaledWidth(),
+          height: selectionSvg.getScaledHeight(),
+          absolutePositioned: true,
+          originX: selectionSvg.originX,
+          originY: selectionSvg.originY,
+          scaleX: selectionSvg.scaleX,
+          scaleY: selectionSvg.scaleY,
+        });
+        var selectionSvgId = selectionSvg.id;
+        console.log(svgMaterial.getBoundingRect());
+        activeImage.clipPath = svgMaterial;
+        const boundingRect = svgMaterial.getBoundingRect();
+        const updatedWidth = boundingRect.width;
+        const updatedHeight = boundingRect.height;
+        const adjustedLeft = boundingRect.left;
+        const adjustedTop = boundingRect.top;
+        canvas.remove(selectionSvg);
+        var cropped = new Image();
+        const cropperVariables = {
+          left: adjustedLeft,
+          top: adjustedTop,
+          width: updatedWidth,
+          height: updatedHeight,
+          path: svgMaterial.path,
+          scaleX: svgMaterial.scaleX,
+          scaleY: svgMaterial.scaleY,
+          originX: svgMaterial.originX,
+          originY: svgMaterial.originY,
+        };
+
+        cropped.src = activeImage.toDataURL(cropperVariables);
+        cropped.onload = function () {
+          canvas.remove(activeImage);
+          let image = new fabric.Image(cropped);
+          image.left = cropperVariables.left;
+          image.top = cropperVariables.top;
+          image.height = cropperVariables.height;
+          image.width = cropperVariables.width;
+          canvas.add(image);
+          image.setCoords();
+          canvas.renderAll();
+          activeImage.clipPath = null;
+          transferedImageArr.push({
+            imageData: image,
+            activeImageData: activeImage,
+            layId: selectionSvg.id,
+          });
+          onlyDeleteLayerEvent(activeImage.id);
+          onlyDeleteLayerEvent(selectionSvgId);
+        };
+      }
+    }
 
     // function logSelectedObject(canvas) {
     //   canvas.on("object:selected", function (e) {
@@ -8584,7 +8794,15 @@
     let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
-
+      // console.log(activeObject, "Active object of mask");
+      // console.log(clipPath);
+      // console.log(clipPath.top, clipPath.left);
+      // console.log(activeObject.top, activeObject.left);
+      // relativeTop = clipPath.top - activeObject.top;
+      // relativeLeft = clipPath.left - activeObject.left;
+      // applyTemplateClipMask(activeObject);
+      // handleMaskingDone();
+      // syncClipPathWithImage(activeObject.clipPath, activeObject);
 
       clipPath.set({
         originX: activeObject.originX,
@@ -8592,28 +8810,157 @@
         angle: activeObject.angle,
         top: activeObject.top + relativeTop,
         left: activeObject.left + relativeLeft,
-
       });
       clipPath.setCoords();
       canvas.renderAll();
     }
 
-    function syncClipPathzoomWithImage(clipPath, activeObject) {
-   
+    // function syncClipPathZoomWithImage(clipPath, activeObject) {
+    //   clipPath.set({
+    //     scaleX: activeObject.scaleX,
+    //     scaleY: activeObject.scaleY,
+
+    //     angle: activeObject.angle,
+    //     top: activeObject.top,
+    //     left: activeObject.left,
+    //   });
+
+    //   clipPath.setCoords();
+    //   canvas.renderAll();
+    // }
+    // function syncClipPathZoomWithImage(clipPath, activeObject) {
+    //   const scaleRatioX = activeObject.scaleX;
+    //   const scaleRatioY = activeObject.scaleY;
+
+    //   clipPath.set({
+    //     scaleX: activeObject.originalScaleX * scaleRatioX,
+    //     scaleY: clipPath.originalScaleY * scaleRatioY,
+    //     left: activeObject.left,
+    //     top: activeObject.top,
+    //     angle: activeObject.angle,
+    //   });
+
+    //   clipPath.setCoords();
+    //   canvas.renderAll();
+    // }
+    function storeClipPathState(activeObject) {
+      const clipPath = activeObject.clipPath;
+
+      // Save relative transform
+      const invMatrix = fabric.util.invertTransform(
+        activeObject.calcTransformMatrix()
+      );
+      const clipPathMatrix = fabric.util.multiplyTransformMatrices(
+        invMatrix,
+        clipPath.calcTransformMatrix()
+      );
+
+      const options = fabric.util.qrDecompose(clipPathMatrix);
+
+      clipPath.relativeTransformData = {
+        left: options.translateX,
+        top: options.translateY,
+        scaleX: options.scaleX,
+        scaleY: options.scaleY,
+        angle: options.angle,
+      };
+    }
+    function syncShellWithClipPath(shell, clipPath) {
+      if (!clipPath) return;
+
+      shell.set({
+        top: clipPath.top,
+        left: clipPath.left,
+        angle: clipPath.angle,
+        scaleX: clipPath.scaleX,
+        scaleY: clipPath.scaleY,
+      });
+
+      shell.setCoords();
+    }
+    function syncClipPathZoomWithImage(activeObject) {
+      const clipPath = activeObject.clipPath;
+      const rel = clipPath.relativeTransformData;
+
+      if (!rel) return;
+
+      // Apply the same relative transform on updated object
+      const objectMatrix = activeObject.calcTransformMatrix();
+      const relMatrix = fabric.util.composeMatrix({
+        scaleX: rel.scaleX,
+        scaleY: rel.scaleY,
+        angle: rel.angle,
+        translateX: rel.left,
+        translateY: rel.top,
+      });
+
+      const finalMatrix = fabric.util.multiplyTransformMatrices(
+        objectMatrix,
+        relMatrix
+      );
+
+      const options = fabric.util.qrDecompose(finalMatrix);
 
       clipPath.set({
-        scaleX: activeObject.scaleX,
-        scaleY: activeObject.scaleY,
-
-        angle: activeObject.angle,
-        top: activeObject.top ,
-        left: activeObject.left
+        scaleX: options.scaleX,
+        scaleY: options.scaleY,
+        angle: options.angle,
+        left: options.translateX,
+        top: options.translateY,
       });
 
       clipPath.setCoords();
-      canvas.renderAll();
+      syncShellWithClipPath(shell, clipPath);
+      canvas.requestRenderAll();
     }
 
+    //   function syncClipPathzoomWithImage(clipPath, activeObject) {
+
+    //     const imageScaleX = activeObject.scaleX;
+    // const imageScaleY = activeObject.scaleY;
+
+    // // Use uniform scale to maintain clipPath shape (circle)
+    // const uniformScale = Math.min(imageScaleX, imageScaleY);
+
+    //     const clipPathScale = (uniformScale * imageOriginalWidth) / clipPathOriginalWidth;
+
+    // // Update clipPath properties
+    // clipPath.set({
+    //   scaleX: clipPathScale, // Uniform scaling for X
+    //   scaleY: clipPathScale, // Uniform scaling for Y to preserve shape
+    //   left: activeObject.left, // Sync position with image center
+    //   top: activeObject.top,   // Sync position with image center
+    //   angle: activeObject.angle, // Sync rotation
+    //   dirty: true // Mark as dirty for rendering
+    // });
+    //     // clipPath.set({
+    //     //   scaleX: activeObject.scaleX,
+    //     //   scaleY: activeObject.scaleY,
+
+    //     //   angle: activeObject.angle,
+    //     //   top: activeObject.top,
+    //     //   left: activeObject.left,
+    //     // });
+    //     activeObject.clipPath = clipPath;
+
+    //     clipPath.setCoords();
+    //     canvas.renderAll();
+    //   }
+    // function syncClipPathZoomWithImage(clipPath, activeObject) {
+    //   const scaleRatioX = activeObject.scaleX;
+    //   const scaleRatioY = activeObject.scaleY;
+
+    //   clipPath.set({
+    //     scaleX: clipPath.scaleX * scaleRatioX,
+    //     scaleY: clipPath.scaleY * scaleRatioY,
+    //     left: activeObject.left - clipPath.left,
+    //     top: activeObject.top - clipPath.top,
+    //     angle: activeObject.angle - clipPath.angle,
+    //   });
+
+    //   clipPath.setCoords();
+    //   canvas.renderAll();
+    // }
 
     function handleMaskingDone() {
       editButtonActive = false;
@@ -8637,10 +8984,16 @@
           syncClipPathWithImage(storedClipPath, storedActiveObject)
         );
         storedActiveObject.on("scaling", () =>
-          syncClipPathzoomWithImage(storedClipPath, storedActiveObject)
-
+          syncClipPathWithImage(storedClipPath, storedActiveObject)
         );
+        // storedActiveObject.on("scaling", () =>
+        //   syncClipPathZoomWithImage(storedClipPath, storedActiveObject)
+        // );
+        storeClipPathState(storedActiveObject); // Once on load or clipPath attach
 
+        storedActiveObject.on("scaling", () =>
+          syncClipPathZoomWithImage(storedActiveObject)
+        );
         // Optionally, hide the "done" button after syncing starts
         document.getElementById("done-masking-img").style.display = "none";
         document.getElementById("replace-image-btn").style.display = "none";
@@ -10020,7 +10373,7 @@
             canvas.requestRenderAll();
             selector.find("#gauci-canvas-loader").hide();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -10228,7 +10581,7 @@
               selector.find("#gauci-canvas-loader").hide();
             }
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -10379,7 +10732,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -10781,8 +11134,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-            selector.find("#brush-pattern-width").val()
-          ),
+              selector.find("#brush-pattern-width").val()
+            ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -11272,10 +11625,11 @@
       var params = new URLSearchParams(window.location.search);
       var name = params.get("name");
       var id = params.get("id");
-      var templateName = params.get("templateName");
-      console.log("This is the template params: ", name, id, templateName);
+      // var templateName = params.get("templateName");
+      var key = params.get("key");
+      // console.log("This is the template params: ", name, id, templateName);
 
-      if (!templateName) {
+      if (!key) {
         console.error("No template name found in the URL.");
         return;
       }
@@ -11300,7 +11654,7 @@
 
       // Fetch the template data using jQuery's AJAX
       $.ajax({
-        url: `${baseUrl}/api/v1/user/template/${id}`,
+        url: `${baseUrl}/api/v1/user/template/${key}`,
         method: "GET",
         xhrFields: {
           withCredentials: true, // to include credentials (cookies)
@@ -11309,23 +11663,96 @@
           console.log("Template data:", data);
 
           if (data.src) {
-            // Fetch the template JSON
-            $.getJSON(data.src, function (jsonData) {
-              console.log("Loaded template JSON:", jsonData);
-              loadJSON(jsonData);
-            }).fail(function () {
-              console.error("Error loading template JSON");
-            });
-          } else {
-            console.error("No template source URL found in the API response.");
+            if (data.src) {
+              console.log("✅ srcData (raw):", data.src);
+              // console.log(output);
+              tabCanvasStates = {};
+              tabCanvasStates = data.src;
+              console.log(tabCanvasStates);
+              allCanvasTabState = data.src;
+
+              console.log(activeTabId);
+              console.log(allCanvasTabState);
+              loadCanvasState(activeTabId);
+            }
           }
+
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
+
+          // $(document).on('keydown', function(event) {
+          //     if (event.key === 'Escape') {
+          //         var targetModal = selector.find('.gauci-modal:visible');
+          //         if (targetModal.length) {
+          //             targetModal.hide();
+          //         }
+          //     }
+          // });
+
+          // selector.find(".gauci-modal-close").on("click", function (e) {
+          //     e.preventDefault();
+          //     var target = $(this).data("target");
+          //     selector.find(target).hide();
+          // });
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
+          // if (data.src) {
+          //   // Fetch the template JSON
+          //   $.getJSON(data.src, function (jsonData) {
+          //     console.log("Loaded template JSON:", jsonData);
+          //     loadJSON(jsonData);
+          //   }).fail(function () {
+          //     console.error("Error loading template JSON");
+          //   });
+          // } else {
+          //   console.error("No template source URL found in the API response.");
+          // }
         },
         error: function (xhr, status, error) {
           console.error("Error fetching template:", status, error);
+          if (xhr.status === 401) {
+            Swal.fire({
+              icon: "info",
+              title: "Login Required",
+              text: "Please log in to view this template.",
+            });
+          }
         },
       });
     }
-    loadTemplateFromUrl();
+    // window.onload = function () {
+    //   // Push to the end of the event queue to allow async tasks to settle
+    //   setTimeout(loadTemplateFromUrl, 0);
+    // };
 
     $(document).on("keydown", function (event) {
       if (event.key === "Escape") {
@@ -11446,10 +11873,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
           <i class="bi bi-caret-up-fill caret-up-icon"></i>
             <ul>
-              ${isAdmin
-        ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
-        : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
-      }
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
+                  : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
+              }
               <li id="logout" class="profile-logout-li"><i class="bi bi-box-arrow-right profile-dropdown-icon"></i>Logout</li>
             </ul>
           </div>
