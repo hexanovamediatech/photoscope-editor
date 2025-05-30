@@ -8819,6 +8819,153 @@
       canvas.renderAll();
     }
 
+    // function syncClipPathZoomWithImage(clipPath, activeObject) {
+    //   clipPath.set({
+    //     scaleX: activeObject.scaleX,
+    //     scaleY: activeObject.scaleY,
+
+    //     angle: activeObject.angle,
+    //     top: activeObject.top,
+    //     left: activeObject.left,
+    //   });
+
+    //   clipPath.setCoords();
+    //   canvas.renderAll();
+    // }
+    // function syncClipPathZoomWithImage(clipPath, activeObject) {
+    //   const scaleRatioX = activeObject.scaleX;
+    //   const scaleRatioY = activeObject.scaleY;
+
+    //   clipPath.set({
+    //     scaleX: activeObject.originalScaleX * scaleRatioX,
+    //     scaleY: clipPath.originalScaleY * scaleRatioY,
+    //     left: activeObject.left,
+    //     top: activeObject.top,
+    //     angle: activeObject.angle,
+    //   });
+
+    //   clipPath.setCoords();
+    //   canvas.renderAll();
+    // }
+    function storeClipPathState(activeObject) {
+      const clipPath = activeObject.clipPath;
+
+      // Save relative transform
+      const invMatrix = fabric.util.invertTransform(
+        activeObject.calcTransformMatrix()
+      );
+      const clipPathMatrix = fabric.util.multiplyTransformMatrices(
+        invMatrix,
+        clipPath.calcTransformMatrix()
+      );
+
+      const options = fabric.util.qrDecompose(clipPathMatrix);
+
+      clipPath.relativeTransformData = {
+        left: options.translateX,
+        top: options.translateY,
+        scaleX: options.scaleX,
+        scaleY: options.scaleY,
+        angle: options.angle,
+      };
+    }
+    function syncShellWithClipPath(shell, clipPath) {
+      if (!clipPath) return;
+
+      shell.set({
+        top: clipPath.top,
+        left: clipPath.left,
+        angle: clipPath.angle,
+        scaleX: clipPath.scaleX,
+        scaleY: clipPath.scaleY,
+      });
+
+      shell.setCoords();
+    }
+    function syncClipPathZoomWithImage(activeObject) {
+      const clipPath = activeObject.clipPath;
+      const rel = clipPath.relativeTransformData;
+
+      if (!rel) return;
+
+      // Apply the same relative transform on updated object
+      const objectMatrix = activeObject.calcTransformMatrix();
+      const relMatrix = fabric.util.composeMatrix({
+        scaleX: rel.scaleX,
+        scaleY: rel.scaleY,
+        angle: rel.angle,
+        translateX: rel.left,
+        translateY: rel.top,
+      });
+
+      const finalMatrix = fabric.util.multiplyTransformMatrices(
+        objectMatrix,
+        relMatrix
+      );
+
+      const options = fabric.util.qrDecompose(finalMatrix);
+
+      clipPath.set({
+        scaleX: options.scaleX,
+        scaleY: options.scaleY,
+        angle: options.angle,
+        left: options.translateX,
+        top: options.translateY,
+      });
+
+      clipPath.setCoords();
+      syncShellWithClipPath(shell, clipPath);
+      canvas.requestRenderAll();
+    }
+
+    //   function syncClipPathzoomWithImage(clipPath, activeObject) {
+
+    //     const imageScaleX = activeObject.scaleX;
+    // const imageScaleY = activeObject.scaleY;
+
+    // // Use uniform scale to maintain clipPath shape (circle)
+    // const uniformScale = Math.min(imageScaleX, imageScaleY);
+
+    //     const clipPathScale = (uniformScale * imageOriginalWidth) / clipPathOriginalWidth;
+
+    // // Update clipPath properties
+    // clipPath.set({
+    //   scaleX: clipPathScale, // Uniform scaling for X
+    //   scaleY: clipPathScale, // Uniform scaling for Y to preserve shape
+    //   left: activeObject.left, // Sync position with image center
+    //   top: activeObject.top,   // Sync position with image center
+    //   angle: activeObject.angle, // Sync rotation
+    //   dirty: true // Mark as dirty for rendering
+    // });
+    //     // clipPath.set({
+    //     //   scaleX: activeObject.scaleX,
+    //     //   scaleY: activeObject.scaleY,
+
+    //     //   angle: activeObject.angle,
+    //     //   top: activeObject.top,
+    //     //   left: activeObject.left,
+    //     // });
+    //     activeObject.clipPath = clipPath;
+
+    //     clipPath.setCoords();
+    //     canvas.renderAll();
+    //   }
+    // function syncClipPathZoomWithImage(clipPath, activeObject) {
+    //   const scaleRatioX = activeObject.scaleX;
+    //   const scaleRatioY = activeObject.scaleY;
+
+    //   clipPath.set({
+    //     scaleX: clipPath.scaleX * scaleRatioX,
+    //     scaleY: clipPath.scaleY * scaleRatioY,
+    //     left: activeObject.left - clipPath.left,
+    //     top: activeObject.top - clipPath.top,
+    //     angle: activeObject.angle - clipPath.angle,
+    //   });
+
+    //   clipPath.setCoords();
+    //   canvas.renderAll();
+    // }
+
     function handleMaskingDone() {
       editButtonActive = false;
       canvas.remove(shell);
@@ -8843,7 +8990,14 @@
         storedActiveObject.on("scaling", () =>
           syncClipPathWithImage(storedClipPath, storedActiveObject)
         );
+        // storedActiveObject.on("scaling", () =>
+        //   syncClipPathZoomWithImage(storedClipPath, storedActiveObject)
+        // );
+        storeClipPathState(storedActiveObject); // Once on load or clipPath attach
 
+        storedActiveObject.on("scaling", () =>
+          syncClipPathZoomWithImage(storedActiveObject)
+        );
         // Optionally, hide the "done" button after syncing starts
         document.getElementById("done-masking-img").style.display = "none";
         document.getElementById("replace-image-btn").style.display = "none";
