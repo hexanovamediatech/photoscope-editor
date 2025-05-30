@@ -53,9 +53,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () {},
-        saveTemplate: function () {},
-        saveImage: function () {},
+        customFunctions: function () { },
+        saveTemplate: function () { },
+        saveImage: function () { },
       },
       options
     );
@@ -183,13 +183,13 @@
             .find("#gauci-icons .gauci-grid")
             .append(
               '<div class="gauci-element add-element" data-elsource="' +
-                url +
-                '" data-loader="no" title="' +
-                item.icons[ii].name +
-                '">' +
-                '<span class="material-icons">' +
-                item.icons[ii].ligature +
-                "</div>"
+              url +
+              '" data-loader="no" title="' +
+              item.icons[ii].name +
+              '">' +
+              '<span class="material-icons">' +
+              item.icons[ii].ligature +
+              "</div>"
             );
         }
       }
@@ -2126,7 +2126,7 @@
             }
           });
         },
-        function () {},
+        function () { },
         {
           crossOrigin: "anonymous",
         }
@@ -3030,7 +3030,7 @@
               canvas.setActiveObject(svg);
               canvas.requestRenderAll();
             },
-            function () {},
+            function () { },
             {
               crossOrigin: "anonymous",
             }
@@ -3239,12 +3239,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-          action +
-          '<span class="time">' +
-          time +
-          '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-          JSON.stringify(json) +
-          "</script></div></li>"
+        action +
+        '<span class="time">' +
+        time +
+        '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+        JSON.stringify(json) +
+        "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -6687,8 +6687,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                            item.find(".select2-item").html() +
-                            "&text=abc",
+                          item.find(".select2-item").html() +
+                          "&text=abc",
                         ],
                       },
                       active: function () {
@@ -6875,18 +6875,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-            $(originalOption).data("icon") +
-            "</span>" +
-            icon.text +
-            "</div>"
+          $(originalOption).data("icon") +
+          "</span>" +
+          icon.text +
+          "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-            $(originalOption).data("font") +
-            '">' +
-            icon.text +
-            "</div>"
+          $(originalOption).data("font") +
+          '">' +
+          icon.text +
+          "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -8458,191 +8458,7 @@
 
     var transferedImageArr;
     var transfaredImage;
-    function crop(event) {
-      if (!transferedImageArr) {
-        transferedImageArr = [];
-      }
-      if (shape === "rectangle") {
-        const rectVariables = {
-          left: selectionRect.left,
-          top: selectionRect.top,
-          width: selectionRect.getScaledWidth(),
-          height: selectionRect.getScaledHeight(),
-          absolutePositioned: true,
-        };
-        let rect = new fabric.Rect(rectVariables);
-        var selectionRectId = selectionRect.id;
 
-        canvas.remove(selectionRect);
-        var cropped = new Image();
-        const cropperVariables = {
-          left: rect.left,
-          top: rect.top,
-          width: rect.width,
-          height: rect.height,
-        };
-        cropped.src = activeImage.toDataURL(cropperVariables);
-
-        cropped.onload = function () {
-          canvas.remove(activeImage);
-          let image = new fabric.Image(cropped);
-          image.left = rect.left;
-          image.top = rect.top;
-          transfaredImage = image.height;
-          console.log(transfaredImage);
-          canvas.add(image);
-          image.setCoords();
-          canvas.renderAll();
-
-          transferedImageArr.push({
-            imageData: image,
-            activeImageData: activeImage,
-            layId: selectionRect.id,
-          });
-          console.log(transferedImageArr);
-          onlyDeleteLayerEvent(activeImage.id);
-          onlyDeleteLayerEvent(selectionRectId);
-        };
-      } else if (shape === "circle") {
-        const circleVariables = {
-          left: selectioncircle.left,
-          top: selectioncircle.top,
-          radius: selectioncircle.getScaledWidth() / 2,
-          absolutePositioned: true,
-        };
-        var selectioncircleId = selectioncircle.id;
-        let circle = new fabric.Circle(circleVariables);
-        activeImage.clipPath = circle;
-        canvas.remove(selectioncircle);
-        var cropped = new Image();
-        const cropperVariables = {
-          left: circle.left,
-          top: circle.top,
-          width: circle.radius * 2,
-          height: circle.radius * 2,
-        };
-        cropped.src = activeImage.toDataURL(cropperVariables);
-        cropped.onload = function () {
-          canvas.remove(activeImage);
-          let image = new fabric.Image(cropped);
-          image.left = cropperVariables.left;
-          image.top = cropperVariables.top;
-          transfaredImage = image.height;
-          canvas.add(image);
-          image.setCoords();
-          canvas.renderAll();
-          activeImage.clipPath = null;
-          transferedImageArr.push({
-            imageData: image,
-            activeImageData: activeImage,
-            layId: selectioncircle.id,
-          });
-          onlyDeleteLayerEvent(activeImage.id);
-          onlyDeleteLayerEvent(selectioncircleId);
-          console.log(transferedImageArr);
-        };
-      } else if (shape === "triangle") {
-        const triangleVariables = {
-          left: selectiontriangle.left,
-          top: selectiontriangle.top,
-          width: selectiontriangle.getScaledWidth(),
-          height: selectiontriangle.getScaledHeight(),
-          absolutePositioned: true,
-        };
-        var selectiontriangleId = selectiontriangle.id;
-        let triangleClipPath = new fabric.Triangle(triangleVariables);
-
-        activeImage.clipPath = triangleClipPath;
-        canvas.remove(selectiontriangle);
-        // canvas.add(triangleClipPath)
-        var cropped = new Image();
-        const cropperVariables = {
-          left: triangleClipPath.left,
-          top: triangleClipPath.top,
-          width: triangleClipPath.width,
-          height: triangleClipPath.height,
-        };
-        cropped.src = activeImage.toDataURL(cropperVariables);
-        cropped.onload = function () {
-          canvas.remove(activeImage);
-          let image = new fabric.Image(cropped);
-          image.left = cropperVariables.left;
-          image.top = cropperVariables.top;
-          transfaredImage = image.cacheKey;
-          canvas.add(image);
-          image.setCoords();
-          canvas.renderAll();
-          activeImage.clipPath = null;
-          transferedImageArr.push({
-            imageData: image,
-            activeImageData: activeImage,
-            layId: selectiontriangle.id,
-          });
-          onlyDeleteLayerEvent(activeImage.id);
-          onlyDeleteLayerEvent(selectiontriangleId);
-
-          console.log(transferedImageArr);
-        };
-      } else if (shape === "square") {
-      } else if (shape === "other") {
-        console.log(selectionSvg);
-        const newPath = selectionSvg.path;
-        console.log(newPath);
-        let svgMaterial = new fabric.Path(newPath, {
-          left: selectionSvg.left,
-          top: selectionSvg.top,
-          width: selectionSvg.getScaledWidth(),
-          height: selectionSvg.getScaledHeight(),
-          absolutePositioned: true,
-          originX: selectionSvg.originX,
-          originY: selectionSvg.originY,
-          scaleX: selectionSvg.scaleX,
-          scaleY: selectionSvg.scaleY,
-        });
-        var selectionSvgId = selectionSvg.id;
-        console.log(svgMaterial.getBoundingRect());
-        activeImage.clipPath = svgMaterial;
-        const boundingRect = svgMaterial.getBoundingRect();
-        const updatedWidth = boundingRect.width;
-        const updatedHeight = boundingRect.height;
-        const adjustedLeft = boundingRect.left;
-        const adjustedTop = boundingRect.top;
-        canvas.remove(selectionSvg);
-        var cropped = new Image();
-        const cropperVariables = {
-          left: adjustedLeft,
-          top: adjustedTop,
-          width: updatedWidth,
-          height: updatedHeight,
-          path: svgMaterial.path,
-          scaleX: svgMaterial.scaleX,
-          scaleY: svgMaterial.scaleY,
-          originX: svgMaterial.originX,
-          originY: svgMaterial.originY,
-        };
-
-        cropped.src = activeImage.toDataURL(cropperVariables);
-        cropped.onload = function () {
-          canvas.remove(activeImage);
-          let image = new fabric.Image(cropped);
-          image.left = cropperVariables.left;
-          image.top = cropperVariables.top;
-          image.height = cropperVariables.height;
-          image.width = cropperVariables.width;
-          canvas.add(image);
-          image.setCoords();
-          canvas.renderAll();
-          activeImage.clipPath = null;
-          transferedImageArr.push({
-            imageData: image,
-            activeImageData: activeImage,
-            layId: selectionSvg.id,
-          });
-          onlyDeleteLayerEvent(activeImage.id);
-          onlyDeleteLayerEvent(selectionSvgId);
-        };
-      }
-    }
 
     // function logSelectedObject(canvas) {
     //   canvas.on("object:selected", function (e) {
@@ -8768,15 +8584,7 @@
     let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
-      // console.log(activeObject, "Active object of mask");
-      // console.log(clipPath);
-      // console.log(clipPath.top, clipPath.left);
-      // console.log(activeObject.top, activeObject.left);
-      // relativeTop = clipPath.top - activeObject.top;
-      // relativeLeft = clipPath.left - activeObject.left;
-      // applyTemplateClipMask(activeObject);
-      // handleMaskingDone();
-      // syncClipPathWithImage(activeObject.clipPath, activeObject);
+
 
       clipPath.set({
         originX: activeObject.originX,
@@ -8784,10 +8592,28 @@
         angle: activeObject.angle,
         top: activeObject.top + relativeTop,
         left: activeObject.left + relativeLeft,
+
       });
       clipPath.setCoords();
       canvas.renderAll();
     }
+
+    function syncClipPathzoomWithImage(clipPath, activeObject) {
+   
+
+      clipPath.set({
+        scaleX: activeObject.scaleX,
+        scaleY: activeObject.scaleY,
+
+        angle: activeObject.angle,
+        top: activeObject.top ,
+        left: activeObject.left
+      });
+
+      clipPath.setCoords();
+      canvas.renderAll();
+    }
+
 
     function handleMaskingDone() {
       editButtonActive = false;
@@ -8811,7 +8637,8 @@
           syncClipPathWithImage(storedClipPath, storedActiveObject)
         );
         storedActiveObject.on("scaling", () =>
-          syncClipPathWithImage(storedClipPath, storedActiveObject)
+          syncClipPathzoomWithImage(storedClipPath, storedActiveObject)
+
         );
 
         // Optionally, hide the "done" button after syncing starts
@@ -10193,7 +10020,7 @@
             canvas.requestRenderAll();
             selector.find("#gauci-canvas-loader").hide();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -10401,7 +10228,7 @@
               selector.find("#gauci-canvas-loader").hide();
             }
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -10552,7 +10379,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () {},
+          function () { },
           {
             crossOrigin: "anonymous",
           }
@@ -10954,8 +10781,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-              selector.find("#brush-pattern-width").val()
-            ),
+            selector.find("#brush-pattern-width").val()
+          ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -11619,11 +11446,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
           <i class="bi bi-caret-up-fill caret-up-icon"></i>
             <ul>
-              ${
-                isAdmin
-                  ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
-                  : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
-              }
+              ${isAdmin
+        ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
+        : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
+      }
               <li id="logout" class="profile-logout-li"><i class="bi bi-box-arrow-right profile-dropdown-icon"></i>Logout</li>
             </ul>
           </div>
