@@ -7691,7 +7691,11 @@
             const tabContent = document.createElement("div");
 
             tabContent.classList.add("gauci-open-page");
-            tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+            // tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
+            const fullName = meshData.meshName || "Unnamed";
+            tabContent.textContent =
+              fullName.slice(0, 6) + (fullName.length > 6 ? "…" : "");
+
             tabDiv.appendChild(tabContent);
 
             // Generate a unique ID for the tab
