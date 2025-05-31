@@ -53,9 +53,9 @@
         watermarkFontWeight: "bold",
         watermarkBackgroundColor: "#FFF",
         watermarkLocation: "bottom-right",
-        customFunctions: function () { },
-        saveTemplate: function () { },
-        saveImage: function () { },
+        customFunctions: function () {},
+        saveTemplate: function () {},
+        saveImage: function () {},
       },
       options
     );
@@ -183,13 +183,13 @@
             .find("#gauci-icons .gauci-grid")
             .append(
               '<div class="gauci-element add-element" data-elsource="' +
-              url +
-              '" data-loader="no" title="' +
-              item.icons[ii].name +
-              '">' +
-              '<span class="material-icons">' +
-              item.icons[ii].ligature +
-              "</div>"
+                url +
+                '" data-loader="no" title="' +
+                item.icons[ii].name +
+                '">' +
+                '<span class="material-icons">' +
+                item.icons[ii].ligature +
+                "</div>"
             );
         }
       }
@@ -1271,6 +1271,9 @@
             confirmButtonText: "OK",
             allowEscapeKey: true,
             showConfirmButton: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
         });
 
@@ -1290,6 +1293,9 @@
             confirmButtonText: "OK",
             allowEscapeKey: true,
             showConfirmButton: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
           });
         });
       });
@@ -2144,7 +2150,7 @@
             }
           });
         },
-        function () { },
+        function () {},
         {
           crossOrigin: "anonymous",
         }
@@ -3048,7 +3054,7 @@
               canvas.setActiveObject(svg);
               canvas.requestRenderAll();
             },
-            function () { },
+            function () {},
             {
               crossOrigin: "anonymous",
             }
@@ -3257,12 +3263,12 @@
       list.find("li").removeClass("active");
       list.prepend(
         '<li class="active"><div class="info">' +
-        action +
-        '<span class="time">' +
-        time +
-        '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
-        JSON.stringify(json) +
-        "</script></div></li>"
+          action +
+          '<span class="time">' +
+          time +
+          '</span></div><div><button type="button" class="gauci-btn primary"><span class="material-icons">restore</span>Restore</button><button type="button" class="gauci-btn danger"><span class="material-icons">clear</span>Delete</button><script type="text/json">' +
+          JSON.stringify(json) +
+          "</script></div></li>"
       );
       var count = list.find("li").length;
       var limit = list.data("max");
@@ -6707,8 +6713,8 @@
                         families: [item.find(".select2-item").html()],
                         urls: [
                           "https://fonts.googleapis.com/css?family=" +
-                          item.find(".select2-item").html() +
-                          "&text=abc",
+                            item.find(".select2-item").html() +
+                            "&text=abc",
                         ],
                       },
                       active: function () {
@@ -6895,18 +6901,18 @@
       if ($(originalOption).data("icon")) {
         return $(
           '<div class="select2-item"><span class="material-icons">' +
-          $(originalOption).data("icon") +
-          "</span>" +
-          icon.text +
-          "</div>"
+            $(originalOption).data("icon") +
+            "</span>" +
+            icon.text +
+            "</div>"
         );
       } else if ($(originalOption).data("font")) {
         return $(
           '<div class="select2-item" style="font-family:' +
-          $(originalOption).data("font") +
-          '">' +
-          icon.text +
-          "</div>"
+            $(originalOption).data("font") +
+            '">' +
+            icon.text +
+            "</div>"
         );
       } else {
         return $('<div class="select2-item">' + icon.text + "</div>");
@@ -10379,7 +10385,7 @@
             canvas.requestRenderAll();
             selector.find("#gauci-canvas-loader").hide();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -10587,7 +10593,7 @@
               selector.find("#gauci-canvas-loader").hide();
             }
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -10738,7 +10744,7 @@
             canvas.setActiveObject(svg);
             canvas.requestRenderAll();
           },
-          function () { },
+          function () {},
           {
             crossOrigin: "anonymous",
           }
@@ -11140,8 +11146,8 @@
         canvas.freeDrawingBrush = squareBrush;
         squareBrush.getPatternSrc = function () {
           var squareWidth = parseInt(
-            selector.find("#brush-pattern-width").val()
-          ),
+              selector.find("#brush-pattern-width").val()
+            ),
             squareDistance = parseInt(
               selector.find("#brush-pattern-distance").val()
             );
@@ -11536,9 +11542,23 @@
     // }
     const meshImageDataArray = [];
 
+    // selector.find(".thr-d").on("click", function () {
+    //   generateImagesFromCanvasStates(); // Just call the function, UI updates are handled inside
+    // });
+
     selector.find(".thr-d").on("click", function () {
-      generateImagesFromCanvasStates(); // Just call the function, UI updates are handled inside
+      // Show loader using jQuery
+      $(".fullpage-loader").show();
+
+      // Hide loader after 2 seconds using jQuery
+      setTimeout(() => {
+        $(".fullpage-loader").hide();
+      }, 1000);
+
+      // Proceed with your existing function
+      generateImagesFromCanvasStates();
     });
+
     async function generateImagesFromCanvasStates() {
       saveCanvasState(activeTabId);
       meshImageDataArray.length = 0; // Clear the array
@@ -11879,10 +11899,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="hex-header-dropdown-min-editor" id="dropdownMenu">
           <i class="bi bi-caret-up-fill caret-up-icon"></i>
             <ul>
-              ${isAdmin
-        ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
-        : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
-      }
+              ${
+                isAdmin
+                  ? `<li id="adminDashboard" class="profile-dashboard-li"><i class="bi bi-grid profile-dropdown-icon"></i>Dashboard</li>`
+                  : `<li id="profile" class="profile-dashboard-li"><i class="bi bi-person profile-dropdown-icon"></i>Profile</li>`
+              }
               <li id="logout" class="profile-logout-li"><i class="bi bi-box-arrow-right profile-dropdown-icon"></i>Logout</li>
             </ul>
           </div>

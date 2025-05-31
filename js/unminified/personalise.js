@@ -2397,6 +2397,9 @@ function saveTemplate() {
       confirmButtonText: "OK",
       allowEscapeKey: true,
       showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
     });
 
     var xhr = new XMLHttpRequest();
@@ -2655,4 +2658,9 @@ favIcon.addEventListener("mouseover", () => {
 favIcon.addEventListener("mouseout", () => {
   // favIcon.src = '../../assets/custom/heart2.png'; // On mouse leave
   console.log("mouse out");
+});
+
+document.querySelector(".hlep-btn").addEventListener("click", () => {
+  console.log("help button clicked");
+  alert("Help button clicked! Implement help functionality here.");
 });

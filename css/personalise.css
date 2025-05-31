@@ -1583,3 +1583,102 @@ div#personaliseDoneBtn img {
     top: -5px;
   }
 }
+
+.hlep-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #00a3ff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.custom-help-btn-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.custom-help-btn {
+  width: 26px;
+  height: 27px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Overlay */
+.custom-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  border-radius: 8px;
+  transition: opacity 0.5s ease-in-out, visibility 0s 0.5s;
+}
+
+.custom-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.5s ease-in-out, visibility 0s 0s;
+}
+
+.custom-overlay-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+
+.custom-overlay-content-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.custom-overlay-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.custom-overlay-box img {
+  width: 50px;
+  height: 50px;
+}
+
+.custom-overlay-box p {
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  font-size: 18px;
+  color: #d9d9d9;
+}
+
+.custom-overlay-title {
+  font-weight: 700;
+  font-size: 20px;
+}
