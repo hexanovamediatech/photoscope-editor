@@ -8010,7 +8010,57 @@ Enter Your Text Here</textarea
       </div>
 
       <div class="web-thr-d-main-container">
-        <div tabindex="-1" id="3d-container"></div>
+        <div tabindex="-1" id="3d-container">
+          <div>
+            <!-- Help Button -->
+            <!-- <div class="custom-help-btn-container">
+              <button id="custom-help-btn" class="custom-help-btn">H</button>
+            </div> -->
+
+            <div class="custom-help-btn-container">
+              <img
+                src="./assets/custom/question.png"
+                alt="help"
+                class="custom-help-btn"
+                id="custom-help-btn"
+                title="help"
+              />
+            </div>
+
+            <!-- Help Overlay (Initially Hidden) -->
+            <div id="custom-overlay" class="custom-overlay">
+              <div class="custom-overlay-content-wrapper">
+                <div class="custom-overlay-box">
+                  <img src="./assets/custom/orbit.png" alt="orbit" />
+                  <p class="custom-overlay-title">Orbit around</p>
+                  <p>
+                    Left click + drag or<br />
+                    One finger drag (touch)
+                  </p>
+                </div>
+                <div class="custom-overlay-box">
+                  <img src="./assets/custom/zoom-in.png" alt="zoom" />
+                  <p class="custom-overlay-title">Zoom</p>
+                  <p>
+                    Double click on model<br />
+                    or scroll anywhere or Pinch (touch)
+                  </p>
+                </div>
+                <div class="custom-overlay-box">
+                  <img src="./assets/custom/pan.png" alt="pan" />
+                  <p class="custom-overlay-title">Pan</p>
+                  <p>
+                    Right click + drag or<br />
+                    Two fingers drag (touch)
+                  </p>
+                </div>
+              </div>
+              <button id="custom-overlay-close" class="custom-overlay-close">
+                &times;
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="gauci-right-col">
         <h6 class="gauci-layers-title">
@@ -8962,6 +9012,23 @@ Enter Your Text Here</textarea
           );
       }
     </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const helpBtn = document.getElementById("custom-help-btn");
+        const overlay = document.getElementById("custom-overlay");
+        const closeBtn = document.getElementById("custom-overlay-close");
+
+        helpBtn.addEventListener("click", function () {
+          overlay.classList.add("show");
+        });
+
+        closeBtn.addEventListener("click", function () {
+          overlay.classList.remove("show");
+        });
+      });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5.5.2/dist/iro.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.1/dist/sweetalert2.all.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.27/sweetalert2.all.min.js"></script> -->
