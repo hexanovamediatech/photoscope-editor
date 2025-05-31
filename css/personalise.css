@@ -1508,8 +1508,9 @@ div#personaliseDoneBtn img {
   /* max-width: 160px; */
   background-color: #00a3ff;
   color: white;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  /* border-top-left-radius: 4px; */
+  /* border-top-right-radius: 4px; */
+  border-radius: 4px;
   flex: 0 0 110px;
 }
 
@@ -1517,8 +1518,9 @@ div#personaliseDoneBtn img {
   display: block;
   padding: 0 30px 0 15px;
   height: 46px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  /* border-top-left-radius: 4px; */
+  /* border-top-right-radius: 4px; */
+  border-radius: 4px;
   line-height: 44px;
   text-align: center;
   font-size: 1rem;
