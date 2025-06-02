@@ -7720,28 +7720,101 @@
             }
 
             // Add click event listener for each tab
+            // tabDiv.addEventListener("click", () => {
+            //   const previousTabId = activeTabId;
+
+            //   // Save the current tab's canvas state
+            //   saveCanvasState(previousTabId);
+
+            //   // Switch to the new tab
+            //   activeTabId = tabId;
+
+            //   // Clear the existing canvas
+            //   canvas.clear();
+
+            //   // Load the new tab's canvas state
+            //   loadCanvasState(tabId);
+
+            //   // Update layoutSource dynamically for the new tab
+            //   layoutSource = meshData.layoutUrl;
+
+            //   // Update the tab's "active" class
+            //   const allTabs = tabContainer.querySelectorAll("div");
+            //   allTabs.forEach((t) => t.classList.remove("active"));
+            //   tabDiv.classList.add("active");
+            // });
+            // tabDiv.addEventListener("click", () => {
+            //   document.querySelector("#gauci-canvas-loader").style.display =
+            //     "flex"; // Show loader
+
+            //   setTimeout(() => {
+            //     saveCanvasState(activeTabId);
+            //     activeTabId = tabId;
+            //     canvas.clear();
+            //     loadCanvasState(tabId);
+            //     layoutSource = meshData.layoutUrl;
+
+            //     tabContainer
+            //       .querySelectorAll("div")
+            //       .forEach((t) => t.classList.remove("active"));
+            //     tabDiv.classList.add("active");
+
+            //     document.querySelector("#gauci-canvas-loader").style.display =
+            //       "none"; // Hide loader
+            //   }, 1000);
+            // });
+            // tabDiv.addEventListener("click", () => {
+            //   document.querySelector("#gauci-canvas-loader").style.display =
+            //     "flex"; // Show loader immediately
+
+            //   // Wait for next event loop tick to let loader render before heavy work starts
+            //   requestAnimationFrame(() => {
+            //     // Heavy operations start here
+            //     saveCanvasState(activeTabId);
+            //     activeTabId = tabId;
+            //     canvas.clear();
+            //     loadCanvasState(tabId);
+            //     layoutSource = meshData.layoutUrl;
+
+            //     tabContainer
+            //       .querySelectorAll("div")
+            //       .forEach((t) => t.classList.remove("active"));
+            //     tabDiv.classList.add("active");
+
+            //     // Hide loader after small delay to allow canvas to load properly
+            //     setTimeout(() => {
+            //       document.querySelector("#gauci-canvas-loader").style.display =
+            //         "none"; // Hide loader
+            //     }, 500); // can adjust based on loadCanvasState timing
+            //   });
+            // });
             tabDiv.addEventListener("click", () => {
-              const previousTabId = activeTabId;
+              // Disable all tabs temporarily
+              tabContainer.style.pointerEvents = "none";
 
-              // Save the current tab's canvas state
-              saveCanvasState(previousTabId);
+              // Show loader
+              document.querySelector("#gauci-canvas-loader").style.display =
+                "flex";
 
-              // Switch to the new tab
-              activeTabId = tabId;
+              requestAnimationFrame(() => {
+                saveCanvasState(activeTabId);
+                activeTabId = tabId;
+                canvas.clear();
+                loadCanvasState(tabId);
+                layoutSource = meshData.layoutUrl;
 
-              // Clear the existing canvas
-              canvas.clear();
+                tabContainer
+                  .querySelectorAll("div")
+                  .forEach((t) => t.classList.remove("active"));
+                tabDiv.classList.add("active");
 
-              // Load the new tab's canvas state
-              loadCanvasState(tabId);
-
-              // Update layoutSource dynamically for the new tab
-              layoutSource = meshData.layoutUrl;
-
-              // Update the tab's "active" class
-              const allTabs = tabContainer.querySelectorAll("div");
-              allTabs.forEach((t) => t.classList.remove("active"));
-              tabDiv.classList.add("active");
+                // Hide loader and re-enable tab clicks after short delay
+                setTimeout(() => {
+                  document.querySelector("#gauci-canvas-loader").style.display =
+                    "none";
+                  tabContainer.style.pointerEvents = "auto"; // Re-enable clicks
+                }, 500); // Adjust delay as needed
+              });
             });
 
             tabContainer.appendChild(tabDiv);
@@ -11546,17 +11619,38 @@
     //   generateImagesFromCanvasStates(); // Just call the function, UI updates are handled inside
     // });
 
+    // selector.find(".thr-d").on("click", function () {
+    //   // Show loader using jQuery
+    //   // $(".fullpage-loader").show();
+    //   selector.find("#gauci-canvas-loader").css("display", "flex");
+
+    //   // Hide loader after 2 seconds using jQuery
+    //   setTimeout(() => {
+    //     // $(".fullpage-loader").hide();
+    //     selector.find("#gauci-canvas-loader").hide();
+    //   }, 1000);
+
+    //   // Proceed with your existing function
+    //   generateImagesFromCanvasStates();
+    // });
+    // selector.find(".thr-d").on("click", function () {
+    //   selector.find("#gauci-canvas-loader").css("display", "flex"); // Show loader
+
+    //   requestAnimationFrame(() => {
+    //     generateImagesFromCanvasStates(); // Now it runs after loader is visible
+    //     selector.find("#gauci-canvas-loader").hide(); // Hide after done
+    //   });
+    // });
     selector.find(".thr-d").on("click", function () {
-      // Show loader using jQuery
-      $(".fullpage-loader").show();
+      selector.find("#gauci-canvas-loader").css("display", "flex"); // Show loader
 
-      // Hide loader after 2 seconds using jQuery
-      setTimeout(() => {
-        $(".fullpage-loader").hide();
-      }, 1000);
+      requestAnimationFrame(() => {
+        generateImagesFromCanvasStates(); // Heavy work
 
-      // Proceed with your existing function
-      generateImagesFromCanvasStates();
+        setTimeout(() => {
+          selector.find("#gauci-canvas-loader").hide(); // Hide after 1 second
+        }, 1000);
+      });
     });
 
     async function generateImagesFromCanvasStates() {

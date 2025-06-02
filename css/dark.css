@@ -294,7 +294,8 @@ button.gauci-icon-menu-btn:hover {
 }
 
 #gauci-canvas-loader {
-  background: #121212;
+  /* background: #121212; */
+  background: #242631;
 }
 
 /* ================= LAYERS ================== */
