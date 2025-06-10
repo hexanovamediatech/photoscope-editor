@@ -247,15 +247,6 @@ function centerModel(model, camera) {
   camera.lookAt(center);
 }
 
-// function onWindowResizePersonalise() {
-//   const mainContainer = document.getElementById("personalise-3d-container");
-//   const containerWidth = mainContainer.offsetWidth;
-//   const containerHeight = mainContainer.offsetHeight;
-//   const size = Math.min(containerWidth, containerHeight);
-//   camera.aspect = size / size;
-//   camera.updateProjectionMatrix();
-//   renderer.setSize(size, size);
-// }
 function onWindowResizePersonalise() {
   const mainContainer = document.getElementById("personalise-3d-container");
   const containerWidth = mainContainer.offsetWidth;
@@ -281,68 +272,6 @@ function animate() {
 function render() {
   renderer.render(scene, camera);
 }
-
-// function changeTexture(newUrl) {
-//   if (scene) {
-//     const textureLoader = new THREE.TextureLoader();
-//     console.log(selectedMesh);
-//     const specificMesh = scene.getObjectByName(mainPart);
-
-//     if (specificMesh) {
-//       textureLoader.load(
-//         "assets/3d/76_leather texture-seamless.jpg",
-//         (bumpMap) => {
-//           textureLoader.load(newUrl, (texture) => {
-//             const material = new THREE.MeshStandardMaterial({
-//               map: texture,
-//               // bumpMap: bumpMap,
-//               roughness: 1,
-//               metalness: 1,
-//               opacity: 1,
-//               bumpScale: 0.5,
-//             });
-//             specificMesh.material = material;
-//             // texture.repeat.set(1.9, -1.9);
-//             // texture.offset.set(0.92, 0.5);
-//             if (selectedMesh === "P2_Top2") {
-//               texture.repeat.set(1.9, -1.9);
-//               texture.offset.set(0.92, 0.5);
-//             } else if (selectedMesh === "P3_typ3_Top") {
-//               texture.repeat.set(1.23, -1.23);
-//               texture.offset.set(0.875, 1.13);
-//             } else if (selectedMesh === "P3_Top") {
-//               texture.repeat.set(1.7, -1.7);
-//               texture.offset.set(1.0, 1.04);
-//             } else if (selectedMesh === "P4Type1") {
-//               // texture.repeat.set(2.0, -2.0);
-//               // texture.offset.set(0.9, 0.4);
-//               console.log("No changes required");
-//             } else if (selectedMesh === "P5_typ1") {
-//               texture.repeat.set(1, -1);
-//               texture.offset.set(1, 1);
-//             } else if (selectedMesh === "Ear_L2") {
-//               texture.repeat.set(1, -1);
-//               texture.offset.set(1, 1);
-//             } else if (selectedMesh === "part2") {
-//               texture.repeat.set(-1, 1);
-//               texture.offset.set(1, 1);
-//             } else if (selectedMesh === "polySurface1") {
-//               // texture.repeat.set(1.6, -1.6);
-//               // texture.offset.set(0.93, 0.55);
-//               texture.repeat.set(1, -1);
-//             } else {
-//               console.warn(
-//                 "No specific texture settings for selectedMesh:",
-//                 selectedMesh
-//               );
-//             }
-//             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-//           });
-//         }
-//       );
-//     }
-//   }
-// }
 
 function changeTexture(newUrl) {
   console.log(newUrl);
@@ -407,147 +336,6 @@ function changeTexture(newUrl) {
   }
 }
 
-// function applyTexturesToMeshes() {
-//   // meshImageDataArray = window.meshImageDataArray;
-//   console.log(meshImageDataArray, "Mesh Image from threeD Model");
-//   // if (!scene) {
-//   //   console.error("Scene is not initialized.");
-//   //   return;
-//   // }
-
-//   const textureLoader = new THREE.TextureLoader();
-//   const appliedMeshNames = meshImageDataArray.map((d) => d.meshName);
-//   console.log(appliedMeshNames, "appliedMeshNames");
-//   meshImageDataArray.forEach((meshData) => {
-//     console.log(meshData, "mesh data from function");
-//     const { meshName, meshImageData } = meshData; // Destructure mesh name and texture URL
-//     console.log(meshName, "Data coming from function");
-//     const specificMesh = scene.getObjectByName(meshName);
-
-//     if (specificMesh) {
-//       console.log(`Applying texture to mesh: ${meshName}`);
-
-//       textureLoader.load(
-//         "assets/3d/76_leather texture-seamless.jpg",
-//         (bumpMap) => {
-//           textureLoader.load(meshImageData, (texture) => {
-//             const material = new THREE.MeshStandardMaterial({
-//               map: texture,
-//               roughness: 1,
-//               metalness: 1,
-//               opacity: 1,
-//               bumpScale: 0.5,
-//               side: THREE.DoubleSide,
-//             });
-
-//             specificMesh.material = material;
-
-//             // Apply texture transformations based on the mesh name
-//             switch (meshName) {
-//               case "P2_Top2":
-//                 texture.repeat.set(1.9, -1.9);
-//                 texture.offset.set(0.92, 0.5);
-//                 break;
-//               case "P3_typ3_Top":
-//                 texture.repeat.set(1.23, -1.23);
-//                 texture.offset.set(0.875, 1.13);
-//                 break;
-//               case "P3_Top":
-//                 texture.repeat.set(1.7, -1.7);
-//                 texture.offset.set(1.0, 1.04);
-//                 break;
-//               case "Booklet_innner":
-//                 console.log("No changes required for this mesh.");
-//                 break;
-//               case "P5_typ1":
-//                 texture.repeat.set(1, -1);
-//                 texture.offset.set(1, 1);
-//                 break;
-//               case "Ear_L2":
-//                 texture.repeat.set(1, -1);
-//                 texture.offset.set(1, 1);
-//                 break;
-//               case "part2":
-//                 texture.repeat.set(-1, 1);
-//                 texture.offset.set(1, 1);
-//                 break;
-//               case "polySurface1":
-//                 texture.repeat.set(1, -1);
-//                 break;
-//               default:
-//                 console.warn(
-//                   `No specific texture settings for mesh: ${meshName}`
-//                 );
-//             }
-
-//             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-//           });
-//         }
-//       );
-//     } else {
-//       console.error(`Mesh not found: ${meshName}`);
-//     }
-//   });
-// }
-
-// function resetModel() {
-//   scene.traverse((object) => {
-//     if (object.isMesh && object.material) {
-//       if (Array.isArray(object.material)) {
-//         object.material.forEach((material) => {
-//           material.map = null; // Remove texture
-//           material.color = new THREE.Color(0xffffff); // Default white
-//           material.side = THREE.DoubleSide;
-//           material.roughness = 1;
-//           material.metalness = 1;
-//           material.needsUpdate = true;
-//         });
-//       } else {
-//         object.material.map = null; // Remove texture
-//         object.material.color = new THREE.Color(0xffffff); // Default white
-//         object.material.side = THREE.DoubleSide;
-//         object.material.roughness = 1;
-//         object.material.metalness = 1;
-//         object.material.needsUpdate = true;
-//       }
-//     }
-//   });
-//   // Clear texture data array
-//   meshImageDataArray = [];
-// }
-// function resetModel() {
-//   // Remove existing model from the scene
-//   scene.children.forEach((child) => {
-//     if (child.isGroup || child.isMesh) {
-//       scene.remove(child);
-//     }
-//   });
-
-//   // Reload the GLB model to restore original materials and textures
-//   new GLTFLoader().load(modelSource, function (gltf) {
-//     const loadedModel = gltf.scene;
-
-//     loadedModel.traverse((child) => {
-//       if (child.isMesh && child.material) {
-//         if (Array.isArray(child.material)) {
-//           child.material.forEach((material) => {
-//             material.side = THREE.DoubleSide; // Keep original textures/materials
-//             material.needsUpdate = true;
-//           });
-//         } else {
-//           child.material.side = THREE.DoubleSide; // Keep original textures/materials
-//           child.material.needsUpdate = true;
-//         }
-//       }
-//     });
-
-//     centerModel(loadedModel, camera);
-//     scene.add(loadedModel);
-//   });
-
-//   // Clear texture data array
-//   meshImageDataArray = [];
-// }
 function resetModel() {
   // Remove existing model from the scene
   scene.children.forEach((child) => {
@@ -840,41 +628,153 @@ function updateCanvasText(textIndex, newText) {
   console.log(window.editedCanvasJson);
 }
 
+// function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
+//   console.log(json);
+//   console.log(newImageSrc);
+//   console.log(imageIndex);
+
+//   // Create a new image object to load the base64 image
+//   const img = new Image();
+//   img.src = newImageSrc;
+
+//   // Once the image is loaded, get its width and height
+//   img.onload = function () {
+//     const imageWidth = img.width;
+//     const imageHeight = img.height;
+
+//     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
+//     console.log(json.objects);
+
+//     // Find the image object at the specified index (adjusted for background image)
+//     const targetIndex = imageIndex; // Since imageObjects skips index 0, imageIndex maps directly
+//     if (
+//       json.objects[targetIndex] &&
+//       json.objects[targetIndex].type === "image"
+//     ) {
+//       json.objects[targetIndex].src = newImageSrc;
+//       json.objects[targetIndex].width = imageWidth;
+//       json.objects[targetIndex].height = imageHeight;
+//     }
+
+//     const imageUpdatedJSON = json;
+//     console.log(imageUpdatedJSON, "image updated json structure");
+
+//     if (callback) callback(imageUpdatedJSON);
+//   };
+
+//   // Handle error if the image fails to load
+//   img.onerror = function () {
+//     console.error("Failed to load the image");
+//   };
+// }
+
+// function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
+//   console.log("Original JSON:", json);
+//   const originalOrder = [...json.objects]; // Save original order
+
+//   // Step 1: Separate images and non-images
+//   const imageObjects = json.objects.filter((obj) => obj.type === "image");
+//   const nonImageObjects = json.objects.filter((obj) => obj.type !== "image");
+
+//   // Step 2: Reorder: images first, then others
+//   json.objects = [...imageObjects, ...nonImageObjects];
+
+//   // Step 3: Load new image to get dimensions
+//   const img = new Image();
+//   img.src = newImageSrc;
+
+//   img.onload = function () {
+//     const imageWidth = img.width;
+//     const imageHeight = img.height;
+
+//     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
+
+//     // Step 4: Replace the image at the given index
+//     if (json.objects[imageIndex] && json.objects[imageIndex].type === "image") {
+//       json.objects[imageIndex].src = newImageSrc;
+//       json.objects[imageIndex].width = imageWidth;
+//       json.objects[imageIndex].height = imageHeight;
+//     } else {
+//       console.warn("Target index does not have an image object");
+//     }
+
+//     // Step 5: Restore original order
+//     const updatedImageObject = json.objects[imageIndex];
+//     const updatedSrc = updatedImageObject?.src;
+
+//     // Create a map of id or src (whichever is stable) to updated image
+//     const updatedImages = imageObjects.map((imgObj, idx) => {
+//       if (idx === imageIndex) {
+//         return updatedImageObject;
+//       }
+//       return imgObj;
+//     });
+
+//     // Reconstruct final object list from original order
+//     const restoredObjects = originalOrder.map((obj) => {
+//       if (obj.type === "image") {
+//         return updatedImages.shift(); // replace from updated image list
+//       }
+//       return obj; // return non-image as is
+//     });
+
+//     json.objects = restoredObjects;
+
+//     console.log("Final updated JSON:", json);
+
+//     if (callback) callback(json);
+//   };
+
+//   img.onerror = function () {
+//     console.error("Failed to load the image");
+//   };
+// }
+
 function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
-  // Create a new image object to load the base64 image
+  console.log("Original JSON:", json);
+  console.log("Target imageIndex:", imageIndex);
+
   const img = new Image();
   img.src = newImageSrc;
 
-  // Once the image is loaded, get its width and height
   img.onload = function () {
     const imageWidth = img.width;
     const imageHeight = img.height;
 
     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
-    console.log(json.objects);
 
-    // Find the image object at the specified index (adjusted for background image)
-    const targetIndex = imageIndex; // Since imageObjects skips index 0, imageIndex maps directly
-    if (
-      json.objects[targetIndex] &&
-      json.objects[targetIndex].type === "image"
-    ) {
-      json.objects[targetIndex].src = newImageSrc;
-      json.objects[targetIndex].width = imageWidth;
-      json.objects[targetIndex].height = imageHeight;
+    // Step 1: Traverse and count only 'image' type objects
+    let imageCounter = 0;
+    let targetFound = false;
+
+    for (let i = 0; i < json.objects.length; i++) {
+      const obj = json.objects[i];
+
+      if (obj.type === "image") {
+        if (imageCounter === imageIndex) {
+          // Found the target image to replace
+          obj.src = newImageSrc;
+          obj.width = imageWidth;
+          obj.height = imageHeight;
+          targetFound = true;
+          break;
+        }
+        imageCounter++;
+      }
     }
 
-    const imageUpdatedJSON = json;
-    console.log(imageUpdatedJSON, "image updated json structure");
+    if (!targetFound) {
+      console.warn("No image object found at given imageIndex");
+    }
 
-    if (callback) callback(imageUpdatedJSON);
+    if (callback) callback(json);
   };
 
-  // Handle error if the image fails to load
   img.onerror = function () {
     console.error("Failed to load the image");
   };
 }
+
 function generateImagesFromCanvasStates() {
   meshImageDataArray = [];
   meshImageDataArray.length = 0;
@@ -938,6 +838,21 @@ function generateImagesFromCanvasStates() {
       }
     });
   });
+}
+
+function getImageObjectByLogicalIndex(objects, imageIndex) {
+  let imageCounter = 0;
+
+  for (let i = 0; i < objects.length; i++) {
+    if (objects[i].type === "image") {
+      if (imageCounter === imageIndex) {
+        return objects[i]; // Return the actual object
+      }
+      imageCounter++;
+    }
+  }
+
+  return null; // Not found
 }
 
 function loadJSONToCanvas(jsonData) {
@@ -1029,9 +944,15 @@ function loadJSONToCanvas(jsonData) {
     }
   });
 
+  // const imageToShow =
+  //   lastReplacedPhotoNumber !== null
+  //     ? jsonData.objects[lastReplacedPhotoNumber]
+  //     : jsonData.objects.find(
+  //         (obj, index) => obj.type === "image" && index !== 0
+  //       );
   const imageToShow =
     lastReplacedPhotoNumber !== null
-      ? jsonData.objects[lastReplacedPhotoNumber]
+      ? getImageObjectByLogicalIndex(jsonData.objects, lastReplacedPhotoNumber)
       : jsonData.objects.find(
           (obj, index) => obj.type === "image" && index !== 0
         );
@@ -1116,17 +1037,17 @@ function loadJSONToCanvas(jsonData) {
     jsonData,
     function () {
       newFabricCanvas.getObjects().forEach((obj, index) => {
-        obj.scaleX *= 0.22;
-        obj.scaleY *= 0.22;
-        obj.left *= 0.22;
-        obj.top *= 0.22;
+        obj.scaleX *= 0.215;
+        obj.scaleY *= 0.215;
+        obj.left *= 0.215;
+        obj.top *= 0.215;
 
         if (obj.clipPath) {
           obj.clipPath.set({
-            scaleX: obj.clipPath.scaleX * 0.22,
-            scaleY: obj.clipPath.scaleY * 0.22,
-            left: obj.clipPath.left * 0.22,
-            top: obj.clipPath.top * 0.22,
+            scaleX: obj.clipPath.scaleX * 0.215,
+            scaleY: obj.clipPath.scaleY * 0.215,
+            left: obj.clipPath.left * 0.215,
+            top: obj.clipPath.top * 0.215,
           });
         }
 
@@ -1343,18 +1264,18 @@ function setNewImageSrc(imageSrc, imageIndex) {
   // Map over objects array and scale properties by 4.55
   newOriginalJson.objects = newOriginalJson.objects.map((obj) => {
     // Scale properties
-    if (obj.scaleX !== undefined) obj.scaleX *= 4.55;
-    if (obj.scaleY !== undefined) obj.scaleY *= 4.55;
-    if (obj.left !== undefined) obj.left *= 4.55;
-    if (obj.top !== undefined) obj.top *= 4.55;
+    if (obj.scaleX !== undefined) obj.scaleX *= 4.76;
+    if (obj.scaleY !== undefined) obj.scaleY *= 4.76;
+    if (obj.left !== undefined) obj.left *= 4.65;
+    if (obj.top !== undefined) obj.top *= 4.65;
 
     // Handle clipPath if present
     if (obj.clipPath) {
       let clip = obj.clipPath;
-      if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
-      if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
-      if (clip.left !== undefined) clip.left *= 4.55;
-      if (clip.top !== undefined) clip.top *= 4.55;
+      if (clip.scaleX !== undefined) clip.scaleX *= 4.65;
+      if (clip.scaleY !== undefined) clip.scaleY *= 4.65;
+      if (clip.left !== undefined) clip.left *= 4.65;
+      if (clip.top !== undefined) clip.top *= 4.65;
     }
 
     return obj;
@@ -2397,9 +2318,6 @@ function saveTemplate() {
       confirmButtonText: "OK",
       allowEscapeKey: true,
       showConfirmButton: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
     });
 
     var xhr = new XMLHttpRequest();
@@ -2658,9 +2576,4 @@ favIcon.addEventListener("mouseover", () => {
 favIcon.addEventListener("mouseout", () => {
   // favIcon.src = '../../assets/custom/heart2.png'; // On mouse leave
   console.log("mouse out");
-});
-
-document.querySelector(".hlep-btn").addEventListener("click", () => {
-  console.log("help button clicked");
-  alert("Help button clicked! Implement help functionality here.");
 });

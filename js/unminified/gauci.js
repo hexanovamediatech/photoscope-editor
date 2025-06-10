@@ -3683,18 +3683,18 @@
             modObj.crossOrigin = "anonymous";
           }
 
-          if (modObj.scaleX !== undefined) modObj.scaleX *= 4.55;
-          if (modObj.scaleY !== undefined) modObj.scaleY *= 4.55;
-          if (modObj.left !== undefined) modObj.left *= 4.55;
-          if (modObj.top !== undefined) modObj.top *= 4.55;
+          if (modObj.scaleX !== undefined) modObj.scaleX *= 4.76;
+          if (modObj.scaleY !== undefined) modObj.scaleY *= 4.76;
+          if (modObj.left !== undefined) modObj.left *= 4.76;
+          if (modObj.top !== undefined) modObj.top *= 4.76;
 
           // ✅ Step 4: Handle clipPath if present
           if (modObj.clipPath) {
             let clip = modObj.clipPath;
-            if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
-            if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
-            if (clip.left !== undefined) clip.left *= 4.55;
-            if (clip.top !== undefined) clip.top *= 4.55;
+            if (clip.scaleX !== undefined) clip.scaleX *= 4.76;
+            if (clip.scaleY !== undefined) clip.scaleY *= 4.76;
+            if (clip.left !== undefined) clip.left *= 4.76;
+            if (clip.top !== undefined) clip.top *= 4.76;
           }
         });
 
@@ -3792,18 +3792,18 @@
               modObj.crossOrigin = "anonymous";
             }
 
-            if (modObj.scaleX !== undefined) modObj.scaleX *= 4.55;
-            if (modObj.scaleY !== undefined) modObj.scaleY *= 4.55;
-            if (modObj.left !== undefined) modObj.left *= 4.55;
-            if (modObj.top !== undefined) modObj.top *= 4.55;
+            if (modObj.scaleX !== undefined) modObj.scaleX *= 4.76;
+            if (modObj.scaleY !== undefined) modObj.scaleY *= 4.76;
+            if (modObj.left !== undefined) modObj.left *= 4.76;
+            if (modObj.top !== undefined) modObj.top *= 4.76;
 
             // ✅ Step 4: Handle clipPath if present
             if (modObj.clipPath) {
               let clip = modObj.clipPath;
-              if (clip.scaleX !== undefined) clip.scaleX *= 4.55;
-              if (clip.scaleY !== undefined) clip.scaleY *= 4.55;
-              if (clip.left !== undefined) clip.left *= 4.55;
-              if (clip.top !== undefined) clip.top *= 4.55;
+              if (clip.scaleX !== undefined) clip.scaleX *= 4.76;
+              if (clip.scaleY !== undefined) clip.scaleY *= 4.76;
+              if (clip.left !== undefined) clip.left *= 4.76;
+              if (clip.top !== undefined) clip.top *= 4.76;
             }
           });
 
