@@ -3279,14 +3279,14 @@
       var undo = list.find("li.active").next("li");
       var redo = list.find("li.active").prev("li");
       if (undo.length) {
-        selector.find("#gauci-undo").prop("disabled", false);
+        // selector.find("#gauci-undo").prop("disabled", false);
       } else {
-        selector.find("#gauci-undo").prop("disabled", true);
+        // selector.find("#gauci-undo").prop("disabled", true);
       }
       if (redo.length) {
-        selector.find("#gauci-redo").prop("disabled", false);
+        // selector.find("#gauci-redo").prop("disabled", false);
       } else {
-        selector.find("#gauci-redo").prop("disabled", true);
+        // selector.find("#gauci-redo").prop("disabled", true);
       }
     }
     // Undo
@@ -3299,29 +3299,29 @@
     // 	selector.find("#gauci-undo").prop("disabled", true);
     // }
     // });
-    selector.find("#gauci-undo").on("click", function () {
-      var historyList = selector.find("#gauci-history-list");
-      var activeListItem = historyList.find("li.active");
+    // selector.find("#gauci-undo").on("click", function () {
+    //   var historyList = selector.find("#gauci-history-list");
+    //   var activeListItem = historyList.find("li.active");
 
-      if (activeListItem.length) {
-        var target = activeListItem.next("li");
+    //   if (activeListItem.length) {
+    //     var target = activeListItem.next("li");
 
-        if (target.length) {
-          var lastAction = getLastAction(target);
+    //     if (target.length) {
+    //       var lastAction = getLastAction(target);
 
-          // Now you have information about the last action
+    //       // Now you have information about the last action
 
-          // Trigger other actions based on the lastAction if needed
-          if (lastAction.json.objects.length > 0) {
-            console.log(lastAction.json.objects.length > 0);
-            target.find(".gauci-btn.primary").trigger("click");
-            selector.find("#gauci-redo").prop("disabled", false);
-          }
-        } else {
-          selector.find("#gauci-undo").prop("disabled", true);
-        }
-      }
-    });
+    //       // Trigger other actions based on the lastAction if needed
+    //       if (lastAction.json.objects.length > 0) {
+    //         console.log(lastAction.json.objects.length > 0);
+    //         target.find(".gauci-btn.primary").trigger("click");
+    //         selector.find("#gauci-redo").prop("disabled", false);
+    //       }
+    //     } else {
+    //       selector.find("#gauci-undo").prop("disabled", true);
+    //     }
+    //   }
+    // });
 
     // Function to get the last action from a history list item
     function getLastAction(historyItem) {
@@ -3335,53 +3335,53 @@
     }
 
     // Redo
-    selector.find("#gauci-redo").on("click", function () {
-      var target = selector.find("#gauci-history-list li.active").prev("li");
-      if (target.length) {
-        target.find(".gauci-btn.primary").trigger("click");
-        selector.find("#gauci-undo").prop("disabled", false);
-      } else {
-        selector.find("#gauci-redo").prop("disabled", true);
-      }
-    });
+    // selector.find("#gauci-redo").on("click", function () {
+    //   var target = selector.find("#gauci-history-list li.active").prev("li");
+    //   if (target.length) {
+    //     target.find(".gauci-btn.primary").trigger("click");
+    //     selector.find("#gauci-undo").prop("disabled", false);
+    //   } else {
+    //     selector.find("#gauci-redo").prop("disabled", true);
+    //   }
+    // });
     // Delete history
-    selector
-      .find("#gauci-history-list")
-      .on("click", ".gauci-btn.danger", function () {
-        $(this).parent().parent().remove();
-        if (!$("#gauci-history-list li").length) {
-          selector.find("#gauci-history").prop("disabled", true);
-          selector.find("#gauci-undo").prop("disabled", true);
-          selector.find("#gauci-redo").prop("disabled", true);
-          selector.find(".gauci-modal").hide();
-        }
-      });
+    // selector
+    //   .find("#gauci-history-list")
+    //   .on("click", ".gauci-btn.danger", function () {
+    //     $(this).parent().parent().remove();
+    //     if (!$("#gauci-history-list li").length) {
+    //       selector.find("#gauci-history").prop("disabled", true);
+    //       selector.find("#gauci-undo").prop("disabled", true);
+    //       selector.find("#gauci-redo").prop("disabled", true);
+    //       selector.find(".gauci-modal").hide();
+    //     }
+    //   });
     // Restore history
-    selector
-      .find("#gauci-history-list")
-      .on("click", ".gauci-btn.primary", function () {
-        selector.find("#gauci-history-list li").removeClass("active");
-        $(this).parent().parent().addClass("active");
-        var undo = selector.find("#gauci-history-list li.active").next("li");
-        var redo = selector.find("#gauci-history-list li.active").prev("li");
-        if (undo.length) {
-          selector.find("#gauci-undo").prop("disabled", false);
-        } else {
-          selector.find("#gauci-undo").prop("disabled", true);
-        }
-        if (redo.length) {
-          selector.find("#gauci-redo").prop("disabled", false);
-        } else {
-          selector.find("#gauci-redo").prop("disabled", true);
-        }
-        var json = JSON.parse($(this).parent().find("script").html());
-        selector.find(".gauci-modal").hide();
-        convertToDataURL(json.backgroundImage.src, function (dataUrl) {
-          json.backgroundImage.src = dataUrl;
-          loadJSON(json);
-          selector.find("#gauci-canvas-loader").hide();
-        });
-      });
+    // selector
+    //   .find("#gauci-history-list")
+    //   .on("click", ".gauci-btn.primary", function () {
+    //     selector.find("#gauci-history-list li").removeClass("active");
+    //     $(this).parent().parent().addClass("active");
+    //     var undo = selector.find("#gauci-history-list li.active").next("li");
+    //     var redo = selector.find("#gauci-history-list li.active").prev("li");
+    //     if (undo.length) {
+    //       selector.find("#gauci-undo").prop("disabled", false);
+    //     } else {
+    //       selector.find("#gauci-undo").prop("disabled", true);
+    //     }
+    //     if (redo.length) {
+    //       selector.find("#gauci-redo").prop("disabled", false);
+    //     } else {
+    //       selector.find("#gauci-redo").prop("disabled", true);
+    //     }
+    //     var json = JSON.parse($(this).parent().find("script").html());
+    //     selector.find(".gauci-modal").hide();
+    //     convertToDataURL(json.backgroundImage.src, function (dataUrl) {
+    //       json.backgroundImage.src = dataUrl;
+    //       loadJSON(json);
+    //       selector.find("#gauci-canvas-loader").hide();
+    //     });
+    //   });
 
     // selector.find("#openEditor").on("click", function () {
     //   var $mainContainer = selector.find("#mini-editor-main-cont");
@@ -3727,6 +3727,7 @@
       loadCanvasState(activeTabId);
       console.log(allCanvasTabState);
       console.log(mainPart);
+      initializeUndoRedo();
       //      let tabCanvasStates = {}; // To store canvas JSON state for each tab
       // let activeTabId = null; // To track the currently active tab
       // let preservedImage = null; // To manage the layout image
@@ -3836,6 +3837,7 @@
         loadCanvasState(activeTabId);
         console.log(allCanvasTabState);
         console.log(mainPart);
+        initializeUndoRedo();
       }
       //  else {
       //   fetchImageData();
@@ -3861,8 +3863,8 @@
       if (answer) {
         selector.find("#gauci-history-list li").remove();
         selector.find("#gauci-history").prop("disabled", true);
-        selector.find("#gauci-undo").prop("disabled", true);
-        selector.find("#gauci-redo").prop("disabled", true);
+        // selector.find("#gauci-undo").prop("disabled", true);
+        // selector.find("#gauci-redo").prop("disabled", true);
         selector.find(".gauci-modal").hide();
       }
     });
@@ -7667,6 +7669,92 @@
     let layoutSource = null; // URL of the current layout image
     let allCanvasTabState = {};
     let mainPart = null;
+    let undoStack = []; // Stack to store undo states
+    let redoStack = []; // Stack to store redo states
+    let isProgrammaticChange = false; // Flag to prevent recursive state saving
+
+    function initializeUndoRedo() {
+      undoStack = [];
+      redoStack = [];
+    }
+
+    function saveUndoState() {
+      if (isProgrammaticChange) return; // Prevent saving during programmatic changes
+
+      const state = JSON.stringify(canvas.toJSON());
+      undoStack.push(state);
+      if (undoStack.length > 20) undoStack.shift();
+      redoStack = []; // Clear redo stack when a new action is performed
+      console.log(`Undo stack size: ${undoStack.length}`);
+    }
+
+    function loadCanvasStateFromHistory(state) {
+      isProgrammaticChange = true;
+      canvas.loadFromJSON(JSON.parse(state), () => {
+        canvas.renderAll();
+        isProgrammaticChange = false;
+        console.log("Loaded canvas state from history");
+
+        console.log(canvas.toJSON());
+        const allObjects = canvas.getObjects();
+
+        if (canvas) {
+          const targetObject = allObjects.find(
+            (obj) => obj.type === "image" && obj.src.startsWith("http")
+          );
+          console.log(targetObject);
+
+          if (targetObject) {
+            targetObject.set({
+              selectable: false,
+              evented: false,
+              hasControls: false,
+            });
+          }
+
+          // const targetMaskObject = allObjects.find(
+          //   (obj) => obj.type === "image" && obj.clipPath
+          // );
+          // console.log(targetMaskObject);
+
+          // canvas.renderAll();
+          // console.log(canvas.toJSON());
+        }
+      });
+    }
+
+    function undo() {
+      console.log(redoStack);
+      if (undoStack.length === 0) {
+        selector.find("#gauci-undo").prop("disabled", true);
+        return;
+      }
+      selector.find("#gauci-redo").prop("disabled", false);
+      if (undoStack.length > 0) {
+        const currentState = JSON.stringify(canvas.toJSON());
+        redoStack.push(currentState); // Save current state to redo stack
+        const previousState = undoStack.pop(); // Get the previous state
+        loadCanvasStateFromHistory(previousState);
+        console.log(`Undo performed. Undo stack size: ${undoStack.length}`);
+      } else {
+        console.log("No more actions to undo.");
+        selector.find("#gauci-undo").prop("disabled", true);
+      }
+    }
+
+    function redo() {
+      if (redoStack.length > 0) {
+        const currentState = JSON.stringify(canvas.toJSON());
+        undoStack.push(currentState); // Save current state to undo stack
+        const nextState = redoStack.pop(); // Get the next state
+        loadCanvasStateFromHistory(nextState);
+        console.log(`Redo performed. Redo stack size: ${redoStack.length}`);
+      } else {
+        console.log("No more actions to redo.");
+        //  selector.find("#gauci-undo").prop("disabled", true);
+        selector.find("#gauci-redo").prop("disabled", true);
+      }
+    }
 
     // Function to fetch image data and set up tabs
     async function fetchImageData() {
@@ -7719,75 +7807,6 @@
               AddingImage(); // Add the first image by default
             }
 
-            // Add click event listener for each tab
-            // tabDiv.addEventListener("click", () => {
-            //   const previousTabId = activeTabId;
-
-            //   // Save the current tab's canvas state
-            //   saveCanvasState(previousTabId);
-
-            //   // Switch to the new tab
-            //   activeTabId = tabId;
-
-            //   // Clear the existing canvas
-            //   canvas.clear();
-
-            //   // Load the new tab's canvas state
-            //   loadCanvasState(tabId);
-
-            //   // Update layoutSource dynamically for the new tab
-            //   layoutSource = meshData.layoutUrl;
-
-            //   // Update the tab's "active" class
-            //   const allTabs = tabContainer.querySelectorAll("div");
-            //   allTabs.forEach((t) => t.classList.remove("active"));
-            //   tabDiv.classList.add("active");
-            // });
-            // tabDiv.addEventListener("click", () => {
-            //   document.querySelector("#gauci-canvas-loader").style.display =
-            //     "flex"; // Show loader
-
-            //   setTimeout(() => {
-            //     saveCanvasState(activeTabId);
-            //     activeTabId = tabId;
-            //     canvas.clear();
-            //     loadCanvasState(tabId);
-            //     layoutSource = meshData.layoutUrl;
-
-            //     tabContainer
-            //       .querySelectorAll("div")
-            //       .forEach((t) => t.classList.remove("active"));
-            //     tabDiv.classList.add("active");
-
-            //     document.querySelector("#gauci-canvas-loader").style.display =
-            //       "none"; // Hide loader
-            //   }, 1000);
-            // });
-            // tabDiv.addEventListener("click", () => {
-            //   document.querySelector("#gauci-canvas-loader").style.display =
-            //     "flex"; // Show loader immediately
-
-            //   // Wait for next event loop tick to let loader render before heavy work starts
-            //   requestAnimationFrame(() => {
-            //     // Heavy operations start here
-            //     saveCanvasState(activeTabId);
-            //     activeTabId = tabId;
-            //     canvas.clear();
-            //     loadCanvasState(tabId);
-            //     layoutSource = meshData.layoutUrl;
-
-            //     tabContainer
-            //       .querySelectorAll("div")
-            //       .forEach((t) => t.classList.remove("active"));
-            //     tabDiv.classList.add("active");
-
-            //     // Hide loader after small delay to allow canvas to load properly
-            //     setTimeout(() => {
-            //       document.querySelector("#gauci-canvas-loader").style.display =
-            //         "none"; // Hide loader
-            //     }, 500); // can adjust based on loadCanvasState timing
-            //   });
-            // });
             tabDiv.addEventListener("click", () => {
               // Disable all tabs temporarily
               tabContainer.style.pointerEvents = "none";
@@ -7802,6 +7821,9 @@
                 canvas.clear();
                 loadCanvasState(tabId);
                 layoutSource = meshData.layoutUrl;
+                // selector.find("#gauci-undo").prop("disabled", false);
+                selector.find("#gauci-undo").prop("disabled", true);
+                selector.find("#gauci-redo").prop("disabled", true);
 
                 tabContainer
                   .querySelectorAll("div")
@@ -7813,6 +7835,9 @@
                   document.querySelector("#gauci-canvas-loader").style.display =
                     "none";
                   tabContainer.style.pointerEvents = "auto"; // Re-enable clicks
+                  initializeUndoRedo();
+                  selector.find("#gauci-undo").prop("disabled", true);
+                  selector.find("#gauci-redo").prop("disabled", true);
                 }, 500); // Adjust delay as needed
               });
             });
@@ -7872,31 +7897,6 @@
       }
     }
 
-    // Save the canvas state for a given tab
-    // function saveCanvasState(tabId) {
-    //   if (tabId !== null && canvas) {
-    //     const state = JSON.stringify(canvas.toJSON());
-    //     tabCanvasStates[tabId] = state; // Store the state
-    //     allCanvasTabState = tabCanvasStates;
-    //     console.log(allCanvasTabState);
-    //     console.log(`Saved canvas state for Tab ${tabId}`);
-
-    //     const output = Object.keys(allCanvasTabState).map((key) => ({
-    //       part: key,
-    //       jsonData: JSON.parse(allCanvasTabState[key]),
-    //     }));
-
-    //     console.log(output);
-
-    //     // const originalFormat = {};
-    //     // output.forEach((item) => {
-    //     //   originalFormat[item.part] = JSON.stringify(item.jsonData);
-    //     // });
-
-    //     // console.log(originalFormat);
-    //   }
-    // }
-
     function saveCanvasState(tabId) {
       if (tabId !== null && canvas) {
         const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
@@ -7921,238 +7921,9 @@
       }
     }
 
-    // function loadCanvasState(tabId) {
-    //   console.log("Canvas before load:", canvas);
-    //   if (tabCanvasStates[tabId]) {
-    //     canvas.loadFromJSON(tabCanvasStates[tabId], () => {
-    //       // Render all objects on the canvas
-    //       canvas.renderAll();
-    //       console.log(canvas.toJSON());
-    //       const allObjects = canvas.getObjects();
-    //       console.log(allObjects, "All Canvas Objects");
-    //       // Ensure the background image has the desired properties after loading
-    //       if (canvas) {
-    //         // const objects = canvas.getObjects();
-    //         // console.log(objects);
-    //         const targetObject = allObjects.find(
-    //           (obj) => obj.type === "image" && obj.src.startsWith("http")
-    //         );
-    //         console.log(targetObject);
-
-    //         if (targetObject) {
-    //           // Set properties for the found object
-    //           targetObject.set({
-    //             selectable: false,
-    //             evented: false,
-    //             hasControls: false,
-    //           });
-    //         }
-
-    //         const targetMaskObject = allObjects.find(
-    //           (obj) => obj.type === "image" && obj.clipPath
-    //         );
-    //         console.log(targetMaskObject);
-    //         if (targetMaskObject) {
-    //           storedActiveObject = targetMaskObject;
-    //           storedClipPath = targetMaskObject.clipPath;
-    //           console.log(storedActiveObject);
-    //           console.log(storedClipPath.top, storedClipPath.left);
-    //           // addClipMask(targetMaskObject.clipPath, targetMaskObject);
-    //           applyTemplateClipMask(targetMaskObject);
-    //           handleMaskingDone();
-    //           syncClipPathWithImage(
-    //             targetMaskObject.clipPath,
-    //             targetMaskObject
-    //           );
-    //         }
-
-    //         canvas.renderAll();
-    //         console.log(canvas.toJSON());
-    //       }
-    //       // console.log("Reattaching event listeners...");
-    //       // logSelectedObject(canvas);
-    //       console.log(`Loaded canvas state for Tab ${tabId}`);
-    //       console.log(activeTabId);
-    //       console.log(tabCanvasStates);
-    //     });
-    //   } else {
-    //     AddingImage(); // Load the default layout image for the tab
-    //     console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
-    //     // logSelectedObject(canvas);
-    //   }
-    // }
-
-    // function loadCanvasState(tabId) {
-    //   editButtonActive = false;
-    //   console.log("Canvas before load:", canvas);
-    //   console.log(editButtonActive);
-    //   if (tabCanvasStates[tabId]) {
-    //     canvas.loadFromJSON(tabCanvasStates[tabId], () => {
-    //       // Render all objects on the canvas
-    //       canvas.renderAll();
-    //       console.log(canvas.toJSON());
-    //       const allObjects = canvas.getObjects();
-    //       console.log(allObjects, "All Canvas Objects");
-    //       // Ensure the background image has the desired properties after loading
-    //       if (canvas) {
-    //         // const objects = canvas.getObjects();
-    //         // console.log(objects);
-    //         const targetObject = allObjects.find(
-    //           (obj) => obj.type === "image" && obj.src.startsWith("http")
-    //         );
-    //         console.log(targetObject);
-
-    //         if (targetObject) {
-    //           // Set properties for the found object
-    //           targetObject.set({
-    //             selectable: false,
-    //             evented: false,
-    //             hasControls: false,
-    //           });
-    //         }
-
-    //         const targetMaskObject = allObjects.find(
-    //           (obj) => obj.type === "image" && obj.clipPath
-    //         );
-    //         console.log(targetMaskObject);
-    //         if (targetMaskObject) {
-    //           storedActiveObject = targetMaskObject;
-    //           storedClipPath = targetMaskObject.clipPath;
-    //           // console.log(storedActiveObject);
-    //           // console.log(storedClipPath.top, storedClipPath.left);
-    //           // // addClipMask(targetMaskObject.clipPath, targetMaskObject);
-    //           // applyTemplateClipMask(targetMaskObject);
-    //           // handleMaskingDone();
-    //           // syncClipPathWithImage(
-    //           //   targetMaskObject.clipPath,
-    //           //   targetMaskObject
-    //           // );
-    //           //       storedActiveObject = selected;
-    //           // storedClipPath = selected.clipPath;
-    //           let path = targetMaskObject.clipPath.path;
-    //           console.log("Stored object:", storedActiveObject);
-    //           console.log(
-    //             "Clip path position:",
-    //             storedClipPath?.top,
-    //             storedClipPath?.left
-    //           );
-
-    //           shell = new fabric.Path(path, {
-    //             fill: "", // Transparent shell
-    //             stroke: "black",
-    //             strokeWidth: 2,
-    //             scaleX: storedClipPath.scaleX,
-    //             scaleY: storedClipPath.scaleY,
-    //             lockScalingX: false,
-    //             lockScalingY: false,
-    //             lockSkewingX: true,
-    //             lockSkewingY: true,
-    //             originX: storedClipPath.originX,
-    //             originY: storedClipPath.originY,
-    //             top: storedClipPath.top,
-    //             left: storedClipPath.left,
-    //             selectable: true, // Make it interactive
-    //           });
-    //           function updateClipPathPosition() {
-    //             // Update the clipPath's properties based on the shell's new position
-    //             storedClipPath.set({
-    //               top: shell.top,
-    //               left: shell.left,
-    //               angle: shell.angle,
-    //               scaleX: shell.scaleX,
-    //               scaleY: shell.scaleY,
-    //             });
-
-    //             // Reassign the updated clipPath to the image
-    //             storedActiveObject.clipPath = storedClipPath;
-
-    //             // Ensure canvas re-renders with changes
-    //             canvas.requestRenderAll();
-    //           }
-
-    //           // Sync clipPath updates when the shell is moved, scaled, or rotated
-    //           shell.on("moving", updateClipPathPosition);
-    //           shell.on("scaling", updateClipPathPosition);
-    //           shell.on("rotating", updateClipPathPosition);
-
-    //           // applyTemplateClipMask(selected);
-
-    //           handleMaskingDone();
-    //           // syncClipPathWithImage(
-    //           //   storedActiveObject.clipPath,
-    //           //   storedActiveObject
-    //           // );
-    //         }
-
-    //         canvas.renderAll();
-    //         console.log(canvas.toJSON());
-    //       }
-    //       // console.log("Reattaching event listeners...");
-    //       // logSelectedObject(canvas);
-    //       console.log(`Loaded canvas state for Tab ${tabId}`);
-    //       console.log(activeTabId);
-    //       console.log(tabCanvasStates);
-    //     });
-    //   } else {
-    //     AddingImage(); // Load the default layout image for the tab
-    //     console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
-    //     // logSelectedObject(canvas);
-    //   }
-    // }
-
-    // function loadCanvasState(tabId) {
-    //   editButtonActive = false;
-
-    //   if (tabCanvasStates[tabId]) {
-    //     console.log(tabCanvasStates[tabId]);
-    //     canvas.loadFromJSON(tabCanvasStates[tabId], () => {
-    //       logSelectedObject(canvas);
-    //       canvas.renderAll();
-    //       console.log(canvas.toJSON());
-    //       const allObjects = canvas.getObjects();
-    //       // console.log(allObjects, "All Canvas Objects");
-
-    //       if (canvas) {
-    //         const targetObject = allObjects.find(
-    //           (obj) => obj.type === "image" && obj.src.startsWith("http")
-    //         );
-    //         console.log(targetObject);
-
-    //         if (targetObject) {
-    //           targetObject.set({
-    //             selectable: false,
-    //             evented: false,
-    //             hasControls: false,
-    //           });
-    //         }
-
-    //         const targetMaskObject = allObjects.find(
-    //           (obj) => obj.type === "image" && obj.clipPath
-    //         );
-    //         console.log(targetMaskObject);
-
-    //         canvas.renderAll();
-    //         console.log(canvas.toJSON());
-    //       }
-    //       console.log(`Loaded canvas state for Tab ${tabId}`);
-    //       console.log(activeTabId);
-    //       console.log(tabCanvasStates);
-    //       logSelectedObject(canvas);
-    //     });
-    //   } else {
-    //     AddingImage();
-    //     console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
-    //   }
-
-    //   console.log(
-    //     "Canvas event listeners after function:",
-    //     canvas.__eventListeners
-    //   ); // Debug: Final check
-    // }
-
     function loadCanvasState(tabId) {
       editButtonActive = false;
-
+      initializeUndoRedo();
       if (tabCanvasStates[tabId]) {
         // Parse stringified JSON
         let jsonData = JSON.parse(tabCanvasStates[tabId]);
@@ -8168,7 +7939,7 @@
         tabCanvasStates[tabId] = JSON.stringify(jsonData);
 
         console.log(tabCanvasStates[tabId]);
-
+        isProgrammaticChange = true;
         // Load modified JSON into canvas
         canvas.loadFromJSON(jsonData, () => {
           logSelectedObject(canvas);
@@ -8202,10 +7973,15 @@
           console.log(activeTabId);
           console.log(tabCanvasStates);
           logSelectedObject(canvas);
+          isProgrammaticChange = false;
+          saveUndoState();
         });
       } else {
         AddingImage();
         console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
+        setTimeout(() => {
+          saveUndoState();
+        }, 150);
       }
 
       console.log(
@@ -8213,11 +7989,62 @@
         canvas.__eventListeners
       );
     }
+    // function setupCanvasEventListeners() {
+    //   canvas.on("object:added", () => saveUndoState());
+    //   canvas.on("object:modified", () => saveUndoState());
+    //   canvas.on("object:removed", () => saveUndoState());
+    // }
+    function setupCanvasEventListeners() {
+      canvas.on("object:added", () => {
+        saveUndoState();
+        if (undoStack.length === 0) {
+          selector.find("#gauci-undo").prop("disabled", true);
+          // selector.find("#gauci-redo").prop("disabled", true);
+        } else {
+          selector.find("#gauci-undo").prop("disabled", false);
+        }
 
+        // selector.find("#gauci-undo").prop("disabled", false);
+        // selector.find("#gauci-redo").prop("disabled", false);
+      });
+
+      canvas.on("object:modified", () => {
+        saveUndoState();
+        if (undoStack.length === 0) {
+          selector.find("#gauci-undo").prop("disabled", true);
+          // selector.find("#gauci-redo").prop("disabled", true);
+        } else {
+          selector.find("#gauci-undo").prop("disabled", false);
+        }
+        // selector.find("#gauci-undo").prop("disabled", false);
+        // selector.find("#gauci-redo").prop("disabled", false);
+      });
+
+      canvas.on("object:removed", () => {
+        saveUndoState();
+        if (undoStack.length === 0) {
+          selector.find("#gauci-undo").prop("disabled", true);
+          // selector.find("#gauci-redo").prop("disabled", true);
+        } else {
+          selector.find("#gauci-undo").prop("disabled", false);
+        }
+        // selector.find("#gauci-undo").prop("disabled", false);
+        // selector.find("#gauci-redo").prop("disabled", false);
+      });
+    }
+
+    $("#gauci-undo").on("click", undo);
+    $("#gauci-redo").on("click", redo);
     // On document ready, fetch image data
     $(document).ready(function () {
       setTimeout(function () {
         fetchImageData();
+        setupCanvasEventListeners();
+        // console.log(undoStack);
+        if (undoStack.length === 0) {
+          selector.find("#gauci-undo").prop("disabled", true);
+          selector.find("#gauci-redo").prop("disabled", true);
+        }
         console.log("Fetching image data and setting tabs.");
       }, 400);
     });
