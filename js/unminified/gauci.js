@@ -615,7 +615,102 @@
     selector.find("#gauci-bg-color").on("change", function () {
       var bgColor = $(this).val();
       setCanvasColor(bgColor);
+      // document
+      //   .getElementById("gauci-canvas")
+      //   .style.removeProperty("background-color");
+      // const canvasDomEl = document.getElementById("gauci-canvas");
+      // if (canvasDomEl && canvasDomEl.style) {
+      //   canvasDomEl.style.backgroundColor = "transparent"; // ✅ force visual override
+      // }
+      setTimeout(() => {
+        const canvasDomEl = document.getElementById("gauci-canvas");
+        if (canvasDomEl && canvasDomEl.style) {
+          canvasDomEl.style.backgroundColor = "transparent"; // ✅ override after render
+        }
+      }, 500);
     });
+
+    //     selector.find("#gauci-bg-color").on("change", function () {
+    //   const hexColor = $(this).val();
+
+    //   // Convert to RGB via hidden div
+    //   const tempDiv = document.createElement("div");
+    //   tempDiv.style.display = "none";
+    //   tempDiv.style.backgroundColor = hexColor;
+    //   document.body.appendChild(tempDiv);
+    //   const computedColor = getComputedStyle(tempDiv).getPropertyValue("background-color");
+    //   document.body.removeChild(tempDiv);
+
+    //   // Fabric.js se canvas background set karo
+    //   canvas.setBackgroundColor(computedColor, () => {
+    //     canvas.renderAll();
+
+    //     // ⚠️ DOM canvas element se inline background-color remove karo
+    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
+
+    //     // Optionally save state for current tab
+    //     saveCurrentTabCanvasState?.();
+    //   });
+    // });
+
+    //     selector.find("#gauci-bg-color").on("change", function () {
+    //   const hexColor = $(this).val();
+
+    //   // Convert to RGB via hidden div
+    //   const tempDiv = document.createElement("div");
+    //   tempDiv.style.display = "none";
+    //   tempDiv.style.backgroundColor = hexColor;
+
+    //   // Fabric.js se canvas background set karo
+    //   canvas.setBackgroundColor(computedColor, () => {
+    //     canvas.renderAll();
+
+    //     // ⚠️ DOM canvas element se inline background-color remove karo
+    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
+
+    //     // Optionally save state for current tab
+    //     saveCurrentTabCanvasState?.();
+    //   });
+    // });
+
+    //     selector.find("#gauci-bg-color").on("change", function () {
+    //   const hexColor = $(this).val();
+
+    //   // Convert to RGB via hidden div
+    //   const tempDiv = document.createElement("div");
+    //   tempDiv.style.display = "none";
+    //   tempDiv.style.backgroundColor = hexColor;
+    //   document.body.appendChild(tempDiv);
+    //   const computedColor = getComputedStyle(tempDiv).getPropertyValue("background-color");
+    //   document.body.removeChild(tempDiv);
+
+    //     // ⚠️ DOM canvas element se inline background-color remove karo
+    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
+
+    //     // Optionally save state for current tab
+    //     saveCurrentTabCanvasState?.();
+    //   });
+    // });
+
+    //     selector.find("#gauci-bg-color").on("change", function () {
+    //   const hexColor = $(this).val();
+
+    //   // Convert to RGB via hidden div
+    //   const tempDiv = document.createElement("div");
+    //   tempDiv.style.display = "none";
+    //   tempDiv.style.backgroundColor = hexColor;
+    //   document.body.appendChild(tempDiv);
+    //   const computedColor = getComputedStyle(tempDiv).getPropertyValue("background-color");
+    //   document.body.removeChild(tempDiv);
+
+    //     // ⚠️ DOM canvas element se inline background-color remove karo
+    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
+
+    //     // Optionally save state for current tab
+    //     saveCurrentTabCanvasState?.();
+    //   });
+    // });
+
     selector.find("#color-remover").on("click", function () {
       canvas.backgroundColor = "transparent";
       canvas.renderAll();
@@ -3727,7 +3822,12 @@
       loadCanvasState(activeTabId);
       console.log(allCanvasTabState);
       console.log(mainPart);
-      initializeUndoRedo();
+      setTimeout(() => {
+        initializeUndoRedo();
+        console.log(undoStack);
+        selector.find("#gauci-undo").prop("disabled", true);
+      }, 500);
+      // initializeUndoRedo();
       //      let tabCanvasStates = {}; // To store canvas JSON state for each tab
       // let activeTabId = null; // To track the currently active tab
       // let preservedImage = null; // To manage the layout image
@@ -3837,8 +3937,17 @@
         loadCanvasState(activeTabId);
         console.log(allCanvasTabState);
         console.log(mainPart);
-        initializeUndoRedo();
+        setTimeout(() => {
+          initializeUndoRedo();
+          console.log(undoStack);
+          selector.find("#gauci-undo").prop("disabled", true);
+        }, 500);
       }
+      setTimeout(() => {
+        initializeUndoRedo();
+        console.log(undoStack);
+        selector.find("#gauci-undo").prop("disabled", true);
+      }, 500);
       //  else {
       //   fetchImageData();
       // }
@@ -7686,6 +7795,7 @@
       if (undoStack.length > 20) undoStack.shift();
       redoStack = []; // Clear redo stack when a new action is performed
       console.log(`Undo stack size: ${undoStack.length}`);
+      console.log(undoStack);
     }
 
     function loadCanvasStateFromHistory(state) {
@@ -7838,6 +7948,7 @@
                   initializeUndoRedo();
                   selector.find("#gauci-undo").prop("disabled", true);
                   selector.find("#gauci-redo").prop("disabled", true);
+                  console.log(undoStack);
                 }, 500); // Adjust delay as needed
               });
             });
@@ -7997,6 +8108,7 @@
     function setupCanvasEventListeners() {
       canvas.on("object:added", () => {
         saveUndoState();
+        console.log(undoStack);
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           // selector.find("#gauci-redo").prop("disabled", true);
@@ -8010,6 +8122,7 @@
 
       canvas.on("object:modified", () => {
         saveUndoState();
+        console.log(undoStack);
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           // selector.find("#gauci-redo").prop("disabled", true);
@@ -8022,6 +8135,7 @@
 
       canvas.on("object:removed", () => {
         saveUndoState();
+        console.log(undoStack);
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           // selector.find("#gauci-redo").prop("disabled", true);
