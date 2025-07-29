@@ -291,6 +291,13 @@
     }
     /* Open Panel */
     function openPanel() {
+      leftPanelOpen = true;
+      if (fitClicked) {
+        selector.find("#gauci-canvas-wrap").css({
+          left: "32%",
+        });
+      }
+      removeCenteringStyles();
       selector.removeClass("panel-closed");
       selector.find(".gauci-icon-menu-btn").removeClass("active");
       selector.find("#gauci-icon-menu").removeClass("closed");
@@ -303,6 +310,7 @@
     }
     /* Close Panel */
     function closePanel() {
+      leftPanelOpen = false;
       selector.addClass("panel-closed");
       selector.find(".gauci-icon-menu-btn").removeClass("active");
       selector.find("#gauci-icon-menu").addClass("closed");
@@ -317,11 +325,20 @@
       closePanel();
     });
     /* Left Panel Toggle */
+    let fitClicked = null;
+    let leftPanelOpen = false;
+
     selector.find("#gauci-toggle-left").on("click", function () {
       if ($(this).hasClass("closed")) {
         openPanel();
       } else {
         closePanel();
+        if (fitClicked) {
+          selector.find("#gauci-canvas-wrap").css({
+            left: "26%",
+          });
+        }
+        removeCenteringStyles();
       }
     });
     /* Right Panel Toggle */
@@ -459,6 +476,13 @@
       adjustZoom();
       fixZoomOut();
       centerCanvas();
+      fitClicked = true;
+      if (!leftPanelOpen) {
+        selector.find("#gauci-canvas-wrap").css({
+          left: "26%",
+        });
+      }
+      removeCenteringStyles();
     });
     /* Numeric Plus */
     selector.find(".gauci-counter .counter-plus").on("click", function () {
@@ -4782,25 +4806,59 @@
       }
     }
     /* Layer Delete */
+    // selector.find("#gauci-layer-delete").on("click", function () {
+    //   var objects = canvas.toJSON();
+    //   console.log(objects);
+    //   var answer = window.confirm(gauciParams.question2);
+    //   if (answer) {
+    //     var type = selector.find("#gauci-layer-select").val();
+    //     var objects = canvas.getObjects();
+    //     if (type == "all") {
+    //       objects.forEach((element) => canvas.remove(element));
+    //       selector.find("#gauci-layers > li").remove();
+    //     } else {
+    //       objects
+    //         .filter((element) => element.objectType == type)
+    //         .forEach((element) => canvas.remove(element));
+    //       selector.find("#gauci-layers > li.layer-" + type).remove();
+    //     }
+    //     canvas.requestRenderAll();
+    //     selector.find("#gauci-layers").sortable("refresh");
+    //     checkLayers();
+    //   }
+    // });
     selector.find("#gauci-layer-delete").on("click", function () {
+      var objects = canvas.toJSON();
+      console.log(objects);
       var answer = window.confirm(gauciParams.question2);
       if (answer) {
         var type = selector.find("#gauci-layer-select").val();
         var objects = canvas.getObjects();
+
         if (type == "all") {
-          objects.forEach((element) => canvas.remove(element));
+          // Remove all objects except the one at index 0
+          objects.forEach((element, index) => {
+            if (index !== 0) canvas.remove(element);
+          });
+
           selector.find("#gauci-layers > li").remove();
         } else {
+          // Remove only objects of the selected type, except index 0
           objects
-            .filter((element) => element.objectType == type)
+            .filter(
+              (element, index) => element.objectType == type && index !== 0
+            )
             .forEach((element) => canvas.remove(element));
+
           selector.find("#gauci-layers > li.layer-" + type).remove();
         }
+
         canvas.requestRenderAll();
         selector.find("#gauci-layers").sortable("refresh");
         checkLayers();
       }
     });
+
     /* Set Background Image */
     function setBackgroundImage() {
       fabric.Image.fromURL(imgurl, function (img) {
@@ -4889,9 +4947,16 @@
       // Apply centering styles to both canvases
       selector.find("#gauci-canvas-wrap").css({
         top: "50%",
-        left: "25%",
+        left: "32%",
         transform: "translate(-50%, -50%)",
       });
+    }
+
+    function removeCenteringStyles() {
+      var el = selector.find("#gauci-canvas-wrap")[0];
+      el.style.removeProperty("top");
+      el.style.removeProperty("left");
+      el.style.removeProperty("transform");
     }
     function fixZoomOut() {
       var containerWidth = selector.find("#gauci-content").width();
