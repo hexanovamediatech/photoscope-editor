@@ -8780,7 +8780,7 @@
     function addClipMask(path, activeObject) {
       console.log("this is the active path and all", path, activeObject);
       editButtonActive = true;
-      document.getElementById("gauci-border-tools-wrap").style.display = "none";
+      // document.getElementById("gauci-border-tools-wrap").style.display = "none";
       console.log(canvas.toJSON());
       var uniqueId = "clipmask";
       var desiredWidth = 700;
