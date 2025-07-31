@@ -7516,6 +7516,8 @@
 
             // Clear the file input value to allow re-uploading the same image
             selector.find("#gauci-img-upload").val("");
+            document.getElementById("gauci-border-tools-wrap").style.display =
+              "block";
           };
         });
       };
@@ -8778,6 +8780,7 @@
     function addClipMask(path, activeObject) {
       console.log("this is the active path and all", path, activeObject);
       editButtonActive = true;
+      document.getElementById("gauci-border-tools-wrap").style.display = "none";
       console.log(canvas.toJSON());
       var uniqueId = "clipmask";
       var desiredWidth = 700;
@@ -9093,6 +9096,7 @@
         canvas.on("selection:cleared", function () {
           document.getElementById("edit-masking-button").style.display = "none";
         });
+        selector.find("#gauci-image-settings").hide();
         // editButtonActive = false;
       } else {
         alert(
@@ -9221,6 +9225,9 @@
         editButtonActive = true;
         unlinkClipPath();
         selector.find("#gauci-image-settings").show();
+
+        // document.getElementById("gauci-border-tools-wrap").style.display =
+        //   "none";
       });
     function updateReplaceButtonState(e) {
       const activeObject = canvas.getActiveObject();
@@ -9569,11 +9576,105 @@
     //   });
 
     //   console.log(
-    //     "Canvas event listeners after attach:",
+
+    //   ); // Debug: Confirm listeners attached
+    // }
+
+    //   canvas.on("selection:cleared", function (e) {
+    //     console.log("Selection cleared");
+    //   });
+
+    //   console.log(
+
+    //   ); // Debug: Confirm listeners attached
+    // }
+
+    //   canvas.on("selection:cleared", function (e) {
+    //     console.log("Selection cleared");
+    //   });
+
+    //   console.log(
+
     //     canvas.__eventListeners
     //   ); // Debug: Confirm listeners attached
     // }
 
+    //   canvas.on("selection:cleared", function (e) {
+    //     console.log("Selection cleared");
+    //   });
+
+    //   console.log(
+    //     "Canvas event listeners after attach:",
+    //     canvas.__eventListeners
+
+    // }
+
+    // function logSelectedObject(canvas) {
+    //   console.log("Attaching event listeners to canvas:", canvas); // Debug: Check canvas instance
+    //   console.log(
+    //     "Canvas event listeners before attach:",
+    //     canvas.__eventListeners
+    //   ); // Debug: Check existing listeners
+
+    //   canvas.on("selection:updated", function (e) {
+    //     console.log("Selection:updated event fired!"); // Debug: Confirm event is firing
+    //     const selected = e.selected[0]; // Newly selected object
+    //     console.log("Selection updated, new object:", selected);
+    //     console.log("editButtonActive:", editButtonActive);
+    //     console.log("Attaching event listeners to canvas:", canvas); // Debug: Check canvas instance
+    //     console.log(
+    //       "Canvas event listeners before attach:",
+    //       canvas.__eventListeners
+    //     );
+
+    //     if (
+    //       !editButtonActive &&
+    //       selected.type === "image" &&
+    //       selected.clipPath
+    //     ) {
+    //       storedActiveObject = selected;
+    //       storedClipPath = selected.clipPath;
+    //       let path = selected.clipPath.path;
+    //       console.log("Stored object:", storedActiveObject);
+    //       console.log(
+    //         "Clip path position:",
+    //         storedClipPath?.top,
+    //         storedClipPath?.left
+    //       );
+
+    //       shell = new fabric.Path(path, {
+    //         fill: "", // Transparent shell
+    //         stroke: "black",
+    //         strokeWidth: 2,
+    //         scaleX: storedClipPath.scaleX,
+    //         scaleY: storedClipPath.scaleY,
+    //         lockScalingX: false,
+    //         lockScalingY: false,
+    //         lockSkewingX: true,
+    //         lockSkewingY: true,
+    //         originX: storedClipPath.originX,
+    //         originY: storedClipPath.originY,
+    //         top: storedClipPath.top,
+    //         left: storedClipPath.left,
+    //         selectable: true, // Make it interactive
+    //       });
+    //       function updateClipPathPosition() {
+    //         storedClipPath.set({
+    //           top: shell.top,
+    //           left: shell.left,
+    //           angle: shell.angle,
+    //           scaleX: shell.scaleX,
+    //           scaleY: shell.scaleY,
+    //         });
+    //         storedActiveObject.clipPath = storedClipPath;
+    //         canvas.requestRenderAll();
+    //       }
+    //       shell.on("moving", updateClipPathPosition);
+    //       shell.on("scaling", updateClipPathPosition);
+    //       shell.on("rotating", updateClipPathPosition);
+    //       handleMaskingDone();
+    //     }
+    //   });
     function logSelectedObject(canvas) {
       // canvas.off("mouse:down");
       canvas.on("mouse:down", function (e) {
@@ -9590,13 +9691,41 @@
 
         const selected = e.target; // Newly selected object
         console.log("Selection updated, new object:", selected);
-
+        if (selected.path) {
+          console.log(selected);
+          document.getElementById("gauci-image-settings").style.display =
+            "none";
+          // document.getElementById("img-filter-container-id").style.display =
+          //   "none";
+        }
+        //     if (selected.path) {
+        //   console.log(selected);
+        //   document.getElementById("gauci-image-settings").style.display =
+        //     "none";
+        //   // document.getElementById("img-filter-container-id").style.display =
+        //   //   "none";
+        // }
+        if (selected.objectType === "image" && selected.clipPath) {
+          console.log(selected);
+          // document.getElementById("gauci-border-tools-wrap").style.display =
+          //   "none";
+          // document.getElementById("img-filter-container-id").style.display =
+          //   "none";
+        }
+        //         if (selected.objectType === "image" && selected.clipPath) {
+        //   console.log(selected);
+        //   // document.getElementById("gauci-border-tools-wrap").style.display =
+        //   //   "none";
+        //   // document.getElementById("img-filter-container-id").style.display =
+        //   //   "none";
+        // }
         if (
           !editButtonActive &&
           selected.type === "image" &&
           selected.clipPath
         ) {
           storedActiveObject = selected;
+          // console.log(storedActiveObject);
           storedClipPath = selected.clipPath;
           let path = selected.clipPath.path;
 
