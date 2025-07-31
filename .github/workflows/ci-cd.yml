@@ -15,5 +15,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Start/Restart http-server
-        run: pm2 restart http-server
+      - name: Start/Restart simple-http
+        run: pm2 restart simple-http
