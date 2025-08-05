@@ -44,41 +44,13 @@ window.addEventListener("load", () => {
   }, 1500);
 });
 
-// async function fetchModelData() {
-//   try {
-//     const response = await fetch(`${baseUrl}/api/v1/product/all`);
-//     const data = await response.json();
-
-//     // Extract the model source (GLB path) based on the name parameter from the URL
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const productId = urlParams.get("id");
-//     const modelName = urlParams.get("name");
-//     const productNameTag = document.querySelector(
-//       ".personalise-product-name-text"
-//     );
-//     if (productNameTag) {
-//       productNameTag.textContent = modelName; // Update the product name
-//     }
-//     const product = data.products.find((item) => item.name === modelName);
-//     console.log(product, "Product here");
-//     if (product && product.modelsUrl) {
-//       modelSource = product.modelsUrl; // Set the model URL
-//       window.layoutSource = product.imageUrl;
-//       selectedMesh = product.specificMesh;
-//     } else {
-//       console.error("Model not found for the specified name.");
-//     }
-//   } catch (error) {
-//     console.error("Error fetching model data:", error);
-//   }
-// }
 async function fetchModelData() {
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get("id");
     const response = await fetch(`${baseUrl}/api/v1/product/get/${productId}`);
     const data = await response.json();
-    console.log(data);
+
     const product = data.product;
     mainPart = product.mainPart.meshName;
     // Extract the model source (GLB path) based on the name parameter from the URL
@@ -95,12 +67,11 @@ async function fetchModelData() {
       productNameTag.textContent = modelName; // Update the product name
     }
     // const product = data.products.find((item) => item.name === modelName);
-    // console.log(product, "Product here");
-    console.log(product.modelUrl, "Model Url");
+
     if (product && product.modelUrl) {
       modelSource = product.modelUrl; // Set the model URL
       linkedMeshImageData = product.linkedMeshImageData[0];
-      console.log(linkedMeshImageData);
+
       window.layoutSource = linkedMeshImageData.layoutUrl;
       selectedMesh = linkedMeshImageData.meshName;
       productDescription.textContent = product.description;
@@ -274,10 +245,9 @@ function render() {
 }
 
 function changeTexture(newUrl) {
-  console.log(newUrl);
   if (scene) {
     const textureLoader = new THREE.TextureLoader();
-    console.log(selectedMesh);
+
     const specificMesh = scene.getObjectByName(mainPartMesh);
 
     if (specificMesh) {
@@ -323,10 +293,7 @@ function changeTexture(newUrl) {
               // texture.offset.set(0.93, 0.55);
               texture.repeat.set(1, -1);
             } else {
-              console.warn(
-                "No specific texture settings for selectedMesh:",
-                selectedMesh
-              );
+              console.warn("No specific texture settings for selectedMesh:");
             }
             texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
           });
@@ -483,23 +450,8 @@ document
       realEditCont.style.display = "flex";
       realEditCont.style.flexDirection = "column";
 
-      // Check if there is an active item
-      // if (activeItem) {
-      //   try {
-      //     const response = await fetch(activeItem.src);
-      //     const jsonData = await response.json();
-      //     // Load the JSON data to the canvas
-      //     loadJSONToCanvas(jsonData);
-      //   } catch (error) {
-      //     console.error("Error fetching or parsing the JSON:", error);
-      //   }
-      // }
-
       if (selectedItem) {
         try {
-          // const response = await fetch(activeItem.src);
-          // const jsonData = await response.json();
-          // Load the JSON data to the canvas
           loadJSONToCanvas(selectedItem.jsonData);
         } catch (error) {
           console.error("Error fetching or parsing the JSON:", error);
@@ -625,123 +577,15 @@ function updateCanvasText(textIndex, newText) {
 
   const updatedCanvasJSON = newFabricCanvas.toJSON();
   window.editedCanvasJson = updatedCanvasJSON;
-  console.log(window.editedCanvasJson);
 }
 
-// function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
-//   console.log(json);
-//   console.log(newImageSrc);
-//   console.log(imageIndex);
-
-//   // Create a new image object to load the base64 image
-//   const img = new Image();
-//   img.src = newImageSrc;
-
-//   // Once the image is loaded, get its width and height
-//   img.onload = function () {
-//     const imageWidth = img.width;
-//     const imageHeight = img.height;
-
-//     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
-//     console.log(json.objects);
-
-//     // Find the image object at the specified index (adjusted for background image)
-//     const targetIndex = imageIndex; // Since imageObjects skips index 0, imageIndex maps directly
-//     if (
-//       json.objects[targetIndex] &&
-//       json.objects[targetIndex].type === "image"
-//     ) {
-//       json.objects[targetIndex].src = newImageSrc;
-//       json.objects[targetIndex].width = imageWidth;
-//       json.objects[targetIndex].height = imageHeight;
-//     }
-
-//     const imageUpdatedJSON = json;
-//     console.log(imageUpdatedJSON, "image updated json structure");
-
-//     if (callback) callback(imageUpdatedJSON);
-//   };
-
-//   // Handle error if the image fails to load
-//   img.onerror = function () {
-//     console.error("Failed to load the image");
-//   };
-// }
-
-// function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
-//   console.log("Original JSON:", json);
-//   const originalOrder = [...json.objects]; // Save original order
-
-//   // Step 1: Separate images and non-images
-//   const imageObjects = json.objects.filter((obj) => obj.type === "image");
-//   const nonImageObjects = json.objects.filter((obj) => obj.type !== "image");
-
-//   // Step 2: Reorder: images first, then others
-//   json.objects = [...imageObjects, ...nonImageObjects];
-
-//   // Step 3: Load new image to get dimensions
-//   const img = new Image();
-//   img.src = newImageSrc;
-
-//   img.onload = function () {
-//     const imageWidth = img.width;
-//     const imageHeight = img.height;
-
-//     console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
-
-//     // Step 4: Replace the image at the given index
-//     if (json.objects[imageIndex] && json.objects[imageIndex].type === "image") {
-//       json.objects[imageIndex].src = newImageSrc;
-//       json.objects[imageIndex].width = imageWidth;
-//       json.objects[imageIndex].height = imageHeight;
-//     } else {
-//       console.warn("Target index does not have an image object");
-//     }
-
-//     // Step 5: Restore original order
-//     const updatedImageObject = json.objects[imageIndex];
-//     const updatedSrc = updatedImageObject?.src;
-
-//     // Create a map of id or src (whichever is stable) to updated image
-//     const updatedImages = imageObjects.map((imgObj, idx) => {
-//       if (idx === imageIndex) {
-//         return updatedImageObject;
-//       }
-//       return imgObj;
-//     });
-
-//     // Reconstruct final object list from original order
-//     const restoredObjects = originalOrder.map((obj) => {
-//       if (obj.type === "image") {
-//         return updatedImages.shift(); // replace from updated image list
-//       }
-//       return obj; // return non-image as is
-//     });
-
-//     json.objects = restoredObjects;
-
-//     console.log("Final updated JSON:", json);
-
-//     if (callback) callback(json);
-//   };
-
-//   img.onerror = function () {
-//     console.error("Failed to load the image");
-//   };
-// }
-
 function replaceImageSrc(json, newImageSrc, imageIndex, callback) {
-  console.log("Original JSON:", json);
-  console.log("Target imageIndex:", imageIndex);
-
   const img = new Image();
   img.src = newImageSrc;
 
   img.onload = function () {
     const imageWidth = img.width;
     const imageHeight = img.height;
-
-    console.log(`Image Width: ${imageWidth}, Image Height: ${imageHeight}`);
 
     // Step 1: Traverse and count only 'image' type objects
     let imageCounter = 0;
@@ -790,7 +634,6 @@ function generateImagesFromCanvasStates() {
 
       // Get all objects from the canvas
       const objects = tempCanvas.getObjects();
-      console.log(objects);
 
       // Remove the first object temporarily
       const firstObject = objects[0];
@@ -833,7 +676,6 @@ function generateImagesFromCanvasStates() {
 
       // Final check to call texture application
       if (meshImageDataArray.length === Object.keys(originalFormat).length) {
-        console.log("Generated Images Array:", meshImageDataArray);
         applyTexturesToMeshes();
       }
     });
@@ -856,7 +698,6 @@ function getImageObjectByLogicalIndex(objects, imageIndex) {
 }
 
 function loadJSONToCanvas(jsonData) {
-  console.log(jsonData, "json data here ");
   if (!newFabricCanvas) {
     initializeCanvas();
   }
@@ -964,7 +805,6 @@ function loadJSONToCanvas(jsonData) {
     "min-editor-dummy-image"
   );
   if (imageToShow && imageToShow.src) {
-    console.log("Showing image:", imageToShow);
     if (window.innerWidth < 1024 && miniEditordummyImage) {
       miniEditordummyImage.src = imageToShow.src;
       miniEditordummyImage.style.width = "100%";
@@ -982,7 +822,6 @@ function loadJSONToCanvas(jsonData) {
       }
     }
   } else {
-    console.warn("No valid image found to display");
     if (miniEditorPopupImage) {
       miniEditorPopupImage.src = "./assets/custom/no-temp.jpg";
     }
@@ -1005,17 +844,6 @@ function loadJSONToCanvas(jsonData) {
     input2.style.display = "block";
   }
 
-  // Show the first replace button if clipmask exists
-  // const replaceImgBtn = document.getElementById("replace-btn-cont-1");
-  // const imageFound = jsonData.objects.filter(
-  //   (obj) => obj.customId === "clipmask"
-  // );
-  // if (imageFound[0] && replaceImgBtn) {
-  //   replaceImgBtn.style.display = "block";
-  // } else if (replaceImgBtn) {
-  //   replaceImgBtn.style.display = "none";
-  // }
-
   // Load the JSON data into the existing Fabric.js canvas
   let nextIndex = 1;
   jsonData.objects.forEach((obj) => {
@@ -1032,7 +860,7 @@ function loadJSONToCanvas(jsonData) {
       obj.src = `${obj.src}?t=${Date.now()}`;
     }
   });
-  console.log(jsonData);
+
   newFabricCanvas.loadFromJSON(
     jsonData,
     function () {
@@ -1069,8 +897,6 @@ function loadJSONToCanvas(jsonData) {
       savedCanvasJSON = newFabricCanvas.toJSON();
       window.editedCanvasJson = savedCanvasJSON;
       const allObjects = newFabricCanvas.getObjects();
-      console.log(allObjects);
-      console.log(savedCanvasJSON);
 
       const firstObject = allObjects[0];
       if (
@@ -1106,17 +932,15 @@ function loadJSONToCanvas(jsonData) {
       });
       newFabricCanvas.setZoom(1);
       fabricImageConverted = imgData;
-      console.log("this is thefabricImageConverted", fabricImageConverted);
+
       if (selectedMesh) {
         changeTexture(fabricImageConverted);
       }
       newFabricCanvas.insertAt(firstObject, 0);
       newFabricCanvas.renderAll();
-      console.log(newFabricCanvas.toJSON());
     },
     function (error) {
-      console.error("Error loading JSON:", error);
-      console.log("Loaded JSON Data:", jsonData);
+      // console.error("Error loading JSON:", error);
     }
   );
 }
@@ -1130,7 +954,6 @@ function updateUIImages(imageSrc) {
   );
 
   if (imageSrc) {
-    console.log("Updating UI images with src:", imageSrc);
     if (window.innerWidth < 1024 && miniEditordummyImage) {
       miniEditordummyImage.src = imageSrc;
       miniEditordummyImage.style.width = "100%";
@@ -1148,7 +971,6 @@ function updateUIImages(imageSrc) {
       }
     }
   } else {
-    console.warn("No valid image found to display");
     if (miniEditorPopupImage) {
       miniEditorPopupImage.src = "./assets/custom/no-temp.jpg";
     }
@@ -1160,103 +982,11 @@ function updateUIImages(imageSrc) {
     }
   }
 }
-// function setNewImageSrc(imageSrc) {
-//   newImageSrc = imageSrc;
-
-//   var originalCanvasJson = window.originalCanvasJson;
-//   var editedCanvasJson = window.editedCanvasJson;
-
-//   // Function to overwrite the text in originalCanvasJsonwith editedCanvasJson's text
-//   function overwriteText(originalJSON, updatedJSON) {
-//     if (
-//       originalJSON.objects &&
-//       updatedJSON.objects &&
-//       originalJSON.objects.length === updatedJSON.objects.length
-//     ) {
-//       originalJSON.objects.forEach((obj, index) => {
-//         if (
-//           obj.type === "textbox" &&
-//           updatedJSON.objects[index].type === "textbox"
-//         ) {
-//           // Overwrite the text
-//           obj.text = updatedJSON.objects[index].text;
-//         }
-//       });
-//     }
-//   }
-
-//   // Overwrite text from editedCanvasJson to originalCanvasJson
-//   overwriteText(originalCanvasJson, editedCanvasJson);
-
-//   if (typeof newImageSrc !== "undefined") {
-//     // Replace the image source in the parsed JSON and compress it
-//     replaceImageSrc(originalCanvasJson, newImageSrc, (imageUpdatedJSON) => {
-//       // Load the updated JSON onto the canvas
-//       loadJSONToCanvas(imageUpdatedJSON);
-
-//       window.editedCanvasJson = imageUpdatedJSON;
-//       console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
-//     });
-//   } else {
-//     // Log the updated JSON (without changing image source) to the console
-//     console.log("Updated JSON with overwritten text:", originalCanvasJson);
-//   }
-// }
-
-// function setNewImageSrc(imageSrc, imageIndex) {
-//   newImageSrc = imageSrc;
-
-//   var originalCanvasJson = window.originalCanvasJson;
-//   var editedCanvasJson = window.editedCanvasJson;
-
-//   console.log(originalCanvasJson);
-//   console.log(editedCanvasJson);
-
-//   // Function to overwrite the text in originalCanvasJson with editedCanvasJson's text
-//   function overwriteText(originalJSON, updatedJSON) {
-//     if (
-//       originalJSON.objects &&
-//       updatedJSON.objects &&
-//       originalJSON.objects.length === updatedJSON.objects.length
-//     ) {
-//       originalJSON.objects.forEach((obj, index) => {
-//         if (
-//           obj.type === "textbox" &&
-//           updatedJSON.objects[index].type === "textbox"
-//         ) {
-//           obj.text = updatedJSON.objects[index].text;
-//         }
-//       });
-//     }
-//   }
-
-//   // Overwrite text from editedCanvasJson to originalCanvasJson
-//   overwriteText(originalCanvasJson, editedCanvasJson);
-
-//   if (typeof newImageSrc !== "undefined") {
-//     // Replace the image source in the parsed JSON and compress it
-//     replaceImageSrc(
-//       originalCanvasJson,
-//       newImageSrc,
-//       imageIndex,
-//       (imageUpdatedJSON) => {
-//         // Load the updated JSON onto the canvas
-//         loadJSONToCanvas(imageUpdatedJSON);
-//         window.editedCanvasJson = imageUpdatedJSON;
-//         console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
-//       }
-//     );
-//   } else {
-//     console.log("Updated JSON with overwritten text:", originalCanvasJson);
-//   }
-// }
 
 function setNewImageSrc(imageSrc, imageIndex) {
   newImageSrc = imageSrc;
 
   var editedCanvasJson = window.editedCanvasJson;
-
-  console.log(editedCanvasJson);
 
   // Store editedCanvasJson in a new variable with a deep copy to avoid modifying the original
   var newOriginalJson = JSON.parse(JSON.stringify(editedCanvasJson));
@@ -1291,81 +1021,12 @@ function setNewImageSrc(imageSrc, imageIndex) {
         // Load the updated JSON onto the canvas
         loadJSONToCanvas(imageUpdatedJSON);
         window.editedCanvasJson = imageUpdatedJSON;
-        console.log("Updated JSON with overwritten text:", imageUpdatedJSON);
       }
     );
   } else {
-    console.log("Updated JSON with new original:", newOriginalJson);
+    // console.log("Updated JSON with new original:", newOriginalJson);
   }
 }
-
-// Assuming the user selects an image via an input field
-// function handleImageUploadAlternate(event) {
-//   if (selectedItem) {
-//     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-//     openModalBtn.style.visibility = "invisible";
-//     const file = event.target.files[0];
-//     const reader = new FileReader();
-
-//     reader.onload = function (e) {
-//       const imageSrc = e.target.result;
-//       setNewImageSrc(imageSrc); // Store the new image source
-//       // loadJSONToCanvas(savedCanvasJSON); // Reload the JSON to canvas with the new image
-//       const miniEditorPopupImage = document.getElementById(
-//         "min-editor-popup-image"
-//       );
-//       if (miniEditorPopupImage) {
-//         miniEditorPopupImage.src = imageSrc; // Set the new image source
-//       }
-//     };
-
-//     if (file) {
-//       reader.readAsDataURL(file);
-//     }
-//   }
-// }
-
-// function handleImageUploadAlternate(event, photoNumber) {
-//   if (selectedItem) {
-//     const openModalBtn = document.getElementById("gauci-mini-editor-save");
-//     if (openModalBtn) {
-//       openModalBtn.style.visibility = "invisible";
-//     }
-//     const file = event.target.files[0];
-//     const reader = new FileReader();
-
-//     reader.onload = function (e) {
-//       const imageSrc = e.target.result;
-//       // Update the UI image
-//       const uiImage = document.getElementById(`hexa-replc-img-${photoNumber}`);
-//       if (uiImage) {
-//         uiImage.src = imageSrc;
-//       }
-//       // Update min-editor-popup-image only for the first image (if needed)
-//       if (photoNumber === 1) {
-//         const miniEditorPopupImage = document.getElementById(
-//           "min-editor-popup-image"
-//         );
-//         if (miniEditorPopupImage) {
-//           miniEditorPopupImage.src = imageSrc;
-//         }
-//         const miniEditordummyImage = document.getElementById(
-//           "min-editor-dummy-image"
-//         );
-//         if (miniEditordummyImage) {
-//           miniEditordummyImage.src = imageSrc;
-//         }
-//       }
-//       // Map photoNumber to the correct jsonData.objects index (skip background image at index 0)
-//       const imageIndex = photoNumber; // jsonData.objects index is photoNumber (since we skip index 0)
-//       setNewImageSrc(imageSrc, imageIndex);
-//     };
-
-//     if (file) {
-//       reader.readAsDataURL(file);
-//     }
-//   }
-// }
 
 function handleImageUploadAlternate(event, photoNumber) {
   if (selectedItem) {
@@ -1397,54 +1058,6 @@ function handleImageUploadAlternate(event, photoNumber) {
   }
 }
 
-// document
-//   .getElementById("personaliseImgUpload")
-//   .addEventListener("change", handleImageUploadAlternate);
-// Replace image event listener
-
-// Event listener for the "Adjust" button click
-
-// document
-//   .getElementById("personaliseAdjustBtn")
-//   .addEventListener("click", () => {
-//     const popupMiniCanvas = document.getElementById("popup-mini-canvas");
-//     popupMiniCanvas.style.display = "flex";
-
-//     if (newFabricCanvas) {
-//       // Set properties for the first object in the canvas
-//       const objects = newFabricCanvas.getObjects();
-//       console.log(objects);
-//       // const targetObject = objects.find(
-//       //   (obj) => obj.type === "image" && !obj.src.startsWith("http")
-//       // );
-//       const targetObject = objects.filter(
-//         (obj) => obj.customId === "clipmask" && obj.type === "image"
-//       );
-
-//       console.log(targetObject);
-
-//       if (targetObject[0]) {
-//         // Set properties for the found object
-//         targetObject[0].set({
-//           selectable: true,
-//           hasControls: true,
-//           hasBorders: true,
-//           lockMovementX: false,
-//           lockMovementY: false,
-//           lockRotation: false,
-//           lockScalingX: false,
-//           lockScalingY: false,
-//         });
-//       }
-
-//       // Render the canvas after adjustments
-//       newFabricCanvas.renderAll();
-
-//       // Save the updated canvas state to localStorage
-//       savedCanvasJSON = newFabricCanvas.toJSON();
-//       window.editedCanvasJson = savedCanvasJSON;
-//     }
-//   });
 document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
@@ -1454,14 +1067,11 @@ document
     if (newFabricCanvas) {
       // Get all objects from the canvas
       const objects = newFabricCanvas.getObjects();
-      console.log(objects);
 
       // Filter image objects, excluding the background image at index 0
       const targetObjects = objects.filter(
         (obj, index) => obj.type === "image" && index !== 0
       );
-
-      console.log(targetObjects);
 
       // Make all target image objects selectable and adjustable
       targetObjects.forEach((targetObject) => {
@@ -1511,14 +1121,12 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
       savedCanvasJSON = newFabricCanvas.toJSON();
       window.editedCanvasJson = savedCanvasJSON;
-      console.log(window.editedCanvasJson);
 
       const allObjects = newFabricCanvas.getObjects();
-      console.log(newFabricCanvas.toJSON());
 
       // Save the first object (assuming it's the background image)
       const firstObject = allObjects[0];
-      console.log(firstObject);
+
       // Remove the first object from the canvas
       // newFabricCanvas.remove(firstObject);
       if (
@@ -1626,7 +1234,6 @@ initialize3DViewer();
     }
     const data = await response.json();
     let dataArray = data.data; // Access the array from the data object
-    console.log("dataArray", dataArray);
 
     if (dataArray === null) {
       hideSkeletonLoader();
@@ -1643,7 +1250,7 @@ initialize3DViewer();
         };
         emptyData.push(dummyTemplate);
       }
-      console.log(emptyData);
+
       emptyData.forEach((item) => {
         const mainDiv = document.createElement("div");
         mainDiv.classList.add("template-main-cont");
@@ -1689,7 +1296,7 @@ initialize3DViewer();
           mainDiv.style.cursor = "pointer";
           mainDiv.addEventListener("click", () => {
             // Placeholder for "No Template" click handler
-            console.log("No Template clicked! Implement click behavior here.");
+            console.log("No Template clicked! ");
             // Add your click logic here later
             // Example: Clear canvas, reset state, etc.
           });
@@ -1708,7 +1315,6 @@ initialize3DViewer();
       );
       filteredData = [noTemplate, ...filteredData]; // Add "No Template" at index 0
 
-      console.log(filteredData);
       if (filteredData.length < 10) {
         const dummyTemplateCount = 10 - filteredData.length;
         for (let i = 0; i < dummyTemplateCount; i++) {
@@ -1804,18 +1410,6 @@ initialize3DViewer();
           return;
         }
 
-        // Handle "No Template" click
-        // if (item.deselectId === "no-template-deselect") {
-        //   mainDiv.style.cursor = "pointer";
-        //   mainDiv.addEventListener("click", () => {
-        //     // Placeholder for "No Template" click handler
-        //     console.log("No Template clicked! Implement click behavior here.");
-        //     // Add your click logic here later
-        //     // Example: Clear canvas, reset state, etc.
-        //   });
-        //   return;
-        // }
-
         if (item.deselectId === "no-template-deselect") {
           mainDiv.style.cursor = "pointer";
           mainDiv.addEventListener("click", () => {
@@ -1858,26 +1452,12 @@ initialize3DViewer();
             dummyImageRestore.style.width = "30%";
             dummyImageRestore.style.height = "30%";
 
-            //             if (miniEditorPopupImage && clipmaskImage.src) {
-            //   // Set the src of the mini-editor-popup-image to the clipmaskImage's src
-            //   miniEditorPopupImage.src = clipmaskImage.src;
-            //   dummyImage.style.width = "100%";
-            //   dummyImage.style.height = "100%";
-            //   dummyImage.style.objectFit = "cover";
-            //   dummyImage.src = clipmaskImage.src;
-            //   dummyImage.style.borderRadius = "10px";
-            // }
-            // //  else {
-            // //   miniEditorPopupImage.src = "../../assets/custom/no-photo.png";
-            // // }
             const realEditCont = document.getElementById(
               "personaliseImageUploadPopup"
             );
             realEditCont.style.display = "none";
-            // const imageInput = document.getElementById("personaliseImgUpload");
-            // imageInput.value = "";
+
             imageReplace = false;
-            console.log("No Template clicked! 3D model and canvas reset.");
           });
           return;
         }
@@ -1950,18 +1530,16 @@ initialize3DViewer();
             previouslyActive.classList.remove("active");
           }
           templateId = item.key;
-          console.log("templateId", templateId);
+
           newImg.classList.add("active");
           activeItem = item.src;
           originalFormat = item.src;
           window.originalFormat = originalFormat;
 
-          console.log("this is the activeitems", activeItem);
           editedArrayFormat = Object.keys(activeItem).map((key) => ({
             part: key,
             jsonData: JSON.parse(activeItem[key]),
           }));
-          console.log("edited array", editedArrayFormat);
 
           generateImagesFromCanvasStates();
 
@@ -1969,7 +1547,7 @@ initialize3DViewer();
             selectedItem =
               editedArrayFormat.find((item) => item.part === mainPart) ||
               editedArrayFormat[0];
-            console.log(selectedItem);
+
             window.selectedOriginalJsonPart = selectedItem;
             imageReplace = true;
             mainPartMesh = selectedItem?.part;
@@ -1999,18 +1577,9 @@ initialize3DViewer();
             );
 
             realEditCont.style.display = "none";
-            // const imageInput = document.getElementById("personaliseImgUpload");
-            // imageInput.value = "";
+
             imageReplace = true;
             loadJSONToCanvas(selectedItem.jsonData);
-            // preloadAllImages(selectedItem.jsonData)
-            //   .then(() => {
-            //     console.log("All images preloaded");
-            //     loadJSONToCanvas(selectedItem.jsonData);
-            //   })
-            //   .catch((err) => {
-            //     console.error("Error during image preloading", err);
-            //   });
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
           }
@@ -2024,39 +1593,6 @@ initialize3DViewer();
     hideSkeletonLoader();
   }
 })();
-
-// function preloadAllImages(objects) {
-//   console.log("preloadAllImages called", objects);
-//   return Promise.all(
-//     objects?.objects?.map((obj) => {
-//       if (obj?.src) {
-//         return new Promise((resolve, reject) => {
-//           const img = new Image();
-//           img.crossOrigin = "anonymous";
-//           img.onload = () => {
-//             console.log("c", obj.src);
-//             resolve();
-//           };
-//           img.onerror = (e) => {
-//             console.error("Failed to preload image:", obj.src, e);
-//             resolve();
-//           };
-//           img.src = obj.src;
-//         });
-//       } else {
-//         return Promise.resolve(); // Not an image object
-//       }
-//     })
-//   );
-// }
-
-// const partDropDownList = document.getElementById("hexa-dropdown-ul-list");
-
-// document
-//   .getElementById("hexa-drop-down-select-cont")
-//   .addEventListener("click", () => {
-//     partDropDownList.classList.remove("show-dropdown");
-//   });
 
 document.getElementById("mobil-cross-btn").addEventListener("click", () => {
   const popupMiniCanvas = document.getElementById(
@@ -2080,7 +1616,7 @@ document.getElementById("mobil-cross-btn").addEventListener("click", () => {
 
 function openModal() {
   const modal = document.getElementById("mini-editor-save-modal-cont");
-  console.log("Opening modal..."); // Debugging log
+
   if (modal) {
     modal.style.display = "block";
   } else {
@@ -2093,7 +1629,6 @@ function closeModal() {
   const modal = document.getElementById("mini-editor-save-modal-cont");
   if (modal) {
     modal.style.display = "none";
-    console.log("Modal closed.");
   } else {
     console.error("Modal element not found!");
   }
@@ -2101,12 +1636,9 @@ function closeModal() {
 
 // Adding event listeners after the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM fully loaded.");
-
   // Get the button that opens the modal
   const openModalBtn = document.getElementById("gauci-mini-editor-save");
   if (openModalBtn) {
-    console.log("Found the open modal button.");
     openModalBtn.addEventListener("click", openModal);
   } else {
     console.error("Open modal button not found!");
@@ -2115,7 +1647,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Get the <span> element that closes the modal (fix the class here)
   const closeModalBtn = document.getElementsByClassName("close-mini-modal")[0];
   if (closeModalBtn) {
-    console.log("Found the close button.");
     closeModalBtn.addEventListener("click", closeModal);
   } else {
     console.error("Close button not found!");
@@ -2154,7 +1685,7 @@ async function handleSaveClick() {
         allowOutsideClick: true,
         allowEscapeKey: true,
       });
-      console.log("User is not logged in.");
+
       return;
     }
 
@@ -2169,14 +1700,13 @@ async function handleSaveClick() {
         allowOutsideClick: true,
         allowEscapeKey: true,
       });
-      console.log("Email is not verified.");
+
       return;
     } else {
       openModal();
     }
 
     // Success action (you can add further logic here)
-    console.log("API call successful", data);
   } catch (error) {
     Swal.fire({
       title: "Login Required",
@@ -2187,14 +1717,9 @@ async function handleSaveClick() {
       allowOutsideClick: true,
       allowEscapeKey: true,
     });
-    console.log(error.message);
   }
 }
 
-// Add event listener to the button
-// document
-//   .getElementById("gauci-mini-editor-save")
-//   .addEventListener("click", handleSaveClick);
 function convertToDataURL(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.onload = function () {
@@ -2222,7 +1747,6 @@ document
 document
   .getElementById("saveAsPublicMini")
   .addEventListener("click", function () {
-    console.log("function called");
     isPublic = true; // Set isPublic to true for public templates
     saveTemplate(); // Call the function to save the template
   });
@@ -2231,7 +1755,6 @@ document
 document
   .getElementById("saveAsPrivateMini")
   .addEventListener("click", function () {
-    console.log("function called");
     isPublic = false; // Set isPublic to false for private templates
     saveTemplate(); // Call the function to save the template
   });
@@ -2266,8 +1789,6 @@ function saveTemplate() {
     }
   });
 
-  console.log(editedCanvasObject);
-  console.log(originalCanvasObject);
   const json = originalCanvasObject;
   var objects = newFabricCanvas.getObjects();
   var filteredObjects = objects.filter(function (obj) {
@@ -2447,35 +1968,6 @@ function dataURLtoBlob(dataurl) {
   return new Blob([u8arr], { type: mime });
 }
 
-// setupEventListener();
-
-// document
-//   .getElementById("personaliseOpenPopupBtn")
-//   .addEventListener("click", async () => {
-
-//   });
-//   function handleFavTempllate(templateKey) {
-//     const url = `https://backend.toddlerneeds.com/api/v1/user/template/togglefavorite`;
-
-//     fetch(url, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ templateKey }),
-//         credentials: 'include'
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log('Success:', data);
-//         toastr.success('Success! Template toggled.', 'success');
-//     })
-//     .catch((error) => {
-//         console.error('Error:', error);
-//         toastr.error('Error! Could not toggle template.', 'failure');
-//     });
-// }
-
 async function handleFavTempllate(templateKey) {
   try {
     const response = await fetch(
@@ -2515,12 +2007,6 @@ async function handleFavTempllate(templateKey) {
   }
 }
 
-// Get the modal
-// Function to open the modal
-
-// Function to open the modal
-// Function to open the modal
-// Select the necessary elements
 const fullScreenButton = document.querySelector(
   ".personalise-question-fullscreen"
 );
@@ -2569,11 +2055,11 @@ const favIcon = document.getElementById("templateFavIcon");
 
 favIcon.addEventListener("mouseover", () => {
   // favIcon.src = '../../assets/custom/heart-filled.png'; // On hover
-  console.log("mouse hoverd");
+  // console.log("mouse hoverd");
 });
 
 // Revert the image source when mouse leaves
 favIcon.addEventListener("mouseout", () => {
   // favIcon.src = '../../assets/custom/heart2.png'; // On mouse leave
-  console.log("mouse out");
+  // console.log("mouse out");
 });
