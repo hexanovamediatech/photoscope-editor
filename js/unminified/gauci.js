@@ -126,7 +126,7 @@
         $("#gauci").find("#gauci-main-loader").fadeOut(200);
       })
       .catch(function (e) {
-        console.log(e);
+        // console.log(e);
         $("#gauci").find("#gauci-main-loader").hide();
       });
     /* LazyLoad */
@@ -654,87 +654,6 @@
       }, 500);
     });
 
-    //     selector.find("#gauci-bg-color").on("change", function () {
-    //   const hexColor = $(this).val();
-
-    //   // Convert to RGB via hidden div
-    //   const tempDiv = document.createElement("div");
-    //   tempDiv.style.display = "none";
-    //   tempDiv.style.backgroundColor = hexColor;
-    //   document.body.appendChild(tempDiv);
-    //   const computedColor = getComputedStyle(tempDiv).getPropertyValue("background-color");
-    //   document.body.removeChild(tempDiv);
-
-    //   // Fabric.js se canvas background set karo
-    //   canvas.setBackgroundColor(computedColor, () => {
-    //     canvas.renderAll();
-
-    //     // ⚠️ DOM canvas element se inline background-color remove karo
-    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
-
-    //     // Optionally save state for current tab
-    //     saveCurrentTabCanvasState?.();
-    //   });
-    // });
-
-    //     selector.find("#gauci-bg-color").on("change", function () {
-    //   const hexColor = $(this).val();
-
-    //   // Convert to RGB via hidden div
-    //   const tempDiv = document.createElement("div");
-    //   tempDiv.style.display = "none";
-    //   tempDiv.style.backgroundColor = hexColor;
-
-    //   // Fabric.js se canvas background set karo
-    //   canvas.setBackgroundColor(computedColor, () => {
-    //     canvas.renderAll();
-
-    //     // ⚠️ DOM canvas element se inline background-color remove karo
-    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
-
-    //     // Optionally save state for current tab
-    //     saveCurrentTabCanvasState?.();
-    //   });
-    // });
-
-    //     selector.find("#gauci-bg-color").on("change", function () {
-    //   const hexColor = $(this).val();
-
-    //   // Convert to RGB via hidden div
-    //   const tempDiv = document.createElement("div");
-    //   tempDiv.style.display = "none";
-    //   tempDiv.style.backgroundColor = hexColor;
-    //   document.body.appendChild(tempDiv);
-    //   const computedColor = getComputedStyle(tempDiv).getPropertyValue("background-color");
-    //   document.body.removeChild(tempDiv);
-
-    //     // ⚠️ DOM canvas element se inline background-color remove karo
-    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
-
-    //     // Optionally save state for current tab
-    //     saveCurrentTabCanvasState?.();
-    //   });
-    // });
-
-    //     selector.find("#gauci-bg-color").on("change", function () {
-    //   const hexColor = $(this).val();
-
-    //   // Convert to RGB via hidden div
-    //   const tempDiv = document.createElement("div");
-    //   tempDiv.style.display = "none";
-    //   tempDiv.style.backgroundColor = hexColor;
-    //   document.body.appendChild(tempDiv);
-    //   const computedColor = getComputedStyle(tempDiv).getPropertyValue("background-color");
-    //   document.body.removeChild(tempDiv);
-
-    //     // ⚠️ DOM canvas element se inline background-color remove karo
-    //     document.getElementById("gauci-canvas").style.backgroundColor = "";
-
-    //     // Optionally save state for current tab
-    //     saveCurrentTabCanvasState?.();
-    //   });
-    // });
-
     selector.find("#color-remover").on("click", function () {
       canvas.backgroundColor = "transparent";
       canvas.renderAll();
@@ -1195,7 +1114,6 @@
             allowEscapeKey: true,
           });
 
-          console.log("User is not logged in.");
           return;
         },
         success: function (response) {
@@ -1211,7 +1129,7 @@
               allowOutsideClick: true,
               allowEscapeKey: true,
             });
-            console.log("User is not logged in.");
+
             return;
           }
 
@@ -1230,12 +1148,11 @@
               allowOutsideClick: true,
               allowEscapeKey: true,
             });
-            console.log("Email is not verified.");
+
             return;
           }
 
           // If the user is logged in and email is verified, proceed to open the modal
-          console.log("User is logged in and email is verified.");
 
           var target = clickedElement.data("target"); // Use the stored clicked element reference
           selector.find(".gauci-modal").hide(); // Hide any open modals
@@ -1420,180 +1337,10 @@
       });
     }
 
-    // selector.find("#gauci-json-save").on("click", function () {
-    //   // Show public/private modal before proceeding
-    //   showPublicPrivateModal().then((isPublic) => {
-    //     // Proceed with saving the template based on user's choice
-
-    //     // Convert the canvas to a JSON object, including specific properties
-    //     var json = canvas.toJSON([
-    //       "objectType",
-    //       "gradientFill",
-    //       "roundedCorners",
-    //       "mode",
-    //       "selectable",
-    //       "lockMovementX",
-    //       "lockMovementY",
-    //       "lockRotation",
-    //       "crossOrigin",
-    //       "layerName",
-    //       "customId",
-    //     ]);
-
-    //     var objects = canvas.getObjects();
-    //     var filteredObjects = objects.filter(function (obj) {
-    //       return obj.customId !== "layoutImage"; // Filter out layoutImage
-    //     });
-
-    //     // Temporarily hide objects that are not filtered
-    //     canvas.getObjects().forEach(function (obj) {
-    //       if (!filteredObjects.includes(obj)) {
-    //         obj.visible = false;
-    //       }
-    //     });
-
-    //     // Generate image URL with only visible (filtered) objects
-    //     var canvasImageUrl = canvas.toDataURL({
-    //       format: "png",
-    //       multiplier: 2,
-    //     });
-
-    //     // Restore visibility of all objects
-    //     canvas.getObjects().forEach(function (obj) {
-    //       obj.visible = true;
-    //     });
-
-    //     convertToDataURL(json.backgroundImage.src, function (dataUrl) {
-    //       json.backgroundImage.src = dataUrl; // Update the background image source in the JSON
-
-    //       var template = JSON.stringify(json);
-    //       console.log(json);
-
-    //       var blob = new Blob([template], { type: "application/json" });
-
-    //       var timestamp = new Date().getTime();
-    //       var uniqueFileName = "template_" + timestamp + ".json";
-    //       var formData = new FormData();
-    //       formData.append("files", blob, uniqueFileName);
-
-    //       var imageBlob = dataURLtoBlob(canvasImageUrl); // Convert the data URL to a Blob
-    //       var imageFileName = "template_image_" + timestamp + ".png";
-    //       formData.append("files", imageBlob, imageFileName);
-    //       console.log(formData);
-    //       $.ajax({
-    //         url: `${baseUrl}/api/v1/user/media/upload`,
-    //         type: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         success: function (response) {
-    //           var imageUrl = "";
-    //           var jsonUrl = "";
-    //           response.urls.forEach(function (url) {
-    //             console.log(url);
-    //             if (url.endsWith(".json")) {
-    //               jsonUrl = url;
-    //             } else if (
-    //               url.endsWith(".png") ||
-    //               url.endsWith(".jpeg") ||
-    //               url.endsWith(".jpg")
-    //             ) {
-    //               imageUrl = url;
-    //             }
-    //           });
-    //           const urlParams = new URLSearchParams(window.location.search);
-    //           const modelName = urlParams.get("name");
-
-    //           var key = Math.random().toString(36).substr(2, 9);
-    //           var name = selector.find("#gauci-json-save-name").val();
-
-    //           var data = {
-    //             key: key,
-    //             src: jsonUrl,
-    //             imageUrl: imageUrl,
-    //             name: name,
-    //             type: modelName,
-    //             isPublic: isPublic, // Add public/private selection to data
-    //           };
-
-    //           //   let isSaving = true;
-    //           //   if (isSaving) {
-    //           //     toastr.info("Please wait, the template is being saved", "Saving...");
-    //           //   }
-    //           // Upload the data object to the new API
-    //           uploadData(data)
-    //             .then(() => {
-    //               // isSaving = false;
-    //               // Display a success message using toastr after successful upload
-    //               //   toastr.success("Data uploaded successfully!", "Success");
-    //               Swal.fire({
-    //                 title: "Success",
-    //                 text: "Data uploaded successfully!",
-    //                 icon: "success",
-    //               });
-    //               Swal.close();
-    //               // Close the modal after saving
-    //               selector.find(".gauci-modal").hide();
-    //             })
-    //             .catch((error) => {
-    //               // Display an error message using toastr if uploading fails
-    //               toastr.error(error.message, "Error");
-    //               const message =
-    //                 error.message ||
-    //                 "Something went wrong uploading, try again!";
-    //               Swal.fire({
-    //                 icon: "error",
-    //                 title: "failed",
-    //                 text: message,
-    //               });
-    //             });
-    //         },
-    //         error: function (xhr, status, error) {
-    //           // Display an error message using toastr if the API call fails
-    //           //   toastr.error(error, "Error");
-    //           const message =
-    //             error.message ||
-    //             error ||
-    //             "Something went wrong uploading, try again!";
-    //           Swal.fire({
-    //             icon: "error",
-    //             title: "failed",
-    //             text: message,
-    //           });
-    //         },
-    //       });
-    //     });
-    //   });
-    // });
-
     selector.find("#gauci-json-save").on("click", function () {
       saveCanvasState(activeTabId);
-      console.log(mainPart);
 
       showPublicPrivateModal().then(async (isPublic) => {
-        // const output = Object.keys(tabCanvasStates).map((key) => ({
-        //   part: key,
-        //   jsonData: JSON.parse(tabCanvasStates[key]),
-        // }));
-        // let output = Object.keys(tabCanvasStates).map((key) => {
-        //   const jsonData = JSON.parse(tabCanvasStates[key]);
-
-        //   // Safely update objects inside jsonData
-        //   jsonData.objects = jsonData.objects.map((obj) => {
-        //     if (obj.type === "image" && obj.clipPath) {
-        //       return {
-        //         ...obj,
-        //         customId: "clipmask",
-        //       };
-        //     }
-        //     return obj;
-        //   });
-
-        //   return {
-        //     part: key,
-        //     jsonData: jsonData,
-        //   };
-        // });
         let output = Object.keys(tabCanvasStates).map((key) => {
           const jsonData = JSON.parse(tabCanvasStates[key]);
 
@@ -1620,11 +1367,8 @@
           };
         });
 
-        console.log(output);
-
         let selectedItem =
           output.find((item) => item.part === mainPart) || output[0]; // fallback if mainPart not found
-        console.log(selectedItem);
 
         // 🎨 Step 2: Convert selected jsonData to image blob
         let imageUrl = "";
@@ -1648,16 +1392,6 @@
             tempCanvas.remove(firstObject);
           }
 
-          // const corsImages = [];
-          // console.log(objects);
-          // // Hide external images to avoid CORS issues
-          // objects.forEach((obj) => {
-          //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-          //     corsImages.push(obj);
-          //     obj.visible = false;
-          //   }
-          // });
-
           tempCanvas.renderAll();
 
           try {
@@ -1665,7 +1399,7 @@
               format: "jpeg",
               quality: 1.0,
             });
-            console.log(base64Image);
+
             const blob = dataURLtoBlob(base64Image);
             const formData = new FormData();
             const timestamp = new Date().getTime();
@@ -1764,7 +1498,6 @@
           updatedJsonArray.forEach((item) => {
             originalFormat[item.part] = JSON.stringify(item.jsonData);
           });
-          console.log(originalFormat);
 
           // 🔍 Step 1: Get specific object for image preview generation
 
@@ -1784,26 +1517,6 @@
             isPublic: isPublic,
           };
 
-          // uploadData(data)
-          //   .then(() => {
-          //     Swal.fire({
-          //       title: "Success",
-          //       text: "Template uploaded successfully!",
-          //       icon: "success",
-          //     });
-          //     Swal.close();
-          //     selector.find(".gauci-modal").hide();
-          //   })
-          //   .catch((error) => {
-          //     const message =
-          //       error.message || "Something went wrong during upload.";
-          //     toastr.error(message, "Error");
-          //     Swal.fire({
-          //       icon: "error",
-          //       title: "Upload Failed",
-          //       text: message,
-          //     });
-          //   });
           uploadData(data)
             .then(() => {
               Swal.fire({
@@ -1831,7 +1544,6 @@
     });
 
     function uploadData(data) {
-      console.log(data);
       return new Promise((resolve, reject) => {
         $.ajax({
           url: `${baseUrl}/api/v1/user/file-data/upload`,
@@ -1870,70 +1582,6 @@
       });
     }
 
-    // function fetchAndDisplayTemplates() {
-    //   const url = window.location.href;
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   const modelName = urlParams.get("name");
-
-    //   // Fetch the user email first
-    //   getUserEmail()
-    //     .then((userEmail) => {
-    //       // After getting the user email, fetch all saved templates
-    //       return getAllSavedData(userEmail);
-    //     })
-    //     .then((assets) => {
-    //       console.log("all the templates in library:", assets);
-    //       const templatesContainer = $("#gauci-my-templates");
-    //       templatesContainer.empty(); // Clear existing content
-
-    //       // Filter templates for the specific model type
-    //       const filteredAssets = assets.filter(
-    //         (asset) => asset.type === modelName
-    //       );
-    //       if (filteredAssets.length === 0) {
-    //         // If no templates found for the model type, show a message
-    //         templatesContainer.html(
-    //           `<div class="notice notice-info">No templates found for model: ${modelName}.</div>`
-    //         );
-    //       }
-    //       if (assets.length === 0) {
-    //         templatesContainer.html(
-    //           '<div class="notice notice-info">No templates found.</div>'
-    //         );
-    //       } else {
-    //         assets.forEach((asset) => {
-    //           if (asset.type === modelName) {
-    //             const jsonblob = new Blob([asset.src], { type: "text/plain" });
-    //             const jsonurl = URL.createObjectURL(jsonblob);
-
-    //             const listItem = $("<li>").attr("data-keyword", asset.name);
-
-    //             listItem.html(`
-    //                     <div>${asset.name}</div>
-    //                     <div>
-    //                         <button type="button" class="gauci-btn primary gauci-select-template" data-json='${JSON.stringify(
-    //                           asset.src
-    //                         )}">
-    //                             <span class="material-icons">check</span>Select
-    //                         </button>
-    //                         <button type="button" class="gauci-btn danger gauci-template-delete" data-target="${
-    //                           asset.key
-    //                         }">
-    //                             <span class="material-icons">clear</span>Delete
-    //                         </button>
-    //                     </div>
-    //                 `);
-
-    //             templatesContainer.append(listItem);
-    //           }
-    //         });
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       // toastr.error(error.message, "Error retrieving assets");
-    //       console.log(error.message, "Error retrieving assets");
-    //     });
-    // }
     function fetchAndDisplayTemplates() {
       const urlParams = new URLSearchParams(window.location.search);
       const modelName = urlParams.get("name");
@@ -1950,7 +1598,6 @@
           return getAllSavedData(userEmail);
         })
         .then((assets) => {
-          console.log("All templates in library:", assets);
           const templatesContainer = $("#gauci-my-templates");
           templatesContainer.empty(); // Clear existing content
 
@@ -1999,27 +1646,6 @@
         });
     }
 
-    // Function to fetch the user email
-    // function getUserEmail() {
-    //   return new Promise((resolve, reject) => {
-    //     $.ajax({
-    //       url: "https://backend.toddlerneeds.com/api/v1/user/profile",
-    //       type: "GET",
-    //       contentType: "application/json",
-    //       xhrFields: {
-    //         withCredentials: true,
-    //       },
-    //       success: function (response) {
-
-    //         // resolve(response.email);
-    //         resolve(response);
-    //       },
-    //       error: function (xhr, status, error) {
-    //         reject(error);
-    //       },
-    //     });
-    //   });
-    // }
     let email;
     let username;
     function getUserEmail() {
@@ -2033,12 +1659,8 @@
           },
           success: function (response) {
             // Assuming response contains username and email properties
-            // const { username, email, isAdmin } = response;
-            console.log(response);
-            // username = username;
-            // email = email;
+
             resolve(response);
-            // resolve({ username, email, isAdmin });
           },
           error: function (xhr, status, error) {
             reject(error);
@@ -2060,7 +1682,7 @@
               (template) =>
                 template.isPublic || template.createdBy === userEmail
             );
-            console.log("filteredTemplates: ", filteredTemplates);
+
             resolve(filteredTemplates);
           },
           error: function (xhr, status, error) {
@@ -2069,72 +1691,6 @@
         });
       });
     }
-
-    // function fetchAndDisplayTemplates() {
-    //   const url = window.location.href;
-    //   // let type = "";
-
-    //   // if (url.includes("p3-type1.html")) {
-    //   //   type = "p3-type1";
-    //   // } else if (url.includes("p2-type1.html")) {
-    //   //   type = "p2-type1";
-    //   // }
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   const modelName = urlParams.get("name");
-    //   getAllSavedData()
-    //     .then((assets) => {
-    //       const templatesContainer = $("#gauci-my-templates");
-    //       templatesContainer.empty(); // Clear existing content
-
-    //       if (assets.length === 0) {
-    //         templatesContainer.html(
-    //           '<div class="notice notice-info">No templates found.</div>'
-    //         );
-    //       } else {
-    //         assets.forEach((asset) => {
-    //           if (asset.type === modelName) {
-    //             const jsonblob = new Blob([asset.src], { type: "text/plain" });
-    //             const jsonurl = URL.createObjectURL(jsonblob);
-
-    //             const listItem = $("<li>").attr("data-keyword", asset.name);
-
-    //             listItem.html(`
-    //                   <div>${asset.name}</div>
-    //                   <div>
-    //                       <button type="button" class="gauci-btn primary gauci-select-template" data-json="${asset.src}">
-    //                           <span class="material-icons">check</span>Select
-    //                       </button>
-    //                       <button type="button" class="gauci-btn danger gauci-template-delete" data-target="${asset.key}">
-    //                           <span class="material-icons">clear</span>Delete
-    //                       </button>
-    //                   </div>
-    //               `);
-
-    //             templatesContainer.append(listItem);
-    //           }
-    //         });
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       toastr.error(error.message, "Error retrieving assets");
-    //     });
-    // }
-
-    // function getAllSavedData() {
-    //   return new Promise((resolve, reject) => {
-    //     $.ajax({
-    //       url: "https://backend.toddlerneeds.com/api/v1/user/get/all",
-    //       type: "GET",
-    //       contentType: "application/json",
-    //       success: function (response) {
-    //         resolve(response.data);
-    //       },
-    //       error: function (xhr, status, error) {
-    //         reject(error);
-    //       },
-    //     });
-    //   });
-    // }
 
     // Example usage of deleteData function
 
@@ -2205,7 +1761,6 @@
     });
     /* Load JSON */
     function loadJSON(json) {
-      console.log("this is the json", json.objects);
       selector.find("#gauci-canvas-loader").css("display", "flex");
       rotate = json.backgroundImage.angle;
       scaleX = json.backgroundImage.scaleX;
@@ -2251,7 +1806,6 @@
           selector.find("#gauci-canvas-loader").hide();
           objects.forEach((obj) => {
             if (obj.customId === "clipmask") {
-              console.log("Found clipmask object. Removing...");
               canvas.remove(obj);
               onlyDeleteLayerEvent(obj.id);
               canvas.requestRenderAll();
@@ -2262,8 +1816,6 @@
               applyTemplateClipMask(obj);
             }
             if (obj.customId === "layoutImage") {
-              // console.log("Found layoutImage object:", obj);
-              console.log("ths is t", obj);
               onlyDeleteLayerEvent(obj.id);
               canvas.requestRenderAll();
             }
@@ -2382,124 +1934,6 @@
       selector.find(".gauci-modal").hide();
     });
     /* Add Template */
-    // selector
-    //   .find(".template-selection")
-    //   .on("click", ".gauci-select-template", function () {
-    //     selector
-    //       .find("#gauci-canvas-wrap, .gauci-content-bar")
-    //       .css("visibility", "visible");
-    //     selector.find(".gauci-modal").hide();
-    //     selector.find("#gauci-canvas-loader").css("display", "flex");
-    //     var objects = canvas.getObjects();
-    //     objects
-    //       .filter((element) => element.objectType != "BG")
-    //       .forEach((element) => canvas.remove(element));
-    //     selector.find("#gauci-layers li").remove();
-    //     checkLayers();
-    //     $.getJSON($(this).data("json"), function (json) {
-    //       console.log("this is the editedCanvasobject 2", json);
-    //       loadJSON(json);
-    //       setTimeout(function () {
-    //         addToHistory(
-    //           '<span class="material-icons">flag</span>' + gauciParams.started
-    //         );
-    //       }, 100);
-    //     })
-    //       .fail(function (jqxhr, textStatus, error) {
-    //         toastr.error("Request Failed: " + error, gauciParams.error);
-    //       })
-    //       .always(function () {
-    //         selector.find("#gauci-canvas-loader").hide();
-    //       });
-    //   });
-
-    // selector
-    //   .find(".template-selection")
-    //   .on("click", ".gauci-select-template", function () {
-    //     selector
-    //       .find("#gauci-canvas-wrap, .gauci-content-bar")
-    //       .css("visibility", "visible");
-    //     selector.find(".gauci-modal").hide();
-    //     selector.find("#gauci-canvas-loader").css("display", "flex");
-    //     var objects = canvas.getObjects();
-    //     objects
-    //       .filter((element) => element.objectType != "BG")
-    //       .forEach((element) => canvas.remove(element));
-    //     selector.find("#gauci-layers li").remove();
-    //     checkLayers();
-    //     $.getJSON($(this).data("json"), function (json) {
-    //       console.log("this is the editedCanvasobject 2", json);
-    //       // loadJSON(json);
-    //       // setTimeout(function () {
-    //       //   addToHistory(
-    //       //     '<span class="material-icons">flag</span>' + gauciParams.started
-    //       //   );
-    //       // }, 100);
-    //     })
-    //       .fail(function (jqxhr, textStatus, error) {
-    //         toastr.error("Request Failed: " + error, gauciParams.error);
-    //       })
-    //       .always(function () {
-    //         selector.find("#gauci-canvas-loader").hide();
-    //       });
-    //   });
-
-    // selector
-    //   .find(".template-selection")
-    //   .on("click", ".gauci-select-template", function () {
-    //     const jsonData = $(this).data("json");
-    //     try {
-    //       const prettyJson = JSON.stringify(jsonData, null, 2); // indented, readable format
-    //       console.log(prettyJson);
-    //     } catch (e) {
-    //       console.error("Invalid JSON data:", e);
-    //     }
-
-    //     // console.log(jsonData);
-    //     // const output = Object.keys(jsonData).map((key) => ({
-    //     //   part: key,
-    //     //   jsonData: JSON.parse(jsonData[key]),
-    //     // }));
-    // console.log(output);
-    // tabCanvasStates = {};
-    // tabCanvasStates = jsonData;
-    // allCanvasTabState = jsonData;
-    // console.log(activeTabId);
-    // loadCanvasState(activeTabId);
-    // tabCanvasStates = jsonData;
-    // loadCanvasState(activeTabId);
-    //   });
-
-    //   selector
-    // .find(".template-selection")
-    // .on("click", ".gauci-select-template", function () {
-    //   selector
-    //     .find("#gauci-canvas-wrap, .gauci-content-bar")
-    //     .css("visibility", "visible");
-    //   selector.find(".gauci-modal").hide();
-    //   selector.find("#gauci-canvas-loader").css("display", "flex");
-    //   var objects = canvas.getObjects();
-    //   objects
-    //     .filter((element) => element.objectType != "BG")
-    //     .forEach((element) => canvas.remove(element));
-    //   selector.find("#gauci-layers li").remove();
-    //   checkLayers();
-    //   $.getJSON($(this).data("json"), function (json) {
-    //     console.log("this is the editedCanvasobject 2", json);
-    //     loadJSON(json);
-    //     setTimeout(function () {
-    //       addToHistory(
-    //         '<span class="material-icons">flag</span>' + gauciParams.started
-    //       );
-    //     }, 100);
-    //   })
-    //     .fail(function (jqxhr, textStatus, error) {
-    //       toastr.error("Request Failed: " + error, gauciParams.error);
-    //     })
-    //     .always(function () {
-    //       selector.find("#gauci-canvas-loader").hide();
-    //     });
-    // });
 
     selector
       .find(".template-selection")
@@ -2510,10 +1944,6 @@
         selector.find(".gauci-modal").hide();
         selector.find("#gauci-canvas-loader").css("display", "flex");
 
-        // var objects = canvas.getObjects();
-        // objects
-        //   .filter((element) => element.objectType != "BG")
-        //   .forEach((element) => canvas.remove(element));
         selector.find("#gauci-layers li").remove();
         checkLayers();
 
@@ -2529,12 +1959,10 @@
 
         try {
           if (jsonData) {
-            console.log("✅ srcData (raw):", jsonData);
-            // console.log(output);
             tabCanvasStates = {};
             tabCanvasStates = jsonData;
             allCanvasTabState = jsonData;
-            console.log(activeTabId);
+
             loadCanvasState(activeTabId);
             // tabCanvasStates = jsonData;
             // loadCanvasState(activeTabId);
@@ -2554,25 +1982,6 @@
           selector.find("#gauci-canvas-loader").hide();
         }
       });
-
-    // $(document).on("click", ".gauci-select-template", function () {
-    //   const id = $(this).data("id");
-    //   const jsonData = window.assetSrcStore[id];
-
-    //   if (jsonData) {
-    //     console.log("✅ srcData (raw):", jsonData);
-    //     // console.log(output);
-    //     tabCanvasStates = {};
-    //     tabCanvasStates = jsonData;
-    //     allCanvasTabState = jsonData;
-    //     console.log(activeTabId);
-    //     loadCanvasState(activeTabId);
-    //     tabCanvasStates = jsonData;
-    //     loadCanvasState(activeTabId);
-    //   } else {
-    //     console.warn("⚠️ No data found for ID:", id);
-    //   }
-    // });
 
     /* Search My Templates */
     selector.find("#gauci-my-templates-search").on("click", function () {
@@ -2604,7 +2013,7 @@
         $(this).removeClass("primary");
         $(this).addClass("danger");
         var searchTerm = input.val().toLowerCase().replace(/\s/g, " ");
-        console.log(searchTerm);
+
         if (searchTerm == "" || searchTerm.length < 1) {
           selector.find("#gauci-my-templates li").show();
           if (selector.find("#gauci-my-templates-pagination").length) {
@@ -3408,39 +2817,6 @@
         // selector.find("#gauci-redo").prop("disabled", true);
       }
     }
-    // Undo
-    // selector.find("#gauci-undo").on("click", function() {
-    // 	var target = selector.find("#gauci-history-list li.active").next("li");
-    // if (target.length) {
-    // 	target.find(".gauci-btn.primary").trigger("click");
-    // 	selector.find("#gauci-redo").prop("disabled", false);
-    // } else {
-    // 	selector.find("#gauci-undo").prop("disabled", true);
-    // }
-    // });
-    // selector.find("#gauci-undo").on("click", function () {
-    //   var historyList = selector.find("#gauci-history-list");
-    //   var activeListItem = historyList.find("li.active");
-
-    //   if (activeListItem.length) {
-    //     var target = activeListItem.next("li");
-
-    //     if (target.length) {
-    //       var lastAction = getLastAction(target);
-
-    //       // Now you have information about the last action
-
-    //       // Trigger other actions based on the lastAction if needed
-    //       if (lastAction.json.objects.length > 0) {
-    //         console.log(lastAction.json.objects.length > 0);
-    //         target.find(".gauci-btn.primary").trigger("click");
-    //         selector.find("#gauci-redo").prop("disabled", false);
-    //       }
-    //     } else {
-    //       selector.find("#gauci-undo").prop("disabled", true);
-    //     }
-    //   }
-    // });
 
     // Function to get the last action from a history list item
     function getLastAction(historyItem) {
@@ -3502,248 +2878,6 @@
     //     });
     //   });
 
-    // selector.find("#openEditor").on("click", function () {
-    //   var $mainContainer = selector.find("#mini-editor-main-cont");
-    //   var $buttonContainer = selector.find("#webg-buttons-container");
-
-    //   // Remove the 'personalise-page-active' class from the main container
-    //   $mainContainer.removeClass("personalise-page-active");
-    //   // Add the 'personalise-page-inactive' class to the main container
-    //   $mainContainer.addClass("personalise-page-inactive");
-
-    //   // Remove the 'toggle-2d-3d-cont' class from the button container
-    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
-
-    //   var editedCanvasJson = window.editedCanvasJson;
-    //   var originalCanvasJson = window.originalCanvasJson;
-    //   console.log(editedCanvasJson);
-    //   if (editedCanvasJson && originalCanvasJson) {
-    //     var originalCanvasObject = originalCanvasJson;
-    //     var editedCanvasObject = editedCanvasJson;
-
-    //     // Iterate over the objects in canvasObject to update their properties
-    //     editedCanvasObject.objects.forEach((obj, index) => {
-    //       if (originalCanvasObject.objects[index]) {
-    //         var originalObj = originalCanvasObject.objects[index];
-
-    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
-    //         obj.top = originalObj.top;
-    //         obj.left = originalObj.left;
-    //         obj.scaleX = originalObj.scaleX;
-    //         obj.scaleY = originalObj.scaleY;
-
-    //         // Iterate over properties of the originalObj and add missing ones to obj
-    //         for (var key in originalObj) {
-    //           if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
-    //             obj[key] = originalObj[key];
-    //           }
-    //         }
-    //       }
-    //     });
-    //     console.log(editedCanvasObject);
-    //     console.log(originalCanvasObject);
-
-    //     // Load the updated JSON into your editor or canvas
-    //     loadJSON(originalCanvasObject);
-    //     // loadJSON(editedCanvasObject);
-    //   } else {
-    //     console.log("No saved canvas JSON found in localStorage.");
-    //   }
-    // });
-    // selector.find("#openEditor").on("click", function () {
-    //   var $mainContainer = selector.find("#mini-editor-main-cont");
-    //   var $buttonContainer = selector.find("#webg-buttons-container");
-
-    //   // Remove the 'personalise-page-active' class from the main container
-    //   $mainContainer.removeClass("personalise-page-active");
-    //   // Add the 'personalise-page-inactive' class to the main container
-    //   $mainContainer.addClass("personalise-page-inactive");
-
-    //   // Remove the 'toggle-2d-3d-cont' class from the button container
-    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
-
-    //   var editedCanvasJson = window.editedCanvasJson;
-    //   var originalCanvasJson = window.originalCanvasJson;
-    //   console.log(editedCanvasJson);
-
-    //   if (editedCanvasJson && originalCanvasJson) {
-    //     var originalCanvasObject = originalCanvasJson;
-    //     var editedCanvasObject = editedCanvasJson;
-
-    //     // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
-    //     editedCanvasObject.objects.forEach((editedObj, index) => {
-    //       if (originalCanvasObject.objects[index]) {
-    //         var originalObj = originalCanvasObject.objects[index];
-
-    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
-    //         // editedObj.top = originalObj.top;
-    //         // editedObj.left = originalObj.left;
-    //         // editedObj.scaleX = originalObj.scaleX;
-    //         // editedObj.scaleY = originalObj.scaleY;
-
-    //         // Iterate over properties of the originalObj and add missing ones to editedObj
-    //         for (var key in originalObj) {
-    //           if (
-    //             originalObj.hasOwnProperty(key) &&
-    //             !editedObj.hasOwnProperty(key)
-    //           ) {
-    //             editedObj[key] = originalObj[key];
-    //           }
-    //         }
-
-    //         // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
-    //         if (editedObj.type === "textbox") {
-    //           originalObj.text = editedObj.text;
-    //         }
-    //         if (
-    //           editedObj.type === "image" &&
-    //           !editedObj.src.startsWith("http")
-    //         ) {
-    //           originalObj.top = editedObj.top * 4.6;
-    //           originalObj.left = editedObj.left * 4.6;
-    //           originalObj.scaleY = editedObj.scaleX * 4.6;
-    //           originalObj.scaleX = editedObj.scaleY * 4.6;
-    //         }
-    //       }
-    //     });
-
-    //     console.log(editedCanvasObject);
-    //     console.log(originalCanvasObject);
-
-    //     // Load the updated original canvas JSON into your editor or canvas
-    //     loadJSON(originalCanvasObject);
-    //   } else {
-    //     console.log("No saved canvas JSON found in localStorage.");
-    //   }
-    // });
-
-    // selector.find("#editInEditorpBtn").on("click", function () {
-    //   var $mainContainer = selector.find("#mini-editor-main-cont");
-    //   var $buttonContainer = selector.find("#webg-buttons-container");
-
-    //   // Remove the 'personalise-page-active' class from the main container
-    //   $mainContainer.removeClass("personalise-page-active");
-    //   // Add the 'personalise-page-inactive' class to the main container
-    //   $mainContainer.addClass("personalise-page-inactive");
-
-    //   // Remove the 'toggle-2d-3d-cont' class from the button container
-    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
-    //   var editedCanvasJson = window.editedCanvasJson;
-    //   var originalCanvasJson = window.originalCanvasJson;
-    //   console.log(editedCanvasJson);
-    //   if (editedCanvasJson && originalCanvasJson) {
-    //     var originalCanvasObject = originalCanvasJson;
-    //     var editedCanvasObject = editedCanvasJson;
-
-    //     // Iterate over the objects in canvasObject to update their properties
-    //     editedCanvasObject.objects.forEach((obj, index) => {
-    //       if (originalCanvasObject.objects[index]) {
-    //         var originalObj = originalCanvasObject.objects[index];
-
-    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
-    //         obj.top = originalObj.top;
-    //         obj.left = originalObj.left;
-    //         obj.scaleX = originalObj.scaleX;
-    //         obj.scaleY = originalObj.scaleY;
-
-    //         // Iterate over properties of the originalObj and add missing ones to obj
-    //         for (var key in originalObj) {
-    //           if (originalObj.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
-    //             obj[key] = originalObj[key];
-    //           }
-    //         }
-    //       }
-    //     });
-
-    //     // Load the updated JSON into your editor or canvas
-    //     console.log("this is the editedCanvasobject 1", originalCanvasObject);
-    //     // loadJSON(originalCanvasObject);
-    //     loadJSON(editedCanvasObject);
-    //   } else {
-    //     console.log("No saved canvas JSON found in localStorage.");
-    //   }
-    // });
-    // selector.find("#editInEditorpBtn").on("click", function () {
-    //   var $mainContainer = selector.find("#mini-editor-main-cont");
-    //   var $buttonContainer = selector.find("#webg-buttons-container");
-
-    //   // Remove the 'personalise-page-active' class from the main container
-    //   $mainContainer.removeClass("personalise-page-active");
-    //   // Add the 'personalise-page-inactive' class to the main container
-    //   $mainContainer.addClass("personalise-page-inactive");
-
-    //   // Remove the 'toggle-2d-3d-cont' class from the button container
-    //   $buttonContainer.removeClass("toggle-2d-3d-cont");
-
-    //   var editedCanvasJson = window.editedCanvasJson;
-    //   var originalCanvasJson = window.originalCanvasJson;
-    //   console.log(editedCanvasJson);
-
-    //   if (editedCanvasJson && originalCanvasJson) {
-    //     var originalCanvasObject = originalCanvasJson;
-    //     var editedCanvasObject = editedCanvasJson;
-
-    //     // Iterate over the objects in editedCanvasObject to update properties in originalCanvasObject
-    //     editedCanvasObject.objects.forEach((editedObj, index) => {
-    //       if (originalCanvasObject.objects[index]) {
-    //         var originalObj = originalCanvasObject.objects[index];
-
-    //         // Copy the values for top, left, scaleX, and scaleY from originalObj
-    //         // editedObj.top = originalObj.top;
-    //         // editedObj.left = originalObj.left;
-    //         // editedObj.scaleX = originalObj.scaleX;
-    //         // editedObj.scaleY = originalObj.scaleY;
-
-    //         // Iterate over properties of the originalObj and add missing ones to editedObj
-    //         for (var key in originalObj) {
-    //           if (
-    //             originalObj.hasOwnProperty(key) &&
-    //             !editedObj.hasOwnProperty(key)
-    //           ) {
-    //             editedObj[key] = originalObj[key];
-    //           }
-    //         }
-
-    //         // If the object type is 'textbox', copy the 'text' key from editedObj to originalObj
-    //         if (editedObj.type === "textbox") {
-    //           originalObj.text = editedObj.text;
-    //         }
-    //         if (
-    //           editedObj.type === "image" &&
-    //           !editedObj.src.startsWith("http")
-    //         ) {
-    //           originalObj.top = editedObj.top * 4.6;
-    //           originalObj.left = editedObj.left * 4.6;
-    //           originalObj.scaleY = editedObj.scaleX * 4.6;
-    //           originalObj.scaleX = editedObj.scaleY * 4.6;
-    //         }
-    //       }
-    //     });
-
-    //     console.log(editedCanvasObject);
-    //     console.log(originalCanvasObject);
-
-    //     // Load the updated original canvas JSON into your editor or canvas
-    //     loadJSON(originalCanvasObject);
-    //   } else {
-    //     console.log("No saved canvas JSON found in localStorage.");
-    //   }
-    // });
-    // selector.find("#go-back-mini").on("click", function () {
-    //   var $mainContainer = selector.find("#mini-editor-main-cont");
-    //   var $buttonContainer = selector.find("#webg-buttons-container");
-
-    //   // Remove the 'personalise-page-active' class from the main container
-    //   // $mainContainer.removeClass("personalise-page-active");
-    //   // // Add the 'personalise-page-inactive' class to the main container
-    //   // $mainContainer.addClass("personalise-page-inactive");
-    //   // $buttonContainer.removeClass("toggle-2d-3d-cont");
-    //   $mainContainer.addClass("personalise-page-active");
-    //   // Add the 'personalise-page-inactive' class to the main container
-    //   $mainContainer.removeClass("personalise-page-inactive");
-    //   $buttonContainer.addClass("toggle-2d-3d-cont");
-    //   canvas.clear();
-    // });
     selector.find("#go-back-mini").on("click", function () {
       location.reload();
     });
@@ -3762,7 +2896,7 @@
 
       var editedCanvasJson = window.editedCanvasJson;
       // var originalCanvasJson = window.originalCanvasJson;
-      console.log(editedCanvasJson);
+
       var selectedOrginalFormat = window.selectedOriginalJsonPart;
       var orginalDataFormat = window.originalFormat;
 
@@ -3775,8 +2909,6 @@
         jsonData: editedCanvasJson,
       };
 
-      console.log(newObject);
-      console.log(editedArrayFormat);
       // Step 1: Filter original object by part
       var originalMatched = editedArrayFormat.find(
         (obj) => obj.part === newObject.part
@@ -3822,7 +2954,7 @@
       }
 
       // Final result
-      console.log(newObject);
+
       var updatedArrayFormat = editedArrayFormat.map((obj) => {
         if (obj.part === newObject.part) {
           return newObject; // Replace with modified object
@@ -3830,36 +2962,20 @@
         return obj; // Keep as is
       });
 
-      console.log(updatedArrayFormat);
       const originalFormat = {};
       updatedArrayFormat.forEach((item) => {
         originalFormat[item.part] = JSON.stringify(item.jsonData);
       });
-      console.log(originalFormat);
 
-      console.log(tabCanvasStates);
-      console.log(activeTabId);
-      console.log(preservedImage);
-      console.log(layoutSource);
       tabCanvasStates = originalFormat;
       allCanvasTabState = originalFormat;
       loadCanvasState(activeTabId);
-      console.log(allCanvasTabState);
-      console.log(mainPart);
+
       setTimeout(() => {
         initializeUndoRedo();
-        console.log(undoStack);
+
         selector.find("#gauci-undo").prop("disabled", true);
       }, 500);
-      // initializeUndoRedo();
-      //      let tabCanvasStates = {}; // To store canvas JSON state for each tab
-      // let activeTabId = null; // To track the currently active tab
-      // let preservedImage = null; // To manage the layout image
-      // let layoutSource = null; // URL of the current layout image
-      // let allCanvasTabState = {};
-      // let mainPart = null;
-      // console.log(selectedOrginalFormat);
-      // console.log(orginalDataFormat);
     });
 
     selector.find("#editInEditorpBtn").on("click", function () {
@@ -3876,7 +2992,7 @@
 
       var editedCanvasJson = window.editedCanvasJson;
       // var originalCanvasJson = window.originalCanvasJson;
-      console.log(editedCanvasJson);
+
       if (editedCanvasJson) {
         var selectedOrginalFormat = window.selectedOriginalJsonPart;
         var orginalDataFormat = window.originalFormat;
@@ -3890,8 +3006,6 @@
           jsonData: editedCanvasJson,
         };
 
-        console.log(newObject);
-        console.log(editedArrayFormat);
         // Step 1: Filter original object by part
         var originalMatched = editedArrayFormat.find(
           (obj) => obj.part === newObject.part
@@ -3937,7 +3051,7 @@
         }
 
         // Final result
-        console.log(newObject);
+
         var updatedArrayFormat = editedArrayFormat.map((obj) => {
           if (obj.part === newObject.part) {
             return newObject; // Replace with modified object
@@ -3945,31 +3059,24 @@
           return obj; // Keep as is
         });
 
-        console.log(updatedArrayFormat);
         const originalFormat = {};
         updatedArrayFormat.forEach((item) => {
           originalFormat[item.part] = JSON.stringify(item.jsonData);
         });
-        console.log(originalFormat);
 
-        console.log(tabCanvasStates);
-        console.log(activeTabId);
-        console.log(preservedImage);
-        console.log(layoutSource);
         tabCanvasStates = originalFormat;
         allCanvasTabState = originalFormat;
         loadCanvasState(activeTabId);
-        console.log(allCanvasTabState);
-        console.log(mainPart);
+
         setTimeout(() => {
           initializeUndoRedo();
-          console.log(undoStack);
+
           selector.find("#gauci-undo").prop("disabled", true);
         }, 500);
       }
       setTimeout(() => {
         initializeUndoRedo();
-        console.log(undoStack);
+
         selector.find("#gauci-undo").prop("disabled", true);
       }, 500);
       //  else {
@@ -4145,133 +3252,9 @@
         }
       }
     });
-    // canvas.on("object:added", function (e) {
-    //   console.log(canvas.getObjects());
-    //   var obj = e.target;
-    //   console.log(obj, "Layers checking");
-    //   if (
-    //     obj.objectType != "clipPath" &&
-    //     obj.objectType != "drawing" &&
-    //     obj.objectType != "watermark"
-    //   ) {
-    //     if (canvas.isDrawingMode === true) {
-    //       obj.set("objectType", "drawing");
-    //       obj.set("selectable", false);
-    //       obj.set("lockMovementX", true);
-    //       obj.set("lockMovementY", true);
-    //       obj.set("lockRotation", true);
-    //     } else {
-    //       var order = canvas.getObjects().indexOf(obj);
-    //       var output = "";
-    //       var layerName = "Object";
-    //       var layerIcon = "category";
-    //       var visibility = "layer-visible";
-    //       var visibilityTag = "visibility";
-    //       var lock = "layer-unlocked";
-    //       var lockTag = "lock_open";
-    //       if (obj.visible == false) {
-    //         visibility = "layer-hidden";
-    //         visibilityTag = "visibility_off";
-    //       }
-    //       if (obj.selectable == false) {
-    //         lock = "layer-locked";
-    //         lockTag = "lock";
-    //       }
-    //       obj.set("id", new Date().getTime());
-    //       selector.find("#gauci-layers > li").removeClass("active");
-    //       if (obj.objectType == "textbox") {
-    //         layerName = obj.text;
-    //         layerIcon = "title";
-    //       } else if (obj.objectType == "drawing") {
-    //         layerName = gauciParams.freeDrawing;
-    //         layerIcon = "brush";
-    //       } else if (obj.objectType == "frame") {
-    //         layerName = gauciParams.frame;
-    //         layerIcon = "wallpaper";
-    //       } else if (obj.objectType == "image") {
-    //         layerName = gauciParams.image;
-    //         layerIcon = "image";
-    //       } else if (obj.objectType == "circle") {
-    //         layerName = gauciParams.circle;
-    //       } else if (obj.objectType == "square") {
-    //         layerName = gauciParams.square;
-    //       } else if (obj.objectType == "rectangle") {
-    //         layerName = gauciParams.rectangle;
-    //       } else if (obj.objectType == "triangle") {
-    //         layerName = gauciParams.triangle;
-    //       } else if (obj.objectType == "ellipse") {
-    //         layerName = gauciParams.ellipse;
-    //       } else if (obj.objectType == "trapezoid") {
-    //         layerName = gauciParams.trapezoid;
-    //       } else if (obj.objectType == "pentagon") {
-    //         layerName = gauciParams.pentagon;
-    //       } else if (obj.objectType == "octagon") {
-    //         layerName = gauciParams.octagon;
-    //       } else if (obj.objectType == "emerald") {
-    //         layerName = gauciParams.emerald;
-    //       } else if (obj.objectType == "star") {
-    //         layerName = gauciParams.star;
-    //       } else if (obj.objectType == "element") {
-    //         layerName = gauciParams.element;
-    //         layerIcon = "star";
-    //       } else if (obj.objectType == "customSVG") {
-    //         layerName = gauciParams.customSvg;
-    //       } else if (obj.objectType == "qrCode") {
-    //         layerName = gauciParams.qrCode;
-    //         layerIcon = "qr_code";
-    //       }
-    //       if ("layerName" in obj) {
-    //         layerName = obj.layerName;
-    //       }
-    //       output =
-    //         '<li id="' +
-    //         obj.id +
-    //         '" data-type="' +
-    //         obj.objectType +
-    //         '" class="layer-' +
-    //         obj.objectType +
-    //         ' active" data-sort="' +
-    //         order +
-    //         '"><span class="material-icons">' +
-    //         layerIcon +
-    //         '</span><input class="layer-name" autocomplete="off" value="' +
-    //         layerName +
-    //         '" /><span class="material-icons layer-settings">settings</span><div class="layer-icons"><a class="material-icons lock-layer ' +
-    //         lock +
-    //         '" title="' +
-    //         gauciParams.lockunlock +
-    //         '">' +
-    //         lockTag +
-    //         '</a><a class="material-icons text-success duplicate-layer" title="' +
-    //         gauciParams.duplicate +
-    //         '">content_copy</a><a class="material-icons layer-visibility ' +
-    //         visibility +
-    //         '" title="' +
-    //         gauciParams.showhide +
-    //         '">' +
-    //         visibilityTag +
-    //         '</a><a class="material-icons text-danger delete-layer" title="' +
-    //         gauciParams.delete +
-    //         '">clear</a></div></li>';
-    //       selector.find("#gauci-layers").prepend(output);
 
-    //       deleteLayerEvent(obj.id);
-    //       cloneLayerEvent(obj.id);
-    //       visibilityLayerEvent(obj.id);
-    //       lockLayerEvent(obj.id);
-    //       clickLayerEvent(obj.id);
-    //       layerNameEvent(obj.id);
-    //       selector.find("#gauci-layers").sortable("refresh");
-    //       checkLayers();
-    //       addDeleteIcon(obj);
-    //       addCloneIcon(obj);
-    //     }
-    //   }
-    // });
     canvas.on("object:added", function (e) {
-      console.log(canvas.getObjects());
       const obj = e.target;
-      // console.log(obj, "Layers checking");
 
       if (
         obj.objectType !== "clipPath" &&
@@ -4284,17 +3267,14 @@
           obj.set("lockMovementX", true);
           obj.set("lockMovementY", true);
           obj.set("lockRotation", true);
-          console.log("object is not active");
         } else {
           // Clear previous layers before adding new ones
           selector.find("#gauci-layers").empty();
-          console.log(canvas.getObjects());
+
           canvas
             .getObjects()
             .slice(1)
             .forEach((canvasObj, index) => {
-              console.log("object goes here");
-              console.log(canvasObj);
               let output = "";
               let layerName = "Object";
               let layerIcon = "category";
@@ -4315,7 +3295,6 @@
               canvasObj.set("id", new Date().getTime() + index); // Ensure unique ID
 
               if (canvasObj.objectType === "textbox") {
-                console.log("text goes here");
                 layerName = canvasObj.text;
                 layerIcon = "title";
               } else if (canvasObj.objectType === "drawing") {
@@ -4542,7 +3521,7 @@
         axis: "y",
         update: function (e, ui) {
           var objects = canvas.getObjects();
-          console.log(objects, "Objects data");
+
           $("#gauci-layers li").each(function (index, value) {
             $(this).attr("data-sort", index + 1);
             objects
@@ -4800,36 +3779,16 @@
           }
         } else {
           $.each(obj, function (index, val) {
-            selector.find("#gauci-layers #" + val.id).addClass("active");
+            selector.find("#gauci-layers #" + val?.id).addClass("active");
           });
         }
       }
     }
     /* Layer Delete */
-    // selector.find("#gauci-layer-delete").on("click", function () {
-    //   var objects = canvas.toJSON();
-    //   console.log(objects);
-    //   var answer = window.confirm(gauciParams.question2);
-    //   if (answer) {
-    //     var type = selector.find("#gauci-layer-select").val();
-    //     var objects = canvas.getObjects();
-    //     if (type == "all") {
-    //       objects.forEach((element) => canvas.remove(element));
-    //       selector.find("#gauci-layers > li").remove();
-    //     } else {
-    //       objects
-    //         .filter((element) => element.objectType == type)
-    //         .forEach((element) => canvas.remove(element));
-    //       selector.find("#gauci-layers > li.layer-" + type).remove();
-    //     }
-    //     canvas.requestRenderAll();
-    //     selector.find("#gauci-layers").sortable("refresh");
-    //     checkLayers();
-    //   }
-    // });
+
     selector.find("#gauci-layer-delete").on("click", function () {
       var objects = canvas.toJSON();
-      console.log(objects);
+
       var answer = window.confirm(gauciParams.question2);
       if (answer) {
         var type = selector.find("#gauci-layer-select").val();
@@ -5924,7 +4883,6 @@
       var selected = $(this).attr("value");
       var obj = canvas.getActiveObject();
       if (selected == "greyscale") {
-        console.log("grayscale selected");
         obj.filters[0] = new fabric.Image.filters.Grayscale();
       } else if (selected == "sepia") {
         obj.filters[0] = new fabric.Image.filters.Sepia();
@@ -6076,7 +5034,6 @@
       setTimeout(function () {
         // Get the filtered image URL
         var filteredImageURL = obj.toDataURL("image/png");
-        console.log("Filtered Image URL:", filteredImageURL);
       }, 100);
     });
 
@@ -6593,7 +5550,7 @@
     // }
     function getScaledSize() {
       if (!canvas.backgroundImage) {
-        console.error("No background image found.");
+        // console.error("No background image found.");
         return [2048, 2048]; // Return default values to avoid further errors
       }
 
@@ -7145,341 +6102,9 @@
         .html(parseInt(img.angle));
     }
     /* Upload Image */
-    // selector.find("#gauci-img-upload").on("change", function(e) {
-    // 	var reader = new FileReader();
-    // 	reader.onload = function(event) {
-    // 		var imgObj = new Image();
-    // 		convertToDataURL(event.target.result, function(dataUrl) {
-    // 			imgObj.src = dataUrl;
-    // 			imgObj.onload = function() {
-    // 				var image = new fabric.Image(imgObj);
-    // 				image.set({
-    // 					objectType: "image",
-    // 					roundedCorders: 0,
-    // 					stroke: "#fff",
-    // 					strokeWidth: 0,
-    // 					top: getScaledSize()[1] / 2,
-    // 					left: getScaledSize()[0] / 2,
-    // 					originX: "center",
-    // 					originY: "center",
-    // 				});
-    // 				canvas.add(image);
-    // 				image.scaleToWidth(getScaledSize()[0] / 2);
-    // 				if (image.isPartiallyOnScreen()) {
-    // 					image.scaleToHeight(getScaledSize()[1] / 2);
-    // 				}
-    // 				canvas.setActiveObject(image);
-    // 				canvas.requestRenderAll();
-    // 			};
-    // 		});
-    // 	};
-    // 	reader.readAsDataURL(e.target.files[0]);
-    // 	canvas.fire("gauci:history", {
-    // 		type: "image",
-    // 		text: gauciParams.added,
-    // 	});
-    // });
 
-    // function AddingFilter(imgObj){
-
-    // 	var filteredImage = new fabric.Image(imgObj);
-    // 	filteredImage.filters.push(new fabric.Image.filters.Polaroid());
-    // 	filteredImage.applyFilters();
-    // 	var filteredImageUrl = filteredImage.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image0").attr("src", filteredImageUrl);
-
-    // 	var filteredImage2 = new fabric.Image(imgObj);
-    // 	filteredImage2.filters.push(new fabric.Image.filters.BlackWhite());
-    // 	filteredImage2.applyFilters();
-    // 	var filteredImageUrl2 = filteredImage2.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image3").attr("src", filteredImageUrl2);
-
-    // 	var filteredImage3 = new fabric.Image(imgObj);
-    // 	filteredImage3.filters.push(new fabric.Image.filters.Sepia());
-    // 	filteredImage3.applyFilters();
-    // 	var filteredImageUrl3 = filteredImage3.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image2").attr("src", filteredImageUrl3);
-
-    // 	var filteredImage4 = new fabric.Image(imgObj);
-    // 	filteredImage4.filters.push(new fabric.Image.filters.Grayscale());
-    // 	filteredImage4.applyFilters();
-    // 	var filteredImageUrl4 = filteredImage4.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image1").attr("src", filteredImageUrl4);
-
-    // 	var filteredImage5 = new fabric.Image(imgObj);
-    // 	filteredImage5.filters.push(new fabric.Image.filters.Brownie());
-    // 	filteredImage5.applyFilters();
-    // 	var filteredImageUrl5 = filteredImage5.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image4").attr("src", filteredImageUrl5);
-
-    // 	var filteredImage6 = new fabric.Image(imgObj);
-    // 	filteredImage6.filters.push(new fabric.Image.filters.Vintage());
-    // 	filteredImage6.applyFilters();
-    // 	var filteredImageUrl6 = filteredImage6.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image5").attr("src", filteredImageUrl6);
-
-    // 	var filteredImage7 = new fabric.Image(imgObj);
-    // 	filteredImage7.filters.push(new fabric.Image.filters.Kodachrome());
-    // 	filteredImage7.applyFilters();
-    // 	var filteredImageUrl7 = filteredImage7.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image6").attr("src", filteredImageUrl7);
-
-    // 	var filteredImage8 = new fabric.Image(imgObj);
-    // 	filteredImage8.filters.push(new fabric.Image.filters.Technicolor());
-    // 	filteredImage8.applyFilters();
-    // 	var filteredImageUrl8 = filteredImage8.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image7").attr("src", filteredImageUrl8);
-
-    // 	var filteredImage8 = new fabric.Image(imgObj);
-    // 	filteredImage8.filters.push(new fabric.Image.filters.Shift());
-    // 	filteredImage8.applyFilters();
-    // 	var filteredImageUrl8 = filteredImage8.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image8").attr("src", filteredImageUrl8);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Invert());
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image9").attr("src", filteredImageUrl9);
-
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Contrast());
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image10").attr("src", filteredImageUrl9);
-
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Brightness());
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image11").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Pixelate({
-    // 		blocksize: 8
-    // 	}));
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image12").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Blur({
-    // 		blur: 2
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image13").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Blur({
-    // 		blur: .5
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image14").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Convolute({
-    // 		matrix: [0, -1, 0, -1, 5, -1, 0, -1, 0]
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image15").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Convolute({
-    // 		matrix: [1, 1, 1, 1, 0.7, -1, -1, -1, -1]
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image16").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.RemoveColor({
-    // 		threshold: 0.2,
-    // 		distance: 0.5
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image17").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Vibrance({
-    // 		vibrance: 1.5
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image18").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.BlendColor({
-    // 		color: '#00ff00',
-    // 		mode: 'multiply'
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image19").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.BlendColor({
-    // 		image: "#fff",
-    // 		mode: 'multiply',
-    // 		alpha: 0.2
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image20").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.HueRotation({
-    // 		rotation: 0.5
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image21").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Resize({
-    // 		scaleX: 1.5,
-    // 		scaleY: 1.5
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image22").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Saturation({
-    // 		saturation: 1.5
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image23").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Gamma({
-    // 		gamma: [1.5, 1.5, 1.5]
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image24").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Convolute({
-    // 		matrix: [ 1, 0, -1, 2, 0, -2, 1, 0, -1 ]
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image25").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Convolute({
-    // 		matrix: [ 1, 2, 1, 0, 0, 0, -1, -2, -1 ]
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image26").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Noise({
-    // 		noise: 100
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image27").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.Blur({
-    // 		blur: .1
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image28").attr("src", filteredImageUrl9);
-    // 	var filteredImage9 = new fabric.Image(imgObj);
-    // 	filteredImage9.filters.push(new fabric.Image.filters.ColorMatrix({
-    // 		matrix: [2, 0, 0, 0, 0,
-    // 				 0, 2, 0, 0, 0,
-    // 				 0, 0, 2, 0, 0,
-    // 				 0, 0, 0, 2, 0],
-    // 	}))
-    // 	filteredImage9.applyFilters();
-    // 	var filteredImageUrl9 = filteredImage9.toDataURL({
-    // 		format: 'png',
-    // 		multiplier: 2,
-    // 	});
-    // 	$("#image29").attr("src", filteredImageUrl9);
-    // }
     var filterImageUrl;
     selector.find("#gauci-img-upload").on("change", function (e) {
-      // console.log('uploaded')
       var reader = new FileReader();
       reader.onload = function (event) {
         var imgObj = new Image();
@@ -7585,7 +6210,7 @@
     function handleOptionClick(event) {
       event.stopPropagation();
       var selectedValue = $(event.target).data("value");
-      console.log("Clicked on option:", selectedValue);
+
       //   $(document).on('click', function (event) {
       // $('.dropdown-options').removeClass('show');
       // });
@@ -7604,240 +6229,6 @@
       }
     });
     /** Adding layout */
-
-    // $(document).ready(function () {
-    //   setTimeout(function () {
-    //     AddingImage();
-    //     console.log("image is adding");
-    //   }, 400);
-    // });
-
-    // var preservedImage;
-    // var layoutSource = null; // Renamed from imgUrl
-
-    // // Fetch image data from the API
-    // async function fetchImageData() {
-    //   try {
-    //     // const response = await fetch(`${baseUrl}/api/v1/product/all`);
-    //     // const data = await response.json();
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const productId = urlParams.get("id");
-    //     const response = await fetch(
-    //       `${baseUrl}/api/v1/product/get/${productId}`
-    //     );
-    //     const data = await response.json();
-    //     console.log(data);
-    //     const product = data.product;
-
-    //     if (product && product.linkedMeshImageData) {
-    //       const linkedMeshImageData = product.linkedMeshImageData;
-
-    //       // Get the tab container
-    //       const tabContainer = document.querySelector(".gauci-tab-cont");
-
-    //       // Clear any existing tabs (optional, if necessary)
-    //       tabContainer.innerHTML = "";
-
-    //       // Loop through the array to create tabs
-    //       linkedMeshImageData.forEach((meshData, index) => {
-    //         const tabDiv = document.createElement("div");
-    //         const tabContent = document.createElement("div");
-
-    //         tabContent.classList.add("gauci-open-page");
-    //         tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
-
-    //         tabDiv.appendChild(tabContent);
-
-    //         // Set the first tab as active by default
-    //         if (index === 0) {
-    //           tabDiv.classList.add("active");
-    //           layoutSource = meshData.layoutUrl; // Set the initial layoutSource
-    //           console.log("Initial layoutSource:", layoutSource);
-    //         }
-
-    //         // Add click event listener for each tab
-    //         tabDiv.addEventListener("click", () => {
-    //           // Remove "active" class from all tabs
-    //           const allTabs = tabContainer.querySelectorAll("div");
-    //           allTabs.forEach((t) => t.classList.remove("active"));
-
-    //           // Add "active" class to the clicked tab
-    //           tabDiv.classList.add("active");
-
-    //           // Update layoutSource dynamically
-    //           layoutSource = meshData.layoutUrl;
-    //           console.log("Updated layoutSource:", layoutSource);
-    //         });
-
-    //         tabContainer.appendChild(tabDiv);
-    //       });
-
-    //       console.log("Tabs created successfully.");
-    //     } else {
-    //       console.error("No linkedMeshImageData found in the product.");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching image data:", error);
-    //   }
-    // }
-
-    // async function AddingImage() {
-    //   console.log("adding image");
-
-    //   // Fetch image data first
-    //   await fetchImageData();
-
-    //   // Proceed only if layoutSource is available
-    //   if (layoutSource) {
-    //     console.log("png image filepath ", layoutSource);
-
-    //     // Delay the execution by 2 seconds (2000 milliseconds)
-    //     setTimeout(() => {
-    //       fabric.Image.fromURL(layoutSource, function (img) {
-    //         img.set({
-    //           selectable: false,
-    //           evented: false,
-    //           hasControls: false,
-    //           customId: "layoutImage",
-    //           isPreservedObject: true,
-    //         });
-
-    //         // Apply specific scaling if name is 'p3-type1'
-    //         const urlParams = new URLSearchParams(window.location.search);
-    //         const name = urlParams.get("name");
-    //         if (name === "p3-type1") {
-    //           img.scaleX = 2;
-    //           img.scaleY = 2;
-    //         }
-
-    //         preservedImage = img;
-    //         canvas.add(img);
-    //         canvas.renderAll();
-    //         onlyDeleteLayerEvent(img.id);
-    //       });
-    //     }, 1000); // 2 seconds delay
-    //   } else {
-    //     console.error("No layout source found. Image loading skipped.");
-    //   }
-    // }
-    // var preservedImage = null; // Declare preservedImage at the top
-    // var layoutSource = null; // Renamed from imgUrl
-    // async function fetchImageData() {
-    //   try {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const productId = urlParams.get("id");
-    //     const response = await fetch(
-    //       `${baseUrl}/api/v1/product/get/${productId}`
-    //     );
-    //     const data = await response.json();
-    //     console.log(data);
-    //     const product = data.product;
-
-    //     if (product && product.linkedMeshImageData) {
-    //       const linkedMeshImageData = product.linkedMeshImageData;
-
-    //       // Get the tab container
-    //       const tabContainer = document.querySelector(".gauci-tab-cont");
-
-    //       // Clear any existing tabs (optional, if necessary)
-    //       tabContainer.innerHTML = "";
-
-    //       // Loop through the array to create tabs
-    //       linkedMeshImageData.forEach((meshData, index) => {
-    //         const tabDiv = document.createElement("div");
-    //         const tabContent = document.createElement("div");
-
-    //         tabContent.classList.add("gauci-open-page");
-    //         tabContent.textContent = `${meshData.meshName || "Unnamed"}`;
-
-    //         tabDiv.appendChild(tabContent);
-
-    //         // Set the first tab as active by default
-    //         if (index === 0) {
-    //           tabDiv.classList.add("active");
-    //           layoutSource = meshData.layoutUrl; // Set the initial layoutSource
-    //           console.log("Initial layoutSource:", layoutSource);
-    //           AddingImage(); // Add the first image by default
-    //         }
-
-    //         // Add click event listener for each tab
-    //         tabDiv.addEventListener("click", () => {
-    //           // Remove "active" class from all tabs
-    //           const allTabs = tabContainer.querySelectorAll("div");
-    //           allTabs.forEach((t) => t.classList.remove("active"));
-
-    //           // Add "active" class to the clicked tab
-    //           tabDiv.classList.add("active");
-
-    //           // Update layoutSource dynamically
-    //           layoutSource = meshData.layoutUrl;
-    //           // console.log("Updated layoutSource:", layoutSource);
-
-    //           // Re-add the updated image
-    //           AddingImage();
-    //         });
-
-    //         tabContainer.appendChild(tabDiv);
-    //       });
-
-    //       console.log("Tabs created successfully.");
-    //     } else {
-    //       console.error("No linkedMeshImageData found in the product.");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching image data:", error);
-    //   }
-    // }
-
-    // async function AddingImage() {
-    //   // console.log("Adding image");
-
-    //   // Ensure layoutSource is available
-    //   if (layoutSource) {
-    //     // console.log("PNG image filepath:", layoutSource);
-
-    //     // Remove the previous image from the canvas
-    //     if (preservedImage) {
-    //       canvas.remove(preservedImage);
-    //     }
-
-    //     // Delay the execution to allow layoutSource to be fully updated
-    //     setTimeout(() => {
-    //       fabric.Image.fromURL(layoutSource, function (img) {
-    //         img.set({
-    //           selectable: false,
-    //           evented: false,
-    //           hasControls: false,
-    //           customId: "layoutImage",
-    //           isPreservedObject: true,
-    //         });
-
-    //         // Apply specific scaling if name is 'p3-type1'
-    //         const urlParams = new URLSearchParams(window.location.search);
-    //         const name = urlParams.get("name");
-    //         if (name === "p3-type1") {
-    //           img.scaleX = 2;
-    //           img.scaleY = 2;
-    //         }
-
-    //         preservedImage = img;
-    //         canvas.add(img);
-    //         canvas.renderAll();
-    //         onlyDeleteLayerEvent(img.id);
-    //       });
-    //     }, 100); // Optional delay for smoother user experience
-    //   } else {
-    //     console.error("No layout source found. Image loading skipped.");
-    //   }
-    // }
-
-    // // On document ready, fetch image data
-    // $(document).ready(function () {
-    //   setTimeout(function () {
-    //     fetchImageData();
-    //     console.log("Fetching image data and setting tabs.");
-    //   }, 400);
-    // });
 
     let tabCanvasStates = {}; // To store canvas JSON state for each tab
     let activeTabId = null; // To track the currently active tab
@@ -7861,8 +6252,6 @@
       undoStack.push(state);
       if (undoStack.length > 20) undoStack.shift();
       redoStack = []; // Clear redo stack when a new action is performed
-      console.log(`Undo stack size: ${undoStack.length}`);
-      console.log(undoStack);
     }
 
     function loadCanvasStateFromHistory(state) {
@@ -7870,16 +6259,13 @@
       canvas.loadFromJSON(JSON.parse(state), () => {
         canvas.renderAll();
         isProgrammaticChange = false;
-        console.log("Loaded canvas state from history");
 
-        console.log(canvas.toJSON());
         const allObjects = canvas.getObjects();
 
         if (canvas) {
           const targetObject = allObjects.find(
             (obj) => obj.type === "image" && obj.src.startsWith("http")
           );
-          console.log(targetObject);
 
           if (targetObject) {
             targetObject.set({
@@ -7888,20 +6274,11 @@
               hasControls: false,
             });
           }
-
-          // const targetMaskObject = allObjects.find(
-          //   (obj) => obj.type === "image" && obj.clipPath
-          // );
-          // console.log(targetMaskObject);
-
-          // canvas.renderAll();
-          // console.log(canvas.toJSON());
         }
       });
     }
 
     function undo() {
-      console.log(redoStack);
       if (undoStack.length === 0) {
         selector.find("#gauci-undo").prop("disabled", true);
         return;
@@ -7912,9 +6289,7 @@
         redoStack.push(currentState); // Save current state to redo stack
         const previousState = undoStack.pop(); // Get the previous state
         loadCanvasStateFromHistory(previousState);
-        console.log(`Undo performed. Undo stack size: ${undoStack.length}`);
       } else {
-        console.log("No more actions to undo.");
         selector.find("#gauci-undo").prop("disabled", true);
       }
     }
@@ -7925,9 +6300,7 @@
         undoStack.push(currentState); // Save current state to undo stack
         const nextState = redoStack.pop(); // Get the next state
         loadCanvasStateFromHistory(nextState);
-        console.log(`Redo performed. Redo stack size: ${redoStack.length}`);
       } else {
-        console.log("No more actions to redo.");
         //  selector.find("#gauci-undo").prop("disabled", true);
         selector.find("#gauci-redo").prop("disabled", true);
       }
@@ -7942,12 +6315,10 @@
           `${baseUrl}/api/v1/product/get/${productId}`
         );
         const data = await response.json();
-        console.log(data);
 
         const product = data.product;
-        console.log(product);
+
         mainPart = product?.mainPart?.meshName;
-        console.log(mainPart);
 
         if (product && product.linkedMeshImageData) {
           const linkedMeshImageData = product.linkedMeshImageData;
@@ -8015,7 +6386,6 @@
                   initializeUndoRedo();
                   selector.find("#gauci-undo").prop("disabled", true);
                   selector.find("#gauci-redo").prop("disabled", true);
-                  console.log(undoStack);
                 }, 500); // Adjust delay as needed
               });
             });
@@ -8023,7 +6393,6 @@
             tabContainer.appendChild(tabDiv);
           });
 
-          console.log("Tabs created successfully.");
           var params = new URLSearchParams(window.location.search);
           // var name = params.get("name");
           // var id = params.get("id");
@@ -8033,7 +6402,7 @@
             loadTemplateFromUrl();
           }
         } else {
-          console.error("No linkedMeshImageData found in the product.");
+          console.warn("No linkedMeshImageData found in the product.");
         }
       } catch (error) {
         console.error("Error fetching image data:", error);
@@ -8080,22 +6449,16 @@
         const state = JSON.stringify(canvas.toJSON()); // Save the entire canvas JSON
         tabCanvasStates[tabId] = state; // Store the state
         allCanvasTabState = tabCanvasStates;
-        console.log(allCanvasTabState);
-        console.log(`Saved canvas state for Tab ${tabId}`);
 
         const output = Object.keys(allCanvasTabState).map((key) => ({
           part: key,
           jsonData: JSON.parse(allCanvasTabState[key]),
         }));
 
-        console.log(output);
-
         const originalFormat = {};
         output.forEach((item) => {
           originalFormat[item.part] = JSON.stringify(item.jsonData);
         });
-
-        console.log(originalFormat);
       }
     }
 
@@ -8116,20 +6479,18 @@
         // Stringify modified JSON
         tabCanvasStates[tabId] = JSON.stringify(jsonData);
 
-        console.log(tabCanvasStates[tabId]);
         isProgrammaticChange = true;
         // Load modified JSON into canvas
         canvas.loadFromJSON(jsonData, () => {
           logSelectedObject(canvas);
           canvas.renderAll();
-          console.log(canvas.toJSON());
+
           const allObjects = canvas.getObjects();
 
           if (canvas) {
             const targetObject = allObjects.find(
               (obj) => obj.type === "image" && obj.src.startsWith("http")
             );
-            console.log(targetObject);
 
             if (targetObject) {
               targetObject.set({
@@ -8142,30 +6503,21 @@
             const targetMaskObject = allObjects.find(
               (obj) => obj.type === "image" && obj.clipPath
             );
-            console.log(targetMaskObject);
 
             canvas.renderAll();
-            console.log(canvas.toJSON());
           }
-          console.log(`Loaded canvas state for Tab ${tabId}`);
-          console.log(activeTabId);
-          console.log(tabCanvasStates);
+
           logSelectedObject(canvas);
           isProgrammaticChange = false;
           saveUndoState();
         });
       } else {
         AddingImage();
-        console.log(`No saved state for Tab ${tabId}. Starting fresh.`);
+
         setTimeout(() => {
           saveUndoState();
         }, 150);
       }
-
-      console.log(
-        "Canvas event listeners after function:",
-        canvas.__eventListeners
-      );
     }
     // function setupCanvasEventListeners() {
     //   canvas.on("object:added", () => saveUndoState());
@@ -8175,7 +6527,7 @@
     function setupCanvasEventListeners() {
       canvas.on("object:added", () => {
         saveUndoState();
-        console.log(undoStack);
+
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           // selector.find("#gauci-redo").prop("disabled", true);
@@ -8189,7 +6541,7 @@
 
       canvas.on("object:modified", () => {
         saveUndoState();
-        console.log(undoStack);
+
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           // selector.find("#gauci-redo").prop("disabled", true);
@@ -8202,7 +6554,7 @@
 
       canvas.on("object:removed", () => {
         saveUndoState();
-        console.log(undoStack);
+
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           // selector.find("#gauci-redo").prop("disabled", true);
@@ -8221,12 +6573,11 @@
       setTimeout(function () {
         fetchImageData();
         setupCanvasEventListeners();
-        // console.log(undoStack);
+
         if (undoStack.length === 0) {
           selector.find("#gauci-undo").prop("disabled", true);
           selector.find("#gauci-redo").prop("disabled", true);
         }
-        console.log("Fetching image data and setting tabs.");
       }, 400);
     });
 
@@ -8444,7 +6795,7 @@
         // });
 
         var svgFileUrl = $(this).find("img.lazy").data("src");
-        // console.log(svgFileUrl);
+
         var regex = /\/([^\/]+)\/[^\/]+\.svg$/; // Regular expression to match "abstract-shapes" from the URL
         var matches = svgFileUrl.match(regex);
         var shapeName = matches[1];
@@ -8608,7 +6959,7 @@
           image.left = rect.left;
           image.top = rect.top;
           transfaredImage = image.height;
-          console.log(transfaredImage);
+
           canvas.add(image);
           image.setCoords();
           canvas.renderAll();
@@ -8618,7 +6969,7 @@
             activeImageData: activeImage,
             layId: selectionRect.id,
           });
-          console.log(transferedImageArr);
+
           onlyDeleteLayerEvent(activeImage.id);
           onlyDeleteLayerEvent(selectionRectId);
         };
@@ -8658,7 +7009,6 @@
           });
           onlyDeleteLayerEvent(activeImage.id);
           onlyDeleteLayerEvent(selectioncircleId);
-          console.log(transferedImageArr);
         };
       } else if (shape === "triangle") {
         const triangleVariables = {
@@ -8699,14 +7049,11 @@
           });
           onlyDeleteLayerEvent(activeImage.id);
           onlyDeleteLayerEvent(selectiontriangleId);
-
-          console.log(transferedImageArr);
         };
       } else if (shape === "square") {
       } else if (shape === "other") {
-        console.log(selectionSvg);
         const newPath = selectionSvg.path;
-        console.log(newPath);
+
         let svgMaterial = new fabric.Path(newPath, {
           left: selectionSvg.left,
           top: selectionSvg.top,
@@ -8719,7 +7066,7 @@
           scaleY: selectionSvg.scaleY,
         });
         var selectionSvgId = selectionSvg.id;
-        console.log(svgMaterial.getBoundingRect());
+
         activeImage.clipPath = svgMaterial;
         const boundingRect = svgMaterial.getBoundingRect();
         const updatedWidth = boundingRect.width;
@@ -8778,10 +7125,9 @@
     let editButtonActive = true;
 
     function addClipMask(path, activeObject) {
-      console.log("this is the active path and all", path, activeObject);
       editButtonActive = true;
       // document.getElementById("gauci-border-tools-wrap").style.display = "none";
-      console.log(canvas.toJSON());
+
       var uniqueId = "clipmask";
       var desiredWidth = 700;
       var desiredHeight = 700;
@@ -8789,16 +7135,9 @@
       if (activeObject) {
         activeObject.customId = uniqueId;
         var objects = canvas.getObjects();
-        console.log(objects);
+
         var pathObjects = objects.filter((obj) => obj.type === "path");
 
-        // if (pathObjects.length > 1) {
-        //   // Remove all but the last path object
-        //   for (let i = 0; i < pathObjects.length - 1; i++) {
-        //     canvas.remove(pathObjects[i]);
-        //     onlyDeleteLayerEvent(pathObjects[i].id);
-        //   }
-        // }
         var pathObjects = objects.filter((obj) => obj.type === "path");
 
         // Remove all path objects from the canvas
@@ -8842,7 +7181,6 @@
           left: activeObject.left,
         });
 
-        console.log("clippath to aand ", clipPath.top, clipPath.left);
         clipPathOffset.top = clipPath.top - activeObject.top;
         clipPathOffset.left = clipPath.left - activeObject.left;
         activeObject.clipPath = clipPath;
@@ -8866,7 +7204,6 @@
           });
           clipPath.setCoords();
           canvas.renderAll();
-          // console.log("clippathOffset", clipPath.top, activeObject.top);
         }
 
         // Attach the event handlers to sync the clipPath with the shell
@@ -8888,16 +7225,6 @@
     let relativeLeft;
 
     function syncClipPathWithImage(clipPath, activeObject) {
-      // console.log(activeObject, "Active object of mask");
-      // console.log(clipPath);
-      // console.log(clipPath.top, clipPath.left);
-      // console.log(activeObject.top, activeObject.left);
-      // relativeTop = clipPath.top - activeObject.top;
-      // relativeLeft = clipPath.left - activeObject.left;
-      // applyTemplateClipMask(activeObject);
-      // handleMaskingDone();
-      // syncClipPathWithImage(activeObject.clipPath, activeObject);
-
       clipPath.set({
         originX: activeObject.originX,
         originY: activeObject.originY,
@@ -8909,34 +7236,6 @@
       canvas.renderAll();
     }
 
-    // function syncClipPathZoomWithImage(clipPath, activeObject) {
-    //   clipPath.set({
-    //     scaleX: activeObject.scaleX,
-    //     scaleY: activeObject.scaleY,
-
-    //     angle: activeObject.angle,
-    //     top: activeObject.top,
-    //     left: activeObject.left,
-    //   });
-
-    //   clipPath.setCoords();
-    //   canvas.renderAll();
-    // }
-    // function syncClipPathZoomWithImage(clipPath, activeObject) {
-    //   const scaleRatioX = activeObject.scaleX;
-    //   const scaleRatioY = activeObject.scaleY;
-
-    //   clipPath.set({
-    //     scaleX: activeObject.originalScaleX * scaleRatioX,
-    //     scaleY: clipPath.originalScaleY * scaleRatioY,
-    //     left: activeObject.left,
-    //     top: activeObject.top,
-    //     angle: activeObject.angle,
-    //   });
-
-    //   clipPath.setCoords();
-    //   canvas.renderAll();
-    // }
     function storeClipPathState(activeObject) {
       const clipPath = activeObject.clipPath;
 
@@ -9008,54 +7307,6 @@
       canvas.requestRenderAll();
     }
 
-    //   function syncClipPathzoomWithImage(clipPath, activeObject) {
-
-    //     const imageScaleX = activeObject.scaleX;
-    // const imageScaleY = activeObject.scaleY;
-
-    // // Use uniform scale to maintain clipPath shape (circle)
-    // const uniformScale = Math.min(imageScaleX, imageScaleY);
-
-    //     const clipPathScale = (uniformScale * imageOriginalWidth) / clipPathOriginalWidth;
-
-    // // Update clipPath properties
-    // clipPath.set({
-    //   scaleX: clipPathScale, // Uniform scaling for X
-    //   scaleY: clipPathScale, // Uniform scaling for Y to preserve shape
-    //   left: activeObject.left, // Sync position with image center
-    //   top: activeObject.top,   // Sync position with image center
-    //   angle: activeObject.angle, // Sync rotation
-    //   dirty: true // Mark as dirty for rendering
-    // });
-    //     // clipPath.set({
-    //     //   scaleX: activeObject.scaleX,
-    //     //   scaleY: activeObject.scaleY,
-
-    //     //   angle: activeObject.angle,
-    //     //   top: activeObject.top,
-    //     //   left: activeObject.left,
-    //     // });
-    //     activeObject.clipPath = clipPath;
-
-    //     clipPath.setCoords();
-    //     canvas.renderAll();
-    //   }
-    // function syncClipPathZoomWithImage(clipPath, activeObject) {
-    //   const scaleRatioX = activeObject.scaleX;
-    //   const scaleRatioY = activeObject.scaleY;
-
-    //   clipPath.set({
-    //     scaleX: clipPath.scaleX * scaleRatioX,
-    //     scaleY: clipPath.scaleY * scaleRatioY,
-    //     left: activeObject.left - clipPath.left,
-    //     top: activeObject.top - clipPath.top,
-    //     angle: activeObject.angle - clipPath.angle,
-    //   });
-
-    //   clipPath.setCoords();
-    //   canvas.renderAll();
-    // }
-
     function handleMaskingDone() {
       editButtonActive = false;
       canvas.remove(shell);
@@ -9064,7 +7315,6 @@
       }
 
       canvas.requestRenderAll();
-      console.log("value is ", clipPathOffset.top, clipPathOffset.left);
 
       if (storedActiveObject && storedClipPath) {
         relativeTop = storedClipPath.top - storedActiveObject.top;
@@ -9110,12 +7360,10 @@
       .addEventListener("click", handleMaskingDone);
 
     function applyTemplateClipMask(clipmaskObject) {
-      //   console.log('Attempting to remove the object:', clipObject);
       let mainClippath = clipmaskObject.clipPath;
 
       // Ensure mainClippath exists and has a valid path
       if (!mainClippath || !mainClippath.path) {
-        console.log("No valid clipPath found in the clipmaskObject.");
         return;
       }
       let path = mainClippath.path;
@@ -9127,8 +7375,6 @@
       };
 
       if (clipmaskObject) {
-        console.log("Clip mask object:", clipmaskObject);
-
         // Create the shell using the mainClippath path
         shell = new fabric.Path(path, {
           fill: "", // Transparent shell
@@ -9186,8 +7432,7 @@
     function unlinkClipPath() {
       if (storedActiveObject && storedClipPath) {
         // Remove event listeners for moving, rotating, and scaling
-        console.log(storedActiveObject);
-        console.log(storedClipPath);
+
         storedActiveObject.off("moving");
         storedActiveObject.off("rotating");
         storedActiveObject.off("scaling");
@@ -9284,7 +7529,6 @@
           alert("No file selected.");
           return;
         }
-        console.log("Selected file:", file);
 
         var reader = new FileReader();
 
@@ -9414,318 +7658,32 @@
 
     canvas.on("object:selected", function (e) {
       const selectedObject = e.target;
-      console.log("User selected object:", selectedObject);
     });
 
-    // function logSelectedObject(canvas) {
-    //   console.log(canvas);
-    //   // console.log("Setting event listeners for canvas:", canvas);
-
-    //   // Handle new selection
-    //   // canvas.on("selection:created", function (e) {
-    //   //   const selectedObject = e.selected[0]; // First selected object
-    //   //   console.log("New object selected:", selectedObject);
-    //   // });
-
-    //   // Handle selection change (e.g., switching to another object)
-    //   canvas.on("selection:updated", function (e) {
-    //     const selected = e.selected[0]; // Newly selected object
-    //     console.log("Selection updated, new object:", selected);
-    //     console.log(editButtonActive);
-
-    //     if (
-    //       !editButtonActive &&
-    //       selected.type === "image" &&
-    //       selected.clipPath
-    //     ) {
-    //       storedActiveObject = selected;
-    //       storedClipPath = selected.clipPath;
-    //       let path = selected.clipPath.path;
-    //       console.log("Stored object:", storedActiveObject);
-    //       console.log(
-    //         "Clip path position:",
-    //         storedClipPath?.top,
-    //         storedClipPath?.left
-    //       );
-
-    //       shell = new fabric.Path(path, {
-    //         fill: "", // Transparent shell
-    //         stroke: "black",
-    //         strokeWidth: 2,
-    //         scaleX: storedClipPath.scaleX,
-    //         scaleY: storedClipPath.scaleY,
-    //         lockScalingX: false,
-    //         lockScalingY: false,
-    //         lockSkewingX: true,
-    //         lockSkewingY: true,
-    //         originX: storedClipPath.originX,
-    //         originY: storedClipPath.originY,
-    //         top: storedClipPath.top,
-    //         left: storedClipPath.left,
-    //         selectable: true, // Make it interactive
-    //       });
-    //       function updateClipPathPosition() {
-    //         // Update the clipPath's properties based on the shell's new position
-    //         storedClipPath.set({
-    //           top: shell.top,
-    //           left: shell.left,
-    //           angle: shell.angle,
-    //           scaleX: shell.scaleX,
-    //           scaleY: shell.scaleY,
-    //         });
-
-    //         // Reassign the updated clipPath to the image
-    //         storedActiveObject.clipPath = storedClipPath;
-
-    //         // Ensure canvas re-renders with changes
-    //         canvas.requestRenderAll();
-    //       }
-
-    //       // Sync clipPath updates when the shell is moved, scaled, or rotated
-    //       shell.on("moving", updateClipPathPosition);
-    //       shell.on("scaling", updateClipPathPosition);
-    //       shell.on("rotating", updateClipPathPosition);
-
-    //       // applyTemplateClipMask(selected);
-
-    //       handleMaskingDone();
-
-    //       // syncClipPathWithImage(selected.clipPath, selected);
-    //       // console.log(sl);
-    //       // deleteLayerEvent(selected.id);
-
-    //       // canvas.renderAll();
-    //     }
-    //   });
-
-    //   // Optional: Handle deselection
-    //   canvas.on("selection:cleared", function (e) {
-    //     console.log("Selection cleared");
-    //   });
-    // }
-
-    // function logSelectedObject(canvas) {
-    //   console.log("Attaching event listeners to canvas:", canvas); // Debug: Check canvas instance
-    //   console.log(
-    //     "Canvas event listeners before attach:",
-    //     canvas.__eventListeners
-    //   ); // Debug: Check existing listeners
-
-    //   canvas.on("selection:updated", function (e) {
-    //     console.log("Selection:updated event fired!"); // Debug: Confirm event is firing
-    //     const selected = e.selected[0]; // Newly selected object
-    //     console.log("Selection updated, new object:", selected);
-    //     console.log("editButtonActive:", editButtonActive);
-    //     console.log("Attaching event listeners to canvas:", canvas); // Debug: Check canvas instance
-    //     console.log(
-    //       "Canvas event listeners before attach:",
-    //       canvas.__eventListeners
-    //     );
-
-    //     if (
-    //       !editButtonActive &&
-    //       selected.type === "image" &&
-    //       selected.clipPath
-    //     ) {
-    //       storedActiveObject = selected;
-    //       storedClipPath = selected.clipPath;
-    //       let path = selected.clipPath.path;
-    //       console.log("Stored object:", storedActiveObject);
-    //       console.log(
-    //         "Clip path position:",
-    //         storedClipPath?.top,
-    //         storedClipPath?.left
-    //       );
-
-    //       shell = new fabric.Path(path, {
-    //         fill: "", // Transparent shell
-    //         stroke: "black",
-    //         strokeWidth: 2,
-    //         scaleX: storedClipPath.scaleX,
-    //         scaleY: storedClipPath.scaleY,
-    //         lockScalingX: false,
-    //         lockScalingY: false,
-    //         lockSkewingX: true,
-    //         lockSkewingY: true,
-    //         originX: storedClipPath.originX,
-    //         originY: storedClipPath.originY,
-    //         top: storedClipPath.top,
-    //         left: storedClipPath.left,
-    //         selectable: true, // Make it interactive
-    //       });
-    //       function updateClipPathPosition() {
-    //         storedClipPath.set({
-    //           top: shell.top,
-    //           left: shell.left,
-    //           angle: shell.angle,
-    //           scaleX: shell.scaleX,
-    //           scaleY: shell.scaleY,
-    //         });
-    //         storedActiveObject.clipPath = storedClipPath;
-    //         canvas.requestRenderAll();
-    //       }
-    //       shell.on("moving", updateClipPathPosition);
-    //       shell.on("scaling", updateClipPathPosition);
-    //       shell.on("rotating", updateClipPathPosition);
-    //       handleMaskingDone();
-    //     }
-    //   });
-
-    //   canvas.on("selection:cleared", function (e) {
-    //     console.log("Selection cleared");
-    //   });
-
-    //   console.log(
-
-    //   ); // Debug: Confirm listeners attached
-    // }
-
-    //   canvas.on("selection:cleared", function (e) {
-    //     console.log("Selection cleared");
-    //   });
-
-    //   console.log(
-
-    //   ); // Debug: Confirm listeners attached
-    // }
-
-    //   canvas.on("selection:cleared", function (e) {
-    //     console.log("Selection cleared");
-    //   });
-
-    //   console.log(
-
-    //     canvas.__eventListeners
-    //   ); // Debug: Confirm listeners attached
-    // }
-
-    //   canvas.on("selection:cleared", function (e) {
-    //     console.log("Selection cleared");
-    //   });
-
-    //   console.log(
-    //     "Canvas event listeners after attach:",
-    //     canvas.__eventListeners
-
-    // }
-
-    // function logSelectedObject(canvas) {
-    //   console.log("Attaching event listeners to canvas:", canvas); // Debug: Check canvas instance
-    //   console.log(
-    //     "Canvas event listeners before attach:",
-    //     canvas.__eventListeners
-    //   ); // Debug: Check existing listeners
-
-    //   canvas.on("selection:updated", function (e) {
-    //     console.log("Selection:updated event fired!"); // Debug: Confirm event is firing
-    //     const selected = e.selected[0]; // Newly selected object
-    //     console.log("Selection updated, new object:", selected);
-    //     console.log("editButtonActive:", editButtonActive);
-    //     console.log("Attaching event listeners to canvas:", canvas); // Debug: Check canvas instance
-    //     console.log(
-    //       "Canvas event listeners before attach:",
-    //       canvas.__eventListeners
-    //     );
-
-    //     if (
-    //       !editButtonActive &&
-    //       selected.type === "image" &&
-    //       selected.clipPath
-    //     ) {
-    //       storedActiveObject = selected;
-    //       storedClipPath = selected.clipPath;
-    //       let path = selected.clipPath.path;
-    //       console.log("Stored object:", storedActiveObject);
-    //       console.log(
-    //         "Clip path position:",
-    //         storedClipPath?.top,
-    //         storedClipPath?.left
-    //       );
-
-    //       shell = new fabric.Path(path, {
-    //         fill: "", // Transparent shell
-    //         stroke: "black",
-    //         strokeWidth: 2,
-    //         scaleX: storedClipPath.scaleX,
-    //         scaleY: storedClipPath.scaleY,
-    //         lockScalingX: false,
-    //         lockScalingY: false,
-    //         lockSkewingX: true,
-    //         lockSkewingY: true,
-    //         originX: storedClipPath.originX,
-    //         originY: storedClipPath.originY,
-    //         top: storedClipPath.top,
-    //         left: storedClipPath.left,
-    //         selectable: true, // Make it interactive
-    //       });
-    //       function updateClipPathPosition() {
-    //         storedClipPath.set({
-    //           top: shell.top,
-    //           left: shell.left,
-    //           angle: shell.angle,
-    //           scaleX: shell.scaleX,
-    //           scaleY: shell.scaleY,
-    //         });
-    //         storedActiveObject.clipPath = storedClipPath;
-    //         canvas.requestRenderAll();
-    //       }
-    //       shell.on("moving", updateClipPathPosition);
-    //       shell.on("scaling", updateClipPathPosition);
-    //       shell.on("rotating", updateClipPathPosition);
-    //       handleMaskingDone();
-    //     }
-    //   });
     function logSelectedObject(canvas) {
       // canvas.off("mouse:down");
       canvas.on("mouse:down", function (e) {
         // Debug: Confirm event is firing
         if (!e.target) {
-          // canvas.selection = false; // Prevent blue rectangle
-          // console.log("Empty click: Multi-selection disabled");
-          // // Restore selection immediately to avoid side effects
-          // setTimeout(() => {
-          //   canvas.selection = true;
-          // }, 0);
           return; // Exit to prevent further processing
         }
 
         const selected = e.target; // Newly selected object
-        console.log("Selection updated, new object:", selected);
+
         if (selected.path) {
-          console.log(selected);
           document.getElementById("gauci-image-settings").style.display =
             "none";
           // document.getElementById("img-filter-container-id").style.display =
           //   "none";
         }
-        //     if (selected.path) {
-        //   console.log(selected);
-        //   document.getElementById("gauci-image-settings").style.display =
-        //     "none";
-        //   // document.getElementById("img-filter-container-id").style.display =
-        //   //   "none";
-        // }
-        if (selected.objectType === "image" && selected.clipPath) {
-          console.log(selected);
-          // document.getElementById("gauci-border-tools-wrap").style.display =
-          //   "none";
-          // document.getElementById("img-filter-container-id").style.display =
-          //   "none";
-        }
-        //         if (selected.objectType === "image" && selected.clipPath) {
-        //   console.log(selected);
-        //   // document.getElementById("gauci-border-tools-wrap").style.display =
-        //   //   "none";
-        //   // document.getElementById("img-filter-container-id").style.display =
-        //   //   "none";
-        // }
+
         if (
           !editButtonActive &&
           selected.type === "image" &&
           selected.clipPath
         ) {
           storedActiveObject = selected;
-          // console.log(storedActiveObject);
+
           storedClipPath = selected.clipPath;
           let path = selected.clipPath.path;
 
@@ -9765,106 +7723,6 @@
     }
 
     logSelectedObject(canvas);
-    // canvas.on("selection:updated", function (e) {
-    //   console.log("Selection:updated event fired!"); // Debug: Confirm event is firing
-    //   const selected = e.selected; // Newly selected object
-    //   console.log("Selection updated, new object:", selected);
-    // });
-    // canvas.on("selection:created", function (e) {
-    //   console.log("Selection:created event fired!"); // Debug: Confirm event firing
-    //   const selected = e.selected; // Newly selected objects (array)
-    //   console.log("New object selected:", selected); // Target log: Prints once per selection
-    // });
-    // canvas.on("object:selected", function (e) {
-    //   console.log("Object:selected event fired!"); // Debug: Confirm event firing
-    //   const selected = e.target; // Single selected object
-    //   console.log("New object selected:", selected); // Target log: Prints once per selection
-    // });
-    // canvas.on("mouse:down", function (e) {
-    //   const selected = e.target;
-    //   console.log("Object selected:", selected);
-
-    //   // 2. Jab selected object move ho
-    //   // selected.on("moving", function () {
-    //   //   console.log("Object is moving...");
-    //   // });
-    // });
-    // let hasMovedOnce = false;
-    // let lastSelectedObject = null;
-
-    // canvas.on("mouse:down", function (e) {
-    //   const selected = e.target;
-
-    //   if (selected && selected !== lastSelectedObject) {
-    //     hasMovedOnce = false; // Reset move tracker
-    //     lastSelectedObject = selected; // Track new selection
-    //   }
-    // });
-
-    // canvas.on("object:moving", function (e) {
-    //   if (!hasMovedOnce) {
-    //     const selected = e.target;
-    //     console.log("Moved (only once):", selected);
-    //     if (selected.type === "image" && selected.clipPath) {
-    //       storedActiveObject = selected;
-    //       storedClipPath = selected.clipPath;
-    //       let path = selected.clipPath.path;
-    //       console.log("Stored object:", storedActiveObject);
-    //       console.log(
-    //         "Clip path position:",
-    //         storedClipPath?.top,
-    //         storedClipPath?.left
-    //       );
-
-    //       shell = new fabric.Path(path, {
-    //         fill: "", // Transparent shell
-    //         stroke: "black",
-    //         strokeWidth: 2,
-    //         scaleX: storedClipPath.scaleX,
-    //         scaleY: storedClipPath.scaleY,
-    //         lockScalingX: false,
-    //         lockScalingY: false,
-    //         lockSkewingX: true,
-    //         lockSkewingY: true,
-    //         originX: storedClipPath.originX,
-    //         originY: storedClipPath.originY,
-    //         top: storedClipPath.top,
-    //         left: storedClipPath.left,
-    //         selectable: true, // Make it interactive
-    //       });
-    //       function updateClipPathPosition() {
-    //         // Update the clipPath's properties based on the shell's new position
-    //         storedClipPath.set({
-    //           top: shell.top,
-    //           left: shell.left,
-    //           angle: shell.angle,
-    //           scaleX: shell.scaleX,
-    //           scaleY: shell.scaleY,
-    //         });
-
-    //         // Reassign the updated clipPath to the image
-    //         storedActiveObject.clipPath = storedClipPath;
-
-    //         // Ensure canvas re-renders with changes
-    //         canvas.requestRenderAll();
-    //       }
-
-    //       // Sync clipPath updates when the shell is moved, scaled, or rotated
-    //       shell.on("moving", updateClipPathPosition);
-    //       shell.on("scaling", updateClipPathPosition);
-    //       shell.on("rotating", updateClipPathPosition);
-
-    //       // applyTemplateClipMask(selected);
-    //       handleMaskingDone();
-    //       // syncClipPathWithImage(selected.clipPath, selected);
-    //       // console.log(sl);
-    //       // deleteLayerEvent(selected.id);
-
-    //       // canvas.renderAll();
-    //     }
-    //     hasMovedOnce = true;
-    //   }
-    // });
 
     var maskButton = selector.find(
       "#gauci-maskbutton, #gauci-maskbutton-outsied"
@@ -10770,7 +8628,6 @@
         if (element.parent().attr("id") == "gauci-icons-grid") {
           var iconStyle = selector.find("#gauci-icon-style").val();
           svgUrl = element.data("elsource") + "/" + iconStyle + "/24px.svg";
-          console.log(svgUrl);
         }
         var loader = element.data("loader");
         if (loader == "yes") {
@@ -11560,222 +9417,9 @@
       selector.find("#gauci-canvas").removeClass("hide-canvas");
       selector.find("#gauci").removeClass("hide-canva");
     });
-    // selector.find(".thr-d").on("click", function () {
-    //   selector.find(".thr-d").addClass("active");
-    //   selector.find(".two-d").removeClass("active");
-    //   selector
-    //     .find(".td-interactive-btn-container-main-contianer")
-    //     .addClass("interactive-btn-alignment");
-    //   selector.find(".web-thr-d-main-container").addClass("display-unity");
-    //   selector.find("#gauci-canvas").addClass("hide-canvas");
-    //   selector.find("#gauci").addClass("hide-canva");
-    //   canvas.renderAll();
-    //   // updateCanvasState()
-    //   var name = "tester";
-    //   var quality = 1;
-    //   var format = "jpeg";
-    //   var objurl = "";
-    //   var link = document.createElement("a");
-    //   add_watermark();
-    //   canvas.setZoom(1);
-    //   selector.find("#gauci-img-zoom").val(100);
-    //   var zoomWidth = originalHeight;
-    //   var zoomHeight = originalWidth;
-    //   if (rotate == 0 || rotate == 180 || rotate == -180) {
-    //     zoomWidth = originalWidth;
-    //     zoomHeight = originalHeight;
-    //   }
-    //   canvas.setWidth(zoomWidth);
-    //   canvas.setHeight(zoomHeight);
-    //   var blob = "";
 
-    //   canvas.getObjects().forEach(function (obj) {
-    //     console.log("object:", obj);
-    //     if (obj.customId === "layoutImage") {
-    //       obj.visible = false;
-    //     }
-    //   });
-    //   var imgData = canvas.toDataURL({
-    //     format: format,
-    //     quality: quality,
-    //     enableRetinaScaling: false,
-    //   });
-    //   canvas.getObjects().forEach(function (obj) {
-    //     if (obj.customId === "layoutImage") {
-    //       obj.visible = true;
-    //     }
-    //   });
-    //   console.log(imgData);
-    //   // window.canvasFinalImage=imgData
-    //   if (format != "webp") {
-    //     imgData = changeDpiDataUrl(
-    //       imgData,
-    //       selector.find("#gauci-download-img-dpi").val()
-    //     );
-    //   }
-    //   blob = dataURLtoBlob(imgData);
-    //   objurl = URL.createObjectURL(blob);
-    //   console.log("object url", objurl);
-    //   if (objurl) {
-    //     var event = new CustomEvent("variableReady", {
-    //       detail: {
-    //         data: objurl,
-    //       },
-    //     });
-    //     document.dispatchEvent(event);
-    //   }
-    //   link.download = name + "." + format;
-    //   link.href = objurl;
-    //   // link.click();
-    //   remove_watermark();
-    //   adjustZoom();
-    //   canvas.requestRenderAll();
-    // });
-    // const meshImageDataArray = [];
-    // selector.find(".thr-d").on("click", function () {
-    //   // Update classes based on user interaction
-    //   selector.find(".thr-d").addClass("active");
-    //   selector.find(".two-d").removeClass("active");
-    //   selector
-    //     .find(".td-interactive-btn-container-main-contianer")
-    //     .addClass("interactive-btn-alignment");
-    //   selector.find(".web-thr-d-main-container").addClass("display-unity");
-    //   selector.find("#gauci-canvas").addClass("hide-canvas");
-    //   selector.find("#gauci").addClass("hide-canva");
-    //   // saveCanvasState(activeTabId);
-    //   generateImagesFromCanvasStates();
-
-    //   const event = new CustomEvent("thrDClicked");
-    //   document.dispatchEvent(event);
-    // });
-
-    // Image generation function
-    // function generateImagesFromCanvasStates() {
-    //   saveCanvasState(activeTabId);
-    //   // Array to store image data for each tab
-    //   meshImageDataArray.length = 0;
-    //   Object.keys(tabCanvasStates).forEach((tabId) => {
-    //     // Create a temporary canvas with a width and height of 2048
-    //     const tempCanvas = new fabric.Canvas(null, {
-    //       width: 2048,
-    //       height: 2048,
-    //     });
-
-    //     // Load the JSON state into the temporary canvas
-    //     tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
-    //       const objects = tempCanvas.getObjects(); // Get all objects in the canvas
-    //       console.log(objects);
-    //       const corsImages = []; // Store references to CORS images
-
-    //       // Identify and hide CORS images
-    //       // objects.forEach((obj) => {
-    //       //   if (obj.type === "image" && obj.src && obj.src.startsWith("http")) {
-    //       //     corsImages.push(obj); // Keep a reference to this object
-    //       //     obj.visible = false; // Hide the object
-    //       //   }
-    //       // });
-
-    //       // Filter objects with type === "image" and get the first one
-    //       // const imageObjects = objects.filter((obj) => obj.type === "image");
-
-    //       // if (imageObjects.length > 0) {
-    //       //   corsImages.push(imageObjects[0]); // Push only the first image object
-    //       //   imageObjects[0].visible = false; // Hide the object
-    //       // }
-
-    //       // tempCanvas.renderAll(); // Render the canvas without CORS images
-    //       const firstObject = objects[0];
-    //       if (
-    //         firstObject &&
-    //         firstObject.type === "image" &&
-    //         firstObject.getSrc &&
-    //         firstObject.getSrc().startsWith("http") &&
-    //         !firstObject.clipPath
-    //       ) {
-    //         tempCanvas.remove(firstObject);
-    //       }
-    //       tempCanvas.renderAll();
-
-    //       // Generate the base64 image
-    //       try {
-    //         // const base64Image = tempCanvas.toDataURL({
-    //         //   format: "png",
-    //         //   quality: 1.0,
-    //         // });
-    //         const base64Image = tempCanvas.toDataURL({
-    //           format: "jpeg", // More compressed
-    //           quality: 1.0,
-    //         });
-
-    //         console.log(base64Image);
-
-    //         // Push the data into the array
-    //         meshImageDataArray.push({
-    //           meshName: tabId,
-    //           meshImageData: base64Image,
-    //         });
-    //       } catch (error) {
-    //         console.error(`Error generating image for Tab ID ${tabId}:`, error);
-    //       }
-
-    //       // Restore visibility of CORS images
-    //       // corsImages.forEach((obj) => {
-    //       //   obj.visible = true;
-    //       // });
-
-    //       // tempCanvas.renderAll(); // Re-render the canvas with all objects
-    //       // Re-insert the removed object (if any)
-    //       if (firstObject) {
-    //         tempCanvas.insertAt(firstObject, 0);
-    //       }
-
-    //       tempCanvas.renderAll();
-
-    //       // Clean up the temporary canvas
-    //       tempCanvas.clear();
-    //       tempCanvas.dispose();
-
-    //       if (
-    //         meshImageDataArray.length === Object.keys(tabCanvasStates).length
-    //       ) {
-    //         // console.log("Generated Images Array:", meshImageDataArray);
-    //         window.meshImageDataArray = meshImageDataArray;
-    //         console.log(
-    //           window.meshImageDataArray,
-    //           "Window data from gauci file"
-    //         );
-    //       }
-    //     });
-    //   });
-    // }
     const meshImageDataArray = [];
 
-    // selector.find(".thr-d").on("click", function () {
-    //   generateImagesFromCanvasStates(); // Just call the function, UI updates are handled inside
-    // });
-
-    // selector.find(".thr-d").on("click", function () {
-    //   // Show loader using jQuery
-    //   // $(".fullpage-loader").show();
-    //   selector.find("#gauci-canvas-loader").css("display", "flex");
-
-    //   // Hide loader after 2 seconds using jQuery
-    //   setTimeout(() => {
-    //     // $(".fullpage-loader").hide();
-    //     selector.find("#gauci-canvas-loader").hide();
-    //   }, 1000);
-
-    //   // Proceed with your existing function
-    //   generateImagesFromCanvasStates();
-    // });
-    // selector.find(".thr-d").on("click", function () {
-    //   selector.find("#gauci-canvas-loader").css("display", "flex"); // Show loader
-
-    //   requestAnimationFrame(() => {
-    //     generateImagesFromCanvasStates(); // Now it runs after loader is visible
-    //     selector.find("#gauci-canvas-loader").hide(); // Hide after done
-    //   });
-    // });
     selector.find(".thr-d").on("click", function () {
       selector.find("#gauci-canvas-loader").css("display", "flex"); // Show loader
 
@@ -11805,7 +9449,6 @@
           tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
             try {
               const objects = tempCanvas.getObjects();
-              console.log(`Objects for tab ${tabId}:`, objects);
 
               const firstObject = objects[0];
               if (
@@ -11824,8 +9467,6 @@
                 format: "jpeg",
                 quality: 1.0,
               });
-
-              console.log(`Base64 image generated for ${tabId}`);
 
               // Push the data into the array
               meshImageDataArray.push({
@@ -11855,7 +9496,7 @@
 
       try {
         await Promise.all(promises);
-        console.log("All images generated:", meshImageDataArray);
+
         window.meshImageDataArray = meshImageDataArray;
 
         // Move UI updates and event dispatch here
@@ -11882,7 +9523,6 @@
       var id = params.get("id");
       // var templateName = params.get("templateName");
       var key = params.get("key");
-      // console.log("This is the template params: ", name, id, templateName);
 
       if (!key) {
         console.error("No template name found in the URL.");
@@ -11915,82 +9555,17 @@
           withCredentials: true, // to include credentials (cookies)
         },
         success: function (data) {
-          console.log("Template data:", data);
-
           if (data.src) {
             if (data.src) {
-              console.log("✅ srcData (raw):", data.src);
               // console.log(output);
               tabCanvasStates = {};
               tabCanvasStates = data.src;
-              console.log(tabCanvasStates);
+
               allCanvasTabState = data.src;
 
-              console.log(activeTabId);
-              console.log(allCanvasTabState);
               loadCanvasState(activeTabId);
             }
           }
-
-          // if (data.src) {
-          //   // Fetch the template JSON
-          //   $.getJSON(data.src, function (jsonData) {
-          //     console.log("Loaded template JSON:", jsonData);
-          //     loadJSON(jsonData);
-          //   }).fail(function () {
-          //     console.error("Error loading template JSON");
-          //   });
-          // } else {
-          //   console.error("No template source URL found in the API response.");
-          // }
-
-          // $(document).on('keydown', function(event) {
-          //     if (event.key === 'Escape') {
-          //         var targetModal = selector.find('.gauci-modal:visible');
-          //         if (targetModal.length) {
-          //             targetModal.hide();
-          //         }
-          //     }
-          // });
-
-          // selector.find(".gauci-modal-close").on("click", function (e) {
-          //     e.preventDefault();
-          //     var target = $(this).data("target");
-          //     selector.find(target).hide();
-          // });
-          // if (data.src) {
-          //   // Fetch the template JSON
-          //   $.getJSON(data.src, function (jsonData) {
-          //     console.log("Loaded template JSON:", jsonData);
-          //     loadJSON(jsonData);
-          //   }).fail(function () {
-          //     console.error("Error loading template JSON");
-          //   });
-          // } else {
-          //   console.error("No template source URL found in the API response.");
-          // }
-          // if (data.src) {
-          //   // Fetch the template JSON
-          //   $.getJSON(data.src, function (jsonData) {
-          //     console.log("Loaded template JSON:", jsonData);
-          //     loadJSON(jsonData);
-          //   }).fail(function () {
-          //     console.error("Error loading template JSON");
-          //   });
-          // } else {
-          //   console.error("No template source URL found in the API response.");
-          // }
-          // if (data.src) {
-          //   // Fetch the template JSON
-          //   $.getJSON(data.src, function (jsonData) {
-          //     console.log("Loaded template JSON:", jsonData);
-          //     loadJSON(jsonData);
-          //   }).fail(function () {
-          //     console.error("Error loading template JSON");
-          //   });
-          // } else {
-          //   console.error("No template source URL found in the API response.");
-          // }
         },
         error: function (xhr, status, error) {
           console.error("Error fetching template:", status, error);
@@ -12004,10 +9579,6 @@
         },
       });
     }
-    // window.onload = function () {
-    //   // Push to the end of the event queue to allow async tasks to settle
-    //   setTimeout(loadTemplateFromUrl, 0);
-    // };
 
     $(document).on("keydown", function (event) {
       if (event.key === "Escape") {
@@ -12067,7 +9638,7 @@ document.addEventListener("DOMContentLoaded", function () {
         credentials: "include",
       });
       const data = await response.json();
-      console.log("this is the data of protected route we got", data);
+
       localStorage.setItem("email", data.email);
       localStorage.setItem("username", data.username);
       localStorage.setItem("fname", data.firstname);
@@ -12086,7 +9657,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   fetchUserRole();
   document.getElementById("signupBtn").addEventListener("click", function () {
-    console.log("function called");
     showSignupPopup();
   });
 
@@ -12157,17 +9727,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // if (isAdmin) {
-    //   document
-    //     .getElementById("adminDashboard")
-    //     .addEventListener("click", function () {
-    //       window.location.href = "http://54.152.205.55:4000/admin-dashboard";
-    //     });
-    // } else {
-    //   document.getElementById("profile").addEventListener("click", function () {
-    //     window.location.href = "http://54.152.205.55:4000/profile";
-    //   });
-    // }
     if (isAdmin) {
       document
         .getElementById("adminDashboard")
@@ -12349,12 +9908,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("this is the lgoin response", response);
+
         const token = response.headers.get("authorization");
         if (token) {
           localStorage.setItem("jwtToken", token);
           localStorage.setItem("isLoggedIn", true);
-          //   console.log("Login successful!");
+
           closeLoginPopup();
           await fetchUserRole();
           const profileResponse = await fetch(
@@ -12372,7 +9931,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           if (profileResponse.ok) {
             const profileData = await profileResponse.json();
-            // console.log("User profile data:", profileData);
+
             localStorage.setItem("email", profileData.email);
             localStorage.setItem("username", profileData.username);
             localStorage.setItem("fname", profileData.firstname);
@@ -12415,13 +9974,6 @@ document.addEventListener("DOMContentLoaded", function () {
       signupErrorElement.style.display = "flex";
       signupErrorElement.querySelector(".error-text").textContent =
         errorMessage;
-
-      // Swal.fire({
-      //   icon: 'error',
-      //   title: 'Login Failed',
-      //   text: errorMessage,
-      //   showConfirmButton: true,
-      // });
     }
   }
 
@@ -12557,7 +10109,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .getElementById("signinBtnInSignUp")
       .addEventListener("click", function () {
         closeSignupPopup();
-        // console.log("sign in pop up");
+
         showLoginPopup();
       });
 
@@ -12624,8 +10176,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (response.ok) {
         // If signup is successful
-        console.log("Signup successful!");
-        console.log(response);
+
         const token = response.headers.get("authorization");
         if (token) {
           closeSignupPopup();
@@ -12640,7 +10191,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         // If signup fails (HTTP error status)
         const errorResponse = await response.json();
-        console.log(errorResponse);
+
         const errorMessage =
           errorResponse?.error || "Signup failed. Please try again.";
         signupErrorElement.style.display = "flex";
@@ -12674,7 +10225,6 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => {
         if (response) {
-          console.log("Logout successful");
           localStorage.removeItem("jwtToken");
           // localStorage.removeItem("isLoggedIn");
           localStorage.setItem("isLoggedIn", false);
@@ -12684,21 +10234,11 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
           response.json().then((data) => {
             console.error("Logout failed:", data.message || "Unknown error");
-            // alert("Logout failed. Please try again.");
-            // toastr.error("Logout failed. Please try again.");
-            // Swal.fire({
-            //     icon: 'error',
-            //     title: 'Failed',
-            //     text: 'Logout failed. Please try again.',
-            //   });
           });
         }
       })
       .catch((error) => {
         console.error("Logout request failed:", error);
-        // alert(
-        //   "Logout request failed. Please check your connection and try again."
-        // );
       });
   }
 });
