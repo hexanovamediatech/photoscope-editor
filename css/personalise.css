@@ -457,20 +457,45 @@
 }
 
 .personalise-edit-btn:hover {
-  background-color: #007acc;
+  background-color: #00a3ff;
 }
 
-.personalise-input-buttom-cont {
+/* .personalise-input-buttom-cont {
   height: 100%;
   overflow-y: scroll;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  /* max-height: 400px; */
+
+
   margin-bottom: 20px;
 }
-.personalise-input-buttom-cont::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, and Opera */
+} */
+
+.personalise-input-buttom-cont {
+  overflow: auto;
+  margin-bottom: 20px;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #00a3ff transparent;
 }
+
+/* Chrome/Safari/Edge */
+.personalise-input-buttom-cont::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.personalise-input-buttom-cont::-webkit-scrollbar-track {
+  background: transparent;
+}
+.personalise-input-buttom-cont::-webkit-scrollbar-thumb {
+  background-color: #00a3ff;
+  border-radius: 10px;
+}
+.personalise-input-buttom-cont::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* .personalise-input-buttom-cont::-webkit-scrollbar {
+  display: none; 
+} */
 .ediotr-btn-cont {
   display: flex;
   align-items: center;
