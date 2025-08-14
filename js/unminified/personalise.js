@@ -547,27 +547,28 @@ function updateCanvasText(textIndex, newText) {
 
   // Set the canvas dimensions to 1080x1080 for the export
   newFabricCanvas.setDimensions({
-    width: 1080,
-    height: 1080,
+    width: 2048,
+    height: 2048,
   });
-  newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+  newFabricCanvas.setZoom(2048 / Math.min(originalWidth, originalHeight));
+  // newFabricCanvas.setZoom(1);
 
   // Convert the remaining objects on the canvas to an image
-  const format = "jpeg";
+  const format = "png";
   const quality = 1;
   const imgData = newFabricCanvas.toDataURL({
     format: format,
     quality: quality,
     enableRetinaScaling: false,
   });
+  fabricImageConverted = imgData;
+  changeTexture(fabricImageConverted);
   newFabricCanvas.setDimensions({
     width: originalWidth,
     height: originalHeight,
   });
   newFabricCanvas.setZoom(1);
   // Pass the image data to the changeTexture function
-  fabricImageConverted = imgData;
-  changeTexture(fabricImageConverted);
 
   // Add the first object back to its original position
   newFabricCanvas.insertAt(firstObject, 0);
@@ -630,6 +631,7 @@ function generateImagesFromCanvasStates() {
     });
 
     tempCanvas.loadFromJSON(originalFormat[tabId], () => {
+      tempCanvas.setZoom(1);
       tempCanvas.renderAll();
 
       // Get all objects from the canvas
@@ -650,8 +652,9 @@ function generateImagesFromCanvasStates() {
 
       try {
         const base64Image = tempCanvas.toDataURL({
-          format: "jpeg",
+          format: "png",
           quality: 1,
+          enableRetinaScaling: false,
         });
 
         // Push the image data to the array
@@ -869,6 +872,7 @@ function loadJSONToCanvas(jsonData) {
         obj.scaleY *= 0.215;
         obj.left *= 0.215;
         obj.top *= 0.215;
+        obj.strokeWidth *= 0.215;
 
         if (obj.clipPath) {
           obj.clipPath.set({
@@ -914,28 +918,30 @@ function loadJSONToCanvas(jsonData) {
       const originalHeight = newFabricCanvas.height;
 
       newFabricCanvas.setDimensions({
-        width: 1080,
-        height: 1080,
+        width: 2048,
+        height: 2048,
       });
-      newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+      newFabricCanvas.setZoom(2048 / Math.min(originalWidth, originalHeight));
+      // newFabricCanvas.setZoom(1);
 
-      const format = "jpeg";
+      const format = "png";
       const quality = 1;
       const imgData = newFabricCanvas.toDataURL({
         format: format,
         quality: quality,
         enableRetinaScaling: false,
       });
-      newFabricCanvas.setDimensions({
-        width: originalWidth,
-        height: originalHeight,
-      });
-      newFabricCanvas.setZoom(1);
       fabricImageConverted = imgData;
 
       if (selectedMesh) {
         changeTexture(fabricImageConverted);
       }
+      newFabricCanvas.setDimensions({
+        width: originalWidth,
+        height: originalHeight,
+      });
+      newFabricCanvas.setZoom(1);
+
       newFabricCanvas.insertAt(firstObject, 0);
       newFabricCanvas.renderAll();
     },
@@ -1146,26 +1152,27 @@ document.getElementById("personaliseDoneBtn").addEventListener("click", () => {
 
       // Set the canvas dimensions to 1080x1080 for the export
       newFabricCanvas.setDimensions({
-        width: 1080,
-        height: 1080,
+        width: 2048,
+        height: 2048,
       });
-      newFabricCanvas.setZoom(1080 / Math.min(originalWidth, originalHeight));
+      newFabricCanvas.setZoom(2048 / Math.min(originalWidth, originalHeight));
+      // newFabricCanvas.setZoom(1);
 
       // Convert the remaining objects on the canvas to an image
-      const format = "jpeg";
+      const format = "png";
       const quality = 1;
       const imgData = newFabricCanvas.toDataURL({
         format: format,
         quality: quality,
         enableRetinaScaling: false,
       });
+      fabricImageConverted = imgData;
+      changeTexture(fabricImageConverted);
       newFabricCanvas.setDimensions({
         width: originalWidth,
         height: originalHeight,
       });
       newFabricCanvas.setZoom(1);
-      fabricImageConverted = imgData;
-      changeTexture(fabricImageConverted);
 
       // Add the first object back to its original position
       newFabricCanvas.insertAt(firstObject, 0);

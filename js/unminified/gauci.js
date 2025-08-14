@@ -2938,6 +2938,7 @@
           if (modObj.scaleY !== undefined) modObj.scaleY *= 4.76;
           if (modObj.left !== undefined) modObj.left *= 4.76;
           if (modObj.top !== undefined) modObj.top *= 4.76;
+          if (modObj.strokeWidth !== undefined) modObj.strokeWidth *= 4.76;
 
           // ✅ Step 4: Handle clipPath if present
           if (modObj.clipPath) {
@@ -3035,6 +3036,7 @@
             if (modObj.scaleY !== undefined) modObj.scaleY *= 4.76;
             if (modObj.left !== undefined) modObj.left *= 4.76;
             if (modObj.top !== undefined) modObj.top *= 4.76;
+            if (modObj.strokeWidth !== undefined) modObj.strokeWidth *= 4.76;
 
             // ✅ Step 4: Handle clipPath if present
             if (modObj.clipPath) {
@@ -7378,7 +7380,7 @@
         // Create the shell using the mainClippath path
         shell = new fabric.Path(path, {
           fill: "", // Transparent shell
-          stroke: "black",
+          stroke: "red",
           strokeWidth: 2,
           scaleX: mainClippath.scaleX,
           scaleY: mainClippath.scaleY,
@@ -7689,7 +7691,7 @@
 
           shell = new fabric.Path(path, {
             fill: "", // Transparent shell
-            stroke: "black",
+            stroke: "red",
             strokeWidth: 2,
             scaleX: storedClipPath.scaleX,
             scaleY: storedClipPath.scaleY,
@@ -9460,12 +9462,19 @@
               ) {
                 tempCanvas.remove(firstObject);
               }
+              // tempCanvas.setZoom(1);
+              tempCanvas.setZoom(1);
               tempCanvas.renderAll();
 
               // Generate the base64 image
+              // const base64Image = tempCanvas.toDataURL({
+              //   format: "jpeg",
+              //   quality: 1.0,
+              // });
               const base64Image = tempCanvas.toDataURL({
-                format: "jpeg",
-                quality: 1.0,
+                format: "png",
+                quality: 1,
+                enableRetinaScaling: false,
               });
 
               // Push the data into the array
