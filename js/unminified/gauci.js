@@ -3516,6 +3516,27 @@
       selector.find("#gauci-layers > li").removeClass("active");
     });
     /* Layers */
+    // selector
+    //   .find("#gauci-layers")
+    //   .sortable({
+    //     placeholder: "layer-placeholder",
+    //     axis: "y",
+    //     update: function (e, ui) {
+    //       var objects = canvas.getObjects();
+
+    //       $("#gauci-layers li").each(function (index, value) {
+    //         $(this).attr("data-sort", index + 1);
+    //         objects
+    //           .filter((element) => element.id == value.id)
+    //           .forEach((element) => element.moveTo(-(index + 1)));
+    //       });
+    //       canvas.requestRenderAll();
+    //     },
+    //     create: function (e, ui) {
+    //       checkLayers();
+    //     },
+    //   })
+    //   .disableSelection();
     selector
       .find("#gauci-layers")
       .sortable({
@@ -3524,12 +3545,19 @@
         update: function (e, ui) {
           var objects = canvas.getObjects();
 
+          const firstObj = objects[0];
+          if (firstObj) {
+            firstObj.moveTo(0);
+          }
+
           $("#gauci-layers li").each(function (index, value) {
             $(this).attr("data-sort", index + 1);
+
             objects
               .filter((element) => element.id == value.id)
-              .forEach((element) => element.moveTo(-(index + 1)));
+              .forEach((element) => element.moveTo(index + 1));
           });
+
           canvas.requestRenderAll();
         },
         create: function (e, ui) {
@@ -3537,6 +3565,7 @@
         },
       })
       .disableSelection();
+
     /* Settings toggle */
     selector.find("#gauci-layers").on("click", ".layer-settings", function () {
       var layerSettings = $(this).next();
@@ -7671,12 +7700,17 @@
         }
 
         const selected = e.target; // Newly selected object
+        // console.log(selected);
 
         if (selected.path) {
           document.getElementById("gauci-image-settings").style.display =
             "none";
           // document.getElementById("img-filter-container-id").style.display =
           //   "none";
+        }
+        if (selected.type === "image") {
+          document.getElementById("gauci-image-settings").style.display =
+            "block";
         }
 
         if (
@@ -9451,8 +9485,10 @@
           tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
             try {
               const objects = tempCanvas.getObjects();
+              console.log(objects);
 
               const firstObject = objects[0];
+              console.log(firstObject);
               if (
                 firstObject &&
                 firstObject.type === "image" &&
