@@ -9485,10 +9485,9 @@
           tempCanvas.loadFromJSON(tabCanvasStates[tabId], () => {
             try {
               const objects = tempCanvas.getObjects();
-              console.log(objects);
 
               const firstObject = objects[0];
-              console.log(firstObject);
+
               if (
                 firstObject &&
                 firstObject.type === "image" &&
