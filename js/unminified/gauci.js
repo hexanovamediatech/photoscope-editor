@@ -1851,6 +1851,7 @@
 
     /* Load Template Fonts */
     function loadTemplateFonts(objects) {
+      console.log("hello");
       if (objects.length !== 0) {
         $.each(objects, function (index, val) {
           var font = val.fontFamily.replace("-gauci", "");
@@ -6493,6 +6494,38 @@
       }
     }
 
+    function applyFont(font, obj = null) {
+      if (!font) return;
+
+      const fontSelect = document.getElementById("gauci-font-family");
+      if (fontSelect) {
+        fontSelect.value = font;
+      }
+
+      let isWebSafe = webSafeFonts.some((f) => f[0] === font);
+
+      if (!isWebSafe) {
+        // Google font load
+        WebFont.load({
+          google: {
+            families: [font],
+          },
+          active: function () {
+            if (obj) obj.set("fontFamily", font);
+            newFabricCanvas.requestRenderAll();
+          },
+          inactive: function () {
+            newFabricCanvas.requestRenderAll();
+          },
+        });
+      } else {
+        // Websafe font
+        if (obj) obj.set("fontFamily", font);
+        newFabricCanvas.requestRenderAll();
+      }
+    }
+    applyFont();
+
     function loadCanvasState(tabId) {
       editButtonActive = false;
       initializeUndoRedo();
@@ -6517,6 +6550,12 @@
           canvas.renderAll();
 
           const allObjects = canvas.getObjects();
+
+          canvas.getObjects().forEach((obj, index) => {
+            if (obj.type === "text" || obj.type === "textbox") {
+              applyFont(obj.fontFamily, obj);
+            }
+          });
 
           if (canvas) {
             const targetObject = allObjects.find(
@@ -7693,14 +7732,29 @@
 
     function logSelectedObject(canvas) {
       // canvas.off("mouse:down");
+
       canvas.on("mouse:down", function (e) {
         // Debug: Confirm event is firing
+        // console.log(canvas.getObjects());
         if (!e.target) {
           return; // Exit to prevent further processing
         }
 
         const selected = e.target; // Newly selected object
         // console.log(selected);
+        // if (selected.type === "textbox") {
+        // document.getElementById("gauci-text-settings").style.display =
+        //   "block";}
+        if (selected.type == "textbox") {
+          selector.find("#gauci-text-settings").show();
+          setTextSettings(selected);
+          if (!selector.find("#gauci-btn-text").hasClass("active")) {
+            selector.find("#gauci-btn-text").trigger("click");
+          }
+          // selector.find("#gauci-font-family").trigger("change");
+        } else {
+          selector.find("#gauci-text-settings").hide();
+        }
 
         if (selected.path) {
           document.getElementById("gauci-image-settings").style.display =

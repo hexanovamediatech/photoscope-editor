@@ -26,6 +26,22 @@ let mainPart = "";
 let mainPartMesh = null;
 let selectedItem = null;
 let lastReplacedPhotoNumber = null;
+let webSafeFonts = [
+  ["Helvetica Neue", "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"],
+  ["Impact", "Impact, Charcoal, sans-serif"],
+  ["Georgia", "Georgia, serif"],
+  ["Palatino Linotype", "'Palatino Linotype', 'Book Antiqua', Palatino, serif"],
+  ["Times New Roman", "'Times New Roman', Times, serif"],
+  ["Arial", "Arial, Helvetica, sans-serif"],
+  ["Arial Black", "'Arial Black', Gadget, sans-serif"],
+  ["Comic Sans", "'Comic Sans MS', cursive, sans-serif"],
+  ["Lucida Sans", "'Lucida Sans Unicode', 'Lucida Grande', sans-serif"],
+  ["Tahoma", "Tahoma, Geneva, sans-serif"],
+  ["Trebuchet", "'Trebuchet MS', Helvetica, sans-serif"],
+  ["Verdana", "Verdana, Geneva, sans-serif"],
+  ["Courier New", "'Courier New', Courier, monospace"],
+  ["Lucida Console", "'Lucida Console', Monaco, monospace"],
+];
 // Initialize the 3D viewer
 document.addEventListener("variableReady", function (e) {
   if (scene) {
@@ -700,7 +716,39 @@ function getImageObjectByLogicalIndex(objects, imageIndex) {
   return null; // Not found
 }
 
+function applyFont(font, obj = null) {
+  if (!font) return;
+
+  const fontSelect = document.getElementById("gauci-font-family");
+  if (fontSelect) {
+    fontSelect.value = font;
+  }
+
+  let isWebSafe = webSafeFonts.some((f) => f[0] === font);
+
+  if (!isWebSafe) {
+    // Google font load
+    WebFont.load({
+      google: {
+        families: [font],
+      },
+      active: function () {
+        if (obj) obj.set("fontFamily", font);
+        newFabricCanvas.requestRenderAll();
+      },
+      inactive: function () {
+        newFabricCanvas.requestRenderAll();
+      },
+    });
+  } else {
+    // Websafe font
+    if (obj) obj.set("fontFamily", font);
+    newFabricCanvas.requestRenderAll();
+  }
+}
+applyFont();
 function loadJSONToCanvas(jsonData) {
+  // console.log(jsonData);
   if (!newFabricCanvas) {
     initializeCanvas();
   }
@@ -868,6 +916,9 @@ function loadJSONToCanvas(jsonData) {
     jsonData,
     function () {
       newFabricCanvas.getObjects().forEach((obj, index) => {
+        if (obj.type === "text" || obj.type === "textbox") {
+          applyFont(obj.fontFamily, obj);
+        }
         obj.scaleX *= 0.215;
         obj.scaleY *= 0.215;
         obj.left *= 0.215;
@@ -1547,6 +1598,7 @@ initialize3DViewer();
             part: key,
             jsonData: JSON.parse(activeItem[key]),
           }));
+          // console.log(editedArrayFormat);
 
           generateImagesFromCanvasStates();
 
@@ -1586,7 +1638,11 @@ initialize3DViewer();
             realEditCont.style.display = "none";
 
             imageReplace = true;
+            // console.log(selectedItem.jsonData);
             loadJSONToCanvas(selectedItem.jsonData);
+            setTimeout(() => {
+              loadJSONToCanvas(selectedItem.jsonData);
+            }, 500);
           } catch (fetchError) {
             console.error("Error fetching JSON data:", fetchError);
           }
