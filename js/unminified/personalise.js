@@ -26,6 +26,7 @@ let mainPart = "";
 let mainPartMesh = null;
 let selectedItem = null;
 let lastReplacedPhotoNumber = null;
+let activePhotoNumber = 1;
 let webSafeFonts = [
   ["Helvetica Neue", "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"],
   ["Impact", "Impact, Charcoal, sans-serif"],
@@ -783,17 +784,25 @@ function loadJSONToCanvas(jsonData) {
   // Dynamically generate image replace sections
   imageObjects.forEach((imageObj, index) => {
     const photoNumber = index + 1;
+    const defaultActiveImg = document.getElementById(
+      `hexa-replc-img-${activePhotoNumber}`
+    );
+    if (defaultActiveImg) {
+      defaultActiveImg.classList.add("active-image");
+    }
     const imageSection = document.createElement("div");
     imageSection.className = "multi-image-cont";
     imageSection.innerHTML = `
       <p class="photo-list-num">Photo ${photoNumber}</p>
       <div class="replace-image-main-box">
+        <div>
         <img
           src="${imageObj.src || "./assets/custom/no-temp.jpg"}"
           class="hexa-replc-img"
           alt="icon"
           id="hexa-replc-img-${photoNumber}"
         />
+        </div>
         <div class="replace-img-btn-cont" id="replace-btn-cont-${photoNumber}">
           <input
             type="file"
@@ -817,7 +826,21 @@ function loadJSONToCanvas(jsonData) {
       `hexa-replc-img-${photoNumber}`
     );
     if (imageElement) {
+      // imageElement.addEventListener("click", () => {
+      //   updateUIImages(imageObj.src || "./assets/custom/no-temp.jpg");
+      // });
       imageElement.addEventListener("click", () => {
+        // remove active from all
+        document.querySelectorAll(".hexa-replc-img").forEach((img) => {
+          img.classList.remove("active-image");
+        });
+        // add active class to clicked image
+        imageElement.classList.add("active-image");
+
+        // update global active number
+        activePhotoNumber = photoNumber;
+
+        // update UI image
         updateUIImages(imageObj.src || "./assets/custom/no-temp.jpg");
       });
     }
@@ -1098,8 +1121,21 @@ function handleImageUploadAlternate(event, photoNumber) {
       const imageSrc = e.target.result;
       // Update the UI image
       const uiImage = document.getElementById(`hexa-replc-img-${photoNumber}`);
+      // if (uiImage) {
+      //   uiImage.src = imageSrc;
+      // }
       if (uiImage) {
         uiImage.src = imageSrc;
+
+        // remove active from all images
+        document.querySelectorAll(".hexa-replc-img").forEach((img) => {
+          img.classList.remove("active-image");
+        });
+        // mark this replaced image as active
+        uiImage.classList.add("active-image");
+
+        // update global active number
+        activePhotoNumber = photoNumber;
       }
       // Set the last replaced image
       lastReplacedPhotoNumber = photoNumber;
@@ -1115,6 +1151,43 @@ function handleImageUploadAlternate(event, photoNumber) {
   }
 }
 
+// document
+//   .getElementById("personaliseAdjustBtn")
+//   .addEventListener("click", () => {
+//     const popupMiniCanvas = document.getElementById("popup-mini-canvas");
+//     popupMiniCanvas.style.display = "flex";
+
+//     if (newFabricCanvas) {
+//       // Get all objects from the canvas
+//       const objects = newFabricCanvas.getObjects();
+
+//       // Filter image objects, excluding the background image at index 0
+//       const targetObjects = objects.filter(
+//         (obj, index) => obj.type === "image" && index !== 0
+//       );
+
+//       // Make all target image objects selectable and adjustable
+//       targetObjects.forEach((targetObject) => {
+//         targetObject.set({
+//           selectable: true,
+//           hasControls: true,
+//           hasBorders: true,
+//           lockMovementX: false,
+//           lockMovementY: false,
+//           lockRotation: false,
+//           lockScalingX: false,
+//           lockScalingY: false,
+//         });
+//       });
+
+//       // Render the canvas after adjustments
+//       newFabricCanvas.renderAll();
+
+//       // Save the updated canvas state to localStorage
+//       savedCanvasJSON = newFabricCanvas.toJSON();
+//       window.editedCanvasJson = savedCanvasJSON;
+//     }
+//   });
 document
   .getElementById("personaliseAdjustBtn")
   .addEventListener("click", () => {
@@ -1122,17 +1195,32 @@ document
     popupMiniCanvas.style.display = "flex";
 
     if (newFabricCanvas) {
-      // Get all objects from the canvas
       const objects = newFabricCanvas.getObjects();
 
-      // Filter image objects, excluding the background image at index 0
-      const targetObjects = objects.filter(
+      // Filter image objects, excluding background (index 0)
+      const imageObjects = objects.filter(
         (obj, index) => obj.type === "image" && index !== 0
       );
 
-      // Make all target image objects selectable and adjustable
-      targetObjects.forEach((targetObject) => {
-        targetObject.set({
+      // Reset all image objects (lock them)
+      imageObjects.forEach((img) => {
+        img.set({
+          selectable: false,
+          hasControls: false,
+          hasBorders: false,
+          lockMovementX: true,
+          lockMovementY: true,
+          lockRotation: true,
+          lockScalingX: true,
+          lockScalingY: true,
+        });
+      });
+
+      // Unlock only the active image
+      const activeIndex = activePhotoNumber - 1;
+      const activeImage = imageObjects[activeIndex];
+      if (activeImage) {
+        activeImage.set({
           selectable: true,
           hasControls: true,
           hasBorders: true,
@@ -1142,12 +1230,22 @@ document
           lockScalingX: false,
           lockScalingY: false,
         });
-      });
 
-      // Render the canvas after adjustments
+        // Force select the active image initially
+        newFabricCanvas.setActiveObject(activeImage);
+      }
+
       newFabricCanvas.renderAll();
 
-      // Save the updated canvas state to localStorage
+      // 🔑 Ensure bounding box never disappears
+      newFabricCanvas.on("selection:cleared", () => {
+        if (activeImage) {
+          newFabricCanvas.setActiveObject(activeImage);
+          newFabricCanvas.renderAll();
+        }
+      });
+
+      // Save updated state
       savedCanvasJSON = newFabricCanvas.toJSON();
       window.editedCanvasJson = savedCanvasJSON;
     }
@@ -1491,6 +1589,7 @@ initialize3DViewer();
             window.originalCanvasJson = null;
             lastReplacedPhotoNumber = null;
             meshImageDataArray = []; // Clear texture data
+            activePhotoNumber = 1;
             // Hide mini editor save button
             const miniEditorSaveBtnt = document.getElementById(
               "gauci-save-mini-cont"
@@ -1639,6 +1738,7 @@ initialize3DViewer();
 
             imageReplace = true;
             // console.log(selectedItem.jsonData);
+            activePhotoNumber = 1;
             loadJSONToCanvas(selectedItem.jsonData);
             setTimeout(() => {
               loadJSONToCanvas(selectedItem.jsonData);
