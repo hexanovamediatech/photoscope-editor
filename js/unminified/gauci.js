@@ -3714,7 +3714,7 @@
           .filter((element) => element.id == id)
           .forEach((element) => {
             canvas.setActiveObject(element);
-            canvas.bringToFront(element); // layer select → top
+            // canvas.bringToFront(element); // layer select → top
           });
 
         selector.find("#gauci-layers > li").removeClass("active");
@@ -7771,7 +7771,7 @@
           return; // Exit to prevent further processing
         }
         const selected = e.target; // Newly selected object
-        canvas.bringToFront(selected);
+        // canvas.bringToFront(selected);
         // console.log(selected);
         if (selected.type === "textbox") {
           document.getElementById("gauci-text-settings").style.display =
