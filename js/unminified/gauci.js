@@ -3691,19 +3691,38 @@
       });
     }
     /* Layer Click Event */
+    // function clickLayerEvent(id) {
+    //   var item = selector.find("#gauci-layers #" + id);
+    //   item.on("click", function (e) {
+    //     var objects = canvas.getObjects();
+    //     var id = $(this).attr("id");
+    //     objects
+    //       .filter((element) => element.id == id)
+    //       .forEach((element) => canvas.setActiveObject(element));
+    //     selector.find("#gauci-layers > li").removeClass("active");
+    //     $(this).addClass("active");
+    //     canvas.requestRenderAll();
+    //   });
+    // }
     function clickLayerEvent(id) {
       var item = selector.find("#gauci-layers #" + id);
       item.on("click", function (e) {
         var objects = canvas.getObjects();
         var id = $(this).attr("id");
+
         objects
           .filter((element) => element.id == id)
-          .forEach((element) => canvas.setActiveObject(element));
+          .forEach((element) => {
+            canvas.setActiveObject(element);
+            canvas.bringToFront(element); // layer select → top
+          });
+
         selector.find("#gauci-layers > li").removeClass("active");
         $(this).addClass("active");
         canvas.requestRenderAll();
       });
     }
+
     /* Layer Name Event */
     function layerNameEvent(id) {
       var item = selector.find("#gauci-layers #" + id);
@@ -3810,9 +3829,9 @@
             selector.find("#gauci-layers #" + obj.id).addClass("active");
           }
         } else {
-          $.each(obj, function (index, val) {
-            selector.find("#gauci-layers #" + val?.id).addClass("active");
-          });
+          // $.each(obj, function (index, val) {
+          //   selector.find("#gauci-layers #" + val?.id).addClass("active");
+          // });
         }
       }
     }
@@ -6512,16 +6531,16 @@
           },
           active: function () {
             if (obj) obj.set("fontFamily", font);
-            newFabricCanvas.requestRenderAll();
+            canvas.requestRenderAll();
           },
           inactive: function () {
-            newFabricCanvas.requestRenderAll();
+            canvas.requestRenderAll();
           },
         });
       } else {
         // Websafe font
         if (obj) obj.set("fontFamily", font);
-        newFabricCanvas.requestRenderAll();
+        canvas.requestRenderAll();
       }
     }
     applyFont();
@@ -7730,6 +7749,18 @@
       const selectedObject = e.target;
     });
 
+    // canvas.on("mouse:down", function (opt) {
+    //   const obj = canvas.getActiveObject();
+    //   if (obj && obj.__lockedDuringDrag) {
+    //     opt.e.target = obj; // force same object select
+    //   }
+    // });
+    // canvas.on("mouse:up", function () {
+    //   const obj = canvas.getActiveObject();
+    //   if (obj && obj.__lockedDuringDrag) {
+    //     delete obj.__lockedDuringDrag;
+    //   }
+    // });
     function logSelectedObject(canvas) {
       // canvas.off("mouse:down");
 
@@ -7739,22 +7770,23 @@
         if (!e.target) {
           return; // Exit to prevent further processing
         }
-
         const selected = e.target; // Newly selected object
+        canvas.bringToFront(selected);
         // console.log(selected);
-        // if (selected.type === "textbox") {
-        // document.getElementById("gauci-text-settings").style.display =
-        //   "block";}
-        if (selected.type == "textbox") {
-          selector.find("#gauci-text-settings").show();
-          setTextSettings(selected);
-          if (!selector.find("#gauci-btn-text").hasClass("active")) {
-            selector.find("#gauci-btn-text").trigger("click");
-          }
-          // selector.find("#gauci-font-family").trigger("change");
-        } else {
-          selector.find("#gauci-text-settings").hide();
+        if (selected.type === "textbox") {
+          document.getElementById("gauci-text-settings").style.display =
+            "block";
         }
+        // if (selected.type == "textbox") {
+        //   selector.find("#gauci-text-settings").show();
+        //   setTextSettings(selected);
+        //   if (!selector.find("#gauci-btn-text").hasClass("active")) {
+        //     selector.find("#gauci-btn-text").trigger("click");
+        //   }
+        //   // selector.find("#gauci-font-family").trigger("change");
+        // } else {
+        //   selector.find("#gauci-text-settings").hide();
+        // }
 
         if (selected.path) {
           document.getElementById("gauci-image-settings").style.display =
