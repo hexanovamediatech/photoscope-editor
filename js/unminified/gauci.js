@@ -3538,6 +3538,82 @@
     //     },
     //   })
     //   .disableSelection();
+
+    // selector
+    //       .find("#gauci-layers")
+    //       .sortable({
+    //         placeholder: "layer-placeholder",
+    //         axis: "y",
+    //         update: function (e, ui) {
+    //           var objects = canvas.getObjects();
+
+    //           const firstObj = objects[0];
+    //           if (firstObj) {
+    //             firstObj.moveTo(0);
+    //           }
+
+    //           $("#gauci-layers li").each(function (index, value) {
+    //             $(this).attr("data-sort", index + 1);
+
+    //             objects
+    //               .filter((element) => element.id == value.id)
+    //               .forEach((element) => element.moveTo(total - index));
+    //           });
+    //           canvas.requestRenderAll();
+    //         },
+    //         create: function (e, ui) {
+    //           checkLayers();
+    //         },
+    //       })
+    //       .disableSelection();
+    // selector
+    //       .find("#gauci-layers")
+    //       .sortable({
+    //         placeholder: "layer-placeholder",
+    //         axis: "y",
+    //         update: function (e, ui) {
+    //           var objects = canvas.getObjects();
+
+    //           const firstObj = objects[0];
+    //           if (firstObj) {
+    //             firstObj.moveTo(0);
+    //           }
+
+    //             objects
+    //               .filter((element) => element.id == value.id)
+    //               .forEach((element) => element.moveTo(total - index));
+    //           });
+    //           canvas.requestRenderAll();
+    //         },
+    //         create: function (e, ui) {
+    //           checkLayers();
+    //         },
+    //       })
+    //       .disableSelection();
+
+    // selector
+    //   .find("#gauci-layers")
+    //   .sortable({
+    //     placeholder: "layer-placeholder",
+    //     axis: "y",
+    //     update: function (e, ui) {
+    //       var objects = canvas.getObjects();
+
+    //       $("#gauci-layers li").each(function (index, value) {
+    //         $(this).attr("data-sort", index + 1);
+
+    //         objects
+    //           .filter((element) => element.id == value.id)
+    //           .forEach((element) => element.moveTo(total - index));
+    //       });
+    //       canvas.requestRenderAll();
+    //     },
+    //     create: function (e, ui) {
+    //       checkLayers();
+    //     },
+    //   })
+    //   .disableSelection();
+
     selector
       .find("#gauci-layers")
       .sortable({
@@ -3551,14 +3627,22 @@
             firstObj.moveTo(0);
           }
 
+          // $("#gauci-layers li").each(function (index, value) {
+          //   $(this).attr("data-sort", index + 1);
+
+          //   objects
+          //     .filter((element) => element.id == value.id)
+          //     .forEach((element) => element.moveTo(index + 1));
+          // });
+          const total = $("#gauci-layers li").length;
+
           $("#gauci-layers li").each(function (index, value) {
             $(this).attr("data-sort", index + 1);
 
             objects
               .filter((element) => element.id == value.id)
-              .forEach((element) => element.moveTo(index + 1));
+              .forEach((element) => element.moveTo(total - index));
           });
-
           canvas.requestRenderAll();
         },
         create: function (e, ui) {
