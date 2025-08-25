@@ -1397,7 +1397,7 @@
           try {
             const base64Image = tempCanvas.toDataURL({
               format: "jpeg",
-              quality: 1.0,
+              quality: 0.2,
             });
 
             const blob = dataURLtoBlob(base64Image);
