@@ -6638,6 +6638,17 @@
 
         // Modify image URLs with cache busting
         jsonData.objects.forEach((obj) => {
+          // if (!obj.objectType) {
+          //   obj.objectType = obj.type; // fallback assignment
+          // }
+          if (!obj.objectType) {
+            if (obj.type === "rect") {
+              obj.objectType = "rectangle";
+            } else {
+              obj.objectType = obj.type;
+            }
+          }
+
           if (obj.type === "image" && obj.src.startsWith("http")) {
             obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
           }
