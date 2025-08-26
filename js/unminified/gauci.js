@@ -7792,7 +7792,7 @@
 
       canvas.on("mouse:down", function (e) {
         // Debug: Confirm event is firing
-        console.log(canvas.toJSON());
+        // console.log(canvas.toJSON());
         if (!e.target) {
           return; // Exit to prevent further processing
         }
