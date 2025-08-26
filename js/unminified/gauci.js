@@ -7792,7 +7792,7 @@
 
       canvas.on("mouse:down", function (e) {
         // Debug: Confirm event is firing
-
+        console.log(canvas.toJSON());
         if (!e.target) {
           return; // Exit to prevent further processing
         }
@@ -7979,6 +7979,10 @@
     /* Set Shape Settings */
     function setShapeSettings(shape) {
       selector.find("#shape-outline-width").val(shape.strokeWidth);
+      if (shape.fill) {
+        selector.find("#gauci-shape-gradient").val("none");
+        selector.find("#gauci-shape-color").spectrum("set", shape.fill);
+      }
       if (shape.gradientFill == "none") {
         selector.find("#gauci-shape-gradient").val("none");
         selector.find("#gauci-shape-color").spectrum("set", shape.fill);
