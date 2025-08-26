@@ -1670,10 +1670,41 @@
     }
 
     // Function to fetch all saved templates and filter them
+    // function getAllSavedData(userEmail) {
+    //   return new Promise((resolve, reject) => {
+    //     $.ajax({
+    //       url:`${baseUrl}/api/v1/user/get/all/templates`,
+    //       type: "GET",
+    //       contentType: "application/json",
+    //       success: function (response) {
+    //         // Filter the templates: public or created by the user (even if private)
+    //         const filteredTemplates = response.data.filter(
+    //           (template) =>
+    //             template.isPublic || template.createdBy === userEmail
+    //         );
+
+    //         resolve(filteredTemplates);
+    //       },
+    //       error: function (xhr, status, error) {
+    //         reject(error);
+    //       },
+    //     });
+    //   });
+    // }
+
     function getAllSavedData(userEmail) {
       return new Promise((resolve, reject) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get("name");
+        const modelId = urlParams.get("id");
+
+        // let currentPage = 1;
+        // const limit = 10;
+
+        // const url = `${baseUrl}/api/v1/user/get/templates/model/${modelId}?page=${currentPage}&limit=${limit}`
+
         $.ajax({
-          url: `${baseUrl}/api/v1/user/get/all/templates`,
+          url: `${baseUrl}/api/v1/user/get/templates/model/${modelId}`,
           type: "GET",
           contentType: "application/json",
           success: function (response) {
