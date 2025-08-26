@@ -1851,7 +1851,6 @@
 
     /* Load Template Fonts */
     function loadTemplateFonts(objects) {
-      console.log("hello");
       if (objects.length !== 0) {
         $.each(objects, function (index, val) {
           var font = val.fontFamily.replace("-gauci", "");
@@ -3530,81 +3529,6 @@
     //         objects
     //           .filter((element) => element.id == value.id)
     //           .forEach((element) => element.moveTo(-(index + 1)));
-    //       });
-    //       canvas.requestRenderAll();
-    //     },
-    //     create: function (e, ui) {
-    //       checkLayers();
-    //     },
-    //   })
-    //   .disableSelection();
-
-    // selector
-    //       .find("#gauci-layers")
-    //       .sortable({
-    //         placeholder: "layer-placeholder",
-    //         axis: "y",
-    //         update: function (e, ui) {
-    //           var objects = canvas.getObjects();
-
-    //           const firstObj = objects[0];
-    //           if (firstObj) {
-    //             firstObj.moveTo(0);
-    //           }
-
-    //           $("#gauci-layers li").each(function (index, value) {
-    //             $(this).attr("data-sort", index + 1);
-
-    //             objects
-    //               .filter((element) => element.id == value.id)
-    //               .forEach((element) => element.moveTo(total - index));
-    //           });
-    //           canvas.requestRenderAll();
-    //         },
-    //         create: function (e, ui) {
-    //           checkLayers();
-    //         },
-    //       })
-    //       .disableSelection();
-    // selector
-    //       .find("#gauci-layers")
-    //       .sortable({
-    //         placeholder: "layer-placeholder",
-    //         axis: "y",
-    //         update: function (e, ui) {
-    //           var objects = canvas.getObjects();
-
-    //           const firstObj = objects[0];
-    //           if (firstObj) {
-    //             firstObj.moveTo(0);
-    //           }
-
-    //             objects
-    //               .filter((element) => element.id == value.id)
-    //               .forEach((element) => element.moveTo(total - index));
-    //           });
-    //           canvas.requestRenderAll();
-    //         },
-    //         create: function (e, ui) {
-    //           checkLayers();
-    //         },
-    //       })
-    //       .disableSelection();
-
-    // selector
-    //   .find("#gauci-layers")
-    //   .sortable({
-    //     placeholder: "layer-placeholder",
-    //     axis: "y",
-    //     update: function (e, ui) {
-    //       var objects = canvas.getObjects();
-
-    //       $("#gauci-layers li").each(function (index, value) {
-    //         $(this).attr("data-sort", index + 1);
-
-    //         objects
-    //           .filter((element) => element.id == value.id)
-    //           .forEach((element) => element.moveTo(total - index));
     //       });
     //       canvas.requestRenderAll();
     //     },
@@ -5731,6 +5655,10 @@
       selector.find("#gauci-text-input").val(text.text);
       selector.find("#gauci-font-family").val(text.fontFamily);
       selector.find("#gauci-font-family").trigger("change");
+      if (text.fill) {
+        selector.find("#gauci-text-gradient").val("none");
+        selector.find("#gauci-text-color").spectrum("set", text.fill);
+      }
       if (text.gradientFill == "none") {
         selector.find("#gauci-text-gradient").val("none");
         selector.find("#gauci-text-color").spectrum("set", text.fill);
@@ -6101,6 +6029,7 @@
       .find("#gauci-text-settings .gauci-colorpicker")
       .bind("change", function () {
         var val = $(this).val();
+
         if ($(this).attr("id") == "gauci-text-color") {
           canvas.getActiveObject().set("fill", val);
         } else if ($(this).attr("id") == "gauci-outline-color") {
@@ -6638,6 +6567,27 @@
 
         // Modify image URLs with cache busting
         jsonData.objects.forEach((obj) => {
+          // if (!obj.objectType) {
+          //   obj.objectType = obj.type; // fallback assignment
+          // }
+
+          // if (!obj.objectType) {
+          //   if (obj.type === "rect") {
+          //     obj.objectType = "rectangle";
+          //   } else {
+          //     obj.objectType = obj.type;
+          //   }
+          // }
+          if (!obj.objectType) {
+            if (obj.type === "rect") {
+              obj.objectType = "rectangle";
+            } else if (obj.type === "path") {
+              obj.objectType = "element";
+            } else {
+              obj.objectType = obj.type;
+            }
+          }
+
           if (obj.type === "image" && obj.src.startsWith("http")) {
             obj.src = `${obj.src}?t=${Date.now()}`; // Add timestamp for URLs only
           }
@@ -7283,14 +7233,6 @@
       }
     }
 
-    // function logSelectedObject(canvas) {
-    //   canvas.on("object:selected", function (e) {
-    //     const selectedObject = e.target;
-    //     console.log("User selected object:", selectedObject);
-    //   });
-    // }
-    // logSelectedObject(canvas);
-
     let storedActiveObject = null;
     let storedClipPath = null;
     let clipPathOffset = { top: 0, left: 0 };
@@ -7850,13 +7792,13 @@
 
       canvas.on("mouse:down", function (e) {
         // Debug: Confirm event is firing
-        // console.log(canvas.getObjects());
+
         if (!e.target) {
           return; // Exit to prevent further processing
         }
         const selected = e.target; // Newly selected object
         // canvas.bringToFront(selected);
-        // console.log(selected);
+
         if (selected.type === "textbox") {
           document.getElementById("gauci-text-settings").style.display =
             "block";
@@ -8876,6 +8818,10 @@
       });
     /* Set Element Settings */
     function setElementSettings(obj) {
+      if (obj.fill) {
+        selector.find("#gauci-element-gradient").val("none");
+        selector.find("#gauci-element-color").spectrum("set", obj.fill);
+      }
       if (obj.gradientFill == "none") {
         selector.find("#gauci-element-gradient").val("none");
         selector.find("#gauci-element-color").spectrum("set", obj.fill);
@@ -9771,7 +9717,6 @@
         success: function (data) {
           if (data.src) {
             if (data.src) {
-              // console.log(output);
               tabCanvasStates = {};
               tabCanvasStates = data.src;
 
