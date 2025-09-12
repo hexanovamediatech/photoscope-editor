@@ -785,7 +785,7 @@ function loadJSONToCanvas(jsonData) {
   imageObjects.forEach((imageObj, index) => {
     const photoNumber = index + 1;
     const defaultActiveImg = document.getElementById(
-      `hexa-replc-img-${activePhotoNumber}`
+      `gauci-replc-img-${activePhotoNumber}`
     );
     if (defaultActiveImg) {
       defaultActiveImg.classList.add("active-image");
@@ -798,9 +798,9 @@ function loadJSONToCanvas(jsonData) {
         <div>
         <img
           src="${imageObj.src || "./assets/custom/no-temp.jpg"}"
-          class="hexa-replc-img"
+          class="gauci-replc-img"
           alt="icon"
-          id="hexa-replc-img-${photoNumber}"
+          id="gauci-replc-img-${photoNumber}"
         />
         </div>
         <div class="replace-img-btn-cont" id="replace-btn-cont-${photoNumber}">
@@ -823,7 +823,7 @@ function loadJSONToCanvas(jsonData) {
     `;
     multiImageContainer.appendChild(imageSection);
     const imageElement = document.getElementById(
-      `hexa-replc-img-${photoNumber}`
+      `gauci-replc-img-${photoNumber}`
     );
     if (imageElement) {
       // imageElement.addEventListener("click", () => {
@@ -831,7 +831,7 @@ function loadJSONToCanvas(jsonData) {
       // });
       imageElement.addEventListener("click", () => {
         // remove active from all
-        document.querySelectorAll(".hexa-replc-img").forEach((img) => {
+        document.querySelectorAll(".gauci-replc-img").forEach((img) => {
           img.classList.remove("active-image");
         });
         // add active class to clicked image
@@ -1120,7 +1120,7 @@ function handleImageUploadAlternate(event, photoNumber) {
     reader.onload = function (e) {
       const imageSrc = e.target.result;
       // Update the UI image
-      const uiImage = document.getElementById(`hexa-replc-img-${photoNumber}`);
+      const uiImage = document.getElementById(`gauci-replc-img-${photoNumber}`);
       // if (uiImage) {
       //   uiImage.src = imageSrc;
       // }
@@ -1128,7 +1128,7 @@ function handleImageUploadAlternate(event, photoNumber) {
         uiImage.src = imageSrc;
 
         // remove active from all images
-        document.querySelectorAll(".hexa-replc-img").forEach((img) => {
+        document.querySelectorAll(".gauci-replc-img").forEach((img) => {
           img.classList.remove("active-image");
         });
         // mark this replaced image as active
