@@ -188,8 +188,47 @@ function initPersonalise() {
   const environment = new RoomEnvironment(renderer);
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
 
+  // Original background color
   scene.background = new THREE.Color(0xbfc3cc);
   scene.environment = pmremGenerator.fromScene(environment).texture;
+
+  // Main key light (front-top-right)
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+  keyLight.position.set(1, 1, 1).normalize();
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 2048;
+  keyLight.shadow.mapSize.height = 2048;
+  scene.add(keyLight);
+
+  // Fill light (front-bottom-left)
+  const fillLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  fillLight.position.set(-0.8, 0.5, 0.5).normalize();
+  scene.add(fillLight);
+
+  // Enhanced back light (behind the model)
+  const backLight = new THREE.DirectionalLight(0xffffff, 2.5); // Increased intensity
+  backLight.position.set(0, 0.3, -1.5).normalize(); // Moved further back
+  backLight.castShadow = true;
+  scene.add(backLight);
+  
+  // Stronger rim/edge light (top-back)
+  const rimLight = new THREE.DirectionalLight(0xffffff, 2.2); // Increased intensity
+  rimLight.position.set(0.3, 0.8, -1).normalize(); // Adjusted position
+  scene.add(rimLight);
+  
+  // Additional back rim light (lower)
+  const backRimLight = new THREE.DirectionalLight(0xffffff, 1.8);
+  backRimLight.position.set(-0.3, -0.2, -1.2).normalize();
+  scene.add(backRimLight);
+  
+  // Ambient light for base illumination
+  const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
+  scene.add(ambientLight);
+  
+  // Additional point light for highlights
+  const pointLight = new THREE.PointLight(0xffffff, 1.5, 10);
+  pointLight.position.set(0.5, 0.5, 1);
+  scene.add(pointLight);
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -275,8 +314,11 @@ function changeTexture(newUrl) {
             const material = new THREE.MeshStandardMaterial({
               map: texture,
               // bumpMap: bumpMap,
-              roughness: 1,
-              metalness: 1,
+              roughness: 0.7,  // Reduced from 1 to make it less rough
+              metalness: 0.3,  // Reduced from 1 to make it less metallic
+              envMapIntensity: 1,  // Add environment map intensity
+              side: THREE.DoubleSide,  // Ensure both sides are rendered
+              transparent: true,
               opacity: 1,
               bumpScale: 0.5,
             });
