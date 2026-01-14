@@ -1384,7 +1384,19 @@ initialize3DViewer();
   showSkeletonLoader();
 
   try {
-    const response = await fetch(`${baseUrl}/api/v1/user/get/all/templates`);
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get("name");
+    const modelId = urlParams.get("id");
+    // let currentPage = 1;
+    // const limit = 10;
+
+    // const url = `${baseUrl}/api/v1/user/get/templates/model/${modelId}?page=${currentPage}&limit=${limit}`;
+
+    // const response = await fetch(`${baseUrl}/api/v1/user/get/all/templates`);
+    const response = await fetch(
+      `${baseUrl}/api/v1/user/get/templates/model/${modelId}`
+    );
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
