@@ -51,8 +51,8 @@ function init() {
                         map: texture,
                         // normalMap: texture,
                         bumpMap: bumpMap,
-                        roughness: 1,
-                        metalness: 1,
+                        roughness: 0.7,
+                        metalness: 0.1,
                         opacity: 1,
                         bumpScale: 0.5,
                       });
@@ -82,7 +82,7 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = .5;
+  renderer.toneMappingExposure = 0.2;
   mainContainer.appendChild(renderer.domElement);
 
   const environment = new RoomEnvironment(renderer);
@@ -130,8 +130,8 @@ function changeTexture(newUrl) {
               map: texture,
               normalMap: texture,
               bumpMap: bumpMap,
-              roughness: 1,
-              metalness: 1,
+              roughness: 0.7,
+              metalness: 0.1,
               opacity: 1,
               bumpScale: 0.5,
             });

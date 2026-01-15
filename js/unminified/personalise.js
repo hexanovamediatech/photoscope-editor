@@ -181,7 +181,7 @@ function initPersonalise() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.5;
+  renderer.toneMappingExposure = 0.2;
 
   mainContainer.appendChild(renderer.domElement);
 
@@ -275,8 +275,8 @@ function changeTexture(newUrl) {
             const material = new THREE.MeshStandardMaterial({
               map: texture,
               // bumpMap: bumpMap,
-              roughness: 1,
-              metalness: 1,
+              roughness: 0.7,
+              metalness: 0.1,
               opacity: 1,
               bumpScale: 0.5,
             });
@@ -374,8 +374,8 @@ function applyTexturesToMeshes() {
         textureLoader.load(meshData.meshImageData, (texture) => {
           const material = new THREE.MeshStandardMaterial({
             map: texture,
-            roughness: 1,
-            metalness: 1,
+            roughness: 0.7,
+            metalness: 0.1,
             opacity: 1,
             bumpScale: 0.5,
             side: THREE.DoubleSide,
